@@ -1,6 +1,13 @@
 import { config } from './config.js';
 import { goToPage, getSongs, getAlbums, getArtists } from './utils.js';
 
+/**
+ * Creates a menu in the specified container and sets up navigation between pages.
+ * 
+ * @param {HTMLElement} menuContainer - The container element where the menu items will be appended.
+ * @param {HTMLElement} pageContainer - The main container where the page content will be displayed.
+ * @param {Object} appState - The application state object that holds references to active page links and menu elements.
+ */
 export function createMenu(menuContainer, pageContainer, appState) {
     Object.entries(config.menu).forEach(([key, { href, text }], index) => {
         const menuElement = document.createElement('a');
@@ -31,6 +38,11 @@ export function createMenu(menuContainer, pageContainer, appState) {
     goToPage(menuContainer.firstElementChild, pageContainer, appState);
 }
 
+/**
+ * Renders a list of songs, retrieved from the server, inside a div element.
+ * 
+ * @returns {HTMLDivElement} A div element containing a list of songs.
+ */
 export function renderSongs() {
     const songs = document.createElement('div');
 
@@ -57,6 +69,11 @@ export function renderSongs() {
     return songs;
 }
 
+/**
+ * Renders a list of albums, retrieved from the server, inside a div element.
+ * 
+ * @returns {HTMLDivElement} A div element containing a list of albums.
+ */
 export function renderAlbums() {
     const albums = document.createElement('div');
 
@@ -80,6 +97,11 @@ export function renderAlbums() {
     return albums;
 }
 
+/**
+ * Renders a list of artists, retrieved from the server, inside a div element.
+ * 
+ * @returns {HTMLDivElement} A div element containing a list of artists.
+ */
 export function renderArtists() {
     const artists = document.createElement('div');
 
