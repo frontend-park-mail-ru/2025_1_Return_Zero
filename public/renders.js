@@ -142,12 +142,14 @@ function createInput(type, text, name, classList, required) {
     input.type = type;
     input.placeholder = text;
     input.name = name;
-    classList.forEach((classname) => {
-        if (typeof classname === "string") {
-            input.classList.add(classname);
+    classList.forEach((className) => {
+        if (typeof className === "string") {
+            input.classList.add(className);
         }
     });
-    input.required = required;
+    if (typeof required === "boolean") {
+        input.required = required;
+    }
 
     return input;
 };
@@ -264,7 +266,7 @@ export function renderLogin() {
         if (inputElement) {
             form.appendChild(inputElement);
         } else {
-            console.log(`In renderSignup: Failed to create input element for ${key}`);
+            console.log(`In renderLogin: Failed to create input element for ${key}`);
         }
     });
 
