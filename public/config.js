@@ -1,4 +1,4 @@
-import { renderSongs, renderAlbums, renderArtists } from './renders.js';
+import { renderSongs, renderAlbums, renderArtists, renderLogin, renderSignup } from './renders.js';
 
 export const config = {
     menu: {
@@ -17,15 +17,15 @@ export const config = {
             text: 'Artists',
             render: renderArtists,
         },
-        // login: {
-        //     href: '/login',
-        //     text: 'Авторизация',
-        //     render: renderLogin
-        // },
-        // signup: {
-        //     href: '/signup',
-        //     text: 'Регистрация',
-        //     render: renderSignup
-        // },
+        login: {
+            href: '/login',
+            text: 'Авторизация',
+            render: renderLogin,
+        },
+        signup: {
+            href: '/signup',
+            text: 'Регистрация',
+            render: renderSignup,
+        },
     },
 };
