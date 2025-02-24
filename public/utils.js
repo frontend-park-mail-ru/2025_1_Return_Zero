@@ -34,6 +34,46 @@ export function getArtists(callback) {
 }
 
 /**
+ * Makes a POST request to the server to send new user data.
+ * 
+ * @param {Object} userData - An object containing username, email, and password.
+ * @param {function} callback - A callback function to be called when the
+ * request is complete. The function will be called with a Response object as
+ * its single argument.
+ */
+export function postSignup(userData, callback) {
+    fetch('/api/signup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+        credentials: 'include'
+    })
+    .then(callback);
+}
+
+/**
+ * Makes a POST request to the server to send new user data.
+ * 
+ * @param {Object} userData - An object containing identifier and password.
+ * @param {function} callback - A callback function to be called when the
+ * request is complete. The function will be called with a Response object as
+ * its single argument.
+ */
+export function postLogin(userData, callback) {
+    fetch('/api/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+        credentials: 'include'
+    })
+    .then(callback);
+}
+
+/**
  * Goes to the page represented by the menu element by adding the rendered page
  * content to the page container.
  * 

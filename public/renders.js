@@ -1,5 +1,5 @@
 import { config } from './config.js';
-import { goToPage, getSongs, getAlbums, getArtists } from './utils.js';
+import { goToPage, getSongs, getAlbums, getArtists, postSignup, postLogin } from './utils.js';
 
 /**
  * Creates a menu in the specified container and sets up navigation between pages.
@@ -155,11 +155,11 @@ function createInput(type, text, name, classList, required) {
 };
 
 /**
- * Validates user inputs.
+ * Validates user input.
  * 
  * @returns {string} Error message or success depending on meeting the requirements.
  */
-function validate(text, type, matchingValue) {
+function validateInput(text, type, matchingValue) {
     const globalValidCharsChecker = (text) => {
         if (typeof text !== 'string') {
             return false;
@@ -242,11 +242,57 @@ function validate(text, type, matchingValue) {
         case 'email':
             break;
 
-        default:
+        case 'identifier':
             break;
+        
+        case 'passwordRepeat':
+            break;
+
+        default:
+            return 'Неизвестный параметр';
     }
 
     return 'success';
+}
+
+/**
+ * Validates user inputs.
+ * 
+ * @returns {string} Error message or success depending on meeting the requirements.
+ */
+function validate(form, validationList, sendingData) {
+    let message;
+    validationList.forEach(({ name, type }) => {
+        const input = form.querySelector(`[name="${name}"]`);
+        
+        // Checking if input's types wasn't changed. We trust html types validation 
+        if (!input) {
+            message = `Input with name "${name}" not found`;
+            return;
+        }
+
+        if (input.type !== type) {
+            message = `Input type mismatch for "${name}". Expected "${type}", but found "${input.type}"`;
+            return;
+        }
+
+        // Validating
+        const validationResult = validateInput(
+            input.value.trim(), name, input.name === 'password' 
+            ? input.form.passwordRepeat?.value.trim() : undefined
+        );
+        if (validationResult !== 'success') {
+            message = validationResult
+            return;
+        }
+
+        // Adding to sending data
+        if (name in sendingData) {
+            sendingData[name] = input.value;
+        }
+    });
+
+    return message || 'success';
 }
 
 /**
@@ -258,7 +304,7 @@ export function renderLogin() {
     const form = document.createElement('form');
 
     const formInputs = {
-        identifier: createInput('text', 'Введите username или email', 'username', [], true),
+        identifier: createInput('text', 'Введите username или email', 'identifier', [], true),
         password: createInput('password', 'Введите пароль', 'password', [], true),
     };
 
@@ -279,39 +325,30 @@ export function renderLogin() {
         e.preventDefault();
         
         const validationList = [
-            { name: 'username', type: 'text' },
+            { name: 'identifier', type: 'text' },
             { name: 'password', type: 'password' },
         ];
 
-        let isValid = true;
-        validationList.forEach(({ name, type }) => {
-            const input = form.querySelector(`[name="${name}"]`);
-            
-            // Checking if input's types wasn't changed. We trust html types validation 
-            if (!input) {
-                console.log(`Input with name "${name}" not found`);
-                isValid = false;
-                return;
-            }
+        const sendingData = {
+            identifier: '',
+            password: '',
+        };
 
-            if (input.type !== type) {
-                console.log(`Input type mismatch for "${name}". Expected "${type}", but found "${input.type}"`);
-                isValid = false;
-                return;
-            }
-
-            // Validating
-            const validationResult = validate(input.value, name, input.name === 'password' ? input.value : undefined);
-            if (validationResult !== 'success') {
-                alert(validationResult);
-                isValid = false;
-            }
-        });
-
-        if (isValid) {
-            console.log('Form is valid');
+        const message = validate(form, validationList, sendingData);
+        if (message === 'success') {
+            postLogin(sendingData, (response) => {
+                if (response.ok) {
+                    response.json().then((data) => {
+                        if (data.status === 'ok') {
+                            alert(`Привет, ${data.username}!`);
+                        } else {
+                            alert(data.message);
+                        }
+                    });
+                }
+            });
         } else {
-            console.log('Form is invalid');
+            alert(message);
         }
     });
 
@@ -356,35 +393,25 @@ export function renderSignup() {
             { name: 'passwordRepeat', type: 'password' },
         ];
 
-        let isValid = true;
-        validationList.forEach(({ name, type }) => {
-            const input = form.querySelector(`[name="${name}"]`);
-            
-            // Checking if input's types wasn't changed. We trust html types validation 
-            if (!input) {
-                console.log(`Input with name "${name}" not found`);
-                isValid = false;
-                return;
-            }
+        const sendingData = {
+            username: '',
+            email: '',
+            password: '',
+        };
 
-            if (input.type !== type) {
-                console.log(`Input type mismatch for "${name}". Expected "${type}", but found "${input.type}"`);
-                isValid = false;
-                return;
-            }
-
-            // Validating
-            const validationResult = validate(input.value, name, input.name === 'password' ? input.form.passwordRepeat?.value : undefined);
-            if (validationResult !== 'success') {
-                alert(validationResult);
-                isValid = false;
-            }
-        });
-
-        if (isValid) {
-            console.log('Form is valid');
+        const message = validate(form, validationList, sendingData);
+        if (message === 'success') {
+            postSignup(sendingData, (response) => {
+                if (response.ok) {
+                    alert("Успешно зарегистрирован!");
+                } else {
+                    response.json().then((data) => {
+                        alert(data.message);
+                    });
+                }
+            });
         } else {
-            console.log('Form is invalid');
+            alert(message);
         }
     });
 
