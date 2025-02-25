@@ -124,9 +124,15 @@ export function renderArtists() {
 }
 
 /**
- * Creates user inputs.
+ * Creates an input element with the specified attributes.
  * 
- * @returns {HTMLInputElement} A user input element.
+ * @param {string} type - The type of input element.
+ * @param {string} text - The placeholder text for the input.
+ * @param {string} name - The name attribute for the input.
+ * @param {string[]} classList - An array of class names to be added to the input.
+ * @param {boolean} required - Whether the input is required.
+ * 
+ * @returns {HTMLInputElement | NaN} The created input element, or NaN if invalid parameters are provided.
  */
 function createInput(type, text, name, classList, required) {
     const validInputTypes = new Set([
@@ -155,9 +161,13 @@ function createInput(type, text, name, classList, required) {
 };
 
 /**
- * Validates user input.
+ * Validates user input based on requirements.
  * 
- * @returns {string} Error message or success depending on meeting the requirements.
+ * @param {string} text - The input text to validate.
+ * @param {string} type - The type of input being validated ("username", "password", "passwordRepeat", etc.).
+ * @param {string} [matchingValue] - The value to match against (used for password confirmation).
+ * 
+ * @returns {string} An error message if validation fails, otherwise "success".
  */
 function validateInput(text, type, matchingValue) {
     const globalValidCharsChecker = (text) => {
@@ -196,11 +206,14 @@ function validateInput(text, type, matchingValue) {
             maxLength: 25,
             containsLetter: globalLetterChecker,
             containsValidChars: globalValidCharsChecker,
-            matches: (text) => {
-                return text === matchingValue || matchingValue === undefined; 
-            },
         },
         
+        passwordRepeat: {
+            matches: (text) => {
+                return text === matchingValue; 
+            },
+        },
+
         username: {
             minLength: 3,
             maxLength: 20,
@@ -234,9 +247,6 @@ function validateInput(text, type, matchingValue) {
             if (!passwordRequirements.containsLetter(text)) {
                 return 'Пароль должен содержать хотя бы одну букву';
             }
-            if (!passwordRequirements.matches(text)) {
-                return 'Пароли не совпадают';
-            }
             break;
 
         case 'email':
@@ -246,6 +256,10 @@ function validateInput(text, type, matchingValue) {
             break;
         
         case 'passwordRepeat':
+            const passwordRepeatRequirements = requirements.passwordRepeat;
+            if (!passwordRepeatRequirements.matches(text)) {
+                return 'Пароли не совпадают';
+            }
             break;
 
         default:
@@ -256,33 +270,41 @@ function validateInput(text, type, matchingValue) {
 }
 
 /**
- * Validates user inputs.
+ * Validates user inputs based on a validation list.
  * 
- * @returns {string} Error message or success depending on meeting the requirements.
+ * @param {HTMLFormElement} form - The form element containing the inputs.
+ * @param {Array<{ name: string, type: string }>} validationList - The list of input fields to validate.
+ * @param {Object} sendingData - The object where validated input values will be stored.
+ * 
+ * @returns {{ message: string, errorInputName: string }} The validation result with a success message or an error message and errorInput name.
  */
 function validate(form, validationList, sendingData) {
     let message;
+    let errorInputName;
     validationList.forEach(({ name, type }) => {
         const input = form.querySelector(`[name="${name}"]`);
         
         // Checking if input's types wasn't changed. We trust html types validation 
         if (!input) {
             message = `Input with name "${name}" not found`;
+            errorInputName = name;
             return;
         }
 
         if (input.type !== type) {
             message = `Input type mismatch for "${name}". Expected "${type}", but found "${input.type}"`;
+            errorInputName = name;
             return;
         }
 
         // Validating
         const validationResult = validateInput(
-            input.value.trim(), name, input.name === 'password' 
-            ? input.form.passwordRepeat?.value.trim() : undefined
+            input.value.trim(), name, input.name === 'passwordRepeat' 
+            ? input.form.password?.value.trim() : undefined
         );
         if (validationResult !== 'success') {
             message = validationResult
+            errorInputName = name;
             return;
         }
 
@@ -292,7 +314,10 @@ function validate(form, validationList, sendingData) {
         }
     });
 
-    return message || 'success';
+    if (!message) {
+        message = 'success';
+    } 
+    return { message, errorInputName };
 }
 
 /**
@@ -334,21 +359,42 @@ export function renderLogin() {
             password: '',
         };
 
-        const message = validate(form, validationList, sendingData);
+        const { message, errorInputName } = validate(form, validationList, sendingData);
+        
+        // Clear previous errors
+        form.querySelectorAll('p.error-message').forEach(msg => msg.remove());
+        
         if (message === 'success') {
             postLogin(sendingData, (response) => {
                 if (response.ok) {
                     response.json().then((data) => {
                         if (data.status === 'ok') {
-                            alert(`Привет, ${data.username}!`);
+                            const successMessage = document.createElement('p');
+                            successMessage.textContent = `Привет, ${data.username}!`;
+                            successMessage.style.color = 'green';
+                            form.appendChild(successMessage);
                         } else {
-                            alert(data.message);
+                            const errorMessage = document.createElement('p');
+                            errorMessage.textContent = data.message;
+                            errorMessage.style.color = 'red';
+                            errorMessage.classList.add('error-message');
+                            form.appendChild(errorMessage);
                         }
                     });
                 }
             });
         } else {
-            alert(message);
+            const inputElement = form.querySelector(`[name="${errorInputName}"]`);
+            if (inputElement) {
+                let validationMessage = inputElement.nextElementSibling;
+                if (!validationMessage || validationMessage.tagName !== 'P') {
+                    validationMessage = document.createElement('p');
+                    validationMessage.classList.add('error-message');
+                    validationMessage.style.color = 'red';
+                    inputElement.parentNode.insertBefore(validationMessage, inputElement.nextSibling);
+                }
+                validationMessage.textContent = message;
+            }
         }
     });
 
@@ -387,10 +433,10 @@ export function renderSignup() {
         e.preventDefault();
         
         const validationList = [
-            { name: 'username', type: 'text' },
-            { name: 'email', type: 'email' },
             { name: 'password', type: 'password' },
             { name: 'passwordRepeat', type: 'password' },
+            { name: 'username', type: 'text' },
+            { name: 'email', type: 'email' },
         ];
 
         const sendingData = {
@@ -399,19 +445,44 @@ export function renderSignup() {
             password: '',
         };
 
-        const message = validate(form, validationList, sendingData);
+        const { message, errorInputName } = validate(form, validationList, sendingData);
+        
+        // Clear previous errors
+        form.querySelectorAll('p.error-message').forEach(msg => msg.remove());
+        
         if (message === 'success') {
             postSignup(sendingData, (response) => {
                 if (response.ok) {
-                    alert("Успешно зарегистрирован!");
+                    response.json().then((data) => {
+                        if (data.status === 'ok') {
+                            const successMessage = document.createElement('p');
+                            successMessage.textContent = `Успешно зарегистрирован!`;
+                            successMessage.style.color = 'green';
+                            form.appendChild(successMessage);
+                        }
+                    });
                 } else {
                     response.json().then((data) => {
-                        alert(data.message);
+                        const errorMessage = document.createElement('p');
+                        errorMessage.textContent = data.message;
+                        errorMessage.style.color = 'red';
+                        errorMessage.classList.add('error-message');
+                        form.appendChild(errorMessage);
                     });
                 }
             });
         } else {
-            alert(message);
+            const inputElement = form.querySelector(`[name="${errorInputName}"]`);
+            if (inputElement) {
+                let validationMessage = inputElement.nextElementSibling;
+                if (!validationMessage || validationMessage.tagName !== 'P') {
+                    validationMessage = document.createElement('p');
+                    validationMessage.classList.add('error-message');
+                    validationMessage.style.color = 'red';
+                    inputElement.parentNode.insertBefore(validationMessage, inputElement.nextSibling);
+                }
+                validationMessage.textContent = message;
+            }
         }
     });
 

@@ -36,7 +36,7 @@ export function getArtists(callback) {
 /**
  * Makes a POST request to the server to send new user data.
  * 
- * @param {Object} userData - An object containing username, email, and password.
+ * @param {Object} userData - An object containing username, email and password.
  * @param {function} callback - A callback function to be called when the
  * request is complete. The function will be called with a Response object as
  * its single argument.
