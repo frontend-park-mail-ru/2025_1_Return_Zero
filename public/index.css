@@ -33,4 +33,9 @@ a {
 
 button {
     border: none;
+    cursor: pointer;
+}
+
+input {
+    display: block;
 }

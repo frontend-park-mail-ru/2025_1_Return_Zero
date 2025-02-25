@@ -12,6 +12,7 @@ const public_root = '../public';
 const users = {
     test: {
         username: 'test',
+        email: 'test',
         password: 'password',
     },
 };
@@ -97,17 +98,17 @@ app.get('/api/artists', (req, res) => {
 });
 
 app.post('/api/signup', (req, res) => {
-    const { username, password } = req.body;
+    const { username, email, password } = req.body;
 
-    if (!username || !password) {
+    if (!username || !password || !email) {
         res.status(400).json({
             status: 'error',
-            message: 'Missing username or password',
+            message: 'Missing username, password or email',
         });
         return;
     }
 
-    if (users[username]) {
+    if (users[username] || users[email]) {
         res.status(400).json({
             status: 'error',
             message: 'User already exists',
@@ -115,6 +116,12 @@ app.post('/api/signup', (req, res) => {
     } else {
         users[username] = {
             username,
+            email,
+            password,
+        };
+        users[email] = {
+            username,
+            email,
             password,
         };
         res.cookie('token', createSession(users[username]), {
@@ -130,8 +137,8 @@ app.post('/api/signup', (req, res) => {
 });
 
 app.post('/api/login', (req, res) => {
-    const { username, password } = req.body;
-    const user = users[username];
+    const { identifier, password } = req.body;
+    const user = users[identifier];
     if (user && user.password === password) {
         const token = createSession(user);
         res.cookie('token', token, {
@@ -139,9 +146,9 @@ app.post('/api/login', (req, res) => {
             secure: false, // no https right now
             httpOnly: true,
         });
-        res.json({
+        res.json({ 
             status: 'ok',
-            nickname: user.nickname,
+            username: user.username,
         });
     } else {
         res.json({
