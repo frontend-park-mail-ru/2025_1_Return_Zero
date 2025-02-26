@@ -102,7 +102,9 @@
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "compile:templates": "handlebars public/components/header/header.hbs -f public/components/header/header.precompiled.js"
+        "compile:templates": "for file in $(find public/components -name *.hbs); do echo \"Compiling $file\"; handlebars $file -f ${file%.hbs}.precompiled.js; done",
+        "prestart": "npm run compile:templates",
+        "start": "node server/server.js"
     },
     "repository": {
         "type": "git",

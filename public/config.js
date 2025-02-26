@@ -1,4 +1,4 @@
-import { renderSongs, renderAlbums, renderArtists, renderLogin, renderSignup } from './renders.js';
+// import { renderSongs, renderAlbums, renderArtists, renderLogin, renderSignup } from './renders.js';
 
 export const config = {
     nav: {
@@ -6,25 +6,25 @@ export const config = {
             href: '/',
             text: 'Главная',
             icon: '/static/img/icon-tracks.svg',
-            render: renderSongs,
+            // render: renderSongs,
         },
         songs: {
             href: '/songs',
             text: 'Треки',
             icon: '/static/img/icon-tracks.svg',
-            render: renderSongs,
+            // render: renderSongs,
         },
         artists: {
             href: '/artists',
             text: 'Артисты',
             icon: '/static/img/icon-artists.svg',
-            render: renderArtists,
+            // render: renderArtists,
         },
         albums: {
             href: '/albums',
             text: 'Альбомы',
             icon: '/static/img/icon-albums.svg',
-            render: renderAlbums,
+            // render: renderAlbums,
         },
         // login: {
         //     href: '/login',

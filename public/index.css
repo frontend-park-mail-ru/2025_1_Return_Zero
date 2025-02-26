@@ -1,4 +1,8 @@
+@import url(components/card/card.css);
+
 @import url(components/header/header.css);
+@import url(components/playlists/playlists.css);
+@import url(components/main/main.css);
 
 @import url(dark.css);
 
@@ -21,6 +25,16 @@
     --font-size-h2: 1.75rem;
     --font-size-h3: 1.5rem;
     --font-size-h4: 1.25rem;
+
+
+    display: grid;
+    grid-template-areas: 
+        "header header"
+        "playlists main"
+        "footer footer";
+    grid-template-rows: min-content 1fr min-content;
+    grid-template-columns: min-content 1fr;
+    gap: 0.5rem;
 }
 
 a {
@@ -35,4 +49,17 @@ button {
 
 input {
     display: block;
+}
+
+h1 {
+    font-size: var(--font-size-h1);
+}
+h2 {
+    font-size: var(--font-size-h2);
+}
+h3 {
+    font-size: var(--font-size-h3);
+}
+h4 {
+    font-size: var(--font-size-h4);
 }

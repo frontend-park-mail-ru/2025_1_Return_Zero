@@ -7,5 +7,5 @@ export function renderHeader() {
         navItems: config.nav,
     };
 
-    return template(content, config);
+    return template(content, content);
 }

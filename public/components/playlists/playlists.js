@@ -1,11 +1,15 @@
-import './header.precompiled.js'
-import { config } from '../../config.js';
+import './playlists.precompiled.js'
 
-export function renderHeader() {
-    const template = Handlebars.templates['header.hbs'];
+export function renderPlaylists() {
+    const template = Handlebars.templates['playlists.hbs'];
+    
+    const playlists = new Array(50).fill(
+        {img: 'https://upload.wikimedia.org/wikipedia/ru/8/8f/The_Number_Of_The_Beast.jpg', href: ''},
+        0, 50
+    )
     const content = {
-        navItems: config.nav,
+        playlists
     };
 
-    return template(content, config);
+    return template(content);
 }
