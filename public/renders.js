@@ -124,43 +124,6 @@ export function renderArtists() {
 }
 
 /**
- * Creates an input element with the specified attributes.
- * 
- * @param {string} type - The type of input element.
- * @param {string} text - The placeholder text for the input.
- * @param {string} name - The name attribute for the input.
- * @param {string[]} classList - An array of class names to be added to the input.
- * @param {boolean} required - Whether the input is required.
- * 
- * @returns {HTMLInputElement | NaN} The created input element, or NaN if invalid parameters are provided.
- */
-function createInput(type, text, name, classList, required) {
-    const validInputTypes = new Set([
-        "text", "email", "password", "number", "tel", "url", "search",
-        "date", "datetime-local", "month", "week", "time", "color", "file"
-    ]);
-
-    if (!validInputTypes.has(type) || typeof text !== "string" || typeof name !== "string") {
-        return NaN;
-    }
-
-    const input = document.createElement('input');
-    input.type = type;
-    input.placeholder = text;
-    input.name = name;
-    classList.forEach((className) => {
-        if (typeof className === "string") {
-            input.classList.add(className);
-        }
-    });
-    if (typeof required === "boolean") {
-        input.required = required;
-    }
-
-    return input;
-};
-
-/**
  * Validates user input based on requirements.
  * 
  * @param {string} text - The input text to validate.
@@ -326,25 +289,18 @@ function validate(form, validationList, sendingData) {
  * @returns {HTMLDivElement} A div element containing the login form.
  */
 export function renderLogin() {
-    const form = document.createElement('form');
-
-    const formInputs = {
-        identifier: createInput('text', 'Введите username или email', 'identifier', [], true),
-        password: createInput('password', 'Введите пароль', 'password', [], true),
+    const template = Handlebars.templates['Auth.hbs'];
+    const formData = {
+        inputs: [
+            { type: 'text', placeholder: 'Введите username или email', name: 'identifier' },
+            { type: 'password', placeholder: 'Введите пароль', name: 'password' },
+        ],
+        submitText: 'Войти',
     };
 
-    Object.entries(formInputs).forEach(([key, inputElement]) => {
-        if (inputElement) {
-            form.appendChild(inputElement);
-        } else {
-            console.log(`In renderLogin: Failed to create input element for ${key}`);
-        }
-    });
-
-    const submitBtn = document.createElement('input');
-    submitBtn.type = 'submit';
-    submitBtn.value = 'Войти';
-    form.appendChild(submitBtn);
+    const form = document.createElement('form');
+    form.classList.add('auth-form');
+    form.innerHTML = template(formData);
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -361,9 +317,10 @@ export function renderLogin() {
 
         const { message, errorInputName } = validate(form, validationList, sendingData);
         
-        // Clear previous errors
+        // Clear previous messages
         form.querySelectorAll('p.error-message').forEach(msg => msg.remove());
-        
+        form.querySelectorAll('p.success-message').forEach(msg => msg.remove());
+
         if (message === 'success') {
             postLogin(sendingData, (response) => {
                 if (response.ok) {
@@ -371,12 +328,11 @@ export function renderLogin() {
                         if (data.status === 'ok') {
                             const successMessage = document.createElement('p');
                             successMessage.textContent = `Привет, ${data.username}!`;
-                            successMessage.style.color = 'green';
+                            successMessage.classList.add('success-message');
                             form.appendChild(successMessage);
                         } else {
                             const errorMessage = document.createElement('p');
                             errorMessage.textContent = data.message;
-                            errorMessage.style.color = 'red';
                             errorMessage.classList.add('error-message');
                             form.appendChild(errorMessage);
                         }
@@ -390,7 +346,6 @@ export function renderLogin() {
                 if (!validationMessage || validationMessage.tagName !== 'P') {
                     validationMessage = document.createElement('p');
                     validationMessage.classList.add('error-message');
-                    validationMessage.style.color = 'red';
                     inputElement.parentNode.insertBefore(validationMessage, inputElement.nextSibling);
                 }
                 validationMessage.textContent = message;
@@ -407,36 +362,30 @@ export function renderLogin() {
  * @returns {HTMLDivElement} A div element containing the signup form.
  */
 export function renderSignup() {
-    const form = document.createElement('form');
+    const template = Handlebars.templates['Auth.hbs']; 
 
-    const formInputs = {
-        username: createInput('text', 'Введите username', 'username', [], true),
-        email: createInput('email', 'Введите email', 'email', [], true),
-        password: createInput('password', 'Введите пароль', 'password', [], true),
-        passwordRepeat: createInput('password', 'Повторите пароль', 'passwordRepeat', [], true),
+    const formData = {
+        inputs: [
+            { type: 'text', placeholder: 'Введите username', name: 'username' },
+            { type: 'email', placeholder: 'Введите email', name: 'email' },
+            { type: 'password', placeholder: 'Введите пароль', name: 'password' },
+            { type: 'password', placeholder: 'Повторите пароль', name: 'passwordRepeat' },
+        ],
+        submitText: 'Зарегистрироваться',
     };
 
-    Object.entries(formInputs).forEach(([key, inputElement]) => {
-        if (inputElement) {
-            form.appendChild(inputElement);
-        } else {
-            console.log(`In renderSignup: Failed to create input element for ${key}`);
-        }
-    });
-
-    const submitBtn = document.createElement('input');
-    submitBtn.type = 'submit';
-    submitBtn.value = 'Зарегистрироваться';
-    form.appendChild(submitBtn);
+    const form = document.createElement('form');
+    form.classList.add('auth-form');
+    form.innerHTML = template(formData);
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         
         const validationList = [
-            { name: 'password', type: 'password' },
             { name: 'passwordRepeat', type: 'password' },
-            { name: 'username', type: 'text' },
+            { name: 'password', type: 'password' },
             { name: 'email', type: 'email' },
+            { name: 'username', type: 'text' },
         ];
 
         const sendingData = {
@@ -447,8 +396,9 @@ export function renderSignup() {
 
         const { message, errorInputName } = validate(form, validationList, sendingData);
         
-        // Clear previous errors
+        // Clear previous messages
         form.querySelectorAll('p.error-message').forEach(msg => msg.remove());
+        form.querySelectorAll('p.success-message').forEach(msg => msg.remove());
         
         if (message === 'success') {
             postSignup(sendingData, (response) => {
@@ -457,7 +407,7 @@ export function renderSignup() {
                         if (data.status === 'ok') {
                             const successMessage = document.createElement('p');
                             successMessage.textContent = `Успешно зарегистрирован!`;
-                            successMessage.style.color = 'green';
+                            successMessage.classList.add('success-message');
                             form.appendChild(successMessage);
                         }
                     });
@@ -465,7 +415,6 @@ export function renderSignup() {
                     response.json().then((data) => {
                         const errorMessage = document.createElement('p');
                         errorMessage.textContent = data.message;
-                        errorMessage.style.color = 'red';
                         errorMessage.classList.add('error-message');
                         form.appendChild(errorMessage);
                     });
@@ -478,7 +427,6 @@ export function renderSignup() {
                 if (!validationMessage || validationMessage.tagName !== 'P') {
                     validationMessage = document.createElement('p');
                     validationMessage.classList.add('error-message');
-                    validationMessage.style.color = 'red';
                     inputElement.parentNode.insertBefore(validationMessage, inputElement.nextSibling);
                 }
                 validationMessage.textContent = message;

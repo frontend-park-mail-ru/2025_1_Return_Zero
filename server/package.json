@@ -9,7 +9,9 @@
     "main": "server.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node server.js"
+        "prestart": "npm run compile:templates",
+        "start": "DEBUG=* && node ./server/server.js",
+        "compile:templates": "handlebars public/Auth.hbs -f public/Auth.precompiled.js"
     },
     "repository": {
         "type": "git",

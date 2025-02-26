@@ -1,0 +1,11 @@
+.auth-form input {
+    display: block;
+}
+
+.error-message {
+    color: red;
+}
+
+.success-message {
+    color: green;
+}

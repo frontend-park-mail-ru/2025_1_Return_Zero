@@ -1,4 +1,5 @@
 @import url(components.css);
+@import "Auth.css";
 
 * {
     padding: 0;
@@ -34,8 +35,4 @@ a {
 button {
     border: none;
     cursor: pointer;
-}
-
-input {
-    display: block;
 }
