@@ -1,4 +1,6 @@
 {{#each inputs}}
-    <input type="{{this.type}}" placeholder="{{this.placeholder}}" name="{{this.name}}" required />
+    <input type="{{this.type}}" placeholder="{{this.placeholder}}" name="{{this.name}}" required>
+    <p class="error-message" name="{{this.errorName}}"></p>
 {{/each}}
-<input type="submit" value="{{submitText}}" class="submit-btn" />
+<input type="submit" value="{{submitText}}" class="submit-btn">
+<p class="error-message" name="global-error"></p>

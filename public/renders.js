@@ -292,8 +292,8 @@ export function renderLogin() {
     const template = Handlebars.templates['Auth.hbs'];
     const formData = {
         inputs: [
-            { type: 'text', placeholder: 'Введите username или email', name: 'identifier' },
-            { type: 'password', placeholder: 'Введите пароль', name: 'password' },
+            { type: 'text', placeholder: 'Введите username или email', name: 'identifier', errorName: 'identifier-error' },
+            { type: 'password', placeholder: 'Введите пароль', name: 'password', errorName: 'password-error' },
         ],
         submitText: 'Войти',
     };
@@ -316,25 +316,23 @@ export function renderLogin() {
         };
 
         const { message, errorInputName } = validate(form, validationList, sendingData);
-        
+
         // Clear previous messages
-        form.querySelectorAll('p.error-message').forEach(msg => msg.remove());
-        form.querySelectorAll('p.success-message').forEach(msg => msg.remove());
+        form.querySelectorAll('p.error-message').forEach(msg => msg.textContent = '');
+        form.querySelectorAll('p.success-message').forEach(msg => msg.textContent = '');
 
         if (message === 'success') {
             postLogin(sendingData, (response) => {
                 if (response.ok) {
                     response.json().then((data) => {
                         if (data.status === 'ok') {
-                            const successMessage = document.createElement('p');
+                            const successMessage = document.querySelector(`[name="global-error"]`);
                             successMessage.textContent = `Привет, ${data.username}!`;
-                            successMessage.classList.add('success-message');
-                            form.appendChild(successMessage);
+                            successMessage.className = 'success-message';
                         } else {
-                            const errorMessage = document.createElement('p');
+                            const errorMessage = document.querySelector(`[name="global-error"]`);
                             errorMessage.textContent = data.message;
-                            errorMessage.classList.add('error-message');
-                            form.appendChild(errorMessage);
+                            errorMessage.className = 'error-message';
                         }
                     });
                 }
@@ -344,9 +342,7 @@ export function renderLogin() {
             if (inputElement) {
                 let validationMessage = inputElement.nextElementSibling;
                 if (!validationMessage || validationMessage.tagName !== 'P') {
-                    validationMessage = document.createElement('p');
-                    validationMessage.classList.add('error-message');
-                    inputElement.parentNode.insertBefore(validationMessage, inputElement.nextSibling);
+                    validationMessage = document.querySelector(`[name="${errorInputName}-error"]`);
                 }
                 validationMessage.textContent = message;
             }
@@ -363,13 +359,12 @@ export function renderLogin() {
  */
 export function renderSignup() {
     const template = Handlebars.templates['Auth.hbs']; 
-
     const formData = {
         inputs: [
-            { type: 'text', placeholder: 'Введите username', name: 'username' },
-            { type: 'email', placeholder: 'Введите email', name: 'email' },
-            { type: 'password', placeholder: 'Введите пароль', name: 'password' },
-            { type: 'password', placeholder: 'Повторите пароль', name: 'passwordRepeat' },
+            { type: 'text', placeholder: 'Введите username', name: 'username', errorName: 'username-error' },
+            { type: 'email', placeholder: 'Введите email', name: 'email',  errorName: 'email-error' },
+            { type: 'password', placeholder: 'Введите пароль', name: 'password',  errorName: 'password-error' },
+            { type: 'password', placeholder: 'Повторите пароль', name: 'passwordRepeat',  errorName: 'passwordRepeat-error' },
         ],
         submitText: 'Зарегистрироваться',
     };
@@ -397,26 +392,24 @@ export function renderSignup() {
         const { message, errorInputName } = validate(form, validationList, sendingData);
         
         // Clear previous messages
-        form.querySelectorAll('p.error-message').forEach(msg => msg.remove());
-        form.querySelectorAll('p.success-message').forEach(msg => msg.remove());
+        form.querySelectorAll('p.error-message').forEach(msg => msg.textContent = '');
+        form.querySelectorAll('p.success-message').forEach(msg => msg.textContent = '');
         
         if (message === 'success') {
             postSignup(sendingData, (response) => {
                 if (response.ok) {
                     response.json().then((data) => {
                         if (data.status === 'ok') {
-                            const successMessage = document.createElement('p');
-                            successMessage.textContent = `Успешно зарегистрирован!`;
-                            successMessage.classList.add('success-message');
-                            form.appendChild(successMessage);
+                            const successMessage = document.querySelector(`[name="global-error"]`);
+                            successMessage.textContent = 'Успешно зарегистрирован!';
+                            successMessage.className = 'success-message';
                         }
                     });
                 } else {
                     response.json().then((data) => {
-                        const errorMessage = document.createElement('p');
+                        const errorMessage = document.querySelector(`[name="global-error"]`);
                         errorMessage.textContent = data.message;
-                        errorMessage.classList.add('error-message');
-                        form.appendChild(errorMessage);
+                        errorMessage.className = 'error-message';
                     });
                 }
             });
@@ -425,9 +418,7 @@ export function renderSignup() {
             if (inputElement) {
                 let validationMessage = inputElement.nextElementSibling;
                 if (!validationMessage || validationMessage.tagName !== 'P') {
-                    validationMessage = document.createElement('p');
-                    validationMessage.classList.add('error-message');
-                    inputElement.parentNode.insertBefore(validationMessage, inputElement.nextSibling);
+                    validationMessage = document.querySelector(`[name="${errorInputName}-error"]`);
                 }
                 validationMessage.textContent = message;
             }
