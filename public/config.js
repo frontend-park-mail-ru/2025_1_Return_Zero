@@ -1,31 +1,40 @@
 import { renderSongs, renderAlbums, renderArtists, renderLogin, renderSignup } from './renders.js';
 
 export const config = {
-    menu: {
-        songs: {
-            href: '/songs',
-            text: 'Songs',
+    nav: {
+        main: {
+            href: '/',
+            text: 'Главная',
+            icon: '/static/img/icon-tracks.svg',
             render: renderSongs,
         },
-        albums: {
-            href: '/albums',
-            text: 'Albums',
-            render: renderAlbums,
+        songs: {
+            href: '/songs',
+            text: 'Треки',
+            icon: '/static/img/icon-tracks.svg',
+            render: renderSongs,
         },
         artists: {
             href: '/artists',
-            text: 'Artists',
+            text: 'Артисты',
+            icon: '/static/img/icon-artists.svg',
             render: renderArtists,
         },
-        login: {
-            href: '/login',
-            text: 'Авторизация',
-            render: renderLogin,
+        albums: {
+            href: '/albums',
+            text: 'Альбомы',
+            icon: '/static/img/icon-albums.svg',
+            render: renderAlbums,
         },
-        signup: {
-            href: '/signup',
-            text: 'Регистрация',
-            render: renderSignup,
-        },
+        // login: {
+        //     href: '/login',
+        //     text: 'Авторизация',
+        //     render: renderLogin,
+        // },
+        // signup: {
+        //     href: '/signup',
+        //     text: 'Регистрация',
+        //     render: renderSignup,
+        // },
     },
 };

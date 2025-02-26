@@ -1,3 +1,7 @@
+// import base from 'data:text/x-handlebars-template;,/static/hbs/base.hbs';
+import './hbs/base.precompiled.js';
+
+import { renderHeader } from './components/header/header.js';
 import { config } from './config.js';
 import { goToPage, getSongs, getAlbums, getArtists, postSignup, postLogin } from './utils.js';
 
@@ -9,6 +13,7 @@ import { goToPage, getSongs, getAlbums, getArtists, postSignup, postLogin } from
  * @param {Object} appState - The application state object that holds references to active page links and menu elements.
  */
 export function createMenu(menuContainer, pageContainer, appState) {
+    menuContainer.innerHTML += Handlebars.templates['base.hbs'](config.base, config);
     Object.entries(config.menu).forEach(([key, { href, text }], index) => {
         const menuElement = document.createElement('a');
         menuElement.href = href;
@@ -36,6 +41,11 @@ export function createMenu(menuContainer, pageContainer, appState) {
     });
 
     goToPage(menuContainer.firstElementChild, pageContainer, appState);
+}
+
+export function renderPage(appState) {
+    const root = document.getElementById('root');
+    root.innerHTML += renderHeader();
 }
 
 /**
