@@ -340,10 +340,7 @@ export function renderLogin() {
         } else {
             const inputElement = form.querySelector(`[name="${errorInputName}"]`);
             if (inputElement) {
-                let validationMessage = inputElement.nextElementSibling;
-                if (!validationMessage || validationMessage.tagName !== 'P') {
-                    validationMessage = document.querySelector(`[name="${errorInputName}-error"]`);
-                }
+                const validationMessage = document.querySelector(`[name="${errorInputName}-error"]`);
                 validationMessage.textContent = message;
             }
         }
@@ -416,10 +413,7 @@ export function renderSignup() {
         } else {
             const inputElement = form.querySelector(`[name="${errorInputName}"]`);
             if (inputElement) {
-                let validationMessage = inputElement.nextElementSibling;
-                if (!validationMessage || validationMessage.tagName !== 'P') {
-                    validationMessage = document.querySelector(`[name="${errorInputName}-error"]`);
-                }
+                const validationMessage = document.querySelector(`[name="${errorInputName}-error"]`);
                 validationMessage.textContent = message;
             }
         }
