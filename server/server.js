@@ -146,7 +146,7 @@ app.post('/api/login', (req, res) => {
             secure: false, // no https right now
             httpOnly: true,
         });
-        res.json({ 
+        res.json({
             status: 'ok',
             username: user.username,
         });

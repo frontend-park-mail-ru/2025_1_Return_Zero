@@ -1,10 +1,10 @@
-import './header.precompiled.js'
-import { config } from '../../config.js';
+import './header.precompiled.js';
 
-export function renderHeader() {
+export function renderHeader(navItems) {
     const template = Handlebars.templates['header.hbs'];
+
     const content = {
-        navItems: config.nav,
+        navItems,
     };
 
     return template(content, content);

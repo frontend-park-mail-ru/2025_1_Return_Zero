@@ -11,7 +11,7 @@
     direction: rtl;
 }
 
-#playlists-panel>ul {
+#playlists-panel > ul {
     list-style: none;
 
     display: flex;
