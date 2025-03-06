@@ -1,5 +1,4 @@
-@import url(components.css);
-@import "Auth.css";
+@import "components/auth.css";
 
 * {
     padding: 0;

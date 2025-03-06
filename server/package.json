@@ -9,9 +9,9 @@
     "main": "server.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
+        "compile:templates": "for file in $(find public/components -name *.hbs); do echo \"Compiling $file\"; handlebars $file -f ${file%.hbs}.precompiled.js; done",
         "prestart": "npm run compile:templates",
-        "start": "DEBUG=* && node ./server/server.js",
-        "compile:templates": "handlebars public/Auth.hbs -f public/Auth.precompiled.js"
+        "start": "node server/server.js"
     },
     "repository": {
         "type": "git",
