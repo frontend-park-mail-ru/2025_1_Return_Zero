@@ -177,20 +177,20 @@ app.get('/api/me', (req, res) => {
             },
         });
     } else {
-        res.json({
+        res.status(401).json({
             status: 'error',
             message: 'Unauthorized',
         });
     }
 });
 
-// async function printSessions() {
-//     while (true) {
-//         console.log(sessions);
-//         await new Promise((resolve) => setTimeout(resolve, 1000));
-//     }
-// }
-// printSessions();
+async function printSessions() {
+    while (true) {
+        console.log(sessions);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+}
+printSessions();
 
 app.listen(port, host, () => {
     console.log(`Example app listening on http://${host}:${port}`);
