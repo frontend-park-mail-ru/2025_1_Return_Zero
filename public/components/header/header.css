@@ -4,17 +4,19 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
+
     gap: 1.6rem;
 
     padding: 0.6rem 2.2rem;
+    margin-right: calc(2.5rem - 2.2rem);
 }
 
 /* logo */
 
 /* search */
-.header__search>input {
-    padding: 0.4rem 1.5rem;
+.header__search > input {
+    height: 2.5rem;
+    
     padding-left: calc(1.5rem + 1em + 0.6rem); /* padding + icon width + gap */
 
     background-image: url(/static/img/icon-search.svg);
@@ -29,18 +31,22 @@
     border: none;
     border-radius: 3rem;
 }
-.header__search>input:focus {
+.header__search > input:focus {
     outline: none;
 }
-.header__search>input::placeholder {
+.header__search > input::placeholder {
     color: var(--color-element);
 }
 
 /* nav */
-.header__nav>ul {
+.header__nav {
+    margin-left: 1.563rem;
+}
+
+.header__nav > ul {
     display: flex;
     align-items: center;
-    gap: 1.6rem;
+    gap: 1.563rem;
 
     list-style: none;
 }
@@ -48,20 +54,26 @@
 .header__nav .item {
     display: flex;
     align-items: center;
+    justify-content: center; 
     gap: 0.6rem;
-
-    padding: 0.4rem 1.5rem;
+    width: 10rem;
+    height: 2.5rem;
 
     font-size: var(--font-size-h4);
     color: var(--color-background);
     background-color: var(--color-text);
-    
+
     border-radius: 3rem;
 }
+.header__nav .item:hover,
+.header__nav .item.active {
+    box-shadow: 2px 4px 4px var(--color-highlight2);
+    overflow: visible;
+}
 
-.header__nav .item>img {
-    width: 1em;
-    height: 1em;
+.header__nav .item > img {
+    width: 1.3em;
+    height: 1.3em;
 }
 
 /* profile */
@@ -74,7 +86,47 @@
     border-radius: 50%;
 }
 
-.header__profile>img {
+.header__profile > img {
     width: 3.75rem;
     height: 3.75rem;
 }
+
+.header__main {
+    display: flex;
+    width: 100%;
+    padding-left: calc(2.25rem + 0.5rem + 2.5rem - 1.6rem);
+}  
+
+.header__auth {
+    display: flex;
+    justify-content: space-between;
+    width: 30rem;
+}
+
+.header__auth button {
+    height: 2.5rem;
+    
+    font-size: var(--font-size-h4);
+    color: var(--color-text);
+    background-color: var(--color-elements);
+    
+    border-radius: 2rem;
+    border: 1px solid var(--color-border);
+}
+
+.header__auth button.active {
+    border: 2px solid var(--color-highlight2);
+}
+
+.header__auth button:hover {
+    background-color: var(--color-button-hover);
+}
+
+.header__login {
+    width: 5.625rem;
+}
+
+.header__signup {
+    width: 14.688rem;
+    margin-left: 1.563rem;
+} 

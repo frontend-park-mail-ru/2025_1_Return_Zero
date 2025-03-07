@@ -146,7 +146,7 @@ app.post('/api/login', (req, res) => {
             secure: false, // no https right now
             httpOnly: true,
         });
-        res.json({ 
+        res.json({
             status: 'ok',
             username: user.username,
         });
@@ -170,7 +170,7 @@ app.get('/api/me', (req, res) => {
 
     const user = sessions[token];
     if (user) {
-        res.status(401).json({
+        res.status(200).json({
             status: 'ok',
             data: {
                 username: user.username,
