@@ -9,6 +9,7 @@
 @import url(components/playlists/playlists.css);
 
 @import url(pages/main/main.css);
+@import url(pages/songs/songs.css);
 @import url(pages/artists/artists.css);
 @import url(pages/albums/albums.css);
 
@@ -16,6 +17,10 @@
 
 /* fonts */
 @import url('https://fonts.googleapis.com/css2?family=Days+One&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@font-face {
+    font-family: 'Days One';
+    src: url('fonts/DaysOne-Regular.ttf') format('truetype');
+}
 
 * {
     padding: 0;
@@ -54,7 +59,7 @@
     --font-size-h3: 1.5rem;
     --font-size-h4: 1.25rem;
 
-    --font-weight-bold: 700;
+    --font-weight-bold: 600;
     --font-weight-light: 300;
 }
 
@@ -75,6 +80,7 @@ input {
 h1 {
     font-size: var(--font-size-h1);
     font-family: var(--font-family-header);
+    font-weight: 100;
 }
 h2 {
     font-size: var(--font-size-h2);

@@ -5,7 +5,7 @@ export const config = {
         main: {
             href: '/',
             text: 'Главная',
-            icon: '/static/img/icon-tracks.svg',
+            icon: '/static/img/icon-home.svg',
             // render: renderSongs,
         },
         songs: {

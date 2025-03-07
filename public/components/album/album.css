@@ -24,8 +24,8 @@
 
 .album__img {
     grid-area: img;
-    width: 9rem;
-    height: 9rem;
+    width: 8.75rem;
+    height: 8.75rem;
     border-radius: 1rem;
 }
 

@@ -2,6 +2,7 @@ import { renderHeader } from './components/header/header.js';
 import { renderPlaylists } from './components/playlists/playlists.js';
 
 import { renderMain } from './pages/main/main.js';
+import { renderSongs } from './pages/songs/songs.js';
 import { renderArtists } from './pages/artists/artists.js';
 import { renderAlbums } from './pages/albums/albums.js';
 
@@ -44,7 +45,16 @@ export function renderPage() {
                     active = section;
                     switch (section) {
                         case 'main':
-                            root.insertAdjacentHTML('beforeend', renderMain());
+                            root.insertAdjacentHTML(
+                                'beforeend',
+                                 renderMain()
+                            );
+                            break;
+                        case 'songs': 
+                            root.insertAdjacentHTML(
+                                'beforeend',
+                                renderSongs()
+                            );
                             break;
                         case 'artists':
                             root.insertAdjacentHTML(

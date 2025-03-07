@@ -7,11 +7,11 @@
 }
 
 .music-card__img {
-    width: 9rem;
-    height: 9rem;
+    width: 8.75rem;
+    height: 8.75rem;
     border-radius: 1rem;
 
-    overflow: visible;
+    overflow: hidden;
     box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.25);
 }
 
