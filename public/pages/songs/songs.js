@@ -2,6 +2,8 @@ import './songs.precompiled.js';
 import '../../components/music-card/music-card.js';
 import '../../components/song/song.js';
 
+import { userAuthChecker } from '../../components/auth/auth.js';
+
 export function renderSongs() {
     const template = Handlebars.templates['songs.hbs'];
     const content = {
@@ -38,6 +40,9 @@ export function renderSongs() {
     content.recommendations[1].artist = 'Another';
     content.recommendations[1].album = 'Another';
     content.recommendations[1].isLiked = true;
+
+    // changing header if user is not authenticated
+    userAuthChecker();
 
     return template(content);
 }

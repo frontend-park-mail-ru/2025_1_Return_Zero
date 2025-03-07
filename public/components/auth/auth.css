@@ -1,0 +1,45 @@
+.auth-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(5px); 
+
+    z-index: 1000; 
+}
+
+.auth-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+    background: var(--color-elements); 
+
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 1rem;
+    border: 1px solid var(--color-border);
+
+    z-index: 1001;
+}
+
+.auth-form input {
+    display: block;
+}
+
+.error-message {
+    color: red;
+}
+
+.success-message {
+    color: green;
+}
+

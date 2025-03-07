@@ -11,6 +11,10 @@
     direction: rtl;
 }
 
+#playlists-panel::-webkit-scrollbar {
+    display: none;
+}
+
 #playlists-panel > ul {
     list-style: none;
 

@@ -170,7 +170,7 @@ app.get('/api/me', (req, res) => {
 
     const user = sessions[token];
     if (user) {
-        res.status(401).json({
+        res.status(200).json({
             status: 'ok',
             data: {
                 username: user.username,

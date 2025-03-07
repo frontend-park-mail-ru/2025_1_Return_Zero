@@ -2,6 +2,8 @@ import '../../components/album-card/album-card.js';
 import '../../components/album/album.js';
 import './albums.precompiled.js';
 
+import { userAuthChecker } from '../../components/auth/auth.js';
+
 export function renderAlbums() {
     const template = Handlebars.templates['albums.hbs'];
 
@@ -29,6 +31,9 @@ export function renderAlbums() {
                 ...song,
             })),
     };
+
+    // changing header if user is not authenticated
+    userAuthChecker();
 
     return template(content);
 }

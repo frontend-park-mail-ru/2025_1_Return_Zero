@@ -1,6 +1,8 @@
 import '../../components/artist-card/artist-card.js';
 import './artists.precompiled.js';
 
+import { userAuthChecker } from '../../components/auth/auth.js';
+
 export function renderArtists() {
     const template = Handlebars.templates['artists.hbs'];
 
@@ -15,6 +17,9 @@ export function renderArtists() {
             name: 'Iron Maiden',
         }),
     };
+    
+    // changing header if user is not authenticated
+    userAuthChecker();
 
     return template(content);
 }

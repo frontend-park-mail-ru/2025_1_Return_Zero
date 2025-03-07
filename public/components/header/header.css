@@ -95,4 +95,38 @@
     display: flex;
     width: 100%;
     padding-left: calc(2.25rem + 0.5rem + 2.5rem - 1.6rem);
+}  
+
+.header__auth {
+    display: flex;
+    justify-content: space-between;
+    width: 30rem;
 }
+
+.header__auth button {
+    height: 2.5rem;
+    
+    font-size: var(--font-size-h4);
+    color: var(--color-text);
+    background-color: var(--color-elements);
+    
+    border-radius: 2rem;
+    border: 1px solid var(--color-border);
+}
+
+.header__auth button.active {
+    border: 2px solid var(--color-highlight2);
+}
+
+.header__auth button:hover {
+    background-color: var(--color-button-hover);
+}
+
+.header__login {
+    width: 5.625rem;
+}
+
+.header__signup {
+    width: 14.688rem;
+    margin-left: 1.563rem;
+} 

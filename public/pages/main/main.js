@@ -2,6 +2,8 @@ import './main.precompiled.js';
 import '../../components/music-card/music-card.js';
 import '../../components/song/song.js';
 
+import { userAuthChecker } from '../../components/auth/auth.js';
+
 export function renderMain() {
     const template = Handlebars.templates['main.hbs'];
     const content = {
@@ -39,5 +41,9 @@ export function renderMain() {
     content.recommendations[1].album = 'Another';
     content.recommendations[1].isLiked = true;
 
+    // changing header if user is not authenticated
+    userAuthChecker();
+
     return template(content);
 }
+

@@ -8,6 +8,8 @@
 @import url(components/header/header.css);
 @import url(components/playlists/playlists.css);
 
+@import url(components/auth/auth.css);
+
 @import url(pages/main/main.css);
 @import url(pages/songs/songs.css);
 @import url(pages/artists/artists.css);

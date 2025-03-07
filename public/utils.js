@@ -72,6 +72,20 @@ export function postLogin(userData, callback) {
 }
 
 /**
+ * Makes a GET request to check the current authenticated user.
+ *
+ * @param {function} callback - A callback function to be called when the
+ * request is complete. The function will be called with a Response object as
+ * its single argument.
+ */
+export function getCurrentUser(callback) {
+    fetch('/api/me', {
+        method: 'GET',
+        credentials: 'include',
+    }).then(callback);
+}
+
+/**
  * Goes to the page represented by the menu element by adding the rendered page
  * content to the page container.
  *
