@@ -219,15 +219,19 @@ export function loginForm() {
     const template = Handlebars.templates['auth.hbs'];
     const formData = {
         inputs: [
-            { type: 'text', placeholder: 'Введите username или email', name: 'identifier', errorName: 'identifier-error' },
-            { type: 'password', placeholder: 'Введите пароль', name: 'password', errorName: 'password-error' },
+            { type: 'text', text: 'Введите логин/email:', name: 'identifier', errorName: 'identifier-error', placeholder: 'логин/email' },
+            { type: 'password', text: 'Введите пароль:', name: 'password', errorName: 'password-error', placeholder: 'пароль' },
         ],
         submitText: 'Войти',
+        header: 'Авторизация',
     };
 
     const form = document.createElement('form');
     form.classList.add('auth-form');
     form.innerHTML = template(formData);
+    setTimeout(() => {
+        form.addEventListener("click", formClickListener);
+    }, 0);
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -253,9 +257,7 @@ export function loginForm() {
                 if (response.ok) {
                     response.json().then((data) => {
                         if (data.status === 'ok') {
-                            const successMessage = document.querySelector(`[name="global-error"]`);
-                            successMessage.textContent = `Привет, ${data.username}!`;
-                            successMessage.className = 'success-message';
+                            location.reload();
                         } else {
                             const errorMessage = document.querySelector(`[name="global-error"]`);
                             errorMessage.textContent = data.message;
@@ -285,17 +287,21 @@ export function signupForm() {
     const template = Handlebars.templates['auth.hbs']; 
     const formData = {
         inputs: [
-            { type: 'text', placeholder: 'Введите username', name: 'username', errorName: 'username-error' },
-            { type: 'email', placeholder: 'Введите email', name: 'email',  errorName: 'email-error' },
-            { type: 'password', placeholder: 'Введите пароль', name: 'password',  errorName: 'password-error' },
-            { type: 'password', placeholder: 'Повторите пароль', name: 'passwordRepeat',  errorName: 'passwordRepeat-error' },
+            { type: 'text', text: 'Введите логин:', name: 'username', errorName: 'username-error', placeholder: 'логин' },
+            { type: 'email', text: 'Введите email:', name: 'email',  errorName: 'email-error', placeholder: 'email' },
+            { type: 'password', text: 'Введите пароль:', name: 'password',  errorName: 'password-error', placeholder: 'пароль' },
+            { type: 'password', text: 'Повторите пароль:', name: 'passwordRepeat',  errorName: 'passwordRepeat-error', placeholder: 'пароль' },
         ],
         submitText: 'Зарегистрироваться',
+        header: 'Регистрация',
     };
 
     const form = document.createElement('form');
     form.classList.add('auth-form');
     form.innerHTML = template(formData);
+    setTimeout(() => {
+        form.addEventListener("click", formClickListener);
+    }, 0);
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -324,9 +330,7 @@ export function signupForm() {
                 if (response.ok) {
                     response.json().then((data) => {
                         if (data.status === 'ok') {
-                            const successMessage = document.querySelector(`[name="global-error"]`);
-                            successMessage.textContent = 'Успешно зарегистрирован!';
-                            successMessage.className = 'success-message';
+                            location.reload();
                         }
                     });
                 } else {
@@ -347,5 +351,20 @@ export function signupForm() {
     });
 
     return form;
+}
+
+function formClickListener(event) {
+    const authWindow = document.getElementById("auth");
+    
+    if (authWindow && !authWindow.contains(event.target)) {
+        const root = document.getElementById('root');
+        const authForm = event.currentTarget;
+        
+        authForm.removeEventListener("click", formClickListener);
+        root.removeChild(event.currentTarget);
+        document.querySelectorAll(".header__login.active, .header__signup.active").forEach(button => {
+            button.classList.remove("active");
+        });
+    }
 }
 
