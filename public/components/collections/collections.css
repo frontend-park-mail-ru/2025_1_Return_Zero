@@ -1,0 +1,38 @@
+.collections-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.collections-container button {
+    cursor: pointer;
+    text-align: center;
+
+    border-radius: 3rem;
+    border: 1px solid var(--color-border);
+    
+    background-color: var(--color-elements);
+    color: var(--color-text);
+    font-weight: var(--font-weight-light);
+    font-size: var(--font-size-collections);
+    font-family: var(--font-family-header);
+}
+
+.collections-container__first-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 27rem;
+    height: 8.375rem;
+}
+
+.collections-container__first-column button {
+    width: 27rem;
+    height: 3.75rem;
+}
+
+.collections-container__fat-button {
+    width: 20.75rem;
+}
+

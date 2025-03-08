@@ -12,19 +12,23 @@ import { postSignup, postLogin, getCurrentUser } from '../../utils.js';
  * @returns {string} An error message if validation fails, otherwise "success".
  */
 function validateInput(text, type, matchingValue) {
+    const validLetters = new Set([
+        ..."abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    ]);
+
+    const validChars = new Set([
+        ...validLetters, 
+        '_', 
+        ...'0123456789',
+        ...'@#!.'
+    ]);
+
     const globalValidCharsChecker = (text) => {
         if (typeof text !== 'string') {
             return false;
         }
 
-        for (let i = 0; i < text.length; i++) {
-            const char = text[i];
-            if (!((char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') || (char >= '0' && char <= '9') || char === '_')) {
-                return false;
-            }
-        }
-
-        return true;
+        return [...text].every(char => validChars.has(char));
     };
 
     const globalLetterChecker = (text) => {
@@ -32,14 +36,7 @@ function validateInput(text, type, matchingValue) {
             return false;
         }
 
-        for (let i = 0; i < text.length; i++) {
-            const char = text[i];
-            if ((char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z')) {
-                return true;
-            }
-        }
-
-        return false;
+        return [...text].some(char => validLetters.has(char));
     };
 
     const requirements = {
@@ -62,19 +59,31 @@ function validateInput(text, type, matchingValue) {
             containsLetter: globalLetterChecker,
             containsValidChars: globalValidCharsChecker,
         },
+
+        email: {
+            minLength: 5,
+            maxLength: 30,
+            containsValidChars: globalValidCharsChecker,
+        },
+
+        identifier: {
+            minLength: 3,
+            maxLength: 20,
+            containsValidChars: globalValidCharsChecker,
+        },
     };
 
     switch (type) {
         case 'username':
             const usernameRequirements = requirements.username;
             if (text.length < usernameRequirements.minLength || text.length > usernameRequirements.maxLength) {
-                return `Имя пользователя должно быть от ${usernameRequirements.minLength} до ${usernameRequirements.maxLength} символов`;
+                return `Логин должно быть от ${usernameRequirements.minLength} до ${usernameRequirements.maxLength} символов`;
             }
             if (!usernameRequirements.containsValidChars(text)) {
-                return 'Имя пользователя может содержать только латинские буквы, цифры и подчеркивания';
+                return 'Логин может содержать только латинские буквы, цифры и подчеркивания';
             }
             if (!usernameRequirements.containsLetter(text)) {
-                return 'Имя пользователя должно содержать хотя бы одну букву';
+                return 'Логин должен содержать хотя бы одну букву';
             }
             break;
 
@@ -92,9 +101,23 @@ function validateInput(text, type, matchingValue) {
             break;
 
         case 'email':
+            const emailRequirements = requirements.email;
+            if (text.length < emailRequirements.minLength || text.length > emailRequirements.maxLength) {
+                return `Email должен быть от ${emailRequirements.minLength} до ${emailRequirements.maxLength} символов`;
+            }
+            if (!emailRequirements.containsValidChars(text)) {
+                return 'Введите корректный email';
+            }
             break;
 
         case 'identifier':
+            const identifierRequirements = requirements.identifier;
+            if (text.length < identifierRequirements.minLength || text.length > identifierRequirements.maxLength) {
+                return `Логин/email должен быть от ${identifierRequirements.minLength} до ${identifierRequirements.maxLength} символов`;
+            }
+            if (!identifierRequirements.containsValidChars(text)) {
+                return 'Логин/email может содержать только латинские буквы, цифры и подчеркивания';
+            }
             break;
         
         case 'passwordRepeat':
@@ -357,6 +380,7 @@ function formClickListener(event) {
     const authWindow = document.getElementById("auth");
     
     if (authWindow && !authWindow.contains(event.target)) {
+        console.log("КУНО");
         const root = document.getElementById('root');
         const authForm = event.currentTarget;
         

@@ -9,6 +9,7 @@
 @import url(components/playlists/playlists.css);
 
 @import url(components/auth/auth.css);
+@import url(components/collections/collections.css);
 
 @import url(pages/main/main.css);
 @import url(pages/songs/songs.css);
@@ -60,6 +61,7 @@
     --font-size-h2: 1.75rem;
     --font-size-h3: 1.5rem;
     --font-size-h4: 1.25rem;
+    --font-size-collections: 1.375rem;
 
     --font-weight-bold: 600;
     --font-weight-light: 300;
