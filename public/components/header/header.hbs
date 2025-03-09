@@ -8,7 +8,7 @@
                 <input type="text" id="search" name="search" placeholder="Поиск...">
             </form>
             <nav class="header__nav">
-                <ul>
+                <ul id="header-list">
                     {{#each this.navItems}}
                         <li class="item {{#if this.active}}active{{/if}}">
                             <img class="icon" src="{{this.icon}}">
@@ -16,6 +16,7 @@
                         </li>
                     {{/each}}
                 </ul>
+                <div id="dropdown-menu" class="hidden-items-grid hide"></div>
             </nav>
         </div>
     </div>
@@ -23,3 +24,4 @@
         <img src="/static/img/no-avatar.svg" alt="profile">
     </a>
 </header>
+

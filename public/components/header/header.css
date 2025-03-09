@@ -142,3 +142,38 @@
 .icon {
     cursor: pointer;
 }
+
+.rotated {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+}
+
+#MoreButton {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background-color: var(--color-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+#MoreButtonImg {
+    transition: transform 0.3s ease;
+}
+
+.hidden-items-grid {
+    position: fixed;
+    margin-top: 1rem;
+    z-index: 999;
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: grid;
+}
