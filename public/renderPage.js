@@ -21,7 +21,7 @@ export function renderPage() {
             'click',
             (e) => {
                 if (e.target.tagName === 'A') {
-                    e.preventDefault();
+                    e.preventDefault(); 
 
                     const active_nav = root
                         .querySelector('#header .header__nav')

@@ -11,8 +11,10 @@
                 <ul>
                     {{#each this.navItems}}
                         <li class="item {{#if this.active}}active{{/if}}">
-                            <img class="icon" src="{{this.icon}}">
-                            <a class="data-href" href="{{this.href}}" data-section="{{@key}}">{{this.text}}</a>
+                            <a href="{{this.href}}" data-section="{{@key}}">
+                                <img class="icon" src="{{this.icon}}">
+                                <span>{{this.text}}</span>
+                            </a>
                         </li>
                     {{/each}}
                 </ul>
