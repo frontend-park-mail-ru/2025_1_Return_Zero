@@ -25,23 +25,23 @@ export function renderPage() {
         root.querySelector('#header .header__nav').addEventListener(
             'click',
             (e) => {
-                if (e.target.tagName === 'A') {
-                    e.preventDefault(); 
-
-                    const active_nav = root
-                        .querySelector('#header .header__nav')
-                        .querySelector('.active');
+                const target = e.target.closest('a');
+                if (target) {
+                    e.preventDefault();
+        
+                    const active_nav = root.querySelector('#header .header__nav .active');
                     if (active_nav) {
                         active_nav.classList.remove('active');
                     }
-                    e.target.parentNode.classList.add('active');
-
+        
+                    target.parentNode.classList.add('active');
+        
                     const active_node = document.getElementById(active);
                     if (active_node) {
                         root.removeChild(active_node);
                     }
-
-                    const section = e.target.dataset.section;
+        
+                    const section = target.dataset.section;
                     active = section;
                     switch (section) {
                         case 'main':

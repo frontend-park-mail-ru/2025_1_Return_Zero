@@ -11,9 +11,9 @@
                 <ul id="header-list">
                         {{#each this.navItems}}
                             <li class="item {{#if this.active}}active{{/if}}">
-                                <a class="data-href" href="{{this.href}}" data-section="{{@key}}">
+                                <a href="{{this.href}}" data-section="{{@key}}">
                                     <img class="icon" src="{{this.icon}}">
-                                    {{this.text}}
+                                    <span>{{this.text}}</span>
                                 </a>
                             </li>
                         {{/each}}
