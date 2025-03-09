@@ -15,6 +15,18 @@
     height: 100%;
 }
 
+::-webkit-scrollbar {
+    width: var(--width-scroll);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-border); 
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-background); 
+}
+
 #main section {
     flex-shrink: 0;
 

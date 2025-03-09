@@ -9,3 +9,4 @@ export function renderHeader(navItems) {
 
     return template(content, content);
 }
+

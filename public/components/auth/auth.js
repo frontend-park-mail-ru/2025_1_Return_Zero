@@ -139,9 +139,14 @@ export function userAuthChecker() {
         if (response.ok) {
             console.log("OK");
         } else {
-            // removing bad sections
+            // removing user sections
             const authUserSections = document.querySelectorAll('section#loved, section#recent');
             authUserSections.forEach(section => section.remove());
+
+            const playlistsPanel = document.getElementById('playlists-list');
+            while (playlistsPanel.children.length > 1) {
+                playlistsPanel.removeChild(playlistsPanel.children[1]);
+            }
     
             // removing profile picture and adding there auth buttons
             const profileHeader = document.querySelector('.header__profile');
@@ -161,8 +166,8 @@ export function userAuthChecker() {
             authButtonsContainer.appendChild(loginButton);
             authButtonsContainer.appendChild(signupButton);
             
-            const header = document.getElementById('header');
-            header.appendChild(authButtonsContainer);
+            const headerContainer = document.getElementById('header-container');
+            headerContainer.appendChild(authButtonsContainer);
     
             // adding listeners to auth buttons
             loginButton.addEventListener('click', (e) => {

@@ -29,3 +29,14 @@
     width: 4.6rem;
     height: 4.6rem;
 }
+
+.playlist-add {
+    background-color: transparent;
+    width: 4.6rem;
+    height: 4.6rem;
+}
+
+.playlist-add:hover {
+    scale: 1.05;
+}
+

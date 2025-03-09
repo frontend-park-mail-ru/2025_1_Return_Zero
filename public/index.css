@@ -65,6 +65,8 @@
 
     --font-weight-bold: 600;
     --font-weight-light: 300;
+
+    --width-scroll: 0.5rem; 
 }
 
 a {

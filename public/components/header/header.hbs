@@ -2,20 +2,22 @@
     <a class="header__logo">
         <img class="logo" src="/static/img/logo.png" alt="logo">
     </a>
-    <div class="header__main">
-        <form class="header__search">
-        <input type="text" id="search" name="search" placeholder="Поиск...">
-        </form>
-        <nav class="header__nav">
-            <ul>
-                {{#each this.navItems}}
-                    <li class="item {{#if this.active}}active{{/if}}">
-                        <img src="{{this.icon}}" alt="">
-                        <a href="{{this.href}}" data-section="{{@key}}">{{this.text}}</a>
-                    </li>
-                {{/each}}
-            </ul>
-        </nav>
+    <div id="header-container" class="header__container">
+        <div class="header__main">
+            <form class="header__search">
+            <input type="text" id="search" name="search" placeholder="Поиск...">
+            </form>
+            <nav class="header__nav">
+                <ul>
+                    {{#each this.navItems}}
+                        <li class="item {{#if this.active}}active{{/if}}">
+                            <img class="icon" src="{{this.icon}}">
+                            <a class="data-href" href="{{this.href}}" data-section="{{@key}}">{{this.text}}</a>
+                        </li>
+                    {{/each}}
+                </ul>
+            </nav>
+        </div>
     </div>
     <a class="header__profile" href="">
         <img src="/static/img/no-avatar.svg" alt="profile">
