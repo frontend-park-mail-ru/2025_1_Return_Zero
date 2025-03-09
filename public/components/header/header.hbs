@@ -9,14 +9,14 @@
             </form>
             <nav class="header__nav">
                 <ul id="header-list">
-                    {{#each this.navItems}}
-                        <li class="item {{#if this.active}}active{{/if}}">
-                            <a href="{{this.href}}" data-section="{{@key}}">
-                                <img class="icon" src="{{this.icon}}">
-                                <span>{{this.text}}</span>
-                            </a>
-                        </li>
-                    {{/each}}
+                        {{#each this.navItems}}
+                            <li class="item {{#if this.active}}active{{/if}}">
+                                <a class="data-href" href="{{this.href}}" data-section="{{@key}}">
+                                    <img class="icon" src="{{this.icon}}">
+                                    {{this.text}}
+                                </a>
+                            </li>
+                        {{/each}}
                 </ul>
                 <ul id="dropdown-menu" class="hidden-items-grid hide-grid"></ul>
             </nav>

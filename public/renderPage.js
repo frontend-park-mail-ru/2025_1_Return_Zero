@@ -72,6 +72,7 @@ export function renderPage() {
                 }
             }
         );
+        
         root.querySelector('.profile__dropdown').addEventListener('click', (e) => {
             if (e.target.tagName == 'A') {
                 e.preventDefault();
@@ -88,6 +89,7 @@ export function renderPage() {
                 }
             }
         });
+
         root.querySelector('.header__nav')
             .querySelector(`[data-section="${active}"]`)
             .click();
@@ -95,4 +97,3 @@ export function renderPage() {
 
     root.insertAdjacentHTML('beforeend', renderPlaylists());
 }
-
