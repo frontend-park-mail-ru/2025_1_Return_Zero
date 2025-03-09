@@ -1,6 +1,7 @@
+import './albums.precompiled.js';
 import '../../components/album-card/album-card.js';
 import '../../components/album/album.js';
-import './albums.precompiled.js';
+import '../../components/collections/collections.js';
 
 import { userAuthChecker } from '../../components/auth/auth.js';
 

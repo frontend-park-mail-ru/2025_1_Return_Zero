@@ -1,6 +1,7 @@
 import './songs.precompiled.js';
 import '../../components/music-card/music-card.js';
 import '../../components/song/song.js';
+import '../../components/collections/collections.js';
 
 import { userAuthChecker } from '../../components/auth/auth.js';
 
