@@ -3,38 +3,30 @@ import '../../components/album-card/album-card.js';
 import '../../components/album/album.js';
 import '../../components/collections/collections.js';
 
-import { userAuthChecker } from '../../components/auth/auth.js';
+import { getAlbums } from '../../utils.js';
 
-export function renderAlbums() {
+export function renderAlbums(callback) {
     const template = Handlebars.templates['albums.hbs'];
 
-    const content = {
-        loved: new Array(10).fill({
-            img: 'https://upload.wikimedia.org/wikipedia/ru/8/8f/The_Number_Of_The_Beast.jpg',
-            title: 'The number of the beast',
-            artist: 'Iron Maiden',
+    getAlbums((response) => {
+        if (response.ok) {
+            response.json().then((albums) => {
+                albums = albums.map((album) => ({
+                    ...album,
+                    ind: album.id,
+                    img: album.image,
+                }));
+                
+                const content = {
+                    loved: albums,
+                    recent: albums,
+                    recommendations: albums,
+                };
 
-            isLiked: true,
-        }),
-
-        recommendations: new Array(20)
-            .fill({
-                img: 'https://upload.wikimedia.org/wikipedia/ru/8/8f/The_Number_Of_The_Beast.jpg',
-                title: 'The number of the beast',
-                artist: 'Iron Maiden',
-                description: 'Very good shit mzf',
-
-                isPlaying: false,
-                isLiked: false,
-            })
-            .map((song, index) => ({
-                ind: index + 1,
-                ...song,
-            })),
-    };
-
-    // changing header if user is not authenticated
-    userAuthChecker();
-
-    return template(content);
+                callback(template(content));
+            });
+        } else {
+            callback(template({}));
+        }
+    });
 }

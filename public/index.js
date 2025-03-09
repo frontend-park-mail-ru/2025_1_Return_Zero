@@ -1,3 +1,3 @@
-import { renderPage } from './renders.js';
+import { renderPage } from './renderPage.js';
 
 renderPage();

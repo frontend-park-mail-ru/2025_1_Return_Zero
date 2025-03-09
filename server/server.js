@@ -68,7 +68,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(root, public_root, 'index.html'));
 });
 
-app.get('/api/songs', (req, res) => {
+app.get('/tracks', (req, res) => {
     const data = songs.map((song) => ({
         title: song.title,
         artist: song.album.artist,
@@ -81,7 +81,7 @@ app.get('/api/songs', (req, res) => {
     });
 });
 
-app.get('/api/albums', (req, res) => {
+app.get('/albums', (req, res) => {
     const data = albums;
     res.json({
         status: 'ok',
@@ -89,7 +89,7 @@ app.get('/api/albums', (req, res) => {
     });
 });
 
-app.get('/api/artists', (req, res) => {
+app.get('/artists', (req, res) => {
     const data = artists;
     res.json({
         status: 'ok',
@@ -97,7 +97,7 @@ app.get('/api/artists', (req, res) => {
     });
 });
 
-app.post('/api/signup', (req, res) => {
+app.post('/signup', (req, res) => {
     const { username, email, password } = req.body;
 
     if (!username || !password || !email) {
@@ -136,7 +136,7 @@ app.post('/api/signup', (req, res) => {
     }
 });
 
-app.post('/api/login', (req, res) => {
+app.post('/login', (req, res) => {
     const { identifier, password } = req.body;
     const user = users[identifier];
     if (user && user.password === password) {
@@ -158,7 +158,7 @@ app.post('/api/login', (req, res) => {
     }
 });
 
-app.get('/api/me', (req, res) => {
+app.get('/session/check', (req, res) => {
     const token = req.cookies.token;
     if (!token) {
         res.status(401).json({
@@ -183,14 +183,6 @@ app.get('/api/me', (req, res) => {
         });
     }
 });
-
-async function printSessions() {
-    while (true) {
-        console.log(sessions);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-    }
-}
-printSessions();
 
 app.listen(port, host, () => {
     console.log(`Example app listening on http://${host}:${port}`);

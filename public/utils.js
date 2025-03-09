@@ -1,5 +1,8 @@
 import { config } from './config.js';
 
+
+const baseUrl = 'http://localhost:8080';
+
 /**
  * Makes a GET request to the server to retrieve a list of songs.
  *
@@ -8,7 +11,7 @@ import { config } from './config.js';
  * its single argument.
  */
 export function getSongs(callback) {
-    fetch('/api/songs').then(callback);
+    fetch(baseUrl + '/tracks').then(callback);
 }
 
 /**
@@ -19,7 +22,7 @@ export function getSongs(callback) {
  * its single argument.
  */
 export function getAlbums(callback) {
-    fetch('/api/albums').then(callback);
+    fetch(baseUrl + '/albums').then(callback);
 }
 
 /**
@@ -30,7 +33,7 @@ export function getAlbums(callback) {
  * its single argument.
  */
 export function getArtists(callback) {
-    fetch('/api/artists').then(callback);
+    fetch(baseUrl + '/artists').then(callback);
 }
 
 /**
@@ -42,7 +45,7 @@ export function getArtists(callback) {
  * its single argument.
  */
 export function postSignup(userData, callback) {
-    fetch('/api/signup', {
+    fetch(baseUrl + '/signup', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -61,7 +64,7 @@ export function postSignup(userData, callback) {
  * its single argument.
  */
 export function postLogin(userData, callback) {
-    fetch('/api/login', {
+    fetch(baseUrl + '/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -79,7 +82,7 @@ export function postLogin(userData, callback) {
  * its single argument.
  */
 export function getCurrentUser(callback) {
-    fetch('/api/me', {
+    fetch(baseUrl + '/session/check', {
         method: 'GET',
         credentials: 'include',
     }).then(callback);

@@ -8,6 +8,8 @@ import { renderAlbums } from './pages/albums/albums.js';
 
 import { config } from './config.js';
 
+import { userAuthChecker } from './components/auth/auth.js';
+
 export function renderPage() {
     let active = 'main';
 
@@ -20,6 +22,8 @@ export function renderPage() {
             (e) => {
                 if (e.target.tagName === 'A') {
                     e.preventDefault();
+
+                    userAuthChecker();
 
                     const active_nav = root
                         .querySelector('#header .header__nav')
@@ -38,28 +42,24 @@ export function renderPage() {
                     active = section;
                     switch (section) {
                         case 'main':
-                            root.insertAdjacentHTML(
-                                'beforeend',
-                                 renderMain()
-                            );
+                            renderMain((html) => {
+                                root.insertAdjacentHTML('beforeend', html);
+                            });
                             break;
                         case 'songs': 
-                            root.insertAdjacentHTML(
-                                'beforeend',
-                                renderSongs()
-                            );
+                            renderSongs((html) => {
+                                root.insertAdjacentHTML('beforeend', html);
+                            })
                             break;
                         case 'artists':
-                            root.insertAdjacentHTML(
-                                'beforeend',
-                                renderArtists()
-                            );
+                            renderArtists((html) => {
+                                root.insertAdjacentHTML('beforeend', html);
+                            })
                             break;
                         case 'albums':
-                            root.insertAdjacentHTML(
-                                'beforeend',
-                                renderAlbums()
-                            );
+                            renderAlbums((html) => {
+                                root.insertAdjacentHTML('beforeend', html);
+                            })
                             break;
                     }
                 }
