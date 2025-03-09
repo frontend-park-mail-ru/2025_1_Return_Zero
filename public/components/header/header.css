@@ -220,10 +220,10 @@
     z-index: 999;
 }
 
-.hide {
-    display: none;
+.hide-grid {
+    display: none !important;
 }
 
-.show {
-    display: grid;
+.show-grid {
+    display: grid !important;
 }

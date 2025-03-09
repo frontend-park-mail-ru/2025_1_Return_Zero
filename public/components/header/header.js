@@ -86,7 +86,7 @@ window.onload = function () {
         function toggleHiddenItems() {
             const img = document.getElementById('MoreButtonImg');
             img.classList.toggle("rotated");
-
+        
             if (!isGrid) {
                 createGrid();
                 isGrid = true;
@@ -99,8 +99,8 @@ window.onload = function () {
 
         function createGrid() {
             const grid = document.getElementById('dropdown-menu');
-            grid.classList.remove('hide');
-            grid.classList.add('show');
+            grid.classList.remove('hide-grid');
+            grid.classList.add('show-grid');
             grid.style.gap = '1.5rem';
 
             switch (navList.children.length - 1) {
@@ -129,8 +129,8 @@ window.onload = function () {
 
         function removeGrid() {
             const grid = document.getElementById('dropdown-menu');
-            grid.classList.remove('show');
-            grid.classList.add('hide');
+            grid.classList.remove('show-grid');
+            grid.classList.add('hide-grid');
         }
 
         setTimeout(() => {
