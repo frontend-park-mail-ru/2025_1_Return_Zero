@@ -71,9 +71,14 @@
 
     font-size: var(--font-size-h4);
     color: var(--color-background);
+    background-color: var(--color-text);
+
+    border-radius: 3rem;
 }
-.header__nav .item>a * {
-    pointer-events: none;
+.header__nav .item:hover,
+.header__nav .item.active {
+    box-shadow: 2px 4px 4px var(--color-highlight2);
+    overflow: visible;
 }
 
 .header__nav .item > img {
@@ -211,6 +216,7 @@
 .hidden-items-grid {
     position: fixed;
     margin-top: 1rem;
+    list-style: none;
     z-index: 999;
 }
 
