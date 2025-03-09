@@ -15,6 +15,8 @@ export function renderAlbums(callback) {
                     ...album,
                     ind: album.id,
                     img: album.image,
+                    hrefAlbum: `#`,
+                    hrefArtist: `#`,
                 }));
                 
                 const content = {

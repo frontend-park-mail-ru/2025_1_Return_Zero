@@ -15,6 +15,8 @@ export function renderMain(callback) {
                     ...song,
                     ind: song.id,
                     img: song.image,
+                    hrefAlbum: `#`,
+                    hrefArtist: `#`,
                 }));
                 
                 const content = {

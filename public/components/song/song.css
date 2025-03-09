@@ -1,9 +1,10 @@
 .song {
+    position: relative;
     display: grid;
     grid-template-areas:
         'ind img title . album . duration like actions'
         'ind img artist . album . duration like actions';
-    grid-template-columns: min-content auto 1fr 10rem 1fr 10rem auto auto auto;
+    grid-template-columns: min-content auto 1fr 2fr 1fr 2fr auto auto auto;
     align-items: center;
     column-gap: 1rem;
     row-gap: 0.33rem;
@@ -13,7 +14,7 @@
     grid-template-areas:
         'img title . album . duration like actions'
         'img artist . album . duration like actions';
-    grid-template-columns: auto auto 1fr auto 1fr auto auto auto;
+    grid-template-columns: auto 1fr 2fr 1fr 2fr auto auto auto;
 }
 
 .song__index {
@@ -44,18 +45,21 @@
     font-weight: var(--font-weight-light);
 }
 
+/* (w - x - t) / 2 */
+/* x + (w - x - t) / 2 = 0.5w + 0.5x - 0.5t*/
+
 .song__album {
     justify-self: center;
     grid-area: album;
-    font-size: var(--font-size-h4);
 
+    font-size: var(--font-size-h4);
     font-weight: var(--font-weight-light);
 }
 
 .song__duration {
     grid-area: duration;
-    font-size: var(--font-size-h4);
 
+    font-size: var(--font-size-h4);
     font-weight: var(--font-weight-light);
 }
 

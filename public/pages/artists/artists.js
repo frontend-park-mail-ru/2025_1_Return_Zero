@@ -14,6 +14,7 @@ export function renderArtists(callback) {
                     ...artist,
                     img: artist.image,
                     name: artist.title,
+                    href: '#',
                 }))
                 
                 const content = {
