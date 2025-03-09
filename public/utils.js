@@ -1,7 +1,7 @@
 import { config } from './config.js';
 
 
-const baseUrl = 'http://localhost:8080';
+const baseUrl = 'http://returnzero.ru';
 
 /**
  * Makes a GET request to the server to retrieve a list of songs.

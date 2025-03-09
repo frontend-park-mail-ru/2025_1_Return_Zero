@@ -275,6 +275,13 @@ export function loginForm() {
         };
 
         const { message, errorInputName } = validate(form, validationList, sendingData);
+        
+        if (form.identifier.value.includes('@')) {
+            sendingData.email = form.identifier.value;
+        } else {
+            sendingData.username = form.identifier.value;
+        }
+        delete sendingData.identifier;
 
         // Clear previous messages
         form.querySelectorAll('p.error-message').forEach(msg => msg.textContent = '');
