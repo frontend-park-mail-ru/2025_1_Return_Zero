@@ -23,8 +23,6 @@ export function renderPage() {
                 if (e.target.tagName === 'A') {
                     e.preventDefault();
 
-                    userAuthChecker();
-
                     const active_nav = root
                         .querySelector('#header .header__nav')
                         .querySelector('.active');
@@ -44,21 +42,25 @@ export function renderPage() {
                         case 'main':
                             renderMain((html) => {
                                 root.insertAdjacentHTML('beforeend', html);
+                                userAuthChecker();
                             });
                             break;
                         case 'songs': 
                             renderSongs((html) => {
                                 root.insertAdjacentHTML('beforeend', html);
+                                userAuthChecker();
                             })
                             break;
                         case 'artists':
                             renderArtists((html) => {
                                 root.insertAdjacentHTML('beforeend', html);
+                                userAuthChecker();
                             })
                             break;
                         case 'albums':
                             renderAlbums((html) => {
                                 root.insertAdjacentHTML('beforeend', html);
+                                userAuthChecker();
                             })
                             break;
                     }

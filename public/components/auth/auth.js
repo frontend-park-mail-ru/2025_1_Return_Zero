@@ -16,20 +16,32 @@ function validateInput(text, type, matchingValue) {
         ..."abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     ]);
 
-    const validChars = new Set([
+    const validLoginChars = new Set([
         ...validLetters, 
         '_', 
         ...'0123456789',
-        ...'@#!.'
     ]);
 
-    const globalValidCharsChecker = (text) => {
+    const validEmailChars = new Set([
+        ...validLoginChars,
+        ...'@#!.',
+    ])
+
+    const globalValidLoginCharsChecker = (text) => {
         if (typeof text !== 'string') {
             return false;
         }
 
-        return [...text].every(char => validChars.has(char));
+        return [...text].every(char => validLoginChars.has(char));
     };
+
+    const globalValidEmailCharsChecker = (text) => {
+        if (typeof text !== 'string') {
+            return false;
+        }
+
+        return [...text].every(char => validEmailChars.has(char));
+    }
 
     const globalLetterChecker = (text) => {
         if (typeof text !== 'string') {
@@ -44,7 +56,7 @@ function validateInput(text, type, matchingValue) {
             minLength: 4,
             maxLength: 25,
             containsLetter: globalLetterChecker,
-            containsValidChars: globalValidCharsChecker,
+            containsValidChars: globalValidLoginCharsChecker,
         },
         
         passwordRepeat: {
@@ -57,19 +69,19 @@ function validateInput(text, type, matchingValue) {
             minLength: 3,
             maxLength: 20,
             containsLetter: globalLetterChecker,
-            containsValidChars: globalValidCharsChecker,
+            containsValidChars: globalValidLoginCharsChecker,
         },
 
         email: {
             minLength: 5,
             maxLength: 30,
-            containsValidChars: globalValidCharsChecker,
+            containsValidChars: globalValidEmailCharsChecker,
         },
 
         identifier: {
             minLength: 3,
             maxLength: 20,
-            containsValidChars: globalValidCharsChecker,
+            containsValidChars: globalValidLoginCharsChecker,
         },
     };
 
@@ -258,7 +270,7 @@ export function loginForm() {
     form.classList.add('auth-form');
     form.innerHTML = template(formData);
     setTimeout(() => {
-        form.addEventListener("click", formClickListener);
+        form.addEventListener("mousedown", formClickListener);
     }, 0);
 
     form.addEventListener('submit', (e) => {
@@ -290,23 +302,17 @@ export function loginForm() {
         if (message === 'success') {
             postLogin(sendingData, (response) => {
                 if (response.ok) {
-                    response.json().then((data) => {
-                        if (data.status === 'ok') {
-                            location.reload();
-                        } else {
-                            const errorMessage = document.querySelector(`[name="global-error"]`);
-                            errorMessage.textContent = data.message;
-                            errorMessage.className = 'error-message';
-                        }
-                    });
+                    location.reload();
+                } else {
+                    const errorMessage = document.querySelector(`[name="global-error"]`);
+                    errorMessage.textContent = 'Неправильные логин/email или пароль';
+                    errorMessage.className = 'error-message';
                 }
             });
         } else {
-            const inputElement = form.querySelector(`[name="${errorInputName}"]`);
-            if (inputElement) {
-                const validationMessage = document.querySelector(`[name="${errorInputName}-error"]`);
-                validationMessage.textContent = message;
-            }
+            const errorMessage = document.querySelector(`[name="global-error"]`);
+            errorMessage.textContent = 'Неправильные логин/email или пароль';
+            errorMessage.className = 'error-message';
         }
     });
 
@@ -335,7 +341,7 @@ export function signupForm() {
     form.classList.add('auth-form');
     form.innerHTML = template(formData);
     setTimeout(() => {
-        form.addEventListener("click", formClickListener);
+        form.addEventListener("mousedown", formClickListener);
     }, 0);
 
     form.addEventListener('submit', (e) => {
@@ -363,17 +369,11 @@ export function signupForm() {
         if (message === 'success') {
             postSignup(sendingData, (response) => {
                 if (response.ok) {
-                    response.json().then((data) => {
-                        if (data.status === 'ok') {
-                            location.reload();
-                        }
-                    });
+                    location.reload();
                 } else {
-                    response.json().then((data) => {
-                        const errorMessage = document.querySelector(`[name="global-error"]`);
-                        errorMessage.textContent = data.message;
-                        errorMessage.className = 'error-message';
-                    });
+                    const errorMessage = document.querySelector(`[name="global-error"]`);
+                    errorMessage.textContent = 'Пользователь с таким логин/email уже существует';
+                    errorMessage.className = 'error-message';
                 }
             });
         } else {
@@ -392,11 +392,10 @@ function formClickListener(event) {
     const authWindow = document.getElementById("auth");
     
     if (authWindow && !authWindow.contains(event.target)) {
-        console.log("КУНО");
         const root = document.getElementById('root');
         const authForm = event.currentTarget;
         
-        authForm.removeEventListener("click", formClickListener);
+        authForm.removeEventListener("mousedown", formClickListener);
         root.removeChild(event.currentTarget);
         document.querySelectorAll(".header__login.active, .header__signup.active").forEach(button => {
             button.classList.remove("active");
