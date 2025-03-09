@@ -103,3 +103,15 @@ h4 {
     font-size: var(--font-size-h4);
     font-family: var(--font-family-header);
 }
+ 
+::-webkit-scrollbar {
+    width: var(--width-scroll);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-border); 
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-background); 
+} 
