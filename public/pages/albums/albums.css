@@ -30,8 +30,9 @@
     gap: 1.5rem;
 
     max-width: 100%;
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
+    padding-bottom: 1rem;
 }
 
 #albums #recommendations > .albums {
