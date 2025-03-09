@@ -6,14 +6,19 @@ import { renderSongs } from './pages/songs/songs.js';
 import { renderArtists } from './pages/artists/artists.js';
 import { renderAlbums } from './pages/albums/albums.js';
 
+import { userAuthChecker } from './components/auth/auth.js';
+
+import { postLogout } from './utils.js';
+
 import { config } from './config.js';
 
-import { userAuthChecker } from './components/auth/auth.js';
+
 
 export function renderPage() {
     let active = 'main';
 
     const root = document.getElementById('root');
+    root.innerHTML = '';
 
     root.insertAdjacentHTML('beforeend', renderHeader(config.nav));
     setTimeout(() => {
@@ -21,7 +26,7 @@ export function renderPage() {
             'click',
             (e) => {
                 if (e.target.tagName === 'A') {
-                    e.preventDefault();
+                    e.preventDefault(); 
 
                     const active_nav = root
                         .querySelector('#header .header__nav')
@@ -67,6 +72,22 @@ export function renderPage() {
                 }
             }
         );
+        root.querySelector('.profile__dropdown').addEventListener('click', (e) => {
+            if (e.target.tagName == 'A') {
+                e.preventDefault();
+
+                const action = e.target.dataset.action;
+                switch (action) {
+                    case 'logout':
+                        postLogout((resp) => {
+                            if (resp.ok) {
+                                renderPage();
+                            }
+                        })
+                        break;
+                }
+            }
+        });
         root.querySelector('.header__nav')
             .querySelector(`[data-section="${active}"]`)
             .click();

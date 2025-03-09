@@ -18,8 +18,8 @@ window.onload = function () {
         let isExpanded = false;
         let isGrid = false;
 
-        const bp = 1740;
-        const step = 140;
+        const bp = 1700;
+        const step = 160;
         const breakpoints = [bp - step * 3, bp - step * 2, bp - step, bp];
 
         function updateNavItems() {
