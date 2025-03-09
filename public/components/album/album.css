@@ -1,0 +1,78 @@
+.album {
+    display: grid;
+    grid-template-areas:
+        'ind img title . description . play like actions'
+        'ind img artist . description . play like actions';
+    grid-template-columns: min-content auto 1fr 2fr 1fr 2fr auto auto auto;
+    align-items: center;
+    column-gap: 1rem;
+    row-gap: 0.33rem;
+}
+
+.album.album_norder {
+    grid-template-areas:
+        'img title . description . play like actions'
+        'img artist . description . play like actions';
+    grid-template-columns: auto 1fr 2fr 1fr 2fr auto auto auto;
+}
+
+.album__index {
+    grid-area: ind;
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-bold);
+}
+
+.album__img {
+    grid-area: img;
+    width: 8.75rem;
+    height: 8.75rem;
+    border-radius: 1rem;
+}
+
+.album__title {
+    grid-area: title;
+    align-self: end;
+
+    font-size: var(--font-size-h4);
+    font-weight: bold;
+}
+
+.album__artist {
+    grid-area: artist;
+    align-self: start;
+
+    font-weight: var(--font-weight-light);
+}
+
+.album__description {
+    justify-self: center;
+    grid-area: description;
+
+    text-align: center;
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-light);
+}
+
+.album__play {
+    width: 2rem;
+    height: 2rem;
+
+    grid-area: play;
+    cursor: pointer;
+}
+
+.album__like {
+    width: 2rem;
+    height: 2rem;
+
+    grid-area: like;
+    cursor: pointer;
+}
+
+.album__actions {
+    width: 2rem;
+    height: 2rem;
+
+    grid-area: actions;
+    cursor: pointer;
+}

@@ -1,0 +1,13 @@
+<div id="playlists-panel">
+    <ul id="playlists-list">
+        <button class="playlist-add">
+            <img src="../../static/img/plus.svg">
+        </button>
+        {{#each this.playlists}}
+        <li class="item">
+            <a href="{{this.href}}">
+                <img src="{{this.img}}" alt="playlist #{{@index}}">
+            </a>
+        {{/each}}
+    </ul>
+</div>

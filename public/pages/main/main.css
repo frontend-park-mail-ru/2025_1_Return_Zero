@@ -1,0 +1,45 @@
+#main {
+    grid-area: page;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+
+    padding: 2.5rem;
+
+    border-radius: 1.25rem;
+
+    background-color: var(--color-elements);
+
+    overflow-y: scroll;
+    height: 100%;
+}
+
+#main section {
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+#recent,
+#loved {
+    height: fit-content;
+}
+
+#main #recent > .cards, #loved > .cards {
+    display: flex;
+    gap: 1.5rem;
+
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 1rem;
+}
+
+#main #recommendations .songs {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
