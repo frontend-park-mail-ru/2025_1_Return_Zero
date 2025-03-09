@@ -11,7 +11,7 @@ const baseUrl = 'http://returnzero.ru';
  * its single argument.
  */
 export function getSongs(callback) {
-    fetch(baseUrl + '/tracks').then(callback);
+    fetch(baseUrl + '/tracks?limit=20').then(callback);
 }
 
 /**
@@ -82,7 +82,7 @@ export function postLogin(userData, callback) {
  * its single argument.
  */
 export function getCurrentUser(callback) {
-    fetch(baseUrl + '/session/check', {
+    fetch(baseUrl + '/user', {
         method: 'GET',
         credentials: 'include',
     }).then(callback);

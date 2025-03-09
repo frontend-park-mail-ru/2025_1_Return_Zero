@@ -25,17 +25,16 @@
     height: fit-content;
 }
 
-#loved > .cards {
+#albums #loved > .cards {
     display: flex;
     gap: 1.5rem;
 
     max-width: 100%;
     overflow-x: scroll;
     overflow-y: hidden;
-    scrollbar-width: none;
 }
 
-#recommendations > .albums {
+#albums #recommendations > .albums {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;

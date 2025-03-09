@@ -23,13 +23,13 @@
     gap: 2rem;
 }
 
-#recent,
-#loved {
+#songs #recent,
+#songs #loved {
     height: fit-content;
 }
 
-#recent > .cards,
-#loved > .cards {
+#songs #recent > .cards,
+#songs #loved > .cards {
     display: flex;
     gap: 1.5rem;
 
@@ -39,7 +39,7 @@
     scrollbar-width: none;
 }
 
-#recommendations .songs {
+#songs #recommendations .songs {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;

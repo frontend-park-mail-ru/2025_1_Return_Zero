@@ -3,47 +3,30 @@ import '../../components/music-card/music-card.js';
 import '../../components/song/song.js';
 import '../../components/collections/collections.js';
 
-import { userAuthChecker } from '../../components/auth/auth.js';
+import { getSongs } from '../../utils.js';
 
-export function renderSongs() {
+export function renderSongs(callback) {
     const template = Handlebars.templates['songs.hbs'];
-    const content = {
-        recent: new Array(10).fill({
-            title: 'The number of the beast',
-            artist: 'Iron Maiden',
-            img: 'https://upload.wikimedia.org/wikipedia/ru/8/8f/The_Number_Of_The_Beast.jpg',
-            href: '',
-        }),
-        loved: new Array(10).fill({
-            title: 'The number of the beast',
-            artist: 'Iron Maiden',
-            img: 'https://upload.wikimedia.org/wikipedia/ru/8/8f/The_Number_Of_The_Beast.jpg',
-            href: '',
-        }),
-        recommendations: new Array(20)
-            .fill({
-                img: 'https://upload.wikimedia.org/wikipedia/ru/8/8f/The_Number_Of_The_Beast.jpg',
 
-                title: 'The number of the beast',
-                artist: 'Iron Maiden',
-                album: 'The number of the beast',
+    getSongs((response) => {
+        if (response.ok) {
+            response.json().then((songs) => {
+                songs = songs.map((song) => ({
+                    ...song,
+                    ind: song.id,
+                    img: song.image,
+                }));
+                
+                const content = {
+                    loved: songs,
+                    recent: songs,
+                    recommendations: songs,
+                };
 
-                duration: '4:00',
-                isLiked: false,
-            })
-            .map((song, index) => ({
-                ...song,
-                ind: index + 1,
-            })),
-    };
-
-    content.recommendations[1].title = 'Another';
-    content.recommendations[1].artist = 'Another';
-    content.recommendations[1].album = 'Another';
-    content.recommendations[1].isLiked = true;
-
-    // changing header if user is not authenticated
-    userAuthChecker();
-
-    return template(content);
+                callback(template(content));
+            });
+        } else {
+            callback(template({}));
+        }
+    });
 }

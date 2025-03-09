@@ -25,7 +25,7 @@
     height: fit-content;
 }
 
-#loved > .cards {
+#artists #loved > .cards {
     display: flex;
     gap: 1.5rem;
 
@@ -35,7 +35,7 @@
     scrollbar-width: none;
 }
 
-#recommendations > .cards {
+#artists #recommendations > .cards {
     display: flex;
     flex-wrap: wrap;
     gap: 1.5rem;

@@ -14,7 +14,7 @@
     overflow-y: scroll;
     height: 100%;
 }
-
+/* 
 ::-webkit-scrollbar {
     width: var(--width-scroll);
 }
@@ -25,7 +25,7 @@
 
 ::-webkit-scrollbar-track {
     background: var(--color-background); 
-}
+} */
 
 #main section {
     flex-shrink: 0;
@@ -40,18 +40,17 @@
     height: fit-content;
 }
 
-#recent > .cards,
-#loved > .cards {
+#main #recent > .cards, #loved > .cards {
     display: flex;
     gap: 1.5rem;
 
     max-width: 100%;
     overflow-x: scroll;
     overflow-y: hidden;
-    scrollbar-width: none;
+    padding-bottom: 1rem;
 }
 
-#recommendations .songs {
+#main #recommendations .songs {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
