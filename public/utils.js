@@ -74,6 +74,13 @@ export function postLogin(userData, callback) {
     }).then(callback);
 }
 
+export function postLogout(callback) {
+    fetch(baseUrl + '/logout', {
+        method: 'POST',
+        credentials: 'include',
+    }).then(callback);
+}
+
 /**
  * Makes a GET request to check the current authenticated user.
  *

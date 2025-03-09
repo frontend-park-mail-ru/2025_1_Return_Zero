@@ -81,7 +81,7 @@ function validateInput(text, type, matchingValue) {
         identifier: {
             minLength: 3,
             maxLength: 20,
-            containsValidChars: globalValidLoginCharsChecker,
+            containsValidChars: globalValidEmailCharsChecker,
         },
     };
 
@@ -288,10 +288,10 @@ export function loginForm() {
 
         const { message, errorInputName } = validate(form, validationList, sendingData);
         
-        if (form.identifier.value.includes('@')) {
-            sendingData.email = form.identifier.value;
+        if (sendingData['identifier'].includes('@')) {
+            sendingData.email = sendingData['identifier'];
         } else {
-            sendingData.username = form.identifier.value;
+            sendingData.username = sendingData['identifier'];
         }
         delete sendingData.identifier;
 

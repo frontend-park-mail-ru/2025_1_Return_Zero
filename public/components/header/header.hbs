@@ -8,7 +8,7 @@
                 <input type="text" id="search" name="search" placeholder="Поиск...">
             </form>
             <nav class="header__nav">
-                <ul>
+                <ul id="header-list">
                     {{#each this.navItems}}
                         <li class="item {{#if this.active}}active{{/if}}">
                             <a href="{{this.href}}" data-section="{{@key}}">
@@ -18,10 +18,17 @@
                         </li>
                     {{/each}}
                 </ul>
+                <div id="dropdown-menu" class="hidden-items-grid hide"></div>
             </nav>
         </div>
     </div>
-    <a class="header__profile" href="">
-        <img src="/static/img/no-avatar.svg" alt="profile">
-    </a>
+    <div class="header__profile">
+        <img class="profile__img" src="/static/img/no-avatar.svg" alt="profile">
+        <div class="profile__dropdown">
+            <a href="#">Профиль</a>
+            <a href="#">Настройки</a>
+            <a href="#" data-action="logout">Выйти</a>
+        </div>
+    </div>
 </header>
+
