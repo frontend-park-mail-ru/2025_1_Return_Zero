@@ -5,6 +5,13 @@ import '../../components/collections/collections.js';
 
 import { getSongs } from '../../utils.js';
 
+/**
+ * Renders the songs page.
+ *
+ * @param {function} callback - A callback function to be called when the
+ * request is complete. The function will be called with a string argument
+ * representing the rendered HTML.
+ */
 export function renderSongs(callback) {
     const template = Handlebars.templates['songs.hbs'];
 

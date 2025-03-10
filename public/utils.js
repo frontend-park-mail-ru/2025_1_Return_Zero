@@ -74,6 +74,13 @@ export function postLogin(userData, callback) {
     }).then(callback);
 }
 
+/**
+ * Makes a POST request to the server to log out the current user.
+ *
+ * @param {function} callback - A callback function to be called when the
+ * request is complete. The function will be called with a Response object as
+ * its single argument.
+ */
 export function postLogout(callback) {
     fetch(baseUrl + '/logout', {
         method: 'POST',

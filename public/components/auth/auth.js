@@ -147,6 +147,15 @@ function validateInput(text, type, matchingValue) {
     return 'success';
 }
 
+/**
+ * Checks the current user's authentication status.
+ * 
+ * This function first checks if the header already contains authentication buttons.
+ * If not, it makes a request to get the current user. If the user is authenticated,
+ * it updates the header with the user's profile information. If the user is not
+ * authenticated, it removes any user-specific sections and adds login and signup
+ * buttons to the header.
+ */
 export function userAuthChecker() {
     const headerContainer = document.getElementById('header-container');
     if (document.querySelector('.header__auth')) {
@@ -403,6 +412,10 @@ export function signupForm() {
     return form;
 }
 
+/**
+ * Removes the authentication form from the DOM when it is clicked outside of it.
+ * @param {Event} event - The event triggered by the click.
+ */
 function formClickListener(event) {
     const authWindow = document.getElementById("auth");
     

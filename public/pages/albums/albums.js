@@ -5,6 +5,13 @@ import '../../components/collections/collections.js';
 
 import { getAlbums } from '../../utils.js';
 
+/**
+ * Renders the albums page.
+ *
+ * @param {function} callback - A callback function to be called when the
+ * request is complete. The function will be called with a string argument
+ * representing the rendered HTML.
+ */
 export function renderAlbums(callback) {
     const template = Handlebars.templates['albums.hbs'];
 

@@ -14,6 +14,20 @@ import { postLogout } from './utils.js';
 import { config } from './config.js';
 
 
+/**
+ * Renders the page.
+ *
+ * The function first renders the header and the playlists, and then listens
+ * for clicks on the links in the header. When a link is clicked, the function
+ * removes the currently active section, removes the active class from the
+ * currently active link, adds the active class to the clicked link, and
+ * renders the section corresponding to the clicked link.
+ *
+ * If the user is logged in, the function also renders the user's login name
+ * and a logout link in the header. When the logout link is clicked, the
+ * function sends a POST request to the server to log out the user, and then
+ * renders the page again.
+ */
 export function renderPage() {
     let active = 'main';
 

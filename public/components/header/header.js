@@ -1,5 +1,11 @@
 import './header.precompiled.js';
 
+/**
+ * Renders the header using the provided navigation items.
+ * 
+ * @param {Array} navItems - An array of navigation items to be rendered in the header.
+ * @returns {string} - The rendered HTML string for the header.
+ */
 export function renderHeader(navItems) {
     const template = Handlebars.templates['header.hbs'];
 
@@ -10,6 +16,22 @@ export function renderHeader(navItems) {
     return template(content, content);
 }
 
+/**
+ * Updates the header navigation items based on the current window width.
+ * 
+ * If the window width is less than or equal to 1700px, the navigation items
+ * will be hidden and replaced with a "More" button. When the "More" button is
+ * clicked, the hidden items will appear in a grid below the "More" button.
+ * 
+ * The grid will have a maximum of 3 columns and 3 rows, and the items will be
+ * distributed evenly across the grid.
+ * 
+ * If the window width is greater than 1700px, the navigation items will be
+ * shown in the top-level navigation bar.
+ * 
+ * This function is intended to be called when the page is first loaded, and
+ * when the window is resized.
+ */
 export function updateHeader() {
     const navList = document.getElementById("header-list");
     let removedItems = [];
