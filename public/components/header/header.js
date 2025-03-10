@@ -10,7 +10,7 @@ export function renderHeader(navItems) {
     return template(content, content);
 }
 
-queueMicrotask(() => {
+export function updateHeader() {
     const navList = document.getElementById("header-list");
     let removedItems = [];
     let moreButton = null;
@@ -128,9 +128,12 @@ queueMicrotask(() => {
         grid.classList.add('hide-grid');
     }
 
-    requestIdleCallback(() => {
-        window.addEventListener("resize", updateNavItems);
+    setTimeout(() => {
+        if (!window.__resizeListenerAdded) {
+            window.addEventListener("resize", updateNavItems);
+            window.__resizeListenerAdded = true; 
+        }
         updateNavItems();
-    });
-});
+    }, 0);
+};
 

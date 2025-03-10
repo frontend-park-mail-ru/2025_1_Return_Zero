@@ -1,6 +1,7 @@
 import './auth.precompiled.js'
 
 import { postSignup, postLogin, getCurrentUser } from '../../utils.js';
+import { renderPage } from '../../renderPage.js';
 
 /**
  * Validates user input based on requirements.
@@ -309,7 +310,8 @@ export function loginForm() {
         if (message === 'success') {
             postLogin(sendingData, (response) => {
                 if (response.ok) {
-                    location.reload();
+                    renderPage();
+                    return;
                 } else {
                     const errorMessage = document.querySelector(`[name="global-error"]`);
                     errorMessage.textContent = 'Неправильные логин/email или пароль';
@@ -376,7 +378,8 @@ export function signupForm() {
         if (message === 'success') {
             postSignup(sendingData, (response) => {
                 if (response.ok) {
-                    location.reload();
+                    renderPage();
+                    return;
                 } else {
                     const errorMessage = document.querySelector(`[name="global-error"]`);
                     errorMessage.textContent = 'Пользователь с таким логин/email уже существует';

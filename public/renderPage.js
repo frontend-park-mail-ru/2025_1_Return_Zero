@@ -7,6 +7,7 @@ import { renderArtists } from './pages/artists/artists.js';
 import { renderAlbums } from './pages/albums/albums.js';
 
 import { userAuthChecker } from './components/auth/auth.js';
+import { updateHeader } from './components/header/header.js';
 
 import { postLogout } from './utils.js';
 
@@ -47,24 +48,28 @@ export function renderPage() {
                             renderMain((html) => {
                                 root.insertAdjacentHTML('beforeend', html);
                                 userAuthChecker();
+                                updateHeader();
                             });
                             break;
                         case 'songs': 
                             renderSongs((html) => {
                                 root.insertAdjacentHTML('beforeend', html);
                                 userAuthChecker();
+                                updateHeader();
                             })
                             break;
                         case 'artists':
                             renderArtists((html) => {
                                 root.insertAdjacentHTML('beforeend', html);
                                 userAuthChecker();
+                                updateHeader();
                             })
                             break;
                         case 'albums':
                             renderAlbums((html) => {
                                 root.insertAdjacentHTML('beforeend', html);
                                 userAuthChecker();
+                                updateHeader();
                             })
                             break;
                     }
@@ -81,7 +86,7 @@ export function renderPage() {
                     case 'logout':
                         postLogout((resp) => {
                             if (resp.ok) {
-                                location.reload();
+                                renderPage();
                             }
                         })
                         break;
