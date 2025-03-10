@@ -81,7 +81,11 @@
     overflow: visible;
 }
 
-.header__nav .item > img {
+.header__nav .item > a * {
+    pointer-events: none;
+}
+
+.header__nav .item > a > img {
     width: 1.3em;
     height: 1.3em;
 }
@@ -186,10 +190,6 @@
 
 .header__signup {
     grid-area: signup;
-} 
-
-.icon {
-    cursor: pointer;
 }
 
 .rotated {
