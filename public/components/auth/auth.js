@@ -173,7 +173,6 @@ export function userAuthChecker() {
             // adding user name in header
             const profile__dropdown =
                 document.querySelector('.profile__dropdown');
-            console.log(profile__dropdown);
             response.json().then((user) => {
                 profile__dropdown.querySelector('.profile__user').textContent =
                     user.username;

@@ -1,6 +1,6 @@
 import { config } from './config.js';
 
-const baseUrl = 'http://127.0.0.1:8080';
+const baseUrl = '';
 
 /**
  * Makes a GET request to the server to retrieve a list of songs.
