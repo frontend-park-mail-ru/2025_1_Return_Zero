@@ -147,6 +147,11 @@ function validateInput(text, type, matchingValue) {
 }
 
 export function userAuthChecker() {
+    const headerContainer = document.getElementById('header-container');
+    if (document.querySelector('.header__auth')) {
+        return;
+    }
+
     getCurrentUser((response) => {
         if (response.ok) {
             console.log("OK");
@@ -156,45 +161,47 @@ export function userAuthChecker() {
             authUserSections.forEach(section => section.remove());
 
             const playlistsPanel = document.getElementById('playlists-list');
-            while (playlistsPanel.children.length > 1) {
+            while (playlistsPanel && playlistsPanel.children.length > 1) {
                 playlistsPanel.removeChild(playlistsPanel.children[1]);
             }
     
             // removing profile picture and adding there auth buttons
             const profileHeader = document.querySelector('.header__profile');
-            profileHeader.remove();
+            if (profileHeader) {
+                profileHeader.remove();
+            }
             
-            const loginButton = document.createElement('button');
-            loginButton.classList.add('header__login');
-            loginButton.textContent = 'Войти';
-    
-            const signupButton = document.createElement('button');
-            signupButton.classList.add('header__signup');
-            signupButton.textContent = 'Зарегистрироваться';
-    
-            const authButtonsContainer = document.createElement('div');
-            authButtonsContainer.classList.add('header__auth');
-    
-            authButtonsContainer.appendChild(loginButton);
-            authButtonsContainer.appendChild(signupButton);
-            
-            const headerContainer = document.getElementById('header-container');
-            headerContainer.appendChild(authButtonsContainer);
-    
-            // adding listeners to auth buttons
-            loginButton.addEventListener('click', (e) => {
-                e.target.classList.add('active');
-    
-                const root = document.getElementById('root');
-                root.appendChild(loginForm());
-            });
-    
-            signupButton.addEventListener('click', (e) => {
-                e.target.classList.add('active');
-    
-                const root = document.getElementById('root');
-                root.appendChild(signupForm());
-            });
+            if (!document.querySelector('.header__auth')) {
+                const loginButton = document.createElement('button');
+                loginButton.classList.add('header__login');
+                loginButton.textContent = 'Войти';
+
+                const signupButton = document.createElement('button');
+                signupButton.classList.add('header__signup');
+                signupButton.textContent = 'Зарегистрироваться';
+
+                const authButtonsContainer = document.createElement('div');
+                authButtonsContainer.classList.add('header__auth');
+
+                authButtonsContainer.appendChild(loginButton);
+                authButtonsContainer.appendChild(signupButton);
+
+                headerContainer.appendChild(authButtonsContainer);
+
+                loginButton.addEventListener('click', (e) => {
+                    e.target.classList.add('active');
+
+                    const root = document.getElementById('root');
+                    root.appendChild(loginForm());
+                });
+
+                signupButton.addEventListener('click', (e) => {
+                    e.target.classList.add('active');
+
+                    const root = document.getElementById('root');
+                    root.appendChild(signupForm());
+                });
+            }
         }   
     });
 }

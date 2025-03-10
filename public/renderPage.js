@@ -13,7 +13,6 @@ import { postLogout } from './utils.js';
 import { config } from './config.js';
 
 
-
 export function renderPage() {
     let active = 'main';
 
@@ -82,7 +81,7 @@ export function renderPage() {
                     case 'logout':
                         postLogout((resp) => {
                             if (resp.ok) {
-                                renderPage();
+                                location.reload();
                             }
                         })
                         break;
