@@ -6,10 +6,10 @@ import { renderSongs } from './pages/songs/songs.js';
 import { renderArtists } from './pages/artists/artists.js';
 import { renderAlbums } from './pages/albums/albums.js';
 
-import { userAuthChecker } from './components/auth/auth.js';
 import { updateHeader } from './components/header/header.js';
 
-import { postLogout } from './utils.js';
+import { postLogout } from './utils/api.js';
+import { userAuthChecker } from './utils/userAuthChecker.js';
 
 import { config } from './config.js';
 

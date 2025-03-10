@@ -3,7 +3,7 @@ import '../../components/music-card/music-card.js';
 import '../../components/song/song.js';
 import '../../components/collections/collections.js';
 
-import { getSongs } from '../../utils.js';
+import { getSongs } from '../../utils/api.js';
 
 /**
  * Renders the main page.

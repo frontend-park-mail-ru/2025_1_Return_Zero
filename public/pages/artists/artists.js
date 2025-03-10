@@ -2,7 +2,7 @@ import './artists.precompiled.js';
 import '../../components/collections/collections.js';
 import '../../components/artist-card/artist-card.js';
 
-import { getArtists } from '../../utils.js';
+import { getArtists } from '../../utils/api.js';
 
 /**
  * Renders the artists page.

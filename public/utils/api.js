@@ -1,5 +1,3 @@
-import { config } from './config.js';
-
 const baseUrl = '';
 
 /**
@@ -99,27 +97,4 @@ export function getCurrentUser(callback) {
         method: 'GET',
         credentials: 'include',
     }).then(callback);
-}
-
-/**
- * Goes to the page represented by the menu element by adding the rendered page
- * content to the page container.
- *
- * @param {HTMLElement} menuElement - The menu element that represents the page
- * to go to.
- * @param {HTMLElement} pageContainer - The container element that the rendered
- * page content will be appended to.
- * @param {Object} appState - The application state object that holds references
- * to active page links and menu elements.
- */
-export function goToPage(menuElement, pageContainer, appState) {
-    pageContainer.innerHTML = '';
-
-    appState.activePageLink.classList.remove('active');
-    menuElement.classList.add('active');
-    appState.activePageLink = menuElement;
-
-    const element = config.menu[menuElement.dataset.section].render();
-
-    pageContainer.appendChild(element);
 }

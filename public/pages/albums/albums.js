@@ -3,7 +3,7 @@ import '../../components/album-card/album-card.js';
 import '../../components/album/album.js';
 import '../../components/collections/collections.js';
 
-import { getAlbums } from '../../utils.js';
+import { getAlbums } from '../../utils/api.js';
 
 /**
  * Renders the albums page.
