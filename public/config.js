@@ -1,5 +1,3 @@
-// import { renderSongs, renderAlbums, renderArtists, renderLogin, renderSignup } from './renders.js';
-
 export const config = {
     nav: {
         main: {

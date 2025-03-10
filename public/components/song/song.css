@@ -45,9 +45,6 @@
     font-weight: var(--font-weight-light);
 }
 
-/* (w - x - t) / 2 */
-/* x + (w - x - t) / 2 = 0.5w + 0.5x - 0.5t*/
-
 .song__album {
     justify-self: center;
     grid-area: album;

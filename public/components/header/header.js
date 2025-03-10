@@ -1,5 +1,11 @@
 import './header.precompiled.js';
 
+/**
+ * Renders the header using the Handlebars template 'header.hbs'.
+ *
+ * @param {Array<Object>} navItems - List of navigation items to be displayed in the header.
+ * @returns {string} The rendered HTML string for the header.
+ */
 export function renderHeader(navItems) {
     const template = Handlebars.templates['header.hbs'];
 
@@ -10,6 +16,10 @@ export function renderHeader(navItems) {
     return template(content, content);
 }
 
+/**
+ * Updates the header navigation dynamically based on screen width.
+ * Manages hiding and showing navigation items and a 'More' button for overflow items.
+ */
 export function updateHeader() {
     const navList = document.getElementById('header-list');
     let removedItems = [];

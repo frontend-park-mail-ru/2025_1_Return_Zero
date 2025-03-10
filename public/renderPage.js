@@ -13,6 +13,11 @@ import { postLogout } from './utils.js';
 
 import { config } from './config.js';
 
+/**
+ * Renders the main page layout, including the header and initial section content.
+ * Handles navigation clicks to dynamically load different sections
+ * and updates the active navigation item accordingly.
+ */
 export function renderPage() {
     let active = 'main';
 
@@ -102,3 +107,4 @@ export function renderPage() {
 
     root.insertAdjacentHTML('beforeend', renderPlaylists());
 }
+
