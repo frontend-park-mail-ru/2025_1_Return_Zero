@@ -155,7 +155,12 @@ export function userAuthChecker() {
 
     getCurrentUser((response) => {
         if (response.ok) {
-            console.log("OK");
+            // adding user name in header
+            const profile__dropdown = document.querySelector('.profile__dropdown');
+            console.log(profile__dropdown);
+            response.json().then((user) => {
+                profile__dropdown.querySelector('.profile__user').textContent = user.username;
+            })
         } else {
             // removing user sections
             const authUserSections = document.querySelectorAll('section#loved, section#recent');

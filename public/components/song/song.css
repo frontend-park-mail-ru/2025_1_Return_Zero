@@ -68,7 +68,7 @@
     height: 2rem;
 
     grid-area: like;
-    cursor: pointer;
+    cursor: not-allowed;
 }
 
 .song__actions {
@@ -76,5 +76,5 @@
     height: 2rem;
 
     grid-area: actions;
-    cursor: pointer;
+    cursor: not-allowed;
 }

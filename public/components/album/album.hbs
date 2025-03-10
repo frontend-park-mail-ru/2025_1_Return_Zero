@@ -1,8 +1,8 @@
 <div class="album {{#unless this.ind}}album_norder{{/unless}}">
     <span class="album__index">{{this.ind}}</span>
     <img src="{{this.img}}" alt="" class="album__img">
-    <a href="{{this.hrefAlbum}}" class="album__title">{{this.title}}</a>
-    <a href="{{this.hrefArtist}}" class="album__artist">{{this.artist}}</a>
+    <a href="{{this.hrefAlbum}}" style="cursor: not-allowed;" class="album__title">{{this.title}}</a>
+    <a href="{{this.hrefArtist}}" style="cursor: not-allowed;" class="album__artist">{{this.artist}}</a>
     <span class="album__description">{{this.description}}</span>
     {{#if this.isPlaying}}
         <img src="/static/img/pause.svg" alt="pause" class="album__play">
