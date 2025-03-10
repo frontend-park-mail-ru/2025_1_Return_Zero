@@ -13,7 +13,7 @@
                             <li class="item {{#if this.active}}active{{/if}}">
                                 <a class="data-href" href="{{this.href}}" data-section="{{@key}}">
                                     <img src="{{this.icon}}">
-                                    <span>{{this.name}}</span>
+                                    <span>{{this.text}}</span>
                                 </a>
                             </li>
                         {{/each}}
@@ -25,6 +25,7 @@
     <div class="header__profile">
         <img class="profile__img" src="/static/img/no-avatar.svg" alt="profile">
         <div class="profile__dropdown">
+            <span class="profile__user">{{this.user}}</span>
             <a href="#">Профиль</a>
             <a href="#">Настройки</a>
             <a href="#" data-action="logout">Выйти</a>
