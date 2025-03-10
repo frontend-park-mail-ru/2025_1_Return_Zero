@@ -10,9 +10,6 @@
     margin-right: calc(2.5rem - 2.2rem);
 }
 
-/* logo */
-
-/* search */
 .header__search > input {
     height: 2.5rem;
 
@@ -37,7 +34,6 @@
     color: var(--color-element);
 }
 
-/* nav */
 .header__nav {
     margin-left: 1.563rem;
 }
@@ -90,7 +86,6 @@
     height: 1.3em;
 }
 
-/* profile */
 .header__profile {
     position: relative;
     overflow: visible;
@@ -159,8 +154,6 @@
     text-overflow: ellipsis;
 }
 
-/* auth */
-
 .header__container {
     display: flex;
     width: 100%;
@@ -213,7 +206,7 @@
     transition: transform 0.3s ease;
 }
 
-#MoreButton {
+#more-button {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
@@ -225,7 +218,7 @@
     padding: 0;
 }
 
-#MoreButtonImg {
+#more-button__img {
     transition: transform 0.3s ease;
 }
 

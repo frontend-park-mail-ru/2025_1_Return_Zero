@@ -72,10 +72,10 @@ export function updateHeader() {
     function addMoreButton() {
         if (!moreButton) {
             moreButton = document.createElement('button');
-            moreButton.id = 'MoreButton';
+            moreButton.id = 'more-button';
 
             const img = document.createElement('img');
-            img.id = 'MoreButtonImg';
+            img.id = 'more-button__img';
             img.src = '/static/img/Down_Circle.svg';
 
             moreButton.appendChild(img);
@@ -93,7 +93,7 @@ export function updateHeader() {
     }
 
     function toggleHiddenItems() {
-        const img = document.getElementById('MoreButtonImg');
+        const img = document.getElementById('more-button__img');
         img.classList.toggle('rotated');
 
         if (!isGrid) {
