@@ -1,0 +1,41 @@
+import './songs.precompiled.js';
+import '../../components/music-card/music-card.js';
+import '../../components/song/song.js';
+import '../../components/collections/collections.js';
+
+import { getSongs } from '../../utils/api.js';
+
+/**
+ * Renders the songs page.
+ *
+ * @param {function} callback - A callback function to be called when the
+ * request is complete. The function will be called with a string argument
+ * representing the rendered HTML.
+ */
+export function renderSongs(callback) {
+    const template = Handlebars.templates['songs.hbs'];
+
+    getSongs((response) => {
+        if (response.ok) {
+            response.json().then((songs) => {
+                songs = songs.map((song) => ({
+                    ...song,
+                    ind: song.id,
+                    img: song.image,
+                    hrefAlbum: `#`,
+                    hrefArtist: `#`,
+                }));
+
+                const content = {
+                    loved: songs,
+                    recent: songs,
+                    recommendations: songs,
+                };
+
+                callback(template(content));
+            });
+        } else {
+            callback(template({}));
+        }
+    });
+}

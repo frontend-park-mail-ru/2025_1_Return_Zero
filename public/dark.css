@@ -1,0 +1,14 @@
+#root {
+    --color-text: #f6f6f6;
+    --color-text-transparent: #f9f9f9;
+    --color-border: rgb(249, 249, 249, 0.5);
+
+    --color-highlight: #ff7a8a;
+    --color-highlight2: #f44336;
+
+    --color-elements: #182633;
+    --color-background: #0c1821;
+
+    --color-button-hover: #2152b0;
+    --color-font-element: #283349;
+}

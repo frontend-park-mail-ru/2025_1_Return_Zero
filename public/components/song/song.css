@@ -1,0 +1,77 @@
+.song {
+    position: relative;
+    display: grid;
+    grid-template-areas:
+        'ind img title . album . duration like actions'
+        'ind img artist . album . duration like actions';
+    grid-template-columns: min-content auto 1fr 2fr 1fr 2fr auto auto auto;
+    align-items: center;
+    column-gap: 1rem;
+    row-gap: 0.33rem;
+}
+
+.song.song_norder {
+    grid-template-areas:
+        'img title . album . duration like actions'
+        'img artist . album . duration like actions';
+    grid-template-columns: auto 1fr 2fr 1fr 2fr auto auto auto;
+}
+
+.song__index {
+    grid-area: ind;
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-bold);
+}
+
+.song__img {
+    grid-area: img;
+    width: 4.6rem;
+    height: 4.6rem;
+    border-radius: 1rem;
+}
+
+.song__title {
+    grid-area: title;
+    align-self: end;
+
+    font-size: var(--font-size-h4);
+    font-weight: bold;
+}
+
+.song__artist {
+    grid-area: artist;
+    align-self: start;
+
+    font-weight: var(--font-weight-light);
+}
+
+.song__album {
+    justify-self: center;
+    grid-area: album;
+
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-light);
+}
+
+.song__duration {
+    grid-area: duration;
+
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-light);
+}
+
+.song__like {
+    width: 2rem;
+    height: 2rem;
+
+    grid-area: like;
+    cursor: not-allowed;
+}
+
+.song__actions {
+    width: 2rem;
+    height: 2rem;
+
+    grid-area: actions;
+    cursor: not-allowed;
+}

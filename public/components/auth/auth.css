@@ -1,0 +1,104 @@
+.auth-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    font-size: var(--font-size-h2);
+    font-weight: bold;
+
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(5px);
+
+    z-index: 1000;
+}
+
+.auth-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+    background: var(--color-elements);
+
+    gap: 1rem;
+    width: 30rem;
+
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 1rem;
+    border: 1px solid var(--color-border);
+
+    z-index: 1001;
+}
+
+.auth-main__line {
+    width: calc(100% - 2rem);
+    height: 0.063rem;
+    background-color: var(--color-border);
+    margin-bottom: 1rem;
+}
+
+.auth-main__input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 1rem 0 1rem;
+    gap: 1rem;
+
+    font-size: var(--font-size-h4);
+    font-weight: bold;
+}
+
+.auth-form input {
+    display: block;
+
+    border-radius: 1rem;
+    border: 1px solid var(--color-border);
+
+    color: var(--color-text);
+
+    background-color: var(--color-font-element);
+}
+
+.auth-form input::placeholder {
+    font-weight: var(--font-weight-light);
+    color: var(--color-text-transparent);
+}
+
+.auth-form input:placeholder-shown {
+    text-align: center;
+    padding-left: 0;
+}
+
+.auth-form__base-input {
+    width: 17.5rem;
+    height: 2.438rem;
+    padding-left: 1rem;
+}
+
+.auth-form__submit-btn {
+    height: 2.438rem;
+    padding: 0 1rem 0 1rem;
+    font-size: var(--font-size-main);
+    cursor: pointer;
+}
+
+.auth-form__submit-btn:hover {
+    background-color: var(--color-button-hover);
+}
+
+.error-message {
+    text-align: center;
+    font-size: var(--font-size-small);
+    color: var(--color-highlight);
+    font-weight: var(--font-weight-light);
+}
+
+.success-message {
+    color: green;
+}
