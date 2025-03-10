@@ -69,7 +69,8 @@
     --font-weight-bold: 600;
     --font-weight-light: 300;
 
-    --width-scroll: 0.5rem; 
+    --width-scroll: 0.8rem; 
+    --height-scroll: 0.5rem; 
 }
 
 a {
@@ -106,6 +107,7 @@ h4 {
  
 ::-webkit-scrollbar {
     width: var(--width-scroll);
+    height: var(--height-scroll);
 }
 
 ::-webkit-scrollbar-thumb {
