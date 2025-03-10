@@ -5,14 +5,14 @@
     position: fixed;
     font-size: var(--font-size-h2);
     font-weight: bold;
-    
+
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    backdrop-filter: blur(5px); 
+    backdrop-filter: blur(5px);
 
-    z-index: 1000; 
+    z-index: 1000;
 }
 
 .auth-main {
@@ -22,7 +22,7 @@
     align-items: center;
 
     position: relative;
-    background: var(--color-elements); 
+    background: var(--color-elements);
 
     gap: 1rem;
     width: 30rem;
@@ -102,4 +102,3 @@
 .success-message {
     color: green;
 }
-

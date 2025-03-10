@@ -22,8 +22,8 @@ export function renderArtists(callback) {
                     img: artist.image,
                     name: artist.title,
                     href: '#',
-                }))
-                
+                }));
+
                 const content = {
                     loved: artists,
                     recommendations: artists,

@@ -14,7 +14,7 @@ import { getSongs } from '../../utils.js';
  */
 export function renderMain(callback) {
     const template = Handlebars.templates['main.hbs'];
-    
+
     getSongs((response) => {
         if (response.ok) {
             response.json().then((songs) => {
@@ -25,7 +25,7 @@ export function renderMain(callback) {
                     hrefAlbum: `#`,
                     hrefArtist: `#`,
                 }));
-                
+
                 const content = {
                     loved: songs,
                     recent: songs,

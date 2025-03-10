@@ -25,7 +25,7 @@ export function renderAlbums(callback) {
                     hrefAlbum: `#`,
                     hrefArtist: `#`,
                 }));
-                
+
                 const content = {
                     loved: albums,
                     recent: albums,

@@ -25,7 +25,7 @@ export function renderSongs(callback) {
                     hrefAlbum: `#`,
                     hrefArtist: `#`,
                 }));
-                
+
                 const content = {
                     loved: songs,
                     recent: songs,

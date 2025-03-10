@@ -1,15 +1,21 @@
-<div id="auth" class="auth-main">
+<div id='auth' class='auth-main'>
     <p>{{this.header}}</p>
-    <div class="auth-main__line"></div>
+    <div class='auth-main__line'></div>
 
     {{#each inputs}}
-        <div class="auth-main__input-container">
+        <div class='auth-main__input-container'>
             {{this.text}}
-            <input type="{{this.type}}" placeholder="{{this.placeholder}}" name="{{this.name}}" class="auth-form__base-input" required>
-            <p class="error-message" name="{{this.errorName}}"></p>
+            <input
+                type='{{this.type}}'
+                placeholder='{{this.placeholder}}'
+                name='{{this.name}}'
+                class='auth-form__base-input'
+                required
+            />
+            <p class='error-message' name='{{this.errorName}}'></p>
         </div>
     {{/each}}
 
-    <p class="error-message" name="global-error"></p>
-    <input type="submit" value="{{submitText}}" class="auth-form__submit-btn">
+    <p class='error-message' name='global-error'></p>
+    <input type='submit' value='{{submitText}}' class='auth-form__submit-btn' />
 </div>

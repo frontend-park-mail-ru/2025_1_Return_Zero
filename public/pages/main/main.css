@@ -28,7 +28,8 @@
     height: fit-content;
 }
 
-#main #recent > .cards, #loved > .cards {
+#main #recent > .cards,
+#loved > .cards {
     display: flex;
     gap: 1.5rem;
 

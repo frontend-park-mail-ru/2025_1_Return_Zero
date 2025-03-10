@@ -69,8 +69,8 @@
     --font-weight-bold: 600;
     --font-weight-light: 300;
 
-    --width-scroll: 0.8rem; 
-    --height-scroll: 0.5rem; 
+    --width-scroll: 0.8rem;
+    --height-scroll: 0.5rem;
 }
 
 a {
@@ -104,16 +104,16 @@ h4 {
     font-size: var(--font-size-h4);
     font-family: var(--font-family-header);
 }
- 
+
 ::-webkit-scrollbar {
     width: var(--width-scroll);
     height: var(--height-scroll);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--color-border); 
+    background: var(--color-border);
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--color-background); 
-} 
+    background: var(--color-background);
+}

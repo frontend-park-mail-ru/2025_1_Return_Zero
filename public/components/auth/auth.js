@@ -1,39 +1,33 @@
-import './auth.precompiled.js'
+import './auth.precompiled.js';
 
 import { postSignup, postLogin, getCurrentUser } from '../../utils.js';
 import { renderPage } from '../../renderPage.js';
+import { updateHeader } from '../header/header.js';
 
 /**
  * Validates user input based on requirements.
- * 
+ *
  * @param {string} text - The input text to validate.
  * @param {string} type - The type of input being validated ("username", "password", "passwordRepeat", etc.).
  * @param {string} [matchingValue] - The value to match against (used for password confirmation).
- * 
+ *
  * @returns {string} An error message if validation fails, otherwise "success".
  */
 function validateInput(text, type, matchingValue) {
     const validLetters = new Set([
-        ..."abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        ...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
     ]);
 
-    const validLoginChars = new Set([
-        ...validLetters, 
-        '_', 
-        ...'0123456789',
-    ]);
+    const validLoginChars = new Set([...validLetters, '_', ...'0123456789']);
 
-    const validEmailChars = new Set([
-        ...validLoginChars,
-        ...'@#!.',
-    ])
+    const validEmailChars = new Set([...validLoginChars, ...'@#!.']);
 
     const globalValidLoginCharsChecker = (text) => {
         if (typeof text !== 'string') {
             return false;
         }
 
-        return [...text].every(char => validLoginChars.has(char));
+        return [...text].every((char) => validLoginChars.has(char));
     };
 
     const globalValidEmailCharsChecker = (text) => {
@@ -41,15 +35,15 @@ function validateInput(text, type, matchingValue) {
             return false;
         }
 
-        return [...text].every(char => validEmailChars.has(char));
-    }
+        return [...text].every((char) => validEmailChars.has(char));
+    };
 
     const globalLetterChecker = (text) => {
         if (typeof text !== 'string') {
             return false;
         }
 
-        return [...text].some(char => validLetters.has(char));
+        return [...text].some((char) => validLetters.has(char));
     };
 
     const requirements = {
@@ -59,10 +53,10 @@ function validateInput(text, type, matchingValue) {
             containsLetter: globalLetterChecker,
             containsValidChars: globalValidLoginCharsChecker,
         },
-        
+
         passwordRepeat: {
             matches: (text) => {
-                return text === matchingValue; 
+                return text === matchingValue;
             },
         },
 
@@ -89,7 +83,10 @@ function validateInput(text, type, matchingValue) {
     switch (type) {
         case 'username':
             const usernameRequirements = requirements.username;
-            if (text.length < usernameRequirements.minLength || text.length > usernameRequirements.maxLength) {
+            if (
+                text.length < usernameRequirements.minLength ||
+                text.length > usernameRequirements.maxLength
+            ) {
                 return `Логин должно быть от ${usernameRequirements.minLength} до ${usernameRequirements.maxLength} символов`;
             }
             if (!usernameRequirements.containsValidChars(text)) {
@@ -102,9 +99,12 @@ function validateInput(text, type, matchingValue) {
 
         case 'password':
             const passwordRequirements = requirements.password;
-            if (text.length < passwordRequirements.minLength || text.length > passwordRequirements.maxLength) {
+            if (
+                text.length < passwordRequirements.minLength ||
+                text.length > passwordRequirements.maxLength
+            ) {
                 return `Пароль должен быть от ${passwordRequirements.minLength} до ${passwordRequirements.maxLength} символов`;
-            } 
+            }
             if (!passwordRequirements.containsValidChars(text)) {
                 return 'Пароль может содержать только латинские буквы, цифры и подчеркивания';
             }
@@ -115,7 +115,10 @@ function validateInput(text, type, matchingValue) {
 
         case 'email':
             const emailRequirements = requirements.email;
-            if (text.length < emailRequirements.minLength || text.length > emailRequirements.maxLength) {
+            if (
+                text.length < emailRequirements.minLength ||
+                text.length > emailRequirements.maxLength
+            ) {
                 return `Email должен быть от ${emailRequirements.minLength} до ${emailRequirements.maxLength} символов`;
             }
             if (!emailRequirements.containsValidChars(text)) {
@@ -125,14 +128,17 @@ function validateInput(text, type, matchingValue) {
 
         case 'identifier':
             const identifierRequirements = requirements.identifier;
-            if (text.length < identifierRequirements.minLength || text.length > identifierRequirements.maxLength) {
+            if (
+                text.length < identifierRequirements.minLength ||
+                text.length > identifierRequirements.maxLength
+            ) {
                 return `Логин/email должен быть от ${identifierRequirements.minLength} до ${identifierRequirements.maxLength} символов`;
             }
             if (!identifierRequirements.containsValidChars(text)) {
                 return 'Логин/email может содержать только латинские буквы, цифры и подчеркивания';
             }
             break;
-        
+
         case 'passwordRepeat':
             const passwordRepeatRequirements = requirements.passwordRepeat;
             if (!passwordRepeatRequirements.matches(text)) {
@@ -149,7 +155,7 @@ function validateInput(text, type, matchingValue) {
 
 /**
  * Checks the current user's authentication status.
- * 
+ *
  * This function first checks if the header already contains authentication buttons.
  * If not, it makes a request to get the current user. If the user is authenticated,
  * it updates the header with the user's profile information. If the user is not
@@ -165,27 +171,31 @@ export function userAuthChecker() {
     getCurrentUser((response) => {
         if (response.ok) {
             // adding user name in header
-            const profile__dropdown = document.querySelector('.profile__dropdown');
+            const profile__dropdown =
+                document.querySelector('.profile__dropdown');
             console.log(profile__dropdown);
             response.json().then((user) => {
-                profile__dropdown.querySelector('.profile__user').textContent = user.username;
-            })
+                profile__dropdown.querySelector('.profile__user').textContent =
+                    user.username;
+            });
         } else {
             // removing user sections
-            const authUserSections = document.querySelectorAll('section#loved, section#recent');
-            authUserSections.forEach(section => section.remove());
+            const authUserSections = document.querySelectorAll(
+                'section#loved, section#recent'
+            );
+            authUserSections.forEach((section) => section.remove());
 
             const playlistsPanel = document.getElementById('playlists-list');
             while (playlistsPanel && playlistsPanel.children.length > 1) {
                 playlistsPanel.removeChild(playlistsPanel.children[1]);
             }
-    
+
             // removing profile picture and adding there auth buttons
             const profileHeader = document.querySelector('.header__profile');
             if (profileHeader) {
                 profileHeader.remove();
             }
-            
+
             if (!document.querySelector('.header__auth')) {
                 const loginButton = document.createElement('button');
                 loginButton.classList.add('header__login');
@@ -217,17 +227,17 @@ export function userAuthChecker() {
                     root.appendChild(signupForm());
                 });
             }
-        }   
+        }
     });
 }
 
 /**
  * Validates user inputs based on a validation list.
- * 
+ *
  * @param {HTMLFormElement} form - The form element containing the inputs.
  * @param {Array<{ name: string, type: string }>} validationList - The list of input fields to validate.
  * @param {Object} sendingData - The object where validated input values will be stored.
- * 
+ *
  * @returns {{ message: string, errorInputName: string }} The validation result with a success message or an error message and errorInput name.
  */
 function validate(form, validationList, sendingData) {
@@ -235,8 +245,8 @@ function validate(form, validationList, sendingData) {
     let errorInputName;
     validationList.forEach(({ name, type }) => {
         const input = form.querySelector(`[name="${name}"]`);
-        
-        // Checking if input's types wasn't changed. We trust html types validation 
+
+        // Checking if input's types wasn't changed. We trust html types validation
         if (!input) {
             message = `Input with name "${name}" not found`;
             errorInputName = name;
@@ -251,11 +261,14 @@ function validate(form, validationList, sendingData) {
 
         // Validating
         const validationResult = validateInput(
-            input.value.trim(), name, input.name === 'passwordRepeat' 
-            ? input.form.password?.value.trim() : undefined
+            input.value.trim(),
+            name,
+            input.name === 'passwordRepeat'
+                ? input.form.password?.value.trim()
+                : undefined
         );
         if (validationResult !== 'success') {
-            message = validationResult
+            message = validationResult;
             errorInputName = name;
             return;
         }
@@ -268,21 +281,33 @@ function validate(form, validationList, sendingData) {
 
     if (!message) {
         message = 'success';
-    } 
+    }
     return { message, errorInputName };
 }
 
 /**
  * Makes the login form.
- * 
+ *
  * @returns {HTMLDivElement} A div element containing the login form.
  */
 export function loginForm() {
     const template = Handlebars.templates['auth.hbs'];
     const formData = {
         inputs: [
-            { type: 'text', text: 'Введите логин/email:', name: 'identifier', errorName: 'identifier-error', placeholder: 'логин/email' },
-            { type: 'password', text: 'Введите пароль:', name: 'password', errorName: 'password-error', placeholder: 'пароль' },
+            {
+                type: 'text',
+                text: 'Введите логин/email:',
+                name: 'identifier',
+                errorName: 'identifier-error',
+                placeholder: 'логин/email',
+            },
+            {
+                type: 'password',
+                text: 'Введите пароль:',
+                name: 'password',
+                errorName: 'password-error',
+                placeholder: 'пароль',
+            },
         ],
         submitText: 'Войти',
         header: 'Авторизация',
@@ -292,12 +317,12 @@ export function loginForm() {
     form.classList.add('auth-form');
     form.innerHTML = template(formData);
     setTimeout(() => {
-        form.addEventListener("mousedown", formClickListener);
+        form.addEventListener('mousedown', formClickListener);
     }, 0);
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-        
+
         const validationList = [
             { name: 'identifier', type: 'text' },
             { name: 'password', type: 'password' },
@@ -308,8 +333,12 @@ export function loginForm() {
             password: '',
         };
 
-        const { message, errorInputName } = validate(form, validationList, sendingData);
-        
+        const { message, errorInputName } = validate(
+            form,
+            validationList,
+            sendingData
+        );
+
         if (sendingData['identifier'].includes('@')) {
             sendingData.email = sendingData['identifier'];
         } else {
@@ -318,22 +347,32 @@ export function loginForm() {
         delete sendingData.identifier;
 
         // Clear previous messages
-        form.querySelectorAll('p.error-message').forEach(msg => msg.textContent = '');
-        form.querySelectorAll('p.success-message').forEach(msg => msg.textContent = '');
+        form.querySelectorAll('p.error-message').forEach(
+            (msg) => (msg.textContent = '')
+        );
+        form.querySelectorAll('p.success-message').forEach(
+            (msg) => (msg.textContent = '')
+        );
 
         if (message === 'success') {
             postLogin(sendingData, (response) => {
                 if (response.ok) {
                     renderPage();
+                    updateHeader();
                     return;
                 } else {
-                    const errorMessage = document.querySelector(`[name="global-error"]`);
-                    errorMessage.textContent = 'Неправильные логин/email или пароль';
+                    const errorMessage = document.querySelector(
+                        `[name="global-error"]`
+                    );
+                    errorMessage.textContent =
+                        'Неправильные логин/email или пароль';
                     errorMessage.className = 'error-message';
                 }
             });
         } else {
-            const errorMessage = document.querySelector(`[name="global-error"]`);
+            const errorMessage = document.querySelector(
+                `[name="global-error"]`
+            );
             errorMessage.textContent = 'Неправильные логин/email или пароль';
             errorMessage.className = 'error-message';
         }
@@ -344,17 +383,41 @@ export function loginForm() {
 
 /**
  * Makes the signup form.
- * 
+ *
  * @returns {HTMLDivElement} A div element containing the signup form.
  */
 export function signupForm() {
-    const template = Handlebars.templates['auth.hbs']; 
+    const template = Handlebars.templates['auth.hbs'];
     const formData = {
         inputs: [
-            { type: 'text', text: 'Введите логин:', name: 'username', errorName: 'username-error', placeholder: 'логин' },
-            { type: 'email', text: 'Введите email:', name: 'email',  errorName: 'email-error', placeholder: 'email' },
-            { type: 'password', text: 'Введите пароль:', name: 'password',  errorName: 'password-error', placeholder: 'пароль' },
-            { type: 'password', text: 'Повторите пароль:', name: 'passwordRepeat',  errorName: 'passwordRepeat-error', placeholder: 'пароль' },
+            {
+                type: 'text',
+                text: 'Введите логин:',
+                name: 'username',
+                errorName: 'username-error',
+                placeholder: 'логин',
+            },
+            {
+                type: 'email',
+                text: 'Введите email:',
+                name: 'email',
+                errorName: 'email-error',
+                placeholder: 'email',
+            },
+            {
+                type: 'password',
+                text: 'Введите пароль:',
+                name: 'password',
+                errorName: 'password-error',
+                placeholder: 'пароль',
+            },
+            {
+                type: 'password',
+                text: 'Повторите пароль:',
+                name: 'passwordRepeat',
+                errorName: 'passwordRepeat-error',
+                placeholder: 'пароль',
+            },
         ],
         submitText: 'Зарегистрироваться',
         header: 'Регистрация',
@@ -364,12 +427,12 @@ export function signupForm() {
     form.classList.add('auth-form');
     form.innerHTML = template(formData);
     setTimeout(() => {
-        form.addEventListener("mousedown", formClickListener);
+        form.addEventListener('mousedown', formClickListener);
     }, 0);
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-        
+
         const validationList = [
             { name: 'passwordRepeat', type: 'password' },
             { name: 'password', type: 'password' },
@@ -383,27 +446,43 @@ export function signupForm() {
             password: '',
         };
 
-        const { message, errorInputName } = validate(form, validationList, sendingData);
-        
+        const { message, errorInputName } = validate(
+            form,
+            validationList,
+            sendingData
+        );
+
         // Clear previous messages
-        form.querySelectorAll('p.error-message').forEach(msg => msg.textContent = '');
-        form.querySelectorAll('p.success-message').forEach(msg => msg.textContent = '');
-        
+        form.querySelectorAll('p.error-message').forEach(
+            (msg) => (msg.textContent = '')
+        );
+        form.querySelectorAll('p.success-message').forEach(
+            (msg) => (msg.textContent = '')
+        );
+
         if (message === 'success') {
             postSignup(sendingData, (response) => {
                 if (response.ok) {
                     renderPage();
+                    updateHeader();
                     return;
                 } else {
-                    const errorMessage = document.querySelector(`[name="global-error"]`);
-                    errorMessage.textContent = 'Пользователь с таким логин/email уже существует';
+                    const errorMessage = document.querySelector(
+                        `[name="global-error"]`
+                    );
+                    errorMessage.textContent =
+                        'Пользователь с таким логин/email уже существует';
                     errorMessage.className = 'error-message';
                 }
             });
         } else {
-            const inputElement = form.querySelector(`[name="${errorInputName}"]`);
+            const inputElement = form.querySelector(
+                `[name="${errorInputName}"]`
+            );
             if (inputElement) {
-                const validationMessage = document.querySelector(`[name="${errorInputName}-error"]`);
+                const validationMessage = document.querySelector(
+                    `[name="${errorInputName}-error"]`
+                );
                 validationMessage.textContent = message;
             }
         }
@@ -417,17 +496,18 @@ export function signupForm() {
  * @param {Event} event - The event triggered by the click.
  */
 function formClickListener(event) {
-    const authWindow = document.getElementById("auth");
-    
+    const authWindow = document.getElementById('auth');
+
     if (authWindow && !authWindow.contains(event.target)) {
         const root = document.getElementById('root');
         const authForm = event.currentTarget;
-        
-        authForm.removeEventListener("mousedown", formClickListener);
+
+        authForm.removeEventListener('mousedown', formClickListener);
         root.removeChild(event.currentTarget);
-        document.querySelectorAll(".header__login.active, .header__signup.active").forEach(button => {
-            button.classList.remove("active");
-        });
+        document
+            .querySelectorAll('.header__login.active, .header__signup.active')
+            .forEach((button) => {
+                button.classList.remove('active');
+            });
     }
 }
-
