@@ -114,6 +114,8 @@
     border-radius: 0 0 1rem 1rem;
     background-color: var(--color-background);
     box-shadow: 0 4px 6px 0 var(--color-background);
+
+    z-index: 1;
 }
 .profile__dropdown::before {
     /* fill empty space to prevent closing */
