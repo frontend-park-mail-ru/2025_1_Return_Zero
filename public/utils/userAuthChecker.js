@@ -14,10 +14,10 @@ import { getCurrentUser } from "./api.js";
 export function userAuthChecker() {
     const headerContainer = document.getElementById('header-container');
     if (document.querySelector('.header__auth')) {
-        if (document.querySelector('#recent')) 
-            document.querySelector('#recent').remove();
-        if (document.querySelector('#loved'))
-            document.querySelector('#loved').remove();
+        const recent = document.querySelector('#recent');
+        recent && recent.remove();
+        const loved = document.querySelector('#loved');
+        loved && loved.remove();
         return;
     }
 
