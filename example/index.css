@@ -1,0 +1,31 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.app {
+    padding: 20px;
+}
+
+.nav {
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav > .active {
+    color: green;
+}
+
+.home {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.home > img {
+    width: 300px;
+    height: 300px;
+}
