@@ -10,6 +10,7 @@
         "ansi-styles": "^4.3.0",
         "argparse": "^2.0.1",
         "balanced-match": "^1.0.2",
+        "before-build-webpack": "^0.2.15",
         "body-parser": "^1.20.3",
         "brace-expansion": "^1.1.11",
         "braces": "^3.0.3",
@@ -88,26 +89,37 @@
         "type-check": "^0.4.0",
         "typescript": "^5.7.3",
         "uri-js": "^4.4.1",
+        "webpack-shell-plugin": "^0.5.0",
         "which": "^2.0.2",
         "word-wrap": "^1.2.5",
         "yocto-queue": "^0.1.0"
     },
     "devDependencies": {
+        "@babel/core": "^7.26.10",
+        "@babel/preset-env": "^7.26.9",
         "@eslint/js": "^9.20.0",
+        "babel-loader": "^10.0.0",
+        "clean-webpack-plugin": "^4.0.0",
+        "css-loader": "^7.1.2",
         "eslint": "^9.20.1",
         "eslint-config-cecilia": "^2.10.1",
         "eslint-config-prettier": "^10.0.1",
         "eslint-plugin-import": "^2.31.0",
         "globals": "^16.0.0",
+        "handlebars-loader": "^1.7.3",
+        "html-webpack-plugin": "^5.6.3",
         "jsdoc": "^4.0.4",
+        "mini-css-extract-plugin": "^2.9.2",
         "prettier": "3.5.1",
-        "typescript-eslint": "^8.24.1"
+        "typescript-eslint": "^8.24.1",
+        "webpack": "^5.98.0",
+        "webpack-cli": "^6.0.1",
+        "webpack-dev-server": "^5.2.0"
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "compile:templates": "for file in $(find public -name *.hbs); do echo \"Compiling $file\"; handlebars $file -f ${file%.hbs}.precompiled.js; done",
-        "prestart": "npm run compile:templates",
-        "start": "node server/server.js"
+        "start": "webpack serve --config webpack.config.js",
+        "build": "webpack --config webpack.config.js --mode production",
+        "compile:templates": "find public -name '*.hbs' -exec sh -c 'echo \"Compiling {}\"; npx handlebars {} -f ${0%.hbs}.precompiled.js' \\;"
     },
     "repository": {
         "type": "git",
