@@ -17,7 +17,7 @@ module.exports = {
     clean: true,
     filename: 'bundle.js',
     publicPath: '/static/', 
-    assetModuleFilename: 'img/[hash][ext]'
+    assetModuleFilename: 'img/[name][ext]'
   },
   module: {
     rules: [
