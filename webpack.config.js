@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const BeforeBuildPlugin = require('before-build-webpack');
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const buildPath = path.resolve(__dirname, 'dist');
 const publicPath = path.resolve(__dirname, 'public');
@@ -27,6 +28,11 @@ module.exports = {
         },
       },
       {
+        test: /\.ts$/,
+        use: 'babel-loader',
+        exclude: /node_modules/,
+      },
+      {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
@@ -42,6 +48,7 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
+    new ForkTsCheckerWebpackPlugin(),
     new BeforeBuildPlugin(function(stats, callback) {
       console.log('Compiling Handlebars templates...');
       const { execSync } = require('child_process');
@@ -64,7 +71,7 @@ module.exports = {
     },
   },
   resolve: {
-    extensions: ['.js'],
+    extensions: ['.js', '.ts'],
     alias: {
       components: path.join(publicPath, 'components'),
       fonts: path.join(publicPath, 'fonts'),
@@ -75,3 +82,5 @@ module.exports = {
     },
   },
 };
+
+
