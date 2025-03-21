@@ -1,3 +1,4 @@
+import './main.css';
 import './main.precompiled.js';
 import '../../components/music-card/music-card.js';
 import '../../components/song/song.js';

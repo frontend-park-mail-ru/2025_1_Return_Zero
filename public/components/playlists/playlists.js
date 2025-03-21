@@ -1,3 +1,4 @@
+import './playlists.css';
 import './playlists.precompiled.js';
 
 /**

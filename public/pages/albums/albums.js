@@ -1,3 +1,4 @@
+import './albums.css';
 import './albums.precompiled.js';
 import '../../components/album-card/album-card.js';
 import '../../components/album/album.js';
