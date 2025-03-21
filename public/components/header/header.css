@@ -15,7 +15,7 @@
 
     padding-left: calc(1.5rem + 1em + 0.6rem); /* padding + icon width + gap */
 
-    background-image: url(/static/img/icon-search.svg);
+    background-image: url(img/icon-search.svg);
     background-size: 1em 1em;
     background-position: 1.5rem center;
     background-repeat: no-repeat;

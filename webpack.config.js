@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const BeforeBuildPlugin = require('before-build-webpack');
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const buildPath = path.resolve(__dirname, 'dist');
 const publicPath = path.resolve(__dirname, 'public');
@@ -13,12 +14,15 @@ module.exports = {
   entry: path.join(publicPath, 'index.js'),
   output: {
     path: buildPath,
+    clean: true,
     filename: 'bundle.js',
+    publicPath: '/static/', 
+    assetModuleFilename: 'img/[hash][ext]'
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.js$/i,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -28,7 +32,7 @@ module.exports = {
         },
       },
       {
-        test: /\.ts$/,
+        test: /\.ts$/i,
         use: {
           loader: 'babel-loader',
           options: {
@@ -41,15 +45,25 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        test: /\.css$/i,
+        use: [
+          MiniCssExtractPlugin.loader, 
+          'css-loader'
+        ],
       },
       {
-        test: /\.hbs$/,
+        test: /\.hbs$/i,
         loader: 'handlebars-loader',
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif|ico|ttf)$/i,
+        test: /\.ttf$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name][ext]'
+        },
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
         type: 'asset/resource',
       },
     ],
@@ -67,7 +81,19 @@ module.exports = {
       template: path.join(__dirname, './public/index.html'),
     }),
     new MiniCssExtractPlugin({
-      filename: '[name]-[contenthash].css',
+      filename: '[name].[contenthash].css',
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.join(publicPath, 'libs/handlebars-v4.7.8.js'),
+          to: path.join(buildPath, 'libs/handlebars-v4.7.8.js'),
+        },
+        {
+          from: path.join(publicPath, 'img'),
+          to: path.join(buildPath, 'img'),
+        },
+      ],
     }),
   ],
   devServer: {
