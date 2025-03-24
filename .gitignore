@@ -1,5 +1,6 @@
 **/node_modules
-public/**/*.precompiled.js
+**/*.precompiled.js
+dist
 backend/
+server/
 gogo
-

@@ -1,3 +1,4 @@
+import './header.css';
 import './header.precompiled.js';
 
 /**

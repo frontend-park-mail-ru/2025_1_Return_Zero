@@ -1,3 +1,4 @@
+import './artists.css';
 import './artists.precompiled.js';
 import '../../components/collections/collections.js';
 import '../../components/artist-card/artist-card.js';

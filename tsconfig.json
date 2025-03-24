@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "baseUrl": "public",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@libs/*": ["libs/*"],
+      "@pages/*": ["pages/*"],
+      "@utils/*": ["utils/*"]
+    },
+    "noEmit": true,
+    "allowJs": true,
+    "sourceMap": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "module": "es6",
+    "target": "es6",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": true
+  },
+  "include": ["public/**/*"],
+  "exclude": ["node_modules"]
+}
+
+

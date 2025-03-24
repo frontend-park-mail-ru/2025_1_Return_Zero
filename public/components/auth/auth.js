@@ -1,3 +1,4 @@
+import './auth.css';
 import './auth.precompiled.js';
 
 import { postSignup, postLogin } from '../../utils/api.js';

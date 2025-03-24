@@ -1,21 +1,3 @@
-@import url(components/music-card/music-card.css);
-@import url(components/artist-card/artist-card.css);
-@import url(components/album-card/album-card.css);
-
-@import url(components/song/song.css);
-@import url(components/album/album.css);
-
-@import url(components/header/header.css);
-@import url(components/playlists/playlists.css);
-
-@import url(components/auth/auth.css);
-@import url(components/collections/collections.css);
-
-@import url(pages/main/main.css);
-@import url(pages/songs/songs.css);
-@import url(pages/artists/artists.css);
-@import url(pages/albums/albums.css);
-
 @import url(dark.css);
 
 /* fonts */
