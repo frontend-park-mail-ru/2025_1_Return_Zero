@@ -1,10 +1,12 @@
 import './auth.css';
 import './auth.precompiled.js';
-import './requirements.ts';
 
 import { postSignup, postLogin } from '../../utils/api.js';
 import { renderPage } from '../../renderPage.js';
 import { updateHeader } from '../header/header.js';
+
+import { inputManipulator } from './inputManipulator';
+import { popUpListener } from './popUpListener';
 
 interface Input {
     type: string,
@@ -18,53 +20,6 @@ interface AuthFormData {
     inputs: Input[],
     submitText: string,
     header: string
-}
-
-function markInput(target: HTMLInputElement, errorMessage: string) {
-    const validationMessage = document.querySelector(
-        `[name="${target.name}-error"]`
-    );
-    if (validationMessage) {
-        validationMessage.textContent = errorMessage;
-    }
-}
-
-function inputListener(event: Event) {
-    const target: HTMLInputElement | null = event.target as HTMLInputElement;
-    if(!target || !target.name || !(target.name in requirements)) {
-        return;
-    }
-
-    const requirement: Requirement = requirements[target.name as keyof Requirements]; 
-    const text: string = target.value;
-
-    let errorMessage: string | undefined;
-    if (text.length < requirement.minLength || text.length > requirement.maxLength) {
-        errorMessage = requirement.errorMessages.length;
-    }
-    if (requirement.containsLetter && !requirement.containsLetter(text)) {
-        errorMessage = requirement.errorMessages.containsLetter;
-    }
-    if (requirement.containsValidChars && !requirement.containsValidChars(text)) {
-        errorMessage = requirement.errorMessages.containsValidChars;
-    }
-    if (requirement.match) {
-        if (target.name == 'passwordRepeat') {
-            const password: string | null = (
-                document.querySelector(`[name="password"]`) as HTMLInputElement
-            ).value;
-            if (password && !requirement.match(text, password)) {
-                errorMessage = requirement.errorMessages.match;
-            }
-        }
-        if (target.name != 'passwordRepeat' && !requirement.match(text)) {
-            errorMessage = requirement.errorMessages.match;
-        }
-    }
-
-    if (errorMessage) {
-        markInput(target, errorMessage);
-    }
 }
 
 interface SendingData {
@@ -108,15 +63,15 @@ export function loginForm(): HTMLFormElement {
     form.innerHTML = template(formData);
 
     setTimeout(() => {
-        form.addEventListener('mousedown', formClickListener);
+        form.addEventListener('mousedown', popUpListener.formClickListener);
     }, 0);
 
     // real-time validation
     formData.inputs.forEach((input) => {
-        const element: HTMLInputElement | null = document.querySelector(`[name=${input.name}]`);
+        const element: HTMLInputElement | null = form.querySelector(`[name=${input.name}]`);
         if (element) {
             setTimeout(() => {
-                element.addEventListener('input', inputListener);
+                element.addEventListener('input', inputManipulator.inputListener);
             }, 0);
         }
     });
@@ -124,33 +79,43 @@ export function loginForm(): HTMLFormElement {
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         
-        const password: string | null = (
-            document.querySelector(`[name="password"]`) as HTMLInputElement
-        ).value;
-        const identifier: string | null = (
-            document.querySelector(`[name="identifier"]`) as HTMLInputElement
-        ).value;
-
-        if (!identifier || !password) {
+        const password: HTMLInputElement | null = (
+            form.querySelector(`[name="password"]`) as HTMLInputElement
+        );
+        const identifier: HTMLInputElement | null = (
+            form.querySelector(`[name="identifier"]`) as HTMLInputElement
+        );
+        
+        let hasError = false;
+        const validationList = [identifier, password];
+        validationList.forEach((input) => {
+            if (!input || input.classList.contains('border-error')) {
+                hasError = true;
+                return;
+            }
+        });
+        if (hasError) {
             return;
         }
 
         const sendingData: SendingData = {
-            password: password,
+            password: password.value,
         };
 
-        if (identifier.includes('@')) {
-            sendingData.email = identifier;
+        if (identifier.value.includes('@')) {
+            sendingData.email = identifier.value;
         } else {
-            sendingData.username = identifier;
+            sendingData.username = identifier.value;
         }
 
+        inputManipulator.renderGlobalError('');
         postLogin(sendingData, (response: Response) => {
             if (response.ok) {
                 renderPage();
                 updateHeader();
                 return;
             } 
+            inputManipulator.renderGlobalError('Неправильные логин/email или пароль');
         });
     });
 
@@ -205,17 +170,15 @@ export function signupForm() {
     form.innerHTML = template(formData);
 
     setTimeout(() => {
-        form.addEventListener('mousedown', formClickListener);
+        form.addEventListener('mousedown', popUpListener.formClickListener);
     }, 0);
 
     // real-time validation
     formData.inputs.forEach((input) => {
-        const element: HTMLInputElement | null = document.querySelector(`[name=${input.name}]`);
-        if (element) {  const username: string | null = (
-            document.querySelector(`[name="username"]`) as HTMLInputElement
-        ).value;
+        const element: HTMLInputElement | null = form.querySelector(`[name=${input.name}]`);
+        if (element) {
             setTimeout(() => {
-                element.addEventListener('input', inputListener);
+                element.addEventListener('input', inputManipulator.inputListener);
             }, 0);
         }
     });
@@ -223,63 +186,49 @@ export function signupForm() {
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         
-        const password: string | null = (
-            document.querySelector(`[name="password"]`) as HTMLInputElement
-        ).value;
-        const passwordRepeat: string | null = (
-            document.querySelector(`[name="passwordRepeat"]`) as HTMLInputElement
-        ).value;
-        const username: string | null = (
-            document.querySelector(`[name="username"]`) as HTMLInputElement
-        ).value;
-        const email: string | null = (
-            document.querySelector(`[name="email"]`) as HTMLInputElement
-        ).value;
+        const password: HTMLInputElement | null = (
+            form.querySelector(`[name="password"]`) as HTMLInputElement
+        );
+        const passwordRepeat: HTMLInputElement | null = (
+            form.querySelector(`[name="passwordRepeat"]`) as HTMLInputElement
+        );
+        const username: HTMLInputElement | null = (
+            form.querySelector(`[name="username"]`) as HTMLInputElement
+        );
+        const email: HTMLInputElement | null = (
+            form.querySelector(`[name="email"]`) as HTMLInputElement
+        );
 
-        if (!email || !password || !username || !passwordRepeat) {
+        let hasError = false;
+        const validationList = [password, passwordRepeat, username, email];
+        validationList.forEach((input) => {
+            if (!input || input.classList.contains('border-error')) {
+                hasError = true;
+                return;
+            }
+        });
+        if (hasError) {
             return;
         }
 
         const sendingData: SendingData = {
-            username: username,
-            email: email,
-            password: password,
-            passwordRepeat: passwordRepeat,
+            username: username.value,
+            email: email.value,
+            password: password.value,
+            passwordRepeat: passwordRepeat.value,
         };
 
+        inputManipulator.renderGlobalError('');
         postSignup(sendingData, (response: Response) => {
             if (response.ok) {
                 renderPage();
                 updateHeader();
                 return;
             } 
+            inputManipulator.renderGlobalError('Пользователь с таким логин/email уже существует');
         });
     });
 
     return form;
-}
-
-/**
- * Removes the authentication form from the DOM when it is clicked outside of it.
- * @param {Event} event - The event triggered by the click.
- */
-function formClickListener(event: Event) {
-    const authWindow: HTMLDivElement | null = document.getElementById('auth') as HTMLDivElement;;
-
-    if (authWindow && event.target instanceof Node && !authWindow.contains(event.target)) {
-        const root: HTMLDivElement | null = document.getElementById('root') as HTMLDivElement;
-        const authForm: HTMLFormElement | null = event.currentTarget as HTMLFormElement;
-
-        if (authForm && event.currentTarget instanceof Node) {
-            authForm.removeEventListener('mousedown', formClickListener);
-            root.removeChild(event.currentTarget);
-
-            document
-            .querySelectorAll('.header__login.active, .header__signup.active')
-            .forEach((button) => {
-                button.classList.remove('active');
-            });
-        }
-    }
 }
 

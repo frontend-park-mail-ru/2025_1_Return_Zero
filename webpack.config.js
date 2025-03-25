@@ -14,7 +14,7 @@ module.exports = {
   output: {
     path: buildPath,
     clean: true,
-    filename: 'bundle.js',
+    filename: 'bundle.[contenthash].js',
     publicPath: '/static/', 
     assetModuleFilename: 'img/[name][ext]'
   },
@@ -77,7 +77,7 @@ module.exports = {
       callback();
     }),
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, './public/index.html'),
+      template: path.resolve(__dirname, './public/index.html'),
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
@@ -98,12 +98,12 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts'],
     alias: {
-      components: path.join(publicPath, 'components'),
-      fonts: path.join(publicPath, 'fonts'),
-      img: path.join(publicPath, 'img'),
-      libs: path.join(publicPath, 'libs'),
-      pages: path.join(publicPath, 'pages'),
-      utils: path.join(publicPath, 'utils'),
+      components: path.resolve(publicPath, 'components'),
+      fonts: path.resolve(publicPath, 'fonts'),
+      img: path.resolve(publicPath, 'img'),
+      libs: path.resolve(publicPath, 'libs'),
+      pages: path.resolve(publicPath, 'pages'),
+      utils: path.resolve(publicPath, 'utils'),
     },
   },
 };

@@ -99,6 +99,12 @@
     font-weight: var(--font-weight-light);
 }
 
-.success-message {
-    color: green;
+.border-error {
+    border: 1px solid var(--color-highlight) !important; 
 }
+
+.border-error:focus {
+    border: 1px solid var(--color-highlight) !important; 
+    outline: none;
+}
+
