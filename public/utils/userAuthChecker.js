@@ -1,4 +1,4 @@
-import { loginForm, signupForm } from "../components/auth/auth.js";
+import { loginForm, signupForm } from "../components/auth/auth.ts";
 
 import { getCurrentUser } from "./api.js";
 

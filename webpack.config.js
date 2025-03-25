@@ -10,8 +10,7 @@ const buildPath = path.resolve(__dirname, 'dist');
 const publicPath = path.resolve(__dirname, 'public');
 
 module.exports = {
-  mode: 'development', 
-  entry: path.join(publicPath, 'index.js'),
+  entry: path.resolve(publicPath, 'index.js'),
   output: {
     path: buildPath,
     clean: true,
@@ -86,24 +85,16 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: path.join(publicPath, 'libs/handlebars-v4.7.8.js'),
-          to: path.join(buildPath, 'libs/handlebars-v4.7.8.js'),
+          from: path.resolve(publicPath, 'libs/handlebars-v4.7.8.js'),
+          to: path.resolve(buildPath, 'libs/handlebars-v4.7.8.js'),
         },
         {
-          from: path.join(publicPath, 'img'),
-          to: path.join(buildPath, 'img'),
+          from: path.resolve(publicPath, 'img'),
+          to: path.resolve(buildPath, 'img'),
         },
       ],
     }),
   ],
-  devServer: {
-    port: 8888,
-    historyApiFallback: true,
-    watchFiles: publicPath,
-    client: {
-      overlay: false,
-    },
-  },
   resolve: {
     extensions: ['.js', '.ts'],
     alias: {
