@@ -1,6 +1,6 @@
-import { loginForm, signupForm } from "../components/auth/auth.js";
+import { loginForm, signupForm } from '../components/auth/auth.js';
 
-import { getCurrentUser } from "./api.js";
+import { getCurrentUser } from './api.js';
 
 /**
  * Checks the current user's authentication status.

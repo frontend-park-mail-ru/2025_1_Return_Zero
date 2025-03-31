@@ -1,4 +1,4 @@
-.song {
+.track {
     position: relative;
     display: grid;
     grid-template-areas:
@@ -10,27 +10,27 @@
     row-gap: 0.33rem;
 }
 
-.song.song_norder {
+.track.track_norder {
     grid-template-areas:
         'img title . album . duration like actions'
         'img artist . album . duration like actions';
     grid-template-columns: auto 1fr 2fr 1fr 2fr auto auto auto;
 }
 
-.song__index {
+.track__index {
     grid-area: ind;
     font-size: var(--font-size-h4);
     font-weight: var(--font-weight-bold);
 }
 
-.song__img {
+.track__img {
     grid-area: img;
     width: 4.6rem;
     height: 4.6rem;
     border-radius: 1rem;
 }
 
-.song__title {
+.track__title {
     grid-area: title;
     align-self: end;
 
@@ -38,14 +38,14 @@
     font-weight: bold;
 }
 
-.song__artist {
+.track__artist {
     grid-area: artist;
     align-self: start;
 
     font-weight: var(--font-weight-light);
 }
 
-.song__album {
+.track__album {
     justify-self: center;
     grid-area: album;
 
@@ -53,14 +53,14 @@
     font-weight: var(--font-weight-light);
 }
 
-.song__duration {
+.track__duration {
     grid-area: duration;
 
     font-size: var(--font-size-h4);
     font-weight: var(--font-weight-light);
 }
 
-.song__like {
+.track__like {
     width: 2rem;
     height: 2rem;
 
@@ -68,7 +68,7 @@
     cursor: not-allowed;
 }
 
-.song__actions {
+.track__actions {
     width: 2rem;
     height: 2rem;
 

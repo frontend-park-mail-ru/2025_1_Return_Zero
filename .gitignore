@@ -1,6 +1,5 @@
 **/node_modules
 **/*.precompiled.js
 dist
-backend/
-server/
-gogo
+backend
+.vscode

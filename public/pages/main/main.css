@@ -1,4 +1,4 @@
-#main {
+#main-page {
     grid-area: page;
 
     display: flex;
@@ -15,7 +15,7 @@
     height: 100%;
 }
 
-#main section {
+#main-page section {
     flex-shrink: 0;
 
     display: flex;
@@ -28,7 +28,7 @@
     height: fit-content;
 }
 
-#main #recent > .cards,
+#main-page #recent > .cards,
 #loved > .cards {
     display: flex;
     gap: 1.5rem;
@@ -39,7 +39,7 @@
     padding-bottom: 1rem;
 }
 
-#main #recommendations .songs {
+#main-page #recommendations .tracks {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;

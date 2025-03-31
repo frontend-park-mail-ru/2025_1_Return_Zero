@@ -1,0 +1,14 @@
+<div class="track {{#unless this.ind}}track_norder{{/unless}}">
+    <span class="track__index">{{this.ind}}</span>
+    <img src="{{this.image}}" alt="" class="track__img">
+    <a style="cursor: not-allowed;" href="{{this.hrefAlbum}}" class="track__title">{{this.title}}</a>
+    <a style="cursor: not-allowed;" href="{{this.hrefArtist}}" class="track__artist">{{this.artist}}</a>
+    <a style="cursor: not-allowed;" href="{{this.hrefAlbum}}" class="track__album">{{this.album}}</a>
+    <span class="track__duration">{{this.duration}}</span>
+    {{#if this.isLiked}}
+        <img src="/static/img/like-active.svg" alt="like" class="track__like">
+    {{else}}
+        <img src="/static/img/like-default.svg" alt="unlike" class="track__like">
+    {{/if}}
+    <img src="/static/img/dots.svg" alt="more" class="track__actions">
+</div>

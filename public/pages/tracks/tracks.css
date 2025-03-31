@@ -1,4 +1,4 @@
-#songs {
+#tracks-page {
     grid-area: page;
 
     display: flex;
@@ -15,7 +15,7 @@
     height: 100%;
 }
 
-#songs section {
+#tracks-page section {
     flex-shrink: 0;
 
     display: flex;
@@ -23,13 +23,13 @@
     gap: 2rem;
 }
 
-#songs #recent,
-#songs #loved {
+#recent,
+#loved {
     height: fit-content;
 }
 
-#songs #recent > .cards,
-#songs #loved > .cards {
+#tracks-page #recent > .cards,
+#loved > .cards {
     display: flex;
     gap: 1.5rem;
 
@@ -39,7 +39,7 @@
     padding-bottom: 1rem;
 }
 
-#songs #recommendations .songs {
+#tracks-page #recommendations .tracks {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;

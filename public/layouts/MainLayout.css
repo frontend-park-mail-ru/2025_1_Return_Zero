@@ -1,0 +1,13 @@
+.main-layout {
+    display: grid;
+    grid-template-areas:
+        'header header'
+        'playlists page'
+        'footer footer';
+    grid-template-rows: min-content 1fr min-content;
+    grid-template-columns: min-content 1fr;
+    gap: 0.5rem;
+
+    width: 100%;
+    height: 100%;
+}
