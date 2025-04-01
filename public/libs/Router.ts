@@ -1,10 +1,11 @@
 export type CallbackData = {
-    oldUrl: string;
-    newUrl: string;
-    pathParams: RegExpMatchArray;
-    searchParams: URLSearchParams;
-    hash: string;
-    data: any;
+    path: string,
+    oldUrl: string,
+    newUrl: string,
+    pathParams: RegExpMatchArray,
+    searchParams: URLSearchParams,
+    hash: string,
+    data: any
 };
 
 export interface Routable {
@@ -14,16 +15,16 @@ export interface Routable {
 export class Router {
     private _href: string = 'http://null.null/';
     private _callbacks: {
-        [key: string]: Routable[];
-    } = {};
+        [key: string]: Routable[]
+    } = {}
 
     constructor() {
         this.setUrl(location.href);
-        window.addEventListener('popstate', (e) => {
+        window.addEventListener("popstate", e =>  {
             this.setUrl(location.href);
         });
     }
-
+    
     private setUrl(value: string) {
         const prev = this.getPath();
         this._href = value;
@@ -31,22 +32,16 @@ export class Router {
     }
 
     addCallback(url_pattern: string, routable: Routable) {
-        console.log(
-            `Adding callback "${routable.constructor.name}" for ${url_pattern}`
-        );
+        console.log(`Adding callback "${routable.constructor.name}" for ${url_pattern}`);
 
         this._callbacks[url_pattern] = this._callbacks[url_pattern] || [];
         this._callbacks[url_pattern].push(routable);
     }
 
     removeCallback(url_pattern: string, routable: Routable) {
-        console.log(
-            `Removing callback "${routable.constructor.name}" for ${url_pattern}`
-        );
+        console.log(`Removing callback "${routable.constructor.name}" for ${url_pattern}`);
 
-        this._callbacks[url_pattern] = this._callbacks[url_pattern].filter(
-            (r) => r !== routable
-        );
+        this._callbacks[url_pattern] = this._callbacks[url_pattern].filter(r => r !== routable);
         if (this._callbacks[url_pattern].length === 0) {
             delete this._callbacks[url_pattern];
         }
@@ -55,52 +50,48 @@ export class Router {
     callCallback(url_pattern: string, routable: Routable) {
         const res = this.getPath().match(url_pattern); // don't need search and hash
 
-        console.log(
-            `Matching ${url_pattern} with ${this.getPath()} got ${res}`
-        );
-        res &&
-            routable.onRoute({
-                oldUrl: undefined,
-                newUrl: this.getPath(),
-                pathParams: res,
-                searchParams: this.getSearch(),
-                hash: this.getHash(),
-                data: history.state,
-            });
+        console.log(`Matching ${url_pattern} with ${this.getPath()} got ${res}`);
+        res && routable.onRoute({
+            path: url_pattern,
+            oldUrl: undefined,
+            newUrl: this.getPath(),
+            pathParams: res,
+            searchParams: this.getSearch(),
+            hash: this.getHash(),
+            data: history.state
+        })
     }
 
     private callCallbacks(prev: string, cur: string) {
-        Object.keys(this._callbacks)
-            .reverse()
-            .forEach((key) => {
+        const cur_parts = cur.split('/')
+        cur_parts.forEach((_, index) => {
+            const cur = cur_parts.slice(0, index + 1).join('/');
+            
+            Object.keys(this._callbacks).reverse().forEach(key => {
                 const prev_res = prev.match(key);
                 const res = cur.match(key);
-
-                console.log(
-                    `Matching ${key} with ${this.getPath()} got ${res}`
-                );
-                prev_res &&
-                    prev_res !== res &&
-                    this._callbacks[key].forEach((r) =>
-                        r.onRoute({
-                            oldUrl: prev,
-                            newUrl: cur,
-                            pathParams: res,
-                            searchParams: this.getSearch(),
-                            hash: this.getHash(),
-                            data: history.state,
-                        })
-                    );
+    
+                console.log(`Matching ${key} with ${cur} got ${res}`);
+                cur && prev_res !== res && this._callbacks[key].forEach(r => r.onRoute({
+                    path: key,
+                    oldUrl: prev,
+                    newUrl: cur,
+                    pathParams: res,
+                    searchParams: this.getSearch(),
+                    hash: this.getHash(),
+                    data: history.state
+                }))
             });
+        })
     }
 
     pushUrl(url: string, data: any) {
-        history.pushState(data, '', url);
+        history.pushState(data, "", url);
         this.setUrl(url);
     }
 
     replaceUrl(url: string, data: any) {
-        history.replaceState(data, '', url);
+        history.replaceState(data, "", url);
         this.setUrl(url);
     }
 

@@ -3,22 +3,24 @@
         {{>collections}}
     </section>
 </section>
-<section id="recent">
-    <h1>Недавно прослушанные</h1>
-    <div class="cards">
-        {{#each this.recent}}
-            {{>music-card}}
-        {{/each}}
-    </div>
-</section>
-<section id="loved">
-    <h1>Любимые треки</h1>
-    <div class="cards">
-        {{#each this.loved}}
-            {{>music-card}}
-        {{/each}}
-    </div>
-</section>
+{{#if this.user}}
+    <section id="recent">
+        <h1>Недавно прослушанные</h1>
+        <div class="cards">
+            {{#each this.recent}}
+                {{>music-card}}
+            {{/each}}
+        </div>
+    </section>
+    <section id="loved">
+        <h1>Любимые треки</h1>
+        <div class="cards">
+            {{#each this.loved}}
+                {{>music-card}}
+            {{/each}}
+        </div>
+    </section>
+{{/if}}
 <section id="recommendations">
     <h1>Рекомендации</h1>
     <div class="tracks">

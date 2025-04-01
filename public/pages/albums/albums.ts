@@ -6,6 +6,7 @@ import '../../components/collections/collections.js';
 
 import { Component } from '../../libs/Component.ts';
 import { API } from 'utils/api';
+import { userState } from '../../states.ts';
 
 export class AlbumsPage extends Component {
     // @ts-ignore
@@ -29,6 +30,7 @@ export class AlbumsPage extends Component {
                     loved: albums,
                     recent: albums,
                     recommendations: albums,
+                    user: userState.getState(),
                 };
 
                 this.element.insertAdjacentHTML(

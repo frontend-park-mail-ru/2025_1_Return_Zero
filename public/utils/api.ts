@@ -66,6 +66,10 @@ export class API {
     }
 
     static async getCurrentUser() {
-        return (await API.get('/user')) as User;
+        try {
+            return (await API.get('/user')) as User;
+        } catch (e) {
+            return null;
+        }
     }
 }

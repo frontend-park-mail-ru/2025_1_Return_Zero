@@ -4,6 +4,7 @@ import './header.css';
 import { Component } from '../../libs/Component.ts';
 import { State } from '../../libs/State.ts';
 import Router, { Routable, CallbackData } from '../../libs/Router.ts';
+import { userState } from '../../states.ts';
 
 const navItems = {
     '/': {
@@ -40,6 +41,8 @@ export class Header extends Component implements Routable {
         this.element.id = 'header';
 
         this.active = this.createState(null);
+        this.createCallback(userState, () => this.build());
+
         Router.addCallback(Header.path, this);
     }
 
@@ -50,6 +53,7 @@ export class Header extends Component implements Routable {
             'beforeend',
             Header.template({
                 navItems,
+                user: userState.getState(),
             })
         );
         this.element
@@ -79,12 +83,7 @@ export class Header extends Component implements Routable {
     }
 
     onRoute({
-        oldUrl,
-        newUrl,
-        pathParams,
-        searchParams,
-        hash,
-        data,
+        newUrl
     }: CallbackData) {
         this.active.setState(
             this.element.querySelector(`.header__nav li>a[href="${newUrl}"]`)

@@ -1,14 +1,16 @@
 <section id="collections"> 
     {{>collections}}
-</section>  
-<section id="loved">
-    <h1>Любимые альбомы</h1>
-    <div class="cards">
-        {{#each this.loved}}
-            {{>album-card}}
-        {{/each}}
-    </div>
 </section>
+{{#if this.user}}
+    <section id="loved">
+        <h1>Любимые альбомы</h1>
+        <div class="cards">
+            {{#each this.loved}}
+                {{>album-card}}
+            {{/each}}
+        </div>
+    </section>
+{{/if}}
 <section id="recommendations">
     <h1>Рекомендации</h1>
     <div class="albums">

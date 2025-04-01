@@ -5,6 +5,7 @@ import '../../components/collections/collections.js';
 
 import { Component } from '../../libs/Component.ts';
 import { API } from 'utils/api';
+import { userState } from '../../states.ts';
 
 export class ArtistsPage extends Component {
     // @ts-ignore
@@ -27,6 +28,7 @@ export class ArtistsPage extends Component {
                 const content = {
                     loved: artists,
                     recommendations: artists,
+                    user: userState.getState(),
                 };
 
                 this.element.insertAdjacentHTML(

@@ -10,19 +10,24 @@ import { TracksPage } from '../pages/tracks/tracks.ts';
 import { AlbumsPage } from '../pages/albums/albums.ts';
 import { ArtistsPage } from '../pages/artists/artists.ts';
 
+import { loginForm, signupForm } from 'components/auth/auth.ts';
+
 import './MainLayout.css';
 
 export class MainLayout extends Component implements Routable {
     protected static path = '^/(tracks|albums|artists|)';
+    protected static authPath = '#(login|register)$';
 
     header: Header;
     playlists: Playlists;
     child: State<Component>;
+    popup: State<Component>;
 
     protected init() {
         this.element.classList.add('main-layout');
 
         this.child = this.createState(null);
+        this.popup = this.createState(null);
         Router.addCallback(MainLayout.path, this);
     }
 
@@ -42,6 +47,10 @@ export class MainLayout extends Component implements Routable {
                 prev && prev.destroy();
                 this.element.appendChild(cur.element);
                 break;
+            case this.popup:
+                prev && prev.destroy();
+                cur && this.element.appendChild(cur.element);
+                break;
         }
     }
 
@@ -52,25 +61,36 @@ export class MainLayout extends Component implements Routable {
     }
 
     onRoute({
-        oldUrl,
-        newUrl,
+        path,
         pathParams,
-        searchParams,
-        hash,
-        data,
     }: CallbackData) {
-        switch (pathParams[1]) {
-            case '':
-                this.child.setState(new MainPage());
+        switch (path) {
+            case MainLayout.authPath:
+                switch (pathParams[1]) {
+                    // case 'login':
+                    //     this.popup.setState(loginForm);
+                    //     break;
+                    // case 'register':
+                    //     this.popup.setState(signupForm);
+                    //     break;
+                    // Нужно переписать попапы на rzf
+                }
                 break;
-            case 'tracks':
-                this.child.setState(new TracksPage());
-                break;
-            case 'albums':
-                this.child.setState(new AlbumsPage());
-                break;
-            case 'artists':
-                this.child.setState(new ArtistsPage());
+            case MainLayout.path:
+                switch (pathParams[1]) {
+                    case '':
+                        this.child.setState(new MainPage());
+                        break;
+                    case 'tracks':
+                        this.child.setState(new TracksPage());
+                        break;
+                    case 'albums':
+                        this.child.setState(new AlbumsPage());
+                        break;
+                    case 'artists':
+                        this.child.setState(new ArtistsPage());
+                        break;
+                }
                 break;
         }
     }
