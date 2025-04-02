@@ -4,11 +4,11 @@ class PopUpListener {
      * @param {Event} event - The event triggered by the click.
      */
     formClickListener = (event: Event) => {
-        const authWindow: HTMLDivElement | null = document.getElementById('auth') as HTMLDivElement;;
+        const authWindow = document.getElementById('auth') as HTMLDivElement ?? null;
 
         if (authWindow && event.target instanceof Node && !authWindow.contains(event.target)) {
-            const root: HTMLDivElement | null = document.getElementById('root') as HTMLDivElement;
-            const authForm: HTMLFormElement | null = event.currentTarget as HTMLFormElement;
+            const root = document.getElementById('root') as HTMLDivElement ?? null;
+            const authForm = event.currentTarget as HTMLFormElement ?? null;
 
             if (authForm && event.currentTarget instanceof Node) {
                 authForm.removeEventListener('mousedown', this.formClickListener);

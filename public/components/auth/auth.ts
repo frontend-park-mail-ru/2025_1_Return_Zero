@@ -5,28 +5,33 @@ import { postSignup, postLogin } from '../../utils/api.js';
 import { renderPage } from '../../renderPage.js';
 import { updateHeader } from '../header/header.js';
 
-import { inputManipulator } from './inputManipulator';
+import { Input, InputState } from './inputTypes';
 import { popUpListener } from './popUpListener';
 
-interface Input {
-    type: string,
-    text: string,
-    name: string,
-    errorName: string,
-    placeholder: string
-}
-
-interface AuthFormData {
+type AuthFormData = {
     inputs: Input[],
     submitText: string,
     header: string
 }
 
 interface SendingData {
+    identifier?: string,
     username?: string,
     email?: string,
-    password: string,
+    password?: string,
     passwordRepeat?: string
+}
+
+function renderGlobalError(text: string): void {
+    const errorMessage: HTMLParagraphElement | null = document.querySelector(
+        `[name="global-error"]`
+    );
+    if (!errorMessage) {
+        return;
+    }
+
+    errorMessage.textContent = text;
+    errorMessage.className = 'error-message';
 }
 
 /**
@@ -35,7 +40,7 @@ interface SendingData {
  * @returns {HTMLFormElement} A form element containing the login form.
  */
 export function loginForm(): HTMLFormElement {
-    // @ts-ignore хз, как сделать так, чтобы на Handlebars не ругался ts
+    // @ts-ignore 
     const template = Handlebars.templates['auth.hbs'];
     const formData: AuthFormData = {
         inputs: [
@@ -66,56 +71,43 @@ export function loginForm(): HTMLFormElement {
         form.addEventListener('mousedown', popUpListener.formClickListener);
     }, 0);
 
-    // real-time validation
+    const inputList: InputState[] = [];
     formData.inputs.forEach((input) => {
-        const element: HTMLInputElement | null = form.querySelector(`[name=${input.name}]`);
-        if (element) {
-            setTimeout(() => {
-                element.addEventListener('input', inputManipulator.inputListener);
-            }, 0);
-        }
+        if(!input) return;
+        const element: InputState = new InputState(form, input, true);
+        inputList.push(element);
     });
 
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         
-        const password: HTMLInputElement | null = (
-            form.querySelector(`[name="password"]`) as HTMLInputElement
-        );
-        const identifier: HTMLInputElement | null = (
-            form.querySelector(`[name="identifier"]`) as HTMLInputElement
-        );
-        
         let hasError = false;
-        const validationList = [identifier, password];
-        validationList.forEach((input) => {
-            if (!input || input.classList.contains('border-error')) {
+        const sendingData: SendingData = {};
+        inputList.forEach((inputState) => {
+            if (!inputState.isValid()) {
                 hasError = true;
-                return;
             }
+            sendingData[inputState.input.name as keyof SendingData] = inputState.inputHTML.value;
         });
+        
         if (hasError) {
             return;
         }
 
-        const sendingData: SendingData = {
-            password: password.value,
-        };
-
-        if (identifier.value.includes('@')) {
-            sendingData.email = identifier.value;
+        if (sendingData.identifier && sendingData.identifier.includes('@')) {
+            sendingData.email = sendingData.identifier;
         } else {
-            sendingData.username = identifier.value;
+            sendingData.username = sendingData.identifier;
         }
 
-        inputManipulator.renderGlobalError('');
+        renderGlobalError('');
         postLogin(sendingData, (response: Response) => {
             if (response.ok) {
                 renderPage();
                 updateHeader();
                 return;
             } 
-            inputManipulator.renderGlobalError('Неправильные логин/email или пароль');
+            renderGlobalError('Неправильные логин/email или пароль');
         });
     });
 
@@ -173,59 +165,37 @@ export function signupForm() {
         form.addEventListener('mousedown', popUpListener.formClickListener);
     }, 0);
 
-    // real-time validation
+    const inputList: InputState[] = [];
     formData.inputs.forEach((input) => {
-        const element: HTMLInputElement | null = form.querySelector(`[name=${input.name}]`);
-        if (element) {
-            setTimeout(() => {
-                element.addEventListener('input', inputManipulator.inputListener);
-            }, 0);
-        }
+        if(!input) return;
+        const element: InputState = new InputState(form, input, false);
+        inputList.push(element);
     });
 
     form.addEventListener('submit', (event) => {
         event.preventDefault();
         
-        const password: HTMLInputElement | null = (
-            form.querySelector(`[name="password"]`) as HTMLInputElement
-        );
-        const passwordRepeat: HTMLInputElement | null = (
-            form.querySelector(`[name="passwordRepeat"]`) as HTMLInputElement
-        );
-        const username: HTMLInputElement | null = (
-            form.querySelector(`[name="username"]`) as HTMLInputElement
-        );
-        const email: HTMLInputElement | null = (
-            form.querySelector(`[name="email"]`) as HTMLInputElement
-        );
-
         let hasError = false;
-        const validationList = [password, passwordRepeat, username, email];
-        validationList.forEach((input) => {
-            if (!input || input.classList.contains('border-error')) {
+        const sendingData: SendingData = {};
+        inputList.forEach((inputState) => {
+            if (!inputState.isValid()) {
                 hasError = true;
-                return;
             }
+            sendingData[inputState.input.name as keyof SendingData] = inputState.inputHTML.value;
         });
+        
         if (hasError) {
             return;
         }
 
-        const sendingData: SendingData = {
-            username: username.value,
-            email: email.value,
-            password: password.value,
-            passwordRepeat: passwordRepeat.value,
-        };
-
-        inputManipulator.renderGlobalError('');
+        renderGlobalError('');
         postSignup(sendingData, (response: Response) => {
             if (response.ok) {
                 renderPage();
                 updateHeader();
                 return;
             } 
-            inputManipulator.renderGlobalError('Пользователь с таким логин/email уже существует');
+            renderGlobalError('Пользователь с таким логин/email уже существует');
         });
     });
 
