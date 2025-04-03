@@ -65,7 +65,7 @@ export class Router {
             const res = cur_route.match(key);
 
             console.log(`Matching ${key} with ${this._href} got ${res} [callCallbackssssssssss]`);
-            prev_res && res && prev_res[0] !== res[0] && this._callbacks[key].forEach(r => r.onRoute({
+            res && (!prev_res || prev_res[0] !== res[0]) && this._callbacks[key].forEach(r => r.onRoute({
                 path: key,
                 pathname: this.getPath(),
                 params: res,

@@ -10,7 +10,7 @@ import { TracksPage } from '../pages/tracks/tracks.ts';
 import { AlbumsPage } from '../pages/albums/albums.ts';
 import { ArtistsPage } from '../pages/artists/artists.ts';
 
-import { LoginForm, SignupForm } from 'components/auth/auth.ts';
+import { AuthForm } from 'components/auth/auth.ts';
 
 import './MainLayout.css';
 
@@ -70,10 +70,10 @@ export class MainLayout extends Component implements Routable {
             case MainLayout.authPath:
                 switch (params[1]) {
                     case 'login':
-                        this.popup.setState(new LoginForm());
+                        this.popup.setState(new AuthForm('login'));
                         break;
                     case 'register':
-                        this.popup.setState(new SignupForm());
+                        this.popup.setState(new AuthForm('register'));
                         break;
                 }
                 break;
