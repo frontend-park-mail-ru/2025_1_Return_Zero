@@ -33,6 +33,7 @@
 
     --font-size-small: 0.75rem;
     --font-size-main: 1rem;
+    --font-size-additional: 1.188rem;
     --font-size-h1: 2rem;
     --font-size-h2: 1.75rem;
     --font-size-h3: 1.5rem;
@@ -44,6 +45,8 @@
 
     --width-scroll: 0.8rem;
     --height-scroll: 0.5rem;
+
+    --main-padding: 1.875rem;
 }
 
 a {

@@ -8,22 +8,22 @@ import { userState } from '../../states.ts';
 
 const navItems = {
     '/': {
-        text: 'Home',
+        text: 'Главная',
         href: '/',
         icon: '/static/img/icon-home.svg',
     },
     '/tracks': {
-        text: 'Tracks',
+        text: 'Треки',
         href: '/tracks',
         icon: '/static/img/icon-tracks.svg',
     },
     '/albums': {
-        text: 'Albums',
+        text: 'Альбомы',
         href: '/albums',
         icon: '/static/img/icon-albums.svg',
     },
     '/artists': {
-        text: 'Artists',
+        text: 'Артисты',
         href: '/artists',
         icon: '/static/img/icon-artists.svg',
     },

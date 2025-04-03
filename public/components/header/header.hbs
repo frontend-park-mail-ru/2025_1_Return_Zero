@@ -1,34 +1,40 @@
-<a class="header__logo">
-    <img class="logo" src="/static/img/logo.png" alt="logo">
-</a>
-<form class="header__search" onsubmit="return false;">
-    <input type="text" id="search" name="search" placeholder="Поиск...">
-</form>
-<nav class="header__nav">
-    <ul id="header-list">
-            {{#each this.navItems}}
-                <li class="item {{#if this.active}}active{{/if}}">
-                    <a href="{{this.href}}">
-                        <img class="icon" src="{{this.icon}}">
-                        <span>{{this.text}}</span>
-                    </a>
-                </li>
-            {{/each}}
-    </ul>
-</nav>
-{{#if this.user}}
-    <div class="header__profile">
-        <img class="profile__img" src="/static/img/no-avatar.svg" alt="profile">
-        <div class="profile__dropdown">
-            <span class="profile__user">{{this.user}}</span>
-            <a href="#" style="cursor: not-allowed;">Профиль</a>
-            <a href="#" style="cursor: not-allowed;">Настройки</a>
-            <a href="#" data-action="logout">Выйти</a>
+<div class="header__logo-container">
+    <a class="header__logo">
+        <img class="logo" src="/static/img/logo.png" alt="logo">
+    </a>
+</div>
+
+<div class="header__main">
+    <form class="header__search" onsubmit="return false;">
+        <img class="search-icon" src="static/img/icon-search.svg">
+        <input type="text" id="search" name="search" placeholder="поиск...">
+    </form>
+    <nav class="header__nav">
+        <ul id="header-list" class="header-list">
+                {{#each this.navItems}}
+                    <li class="item {{#if this.active}}active{{/if}}">
+                        <a href="{{this.href}}">
+                            <img class="icon" src="{{this.icon}}">
+                            <span>{{this.text}}</span>
+                        </a>
+                    </li>
+                {{/each}}
+        </ul>
+    </nav>
+    {{#if this.user}}
+        <div class="header__profile">
+            <img class="profile__img" src="/static/img/no-avatar.svg" alt="profile">
+            <div class="profile__dropdown">
+                <span class="profile__user">{{this.user}}</span>
+                <a href="#" style="cursor: not-allowed;">Профиль</a>
+                <a href="#" style="cursor: not-allowed;">Настройки</a>
+                <a href="#" data-action="logout">Выйти</a>
+            </div>
         </div>
-    </div>
-{{else}}
-    <div class="header__auth">
-        <a class="btn" href="#login">Войти</a>
-        <a class="btn" href="#register">Регистрация</a>
-    </div>
-{{/if}}
+    {{else}}
+        <div class="header__auth">
+            <a class="btn" href="#login">Войти</a>
+            <a class="btn" href="#register">Регистрация</a>
+        </div>
+    {{/if}}
+</div>

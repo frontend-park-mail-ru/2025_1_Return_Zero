@@ -5,8 +5,8 @@
     flex-direction: column;
     gap: 2.5rem;
 
-    padding: 2.5rem;
-
+    padding: var(--main-padding);
+    
     border-radius: 1.25rem;
 
     background-color: var(--color-elements);

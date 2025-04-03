@@ -71,12 +71,12 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new ForkTsCheckerWebpackPlugin(),
-    // new BeforeBuildPlugin(function(stats, callback) {
-    //   console.log('Compiling Handlebars templates...');
-    //   const { execSync } = require('child_process');
-    //   execSync('for file in $(find public -name *.hbs); do echo \"Compiling $file\"; handlebars $file -f ${file%.hbs}.precompiled.js; done');
-    //   callback();
-    // }),
+    new BeforeBuildPlugin(function(stats, callback) {
+      console.log('Compiling Handlebars templates...');
+      const { execSync } = require('child_process');
+      execSync('for file in $(find public -name *.hbs); do echo \"Compiling $file\"; handlebars $file -f ${file%.hbs}.precompiled.js; done');
+      callback();
+    }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, './public/index.html'),
     }),
