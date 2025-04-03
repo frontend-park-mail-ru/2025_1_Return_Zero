@@ -66,7 +66,10 @@ export class LoginForm extends Component {
 
         const form = this.element.querySelector('form')
         
-        form.addEventListener('mousedown', popUpListener.formClickListener);
+        setTimeout(() => {
+            form.addEventListener('mousedown', popUpListener.formClickListener);
+        }, 0);
+    
         
         const inputList: InputState[] = [];
         content.inputs.forEach((input) => {
@@ -108,7 +111,6 @@ export class LoginForm extends Component {
                         renderGlobalError('Неправильные логин/email или пароль');
                     }
                 } catch (error) {
-                    console.error('Ошибка при входе:', error);
                     renderGlobalError('Ошибка сети, попробуйте позже');
                 }
             })();
@@ -169,9 +171,10 @@ export class SignupForm extends Component {
         this.element.insertAdjacentHTML('beforeend', SignupForm.template(content));
 
         const form = this.element.querySelector('form')
-        
-        form.addEventListener('mousedown', popUpListener.formClickListener);
-        
+        setTimeout(() => {
+            form.addEventListener('mousedown', popUpListener.formClickListener);
+        }, 0);    
+
         const inputList: InputState[] = [];
         content.inputs.forEach((input) => {
             if(!input) return;

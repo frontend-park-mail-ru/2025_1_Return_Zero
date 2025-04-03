@@ -67,7 +67,7 @@ button {
     border-radius: 1rem;
 }
 .btn:hover {
-    background-color: var(--color-highlight);
+    background-color: var(--color-button);
 }
 
 input {

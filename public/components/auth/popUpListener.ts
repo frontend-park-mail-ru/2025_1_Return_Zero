@@ -5,20 +5,23 @@ class PopUpListener {
      */
     formClickListener = (event: Event) => {
         const authWindow = document.getElementById('auth') as HTMLDivElement ?? null;
-
+    
         if (authWindow && event.target instanceof Node && !authWindow.contains(event.target)) {
-            const root = document.getElementById('root') as HTMLDivElement ?? null;
             const authForm = event.currentTarget as HTMLFormElement ?? null;
-
+    
             if (authForm && event.currentTarget instanceof Node) {
                 authForm.removeEventListener('mousedown', this.formClickListener);
-                root.removeChild(event.currentTarget);
-
+                
+                const parent = authForm.parentNode; 
+                if (parent) {
+                    parent.removeChild(authForm); 
+                }
+    
                 document
-                .querySelectorAll('.header__login.active, .header__signup.active')
-                .forEach((button) => {
-                    button.classList.remove('active');
-                });
+                    .querySelectorAll('.header__login.active, .header__signup.active')
+                    .forEach((button) => {
+                        button.classList.remove('active');
+                    });
             }
         }
     }
