@@ -2,11 +2,12 @@ import './auth.css';
 import './auth.precompiled.js';
 
 import { API } from 'utils/api';
-import { Component } from 'libs/Component';
+import { Component } from '../../libs/Component.ts';
 
-import { Input, InputState } from './inputTypes';
-import { popUpListener } from './popUpListener';
+import { Input, InputState, signupContent, loginContent } from './inputTypes';
+import { formClickListener, renderGlobalError } from './authFunctions';
 import { AuthSendingData } from 'utils/api_types.js';
+import Router from 'libs/Router';
 
 type AuthFormData = {
     inputs: Input[],
@@ -14,71 +15,46 @@ type AuthFormData = {
     header: string
 }
 
-function renderGlobalError(text: string): void {
-    const errorMessage: HTMLParagraphElement | null = document.querySelector(
-        `[name="global-error"]`
-    );
-    if (!errorMessage) {
-        return;
-    }
+type AuthType = 'login' | 'register';
 
-    errorMessage.textContent = text;
-    errorMessage.className = 'error-message';
-}
-
-export class LoginForm extends Component {
+export class AuthForm extends Component {
+    protected static BASE_ELEMENT = 'form';
     // @ts-ignore
     static template = Handlebars.templates['auth.hbs'];
 
-    constructor() {
-        super();
-    }
+    private authType: AuthType;
 
-    protected init() {
-        this.element.id = 'login-form';
+    protected init(initState: AuthType) {
+        this.authType = initState;
+        this.element.id = 'auth-form';
+        this.element.classList.add('auth-form');
+        this.build();
     }
 
     protected build() {
         this.element.innerHTML = '';
-
-        const content: AuthFormData = {
-            inputs: [
-                {
-                    type: 'text',
-                    text: 'Введите логин/email:',
-                    name: 'identifier',
-                    errorName: 'identifier-error',
-                    placeholder: 'логин/email',
-                },
-                {
-                    type: 'password',
-                    text: 'Введите пароль:',
-                    name: 'password',
-                    errorName: 'password-error',
-                    placeholder: 'пароль',
-                },
-            ],
-            submitText: 'Войти',
-            header: 'Авторизация',
-        };
-
-        this.element.insertAdjacentHTML('beforeend', LoginForm.template(content));
-
-        const form = this.element.querySelector('form')
         
-        setTimeout(() => {
-            form.addEventListener('mousedown', popUpListener.formClickListener);
-        }, 0);
-    
-        
+        const content = this.getContent(); 
+
+        this.element.insertAdjacentHTML('beforeend', 
+            AuthForm.template(content)
+        );
+        this.element.addEventListener('mousedown', 
+            formClickListener
+        );
+
         const inputList: InputState[] = [];
         content.inputs.forEach((input) => {
             if(!input) return;
-            const element: InputState = new InputState(form, input, true);
+            const element: InputState = new InputState(
+                // @ts-ignore
+                this.element, input, 
+                this.authType === 'login' ? true : false
+            );
             inputList.push(element);
         });
 
-        form.addEventListener('submit', (event) => {
+        this.element.addEventListener('submit', (event) => {
             event.preventDefault();
             
             let hasError = false;
@@ -96,124 +72,52 @@ export class LoginForm extends Component {
     
             if (sendingData.identifier && sendingData.identifier.includes('@')) {
                 sendingData.email = sendingData.identifier;
-            } else {
+                delete sendingData.identifier;
+            } 
+            if (sendingData.identifier && !sendingData.identifier.includes('@')) {
                 sendingData.username = sendingData.identifier;
+                delete sendingData.identifier;
             }
     
             renderGlobalError('');
-            (async () => {
-                try {
-                    const response = await API.postLogin(sendingData);
+            this.sendData(sendingData);
+        });   
+    }
+
+    private getContent(): AuthFormData {
+        switch (this.authType) {
+            case 'login' as AuthType:
+                return loginContent as AuthFormData;
+            case 'register' as AuthType:
+                return signupContent as AuthFormData;
+        }    
+    }
+
+    private sendData(data: AuthSendingData): void {
+        (async () => {
+            try {
+                if (this.authType === 'register') {
+                    const response = await API.postSignup(data);
+        
+                    if (response.ok) {
+                        Router.pushUrl('/', {});
+                    } else {
+                        renderGlobalError('Пользователь с таким логином/email уже существует');
+                    }
+                }
+                if (this.authType === 'login') {
+                    const response = await API.postLogin(data);
             
                     if (response.ok) {
-                        location.reload();
+                        Router.pushUrl('/', {});
                     } else {
                         renderGlobalError('Неправильные логин/email или пароль');
                     }
-                } catch (error) {
-                    renderGlobalError('Ошибка сети, попробуйте позже');
                 }
-            })();
-        });
-    }
-}
-
-export class SignupForm extends Component {
-    // @ts-ignore
-    static template = Handlebars.templates['auth.hbs'];
-
-    constructor() {
-        super();
-    }
-
-    protected init() {
-        this.element.id = 'signup-form';
-    }
-
-    protected build() {
-        this.element.innerHTML = '';
-
-        const content: AuthFormData = {
-            inputs: [
-                {
-                    type: 'text',
-                    text: 'Введите логин:',
-                    name: 'username',
-                    errorName: 'username-error',
-                    placeholder: 'логин',
-                },
-                {
-                    type: 'email',
-                    text: 'Введите email:',
-                    name: 'email',
-                    errorName: 'email-error',
-                    placeholder: 'email',
-                },
-                {
-                    type: 'password',
-                    text: 'Введите пароль:',
-                    name: 'password',
-                    errorName: 'password-error',
-                    placeholder: 'пароль',
-                },
-                {
-                    type: 'password',
-                    text: 'Повторите пароль:',
-                    name: 'passwordRepeat',
-                    errorName: 'passwordRepeat-error',
-                    placeholder: 'пароль',
-                },
-            ],
-            submitText: 'Зарегистрироваться',
-            header: 'Регистрация',
-        };
-
-        this.element.insertAdjacentHTML('beforeend', SignupForm.template(content));
-
-        const form = this.element.querySelector('form')
-        setTimeout(() => {
-            form.addEventListener('mousedown', popUpListener.formClickListener);
-        }, 0);    
-
-        const inputList: InputState[] = [];
-        content.inputs.forEach((input) => {
-            if(!input) return;
-            const element: InputState = new InputState(form, input, false);
-            inputList.push(element);
-        });
-
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            
-            let hasError = false;
-            const sendingData: AuthSendingData = {};
-            inputList.forEach((inputState) => {
-                if (!inputState.isValid()) {
-                    hasError = true;
-                }
-                sendingData[inputState.input.name as keyof AuthSendingData] = inputState.inputHTML.value;
-            });
-            
-            if (hasError) {
-                return;
+            } catch (error) {
+                renderGlobalError('Ошибка сети, попробуйте позже');
             }
-    
-            renderGlobalError('');
-            (async () => {
-                try {
-                    const response = await API.postSignup(sendingData);
-            
-                    if (response.ok) {
-                        location.reload();
-                    } else {
-                        renderGlobalError('Пользователь с таким логин/email уже существует');
-                    }
-                } catch (error) {
-                    console.error('Ошибка при регистрации:', error);
-                    renderGlobalError('Ошибка сети, попробуйте позже');
-                }
-            })();
-        });
+        })();
     }
 }
 

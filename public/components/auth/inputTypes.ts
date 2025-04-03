@@ -29,11 +29,9 @@ class InputState {
             `[name="${this.input.name}-error"]`
         ) as HTMLParagraphElement; 
 
-        setTimeout(() =>
-            this.inputHTML.addEventListener('input',
-                this.inputListener.bind(this)
-            )
-        , 0);
+        this.inputHTML.addEventListener('input',
+            this.inputListener.bind(this)
+        );
 
         this.valid = false;
         this.error = null;
@@ -67,7 +65,7 @@ class InputState {
     inputListener() {
         const requirement = requirements[this.input.name as keyof typeof requirements];
         const text: string = this.inputHTML.value;
-    
+
         let errorMessage: string | undefined;
         if (text.length < requirement.minLength || text.length > requirement.maxLength) {
             errorMessage = requirement.errorMessages.length;
@@ -116,5 +114,61 @@ class InputState {
     }
 }
 
-export { Input, InputState };
+const signupContent = {
+    inputs: [
+        {
+            type: 'text',
+            text: 'Введите логин:',
+            name: 'username',
+            errorName: 'username-error',
+            placeholder: 'логин',
+        },
+        {
+            type: 'email',
+            text: 'Введите email:',
+            name: 'email',
+            errorName: 'email-error',
+            placeholder: 'email',
+        },
+        {
+            type: 'password',
+            text: 'Введите пароль:',
+            name: 'password',
+            errorName: 'password-error',
+            placeholder: 'пароль',
+        },
+        {
+            type: 'password',
+            text: 'Повторите пароль:',
+            name: 'passwordRepeat',
+            errorName: 'passwordRepeat-error',
+            placeholder: 'пароль',
+        },
+    ],
+    submitText: 'Зарегистрироваться',
+    header: 'Регистрация',
+};
+
+const loginContent = {
+    inputs: [
+        {
+            type: 'text',
+            text: 'Введите логин/email:',
+            name: 'identifier',
+            errorName: 'identifier-error',
+            placeholder: 'логин/email',
+        },
+        {
+            type: 'password',
+            text: 'Введите пароль:',
+            name: 'password',
+            errorName: 'password-error',
+            placeholder: 'пароль',
+        },
+    ],
+    submitText: 'Войти',
+    header: 'Авторизация',
+};
+
+export { Input, InputState, signupContent, loginContent };
 
