@@ -75,6 +75,8 @@ export class MainLayout extends Component implements Routable {
                     case 'register':
                         this.popup.setState(new AuthForm('register'));
                         break;
+                    default:
+                        this.popup.setState(null);
                 }
                 break;
             case MainLayout.path:

@@ -23,7 +23,6 @@ function formClickListener(event: Event): void {
             
             const parent = authForm.parentNode; 
             if (parent) {
-                parent.removeChild(authForm); 
                 Router.pushUrl(
                     '/', {} 
                 );

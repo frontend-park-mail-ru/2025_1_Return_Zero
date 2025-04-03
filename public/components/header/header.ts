@@ -32,10 +32,12 @@ const navItems = {
 export class Header extends Component implements Routable {
     protected static BASE_ELEMENT = 'header';
     protected static path = '^/(tracks|albums|artists|)';
+    protected static authPath = '#(login|register)';
     // @ts-ignore
     static template = Handlebars.templates['header.hbs'];
 
     active: State<HTMLElement>;
+
 
     protected init() {
         this.element.id = 'header';
@@ -44,6 +46,7 @@ export class Header extends Component implements Routable {
         this.createCallback(userState, () => this.build());
 
         Router.addCallback(Header.path, this);
+        Router.addCallback(Header.authPath, this);
     }
 
     protected build() {
@@ -67,6 +70,7 @@ export class Header extends Component implements Routable {
             });
 
         Router.callCallback(Header.path, this);
+        Router.callCallback(Header.authPath, this);
     }
 
     protected render(state: State<any>, prev: any, cur: any) {
@@ -83,12 +87,25 @@ export class Header extends Component implements Routable {
     }
 
     onRoute({
-        pathname
+        path,
+        pathname,
+        params,
     }: CallbackData) {
-        console.error("Header onRoute", pathname);
-        this.active.setState(
-            this.element.querySelector(`.header__nav li>a[href="${pathname}"]`)
-                .parentElement
-        );
+        switch (path) {
+            case Header.path:
+                this.active.setState(
+                    this.element.querySelector(`.header__nav li>a[href="${pathname}"]`)
+                        .parentElement
+                );
+                break;
+            case Header.authPath:
+                this.element.querySelectorAll('.header__auth>a').forEach((a) => {
+                    a.classList.remove('active');
+                });
+                this.element
+                    .querySelector(`.header__auth>a[href="#${params[1]}"]`)
+                    ?.classList.add('active');
+                break;
+        }
     }
 }

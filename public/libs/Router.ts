@@ -46,10 +46,10 @@ export class Router {
     }
 
     callCallback(url_pattern: string, routable: Routable) {
-        const res = this.getRoute().match(url_pattern);
+        const res = this.getRoute().match(url_pattern) ?? [''];
 
         console.log(`Matching ${url_pattern} with ${this._href} got ${res} [callCallback]`);
-        res && routable.onRoute({
+        routable.onRoute({
             path: url_pattern,
             pathname: this.getPath(),
             params: res,
@@ -61,11 +61,11 @@ export class Router {
     private callCallbacks(prev_route: string, cur_route: string
     ) {
         Object.keys(this._callbacks).forEach(key => {
-            const prev_res = prev_route.match(key);
-            const res = cur_route.match(key);
+            const prev_res = prev_route.match(key) ?? [''];
+            const res = cur_route.match(key) ?? [''];
 
             console.log(`Matching ${key} with ${this._href} got ${res} [callCallbackssssssssss]`);
-            res && (!prev_res || prev_res[0] !== res[0]) && this._callbacks[key].forEach(r => r.onRoute({
+            prev_res[0] !== res[0] && this._callbacks[key].forEach(r => r.onRoute({
                 path: key,
                 pathname: this.getPath(),
                 params: res,
@@ -76,11 +76,13 @@ export class Router {
     }
 
     pushUrl(url: string, data: any) {
+        url = new URL(url, this._href).href;
         history.pushState(data, "", url);
         this.setUrl(url);
     }
 
     replaceUrl(url: string, data: any) {
+        url = new URL(url, this._href).href;
         history.replaceState(data, "", url);
         this.setUrl(url);
     }

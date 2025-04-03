@@ -28,7 +28,6 @@ export class AuthForm extends Component {
         this.authType = initState;
         this.element.id = 'auth-form';
         this.element.classList.add('auth-form');
-        this.build();
     }
 
     protected build() {
@@ -39,9 +38,12 @@ export class AuthForm extends Component {
         this.element.insertAdjacentHTML('beforeend', 
             AuthForm.template(content)
         );
-        this.element.addEventListener('mousedown', 
-            formClickListener
-        );
+        
+        this.element.addEventListener('click', (e) => {
+            if ((e.target as HTMLElement).id === "auth-form") {
+                Router.pushUrl('/', {});
+            }
+        });
 
         const inputList: InputState[] = [];
         content.inputs.forEach((input) => {
