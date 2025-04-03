@@ -3,8 +3,7 @@ import {
     Album,
     Artist,
     User,
-    LoginData,
-    SignupData,
+    AuthSendingData,
 } from './api_types.ts';
 
 export class API {
@@ -53,11 +52,11 @@ export class API {
         return await API.get('/playlists');
     }
 
-    static async postSignup(data: SignupData) {
+    static async postSignup(data: AuthSendingData) {
         return await API.post('/signup', data);
     }
 
-    static async postLogin(data: LoginData) {
+    static async postLogin(data: AuthSendingData) {
         return await API.post('/login', data);
     }
 

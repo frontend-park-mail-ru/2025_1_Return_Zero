@@ -10,7 +10,7 @@ import { TracksPage } from '../pages/tracks/tracks.ts';
 import { AlbumsPage } from '../pages/albums/albums.ts';
 import { ArtistsPage } from '../pages/artists/artists.ts';
 
-import { loginForm, signupForm } from 'components/auth/auth.ts';
+import { LoginForm, SignupForm } from 'components/auth/auth.ts';
 
 import './MainLayout.css';
 
@@ -66,17 +66,18 @@ export class MainLayout extends Component implements Routable {
     }: CallbackData) {
         switch (path) {
             case MainLayout.authPath:
+                console.error('Sosiska!');
                 switch (pathParams[1]) {
-                    // case 'login':
-                    //     this.popup.setState(loginForm);
-                    //     break;
-                    // case 'register':
-                    //     this.popup.setState(signupForm);
-                    //     break;
-                    // Нужно переписать попапы на rzf
+                    case 'login':
+                        this.popup.setState(new LoginForm());
+                        break;
+                    case 'register':
+                        this.popup.setState(new SignupForm());
+                        break;
                 }
                 break;
             case MainLayout.path:
+                console.error('Sosulka!');
                 switch (pathParams[1]) {
                     case '':
                         this.child.setState(new MainPage());

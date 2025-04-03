@@ -24,14 +24,11 @@ export type User = {
     username: string;
 };
 
-export type LoginData = {
-    login: string;
-    email: string;
-    password: string;
-};
+export type AuthSendingData = {
+    identifier?: string,
+    username?: string,
+    email?: string,
+    password?: string,
+    passwordRepeat?: string
+}
 
-export type SignupData = {
-    email: string;
-    username: string;
-    password: string;
-};
