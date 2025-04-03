@@ -83,10 +83,11 @@ export class Header extends Component implements Routable {
     }
 
     onRoute({
-        newUrl
+        pathname
     }: CallbackData) {
+        console.error("Header onRoute", pathname);
         this.active.setState(
-            this.element.querySelector(`.header__nav li>a[href="${newUrl}"]`)
+            this.element.querySelector(`.header__nav li>a[href="${pathname}"]`)
                 .parentElement
         );
     }

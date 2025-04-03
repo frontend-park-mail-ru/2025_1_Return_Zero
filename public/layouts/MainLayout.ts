@@ -16,7 +16,7 @@ import './MainLayout.css';
 
 export class MainLayout extends Component implements Routable {
     protected static path = '^/(tracks|albums|artists|)';
-    protected static authPath = '#(login|register)$';
+    protected static authPath = '#(login|register)';
 
     header: Header;
     playlists: Playlists;
@@ -29,6 +29,7 @@ export class MainLayout extends Component implements Routable {
         this.child = this.createState(null);
         this.popup = this.createState(null);
         Router.addCallback(MainLayout.path, this);
+        Router.addCallback(MainLayout.authPath, this);
     }
 
     protected build() {
@@ -39,6 +40,7 @@ export class MainLayout extends Component implements Routable {
         this.element.appendChild(this.playlists.element);
 
         Router.callCallback(MainLayout.path, this);
+        Router.callCallback(MainLayout.authPath, this);
     }
 
     protected render(state: State<any>, prev: any, cur: any): void {
@@ -62,12 +64,11 @@ export class MainLayout extends Component implements Routable {
 
     onRoute({
         path,
-        pathParams,
+        params,
     }: CallbackData) {
         switch (path) {
             case MainLayout.authPath:
-                console.error('Sosiska!');
-                switch (pathParams[1]) {
+                switch (params[1]) {
                     case 'login':
                         this.popup.setState(new LoginForm());
                         break;
@@ -77,8 +78,7 @@ export class MainLayout extends Component implements Routable {
                 }
                 break;
             case MainLayout.path:
-                console.error('Sosulka!');
-                switch (pathParams[1]) {
+                switch (params[1]) {
                     case '':
                         this.child.setState(new MainPage());
                         break;

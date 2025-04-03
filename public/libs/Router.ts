@@ -1,10 +1,8 @@
 export type CallbackData = {
     path: string,
-    oldUrl: string,
-    newUrl: string,
-    pathParams: RegExpMatchArray,
+    pathname: string,
+    params: RegExpMatchArray,
     searchParams: URLSearchParams,
-    hash: string,
     data: any
 };
 
@@ -19,16 +17,16 @@ export class Router {
     } = {}
 
     constructor() {
-        this.setUrl(location.href);
+        this._href = location.href;
         window.addEventListener("popstate", e =>  {
             this.setUrl(location.href);
         });
     }
     
     private setUrl(value: string) {
-        const prev = this.getPath();
+        const prev_route = this.getRoute();
         this._href = value;
-        this.callCallbacks(prev, this.getPath());
+        this.callCallbacks(prev_route, this.getRoute());
     }
 
     addCallback(url_pattern: string, routable: Routable) {
@@ -48,41 +46,33 @@ export class Router {
     }
 
     callCallback(url_pattern: string, routable: Routable) {
-        const res = this.getPath().match(url_pattern); // don't need search and hash
+        const res = this.getRoute().match(url_pattern);
 
-        console.log(`Matching ${url_pattern} with ${this.getPath()} got ${res}`);
+        console.log(`Matching ${url_pattern} with ${this._href} got ${res} [callCallback]`);
         res && routable.onRoute({
             path: url_pattern,
-            oldUrl: undefined,
-            newUrl: this.getPath(),
-            pathParams: res,
+            pathname: this.getPath(),
+            params: res,
             searchParams: this.getSearch(),
-            hash: this.getHash(),
             data: history.state
         })
     }
 
-    private callCallbacks(prev: string, cur: string) {
-        const cur_parts = cur.split('/')
-        cur_parts.forEach((_, index) => {
-            const cur = cur_parts.slice(0, index + 1).join('/');
-            
-            Object.keys(this._callbacks).reverse().forEach(key => {
-                const prev_res = prev.match(key);
-                const res = cur.match(key);
-    
-                console.log(`Matching ${key} with ${cur} got ${res}`);
-                cur && prev_res !== res && this._callbacks[key].forEach(r => r.onRoute({
-                    path: key,
-                    oldUrl: prev,
-                    newUrl: cur,
-                    pathParams: res,
-                    searchParams: this.getSearch(),
-                    hash: this.getHash(),
-                    data: history.state
-                }))
-            });
-        })
+    private callCallbacks(prev_route: string, cur_route: string
+    ) {
+        Object.keys(this._callbacks).forEach(key => {
+            const prev_res = prev_route.match(key);
+            const res = cur_route.match(key);
+
+            console.log(`Matching ${key} with ${this._href} got ${res} [callCallbackssssssssss]`);
+            prev_res && res && prev_res[0] !== res[0] && this._callbacks[key].forEach(r => r.onRoute({
+                path: key,
+                pathname: this.getPath(),
+                params: res,
+                searchParams: this.getSearch(),
+                data: history.state
+            }))
+        });
     }
 
     pushUrl(url: string, data: any) {
@@ -97,6 +87,10 @@ export class Router {
 
     joinUrl(url: string, data: any) {
         this.pushUrl(new URL(url, this._href).href, data);
+    }
+
+    getRoute(): string {
+        return this._href.match(/\/\/.*?(\/.*)/)[1];
     }
 
     getPath(): string {
