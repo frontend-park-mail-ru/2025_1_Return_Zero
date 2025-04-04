@@ -1,8 +1,9 @@
-import './main.css';
 import './main.precompiled.js';
 import '../../components/music-card/music-card.js';
 import '../../components/track/track.js';
 import '../../components/collections/collections.js';
+
+import '../pages.scss';
 
 import { Component } from '../../libs/Component.ts';
 import { API } from 'utils/api';
@@ -17,7 +18,7 @@ export class MainPage extends Component {
     }
 
     protected init() {
-        this.element.id = 'main-page';
+        this.element.classList.add('page');
     }
 
     protected build() {

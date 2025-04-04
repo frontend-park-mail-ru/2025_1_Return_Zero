@@ -10,9 +10,9 @@
         <input type="text" id="search" name="search" placeholder="поиск...">
     </form>
     <nav class="header__nav">
-        <ul id="header-list" class="header-list">
+        <ul class="header-list">
                 {{#each this.navItems}}
-                    <li class="item {{#if this.active}}active{{/if}}">
+                    <li class="item">
                         <a href="{{this.href}}">
                             <img class="icon" src="{{this.icon}}">
                             <span>{{this.text}}</span>

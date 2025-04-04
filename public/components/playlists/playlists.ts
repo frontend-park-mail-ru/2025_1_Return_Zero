@@ -1,9 +1,10 @@
-import './playlists.css';
+import './playlists.scss';
 import './playlists.precompiled.js';
 
 import { Component } from '../../libs/Component.ts';
 
 export class Playlists extends Component {
+    protected static BASE_ELEMENT = 'section';
     // @ts-ignore
     static template = Handlebars.templates['playlists.hbs'];
 

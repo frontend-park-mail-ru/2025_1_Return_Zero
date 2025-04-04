@@ -1,4 +1,4 @@
-import './collections.css';
+import './collections.scss';
 import './collections.precompiled.js';
 
 Handlebars.registerPartial(

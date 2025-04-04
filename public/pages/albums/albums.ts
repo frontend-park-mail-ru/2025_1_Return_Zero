@@ -1,8 +1,10 @@
-import './albums.css';
 import './albums.precompiled.js';
+
 import '../../components/album-card/album-card.js';
 import '../../components/album/album.js';
 import '../../components/collections/collections.js';
+
+import '../pages.scss';
 
 import { Component } from '../../libs/Component.ts';
 import { API } from 'utils/api';
@@ -17,7 +19,7 @@ export class AlbumsPage extends Component {
     }
 
     protected init() {
-        this.element.id = 'albums-page';
+        this.element.classList.add("page");
     }
 
     protected build() {

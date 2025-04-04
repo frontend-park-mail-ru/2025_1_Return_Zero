@@ -1,4 +1,4 @@
-import './album-card.css';
+import './album-card.scss';
 import './album-card.precompiled.js';
 
 Handlebars.registerPartial(

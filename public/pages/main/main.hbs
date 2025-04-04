@@ -1,29 +1,27 @@
-<section id="collections"> 
-    <section id="collections">
-        {{>collections}}
-    </section>
+<section class="section"> 
+    {{>collections}}
 </section>
 {{#if this.user}}
-    <section id="recent">
+    <section class="section section--recent">
         <h1>Недавно прослушанные</h1>
-        <div class="cards">
+        <div>
             {{#each this.recent}}
                 {{>music-card}}
             {{/each}}
         </div>
     </section>
-    <section id="loved">
+    <section class="section section--loved">
         <h1>Любимые треки</h1>
-        <div class="cards">
+        <div>
             {{#each this.loved}}
                 {{>music-card}}
             {{/each}}
         </div>
     </section>
 {{/if}}
-<section id="recommendations">
+<section class="section section--recommendations">
     <h1>Рекомендации</h1>
-    <div class="tracks">
+    <div>
         {{#each this.recommendations}}
             {{>track}}
         {{/each}}

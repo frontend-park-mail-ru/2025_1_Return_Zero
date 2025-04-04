@@ -1,5 +1,5 @@
 import './header.precompiled.js';
-import './header.css';
+import './header.scss';
 
 import { Component } from '../../libs/Component.ts';
 import { State } from '../../libs/State.ts';
@@ -40,7 +40,7 @@ export class Header extends Component implements Routable {
 
 
     protected init() {
-        this.element.id = 'header';
+        this.element.classList.add('header');
 
         this.active = this.createState(null);
         this.createCallback(userState, () => this.build());
@@ -91,6 +91,9 @@ export class Header extends Component implements Routable {
         pathname,
         params,
     }: CallbackData) {
+        console.error("onRoute", path, pathname, params);
+        console.error(                    this.element.querySelector(`.header__nav li>a[href="${pathname}"]`)
+        .parentElement)
         switch (path) {
             case Header.path:
                 this.active.setState(

@@ -1,0 +1,77 @@
+@use './variables.scss' as v;
+@use './dark.scss' as d;
+
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+#root {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background-color: d.$color-background;
+    color: d.$color-text;
+}
+
+a {
+    text-decoration: none;
+    color: d.$color-text;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+}
+
+.btn {
+    padding: 0.5rem 1rem;
+    background-color: d.$color-elements;
+    border: 1px solid d.$color-border;
+    border-radius: 1rem;
+
+    &:hover, &.active {
+        background-color: d.$color-button;
+    }
+}
+
+input {
+    display: block;
+    color: d.$color-text;
+}
+
+h1 {
+    font-size: v.$font-size-h1;
+    font-family: v.$font-family-header;
+    font-weight: 100;
+}
+h2 {
+    font-size: v.$font-size-h2;
+    font-family: v.$font-family-header;
+}
+h3 {
+    font-size: v.$font-size-h3;
+    font-family: v.$font-family-header;
+}
+h4 {
+    font-size: v.$font-size-h4;
+    font-family: v.$font-family-header;
+}
+
+::-webkit-scrollbar {
+    width: v.$width-scroll;
+    height: v.$height-scroll;
+}
+
+::-webkit-scrollbar-thumb {
+    background: d.$color-border;
+}
+
+::-webkit-scrollbar-track {
+    background: d.$color-background;
+}

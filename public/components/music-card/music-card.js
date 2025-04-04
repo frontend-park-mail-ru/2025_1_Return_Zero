@@ -1,4 +1,4 @@
-import './music-card.css';
+import './music-card.scss';
 import './music-card.precompiled.js';
 
 Handlebars.registerPartial(

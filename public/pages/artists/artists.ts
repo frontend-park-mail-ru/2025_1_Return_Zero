@@ -1,7 +1,9 @@
-import './artists.css';
 import './artists.precompiled.js';
+
 import '../../components/artist-card/artist-card.js';
 import '../../components/collections/collections.js';
+
+import '../pages.scss';
 
 import { Component } from '../../libs/Component.ts';
 import { API } from 'utils/api';
@@ -16,7 +18,7 @@ export class ArtistsPage extends Component {
     }
 
     protected init() {
-        this.element.id = 'artists-page';
+        this.element.classList.add('page', 'page--artists');
     }
 
     protected build() {
