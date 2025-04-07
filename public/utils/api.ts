@@ -1,13 +1,10 @@
 import {
-    Track,
-    Album,
-    Artist,
-    User,
-    AuthSendingData,
+    TemplateAPI,
+    AuthSendingData
 } from './api_types.ts';
 
 export class API {
-    static baseUrl = '/api';
+    static baseUrl = '/api/v1';
 
     static async get(endpoint: string) {
         const resp = await fetch(this.baseUrl + endpoint);
@@ -36,19 +33,19 @@ export class API {
         throw new Error(resp.statusText);
     }
 
-    static async getTracks() {
-        return (await API.get('/tracks?limit=20')) as Track[];
+    static async getTracks(): Promise<TemplateAPI.TracksResponse> {
+        return (await API.get('/tracks?limit=20'));
     }
 
-    static async getAlbums() {
-        return (await API.get('/albums')) as Album[];
+    static async getAlbums(): Promise<TemplateAPI.AlbumsResponse> {
+        return (await API.get('/albums'));
     }
 
-    static async getArtists() {
-        return (await API.get('/artists')) as Artist[];
+    static async getArtists(): Promise<TemplateAPI.ArtistsResponse> {
+        return (await API.get('/artists'));
     }
 
-    static async getPlaylists() {
+    static async getPlaylists(): Promise<TemplateAPI.playlistsResponse> {
         return await API.get('/playlists');
     }
 
@@ -66,7 +63,7 @@ export class API {
 
     static async getCurrentUser() {
         try {
-            return (await API.get('/user')) as User;
+            return (await API.get('/user'));
         } catch (e) {
             return null;
         }

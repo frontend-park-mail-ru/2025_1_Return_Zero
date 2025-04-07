@@ -27,7 +27,8 @@ export class AlbumsPage extends Component {
 
         (async () => {
             try {
-                const albums = await API.getAlbums();
+                const albums = (await API.getAlbums()).body;
+
                 const content = {
                     loved: albums,
                     recent: albums,

@@ -146,6 +146,15 @@
         display: flex;
         gap: 1.5rem;
     }
+
+    &__span {
+        font-size: v.$font-size-main;
+    }
+
+    &__icon {
+        width: 22px;
+        height: 22px;
+    }
 }
 
 /* Global selectors not nested under .header */

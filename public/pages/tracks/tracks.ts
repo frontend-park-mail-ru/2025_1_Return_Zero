@@ -26,7 +26,8 @@ export class TracksPage extends Component {
 
         (async () => {
             try {
-                const tracks = await API.getTracks();
+                const tracks = (await API.getTracks()).body;
+                
                 const content = {
                     loved: tracks,
                     recent: tracks,

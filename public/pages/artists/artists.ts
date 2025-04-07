@@ -26,7 +26,8 @@ export class ArtistsPage extends Component {
 
         (async () => {
             try {
-                const artists = await API.getArtists();
+                const artists = (await API.getArtists()).body;
+                
                 const content = {
                     loved: artists,
                     recommendations: artists,

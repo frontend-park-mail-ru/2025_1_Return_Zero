@@ -4,7 +4,9 @@
 
         {{#each inputs}}
             <div class='auth-main__input-container'>
-                {{this.text}}
+                <div class="auth-form__span-container">
+                    <span>{{this.text}}</span>
+                </div>
                 <input
                     type='{{this.type}}'
                     placeholder='{{this.placeholder}}'

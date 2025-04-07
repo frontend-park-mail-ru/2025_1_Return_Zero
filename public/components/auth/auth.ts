@@ -1,4 +1,4 @@
-import './auth.css';
+import './auth.scss';
 import './auth.precompiled.js';
 
 import { API } from 'utils/api';
@@ -7,7 +7,7 @@ import { Component } from '../../libs/Component.ts';
 import { Input, InputState, signupContent, loginContent } from './inputTypes';
 import { renderGlobalError } from './authFunctions';
 import { AuthSendingData } from 'utils/api_types.js';
-import Router, { Routable, CallbackData } from 'libs/Router.ts';
+import Router from 'libs/Router.ts';
 
 type AuthFormData = {
     inputs: Input[],
@@ -39,7 +39,7 @@ export class AuthForm extends Component {
             AuthForm.template(content)
         );
         
-        this.element.addEventListener('click', (e) => {
+        this.element.addEventListener('mousedown', (e) => {
             if ((e.target as HTMLElement).id === "auth-form") {
                 Router.pushUrl(Router.getPath(), {});
             }

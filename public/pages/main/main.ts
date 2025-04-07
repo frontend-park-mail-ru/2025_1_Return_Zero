@@ -8,6 +8,7 @@ import '../pages.scss';
 import { Component } from '../../libs/Component.ts';
 import { API } from 'utils/api';
 import { userState } from '../../states.ts';
+import { Track } from 'utils/api_types';
 
 export class MainPage extends Component {
     // @ts-ignore
@@ -26,7 +27,8 @@ export class MainPage extends Component {
 
         (async () => {
             try {
-                const tracks = await API.getTracks();
+                const tracks = (await API.getTracks()).body;
+
                 const content = {
                     loved: tracks,
                     recent: tracks,

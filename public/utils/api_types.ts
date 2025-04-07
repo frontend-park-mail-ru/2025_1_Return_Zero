@@ -1,3 +1,8 @@
+export interface ApiResponse<T> {
+    status: number;
+    body: T;
+}  
+
 export type Track = {
     id: number;
     title: string;
@@ -30,5 +35,12 @@ export type AuthSendingData = {
     email?: string,
     password?: string,
     passwordRepeat?: string
+}
+
+export namespace TemplateAPI {
+    export type TracksResponse = ApiResponse<Track[]>;
+    export type ArtistsResponse = ApiResponse<Artist[]>;
+    export type AlbumsResponse = ApiResponse<Album[]>;
+    export type playlistsResponse = ApiResponse<Album[]>;
 }
 
