@@ -2,7 +2,7 @@
     <span class="track__index">{{this.id}}</span>
     <img src="{{thumbnail_url}}" alt="" class="track__img">
     <a style="cursor: not-allowed;" href="{{this.hrefAlbum}}" class="track__title">{{this.title}}</a>
-    <a style="cursor: not-allowed;" href="{{this.hrefArtist}}" class="track__artist">{{this.artist}}</a>
+    <a style="cursor: not-allowed;" href="{{this.hrefArtist}}" class="track__artist">{{this.artists.0.title}}</a>
     <a style="cursor: not-allowed;" href="{{this.hrefAlbum}}" class="track__album">{{this.album}}</a>
     <span class="track__duration">{{this.duration}}</span>
     {{#if this.isLiked}}

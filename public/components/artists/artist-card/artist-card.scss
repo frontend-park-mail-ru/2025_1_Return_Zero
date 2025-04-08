@@ -1,7 +1,7 @@
-@use '../../dark.scss' as d;
-@use '../../variables.scss' as v;
+@use '../../../dark.scss' as d;
+@use '../../../variables.scss' as v;
 
-.album-card {
+.artist-card {
     position: relative;
 
     > a {
@@ -14,20 +14,13 @@
     &__img {
         width: 8.75rem;
         height: 8.75rem;
-        border-radius: 1rem;
-        overflow: hidden;
+        border-radius: 50%;
         box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.25);
     }
 
-    &__title {
-        text-align: center;
+    &__name {
         font-size: v.$font-size-h4;
         font-weight: v.$font-weight-bold;
-    }
-
-    &__artist {
-        font-weight: v.$font-weight-light;
-        text-align: center;
     }
 
     &__like {

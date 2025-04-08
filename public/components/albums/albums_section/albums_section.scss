@@ -1,0 +1,9 @@
+.section.section--albums {
+    .section {
+        &__content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+    }
+}

@@ -5,7 +5,7 @@
     <a href="{{this.hrefArtist}}" style="cursor: not-allowed;" class="album__artist">{{this.artist}}</a>
     <span class="album__description">{{this.description}}</span>
     
-    <img src="/static/img/dots.svg" alt="more" class="album__actions">
+    {{!-- <img src="/static/img/dots.svg" alt="more" class="album__actions"> --}}
     {{#if this.isPlaying}}
         <img src="/static/img/pause.svg" alt="pause" class="album__play">
     {{else}}

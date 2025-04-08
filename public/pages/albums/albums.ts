@@ -1,7 +1,7 @@
-import './albums.precompiled.js';
+import './albums.precompiled.js'
 
-import '../../components/album-card/album-card.js';
-import '../../components/album/album.js';
+import '../../components/albums'
+import '../../components/musics'
 import '../../components/collections/collections.js';
 
 import '../pages.scss';

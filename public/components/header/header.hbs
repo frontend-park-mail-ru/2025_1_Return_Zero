@@ -25,10 +25,10 @@
         <div class="header__profile">
             <img class="profile__img" src="/static/img/no-avatar.svg" alt="profile">
             <div class="profile__dropdown">
-                <span class="profile__user">{{this.user}}</span>
-                <a href="#" style="cursor: not-allowed;">Профиль</a>
-                <a href="#" style="cursor: not-allowed;">Настройки</a>
-                <a href="#" data-action="logout">Выйти</a>
+                <span class="profile__user">{{this.user.username}}</span>
+                <a href="/profile">Профиль</a>
+                <a href="/profile/settings">Настройки</a>
+                <a href="/logout">Выйти</a>
             </div>
         </div>
     {{else}}

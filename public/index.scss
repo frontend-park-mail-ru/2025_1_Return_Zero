@@ -76,3 +76,25 @@ h4 {
 ::-webkit-scrollbar-track {
     background: d.$color-background;
 }
+
+.section {
+    display: grid;
+    grid-template-areas: "title all" "content content";
+    align-items: center;
+    row-gap: 1.25rem;
+
+    &__title {
+        grid-area: title;
+        justify-self: start;
+    }
+
+    &__all {
+        grid-area: all;
+        justify-self: end;
+    }
+
+    &__content {
+        grid-area: content;
+        justify-self: stretch;
+    }
+}

@@ -2,29 +2,15 @@
     <h1>Только для тебя</h1>
     {{>collections}}
 </section>
-{{#if this.user}}
-    <section class="section section--recent">
-        <h1>Недавно прослушанные</h1>
-        <div>
-            {{#each this.recent}}
-                {{>music-card}}
-            {{/each}}
-        </div>
-    </section>
-    <section class="section section--loved">
-        <h1>Любимые треки</h1>
-        <div>
-            {{#each this.loved}}
-                {{>music-card}}
-            {{/each}}
-        </div>
-    </section>
+
+{{#if this.recent}}
+    {{>musics-section title="Недавно прослушанные" href_all="#" musics=this.recent }}
 {{/if}}
-<section class="section section--recommendations">
-    <h1>Рекомендации</h1>
-    <div>
-        {{#each this.recommendations}}
-            {{>track}}
-        {{/each}}
-    </div>
-</section>
+
+{{#if this.loved}}
+    {{>musics-section title="Любимые треки" href_all="#" musics=this.loved }}
+{{/if}}
+
+{{#if this.recommendations}}
+    {{>tracks-section title="Рекомендации" href_all="#" tracks=this.recommendations }}
+{{/if}}

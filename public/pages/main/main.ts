@@ -1,14 +1,13 @@
-import './main.precompiled.js';
-import '../../components/music-card/music-card.js';
-import '../../components/track/track.js';
-import '../../components/collections/collections.js';
+import './main.precompiled.js'
+
+import '../../components/musics'
+import '../../components/tracks'
 
 import '../pages.scss';
 
 import { Component } from '../../libs/Component.ts';
 import { API } from 'utils/api';
 import { userState } from '../../states.ts';
-import { Track } from 'utils/api_types';
 
 export class MainPage extends Component {
     // @ts-ignore
@@ -32,8 +31,7 @@ export class MainPage extends Component {
                 const content = {
                     loved: tracks,
                     recent: tracks,
-                    recommendations: tracks,
-                    user: userState.getState(),
+                    recommendations: tracks
                 };
 
                 this.element.insertAdjacentHTML(

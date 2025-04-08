@@ -1,9 +1,7 @@
-@use '../../dark.scss' as d;
-@use '../../variables.scss' as v;
+@use '../../../dark.scss' as d;
+@use '../../../variables.scss' as v;
 
-.artist-card {
-    position: relative;
-
+.music-card {
     > a {
         display: flex;
         flex-direction: column;
@@ -14,20 +12,19 @@
     &__img {
         width: 8.75rem;
         height: 8.75rem;
-        border-radius: 50%;
+        border-radius: 1rem;
+        overflow: hidden;
         box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.25);
     }
 
-    &__name {
+    &__title {
+        text-align: center;
         font-size: v.$font-size-h4;
         font-weight: v.$font-weight-bold;
     }
 
-    &__like {
-        position: absolute;
-        left: 7rem;
-        top: 7rem;
-        width: 2rem;
-        height: 2rem;
+    &__artist {
+        font-weight: v.$font-weight-light;
+        text-align: center;
     }
 }

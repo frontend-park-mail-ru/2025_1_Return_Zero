@@ -1,7 +1,6 @@
-import './artists.precompiled.js';
+import './artists.precompiled.js'
 
-import '../../components/artist-card/artist-card.js';
-import '../../components/collections/collections.js';
+import '../../components/artists'
 
 import '../pages.scss';
 
@@ -30,8 +29,7 @@ export class ArtistsPage extends Component {
                 
                 const content = {
                     loved: artists,
-                    recommendations: artists,
-                    user: userState.getState(),
+                    recommendations: artists
                 };
 
                 this.element.insertAdjacentHTML(

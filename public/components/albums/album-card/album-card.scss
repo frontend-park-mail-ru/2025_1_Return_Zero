@@ -1,7 +1,9 @@
-@use '../../dark.scss' as d;
-@use '../../variables.scss' as v;
+@use '../../../dark.scss' as d;
+@use '../../../variables.scss' as v;
 
-.music-card {
+.album-card {
+    position: relative;
+
     > a {
         display: flex;
         flex-direction: column;
@@ -26,5 +28,13 @@
     &__artist {
         font-weight: v.$font-weight-light;
         text-align: center;
+    }
+
+    &__like {
+        position: absolute;
+        left: 7rem;
+        top: 7rem;
+        width: 2rem;
+        height: 2rem;
     }
 }

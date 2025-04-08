@@ -1,7 +1,7 @@
-import './tracks.precompiled.js';
-import '../../components/music-card/music-card.js';
-import '../../components/track/track.js';
-import '../../components/collections/collections.js';
+import './tracks.precompiled.js'
+
+import '../../components/musics'
+import '../../components/tracks'
 
 import '../pages.scss';
 
@@ -31,8 +31,7 @@ export class TracksPage extends Component {
                 const content = {
                     loved: tracks,
                     recent: tracks,
-                    recommendations: tracks,
-                    user: userState.getState(),
+                    recommendations: tracks
                 };
 
                 this.element.insertAdjacentHTML(

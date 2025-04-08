@@ -1,0 +1,9 @@
+<section class="section section--albums">
+    <h1 class="section__title">{{this.title}}</h1>
+    <a class="section__all" href="{{this.href_all}}">Показать все</a>
+    <div class="section__content">
+        {{#each this.albums}}
+            {{>album}}
+        {{/each}}
+    </div>
+</section>
