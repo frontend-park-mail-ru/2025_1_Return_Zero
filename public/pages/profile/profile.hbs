@@ -1,0 +1,26 @@
+<div class="profile__info">
+    <img class="profile__info__img" src="{{this.user.avatar}}" alt="error loading avatar">
+    <div>
+        <h2 class="profile__info__username">{{this.user.username}}</h2>
+        <img class="profile__info__actions" src="/static/img/dots.svg" alt="edit">
+        {{#if this.stats}}
+            <div class="profile__info__stats">
+                <span>{{this.stats.minutes}} минут прослушано</span>
+                <span>{{this.stats.tracks}} треков услышано</span>
+                <span>{{this.stats.artists}} артистов изучено</span>
+            </div>
+        {{/if}}
+    </div>
+</div>
+
+{{#if this.playlists }}
+    {{>musics-section title="Плейлисты" href_all="#" musics=this.playlists }}
+{{/if}}
+
+{{#if this.tracks }}
+    {{>tracks-section title="Любимые треки" href_all="#" tracks=this.tracks }}
+{{/if}}
+
+{{#if this.artists}}
+    {{>artists-section title="Любимые исполнители" href_all="#" artists=this.artists }}
+{{/if}}

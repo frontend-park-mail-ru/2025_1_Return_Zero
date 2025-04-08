@@ -11,6 +11,8 @@ export interface Routable {
 }
 
 export class Router {
+    static append = '(?!\\w)'
+
     private _href: string = 'http://null.null/';
     private _callbacks: {
         [key: string]: Routable[]
@@ -46,32 +48,34 @@ export class Router {
     }
 
     callCallback(url_pattern: string, routable: Routable) {
-        const res = this.getRoute().match(url_pattern) ?? [''];
+        const res = this.getRoute().match(url_pattern + Router.append) ?? [''];
 
         console.log(`Matching ${url_pattern} with ${this._href} got ${res} [callCallback]`);
-        routable.onRoute({
-            path: url_pattern,
-            pathname: this.getPath(),
-            params: res,
-            searchParams: this.getSearch(),
-            data: history.state
-        })
+        setTimeout(
+            () => routable.onRoute({
+                path: url_pattern,
+                pathname: this.getPath(),
+                params: res,
+                searchParams: this.getSearch(),
+                data: history.state
+            })
+        )
     }
 
     private callCallbacks(prev_route: string, cur_route: string
     ) {
         Object.keys(this._callbacks).forEach(key => {
-            const prev_res = prev_route.match(key) ?? [''];
-            const res = cur_route.match(key) ?? [''];
+            const prev_res = prev_route.match(key + Router.append) ?? [''];
+            const res = cur_route.match(key + Router.append) ?? [''];
 
             console.log(`Matching ${key} with ${this._href} got ${res} [callCallbackssssssssss]`);
-            prev_res[0] !== res[0] && this._callbacks[key].forEach(r => r.onRoute({
+            prev_res[0] !== res[0] && this._callbacks[key].forEach(r => setTimeout(() => r.onRoute({
                 path: key,
                 pathname: this.getPath(),
                 params: res,
                 searchParams: this.getSearch(),
                 data: history.state
-            }))
+            })))
         });
     }
 

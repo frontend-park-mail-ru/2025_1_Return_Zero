@@ -4,6 +4,8 @@ import './header.scss';
 import { Component } from '../../libs/Component.ts';
 import { State } from '../../libs/State.ts';
 import Router, { Routable, CallbackData } from '../../libs/Router.ts';
+import { routes } from '../../routes';
+
 import { userState } from '../../states.ts';
 
 const navItems = {
@@ -31,8 +33,8 @@ const navItems = {
 
 export class Header extends Component implements Routable {
     protected static BASE_ELEMENT = 'header';
-    protected static path = '^/(tracks|albums|artists|)';
-    protected static authPath = '#(login|register)';
+    protected static path = routes.pageRoute;
+    protected static authPath = routes.authRoute;
     // @ts-ignore
     static template = Handlebars.templates['header.hbs'];
 
@@ -60,7 +62,6 @@ export class Header extends Component implements Routable {
             })
         );
         this.element
-            .querySelector('.header__nav')
             .addEventListener('click', (e) => {
                 e.preventDefault();
 
@@ -77,7 +78,7 @@ export class Header extends Component implements Routable {
         switch (state) {
             case this.active:
                 prev && prev.classList.remove('active');
-                cur.classList.add('active');
+                cur && cur.classList.add('active');
                 break;
         }
     }
@@ -91,14 +92,11 @@ export class Header extends Component implements Routable {
         pathname,
         params,
     }: CallbackData) {
-        console.error("onRoute", path, pathname, params);
-        console.error(                    this.element.querySelector(`.header__nav li>a[href="${pathname}"]`)
-        .parentElement)
         switch (path) {
             case Header.path:
                 this.active.setState(
-                    this.element.querySelector(`.header__nav li>a[href="${pathname}"]`)
-                        .parentElement
+                    this.element.querySelector?.(`.header__nav li>a[href="${pathname}"]`)
+                        ?.parentElement
                 );
                 break;
             case Header.authPath:

@@ -1,6 +1,8 @@
 import { Component } from '../libs/Component.ts';
-import Router, { Routable, CallbackData } from '../libs/Router.ts';
 import { State } from '../libs/State.ts';
+import Router, { Routable, CallbackData } from '../libs/Router.ts';
+import { userState } from '../states';
+import { routes, reverseRoute } from '../routes';
 
 import { Header } from '../components/header/header.ts';
 import { Playlists } from '../components/playlists/playlists.ts';
@@ -9,14 +11,16 @@ import { MainPage } from '../pages/main/main.ts';
 import { TracksPage } from '../pages/tracks/tracks.ts';
 import { AlbumsPage } from '../pages/albums/albums.ts';
 import { ArtistsPage } from '../pages/artists/artists.ts';
+import { ProfilePage } from '../pages/profile/profile.ts';
 
 import { AuthForm } from 'components/auth/auth.ts';
 
 import './MainLayout.css';
 
 export class MainLayout extends Component implements Routable {
-    protected static path = '^/(tracks|albums|artists|)';
-    protected static authPath = '#(login|register)';
+    protected static path = routes.pageRoute;
+    protected static authPath = routes.authRoute;
+    protected static logoutPath = routes.logoutRoute;
 
     header: Header;
     playlists: Playlists;
@@ -30,6 +34,7 @@ export class MainLayout extends Component implements Routable {
         this.popup = this.createState(null);
         Router.addCallback(MainLayout.path, this);
         Router.addCallback(MainLayout.authPath, this);
+        Router.addCallback(MainLayout.logoutPath, this);
     }
 
     protected build() {
@@ -41,6 +46,7 @@ export class MainLayout extends Component implements Routable {
 
         Router.callCallback(MainLayout.path, this);
         Router.callCallback(MainLayout.authPath, this);
+        Router.callCallback(MainLayout.logoutPath, this);
     }
 
     protected render(state: State<any>, prev: any, cur: any): void {
@@ -60,6 +66,8 @@ export class MainLayout extends Component implements Routable {
         super.destroy();
 
         Router.removeCallback(MainLayout.path, this);
+        Router.removeCallback(MainLayout.authPath, this);
+        Router.removeCallback(MainLayout.logoutPath, this);
     }
 
     onRoute({
@@ -93,7 +101,16 @@ export class MainLayout extends Component implements Routable {
                     case 'artists':
                         this.child.setState(new ArtistsPage());
                         break;
+                    case 'profile':
+                        this.child.setState(new ProfilePage());
+                        break;
                 }
+                break;
+            case MainLayout.logoutPath:
+                if (params[0] !== MainLayout.logoutPath) 
+                    break;
+                userState.setState(null);
+                Router.pushUrl(reverseRoute(routes.pageRoute, ['']), {});
                 break;
         }
     }
