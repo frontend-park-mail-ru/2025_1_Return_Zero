@@ -4,6 +4,7 @@ import { State } from '../libs/State.ts';
 
 import { Header } from '../components/header/header.ts';
 import { Playlists } from '../components/playlists/playlists.ts';
+import { BottomPlayer } from '../components/bottomPlayer/bottomPlayer.ts';
 
 import { MainPage } from '../pages/main/main.ts';
 import { TracksPage } from '../pages/tracks/tracks.ts';
@@ -20,6 +21,7 @@ export class MainLayout extends Component implements Routable {
 
     header: Header;
     playlists: Playlists;
+    bottomPlayer: BottomPlayer;
     child: State<Component>;
     popup: State<Component>;
 
@@ -35,9 +37,11 @@ export class MainLayout extends Component implements Routable {
     protected build() {
         this.header = new Header();
         this.playlists = new Playlists();
+        this.bottomPlayer = new BottomPlayer();
 
         this.element.appendChild(this.header.element);
         this.element.appendChild(this.playlists.element);
+        this.element.appendChild(this.bottomPlayer.element);
 
         Router.callCallback(MainLayout.path, this);
         Router.callCallback(MainLayout.authPath, this);

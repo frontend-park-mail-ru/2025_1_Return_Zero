@@ -50,6 +50,7 @@
     "homepage": "https://github.com/frontend-park-mail-ru/2025_1_Return_Zero#readme",
     "dependencies": {
         "handlebars": "^4.7.8",
+        "handlebars-helpers": "^0.10.0",
         "tern": "^0.24.3"
     }
 }
