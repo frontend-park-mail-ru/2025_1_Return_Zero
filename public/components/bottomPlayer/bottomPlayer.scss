@@ -14,122 +14,165 @@
     width: calc(100% - 2.25rem * 2 - 4.6rem - 0.5rem - v.$width-scroll + 1px);
 
     background-color: d.$color-background;
-}
 
-.player__song {
-    display: flex;
-    align-items: center;
-
-    img {
-        height: 3.5rem;
-        width: 3.5rem;
-        border-radius: 15%;
-    }
-}
-
-.player__song-container {
-    display: flex;
-    align-items: center;
-    gap: 1vw;
-
-    .icon {
-        cursor: pointer;
-        user-select: none;
-        width: 1.563rem;
-        height: 1.563rem;
-    }
-
-    padding-left: 0.625rem;
-}
-
-.player__song-text {
-    display: flex;
-    flex-direction: column;
-    padding-left: 1vw;
-    gap: 0.2vw;
-
-    .song-name {
-        font-size: 14px;
-        font-family: 'Inter';
-        font-weight: bold;
-        user-select: none; 
-        color: white;
-    }
-
-    .artist {
-        font-size: 14px;
-        font-family: 'Inter';
-        font-weight: 300;
-        user-select: none; 
-        color: white;
-    }
-}
-
-.player__container {
-    display: grid; 
-    grid-template-columns: auto auto auto;
-    width: 100%;
-
-    padding-left: 0.625rem;
-    padding-right: 1.25rem;
-}
-
-.player__widgets {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-}
-
-.player__controls {
-    display: flex;
-
-    .icon {
-        cursor: pointer;
-        user-select: none;
-        height: 1.25rem;
-        width: 1.25rem;
-    }
- 
-    gap: clamp(0.625rem, 2vw, 2.438rem);
-}
-
-.player__progress-container {
-    display: flex;
-    align-items: center;
-    gap: 1vw;
-
-    span {
-        color: white;
-        user-select: none;
-    }
-
-    .rectangle {
-        position: relative;
+    &__song {
         display: flex;
         align-items: center;
-        width: clamp(12.5rem, 30vw, 31.25rem);
-        height: v.$bottomPlayer-height-progress;
-        border-radius: v.$bottomPlayer-border-radius-progress;
-        background-color: white;
 
-        .rectangle-prev {
-            position: absolute; 
-            width: 0px;
-            left: 0;
-            height: v.$bottomPlayer-height-progress;
-            border-radius: v.$bottomPlayer-border-radius-progress;
-            background-color: #1F68F2;
+        img {
+            height: 3.5rem;
+            width: 3.5rem;
+            border-radius: 15%;
+        }
+    }
+
+    &__song-container {
+        display: flex;
+        align-items: center;
+        gap: 1vw;
+
+        .icon {
+            cursor: pointer;
+            user-select: none;
+            width: 1.563rem;
+            height: 1.563rem;
         }
 
-        .circle {
-            display: none;
-            position: absolute;
-            left: 0; 
-            height: v.$bottomPlayer-width-circle;
-            width: v.$bottomPlayer-width-circle; 
-            border-radius: 50%;
-            background-color: #1F68F2;
+        padding-left: 0.625rem;
+    }
+
+    &__song-text {
+        display: flex;
+        flex-direction: column;
+        padding-left: 1vw;
+        gap: 0.2vw;
+
+        .song-name {
+            font-size: 14px;
+            font-family: v.$font-family-main;
+            font-weight: v.$font-weight-bold;
+            user-select: none; 
+            color: d.$color-text;
+        }
+
+        .artist {
+            font-size: 14px;
+            font-family: v.$font-family-main;
+            font-weight: v.$font-weight-light;
+            user-select: none; 
+            color: d.$color-text;
+        }
+    }
+
+    &__container {
+        display: grid; 
+        grid-template-columns: auto auto auto;
+        width: 100%;
+
+        padding-left: 0.625rem;
+        padding-right: 1.25rem;
+    }
+
+    &__widgets {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    &__controls {
+        display: flex;
+
+        .icon {
+            cursor: pointer;
+            user-select: none;
+            height: 1.25rem;
+            width: 1.25rem;
+        }
+
+        gap: clamp(0.625rem, 2vw, 2.438rem);
+    }
+
+    &__progress-container {
+        display: flex;
+        align-items: center;
+        gap: 1vw;
+
+        span {
+            color: d.$color-text;
+            user-select: none;
+        }
+
+        .rectangle {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: clamp(12.5rem, 30vw, 31.25rem);
+            height: v.$bottomPlayer-height-progress;
+            border-radius: v.$bottomPlayer-border-radius-progress;
+            background-color: d.$color-text;
+
+            .rectangle-prev {
+                position: absolute; 
+                width: 0px;
+                left: 0;
+                height: v.$bottomPlayer-height-progress;
+                border-radius: v.$bottomPlayer-border-radius-progress;
+                background-color: d.$color-button;
+            }
+
+            .circle {
+                display: none;
+                position: absolute;
+                left: 0; 
+                height: v.$bottomPlayer-width-circle;
+                width: v.$bottomPlayer-width-circle; 
+                border-radius: 50%;
+                background-color: d.$color-button;
+            }
+        }
+    }
+
+    &__tools {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 1vw;
+
+        .icon {
+            cursor: pointer;
+            user-select: none;
+            height: 1.25rem;
+            width: 1.25rem;
+        }
+
+        .rectangle-volume {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background-color: d.$color-text;
+            height: v.$bottomPlayer-height-progress;
+            border-radius: v.$bottomPlayer-border-radius-progress;
+            width: clamp(0.625rem, 5vw, 6.25rem);            
+
+            .rectangle-prev {
+                position: absolute;
+                left: 0;
+                width: 0px;
+                height: v.$bottomPlayer-height-progress; 
+                border-radius: v.$bottomPlayer-border-radius-progress;
+                background-color: d.$color-button;
+            }
+
+            .circle {
+                display: none;
+                position: absolute;
+                left: 0; 
+                height: v.$bottomPlayer-width-circle;
+                width: v.$bottomPlayer-width-circle; 
+                border-radius: 50%;
+                background-color: d.$color-button;
+            }
         }
     }
 }
@@ -138,50 +181,6 @@
     cursor: pointer;
     .circle {
         display: block;
-    }
-}
-
-.player__tools {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 1vw;
-
-    .icon {
-        cursor: pointer;
-        user-select: none;
-        height: 1.25rem;
-        width: 1.25rem;
-    }
-
-    .rectangle-volume {
-        position: relative;
-        display: flex;
-        align-items: center;
-        background-color: white;
-        height: v.$bottomPlayer-height-progress;
-        border-radius: v.$bottomPlayer-border-radius-progress;
-        width: clamp(0.625rem, 5vw, 6.25rem);
-
-        .rectangle-prev {
-            position: absolute;
-            left: 0;
-            width: 0px;
-            height: v.$bottomPlayer-height-progress; 
-            border-radius: v.$bottomPlayer-border-radius-progress;
-            background-color: #1F68F2;
-        }
-
-        .circle {
-            position: absolute;
-            left: 0;
-            display: none;
-            cursor: pointer;
-            height: v.$bottomPlayer-width-circle;
-            width: v.$bottomPlayer-width-circle; 
-            border-radius: 50%;
-            background-color: #1F68F2;
-        }
     }
 }
 
