@@ -51,6 +51,8 @@ export class BottomPlayer extends Component {
     playBtn: HTMLImageElement;
     nextBtn: HTMLImageElement;
     prevBtn: HTMLImageElement;
+    shuffleBtn: HTMLImageElement;
+    repeatBtn: HTMLImageElement;
 
     playProgress: HTMLElement;
     progressBar: HTMLElement;
@@ -103,6 +105,8 @@ export class BottomPlayer extends Component {
         this.playBtn = this.playerHTML.querySelector('#play');
         this.nextBtn = this.playerHTML.querySelector('#next');
         this.prevBtn = this.playerHTML.querySelector('#prev');
+        this.shuffleBtn = this.playerHTML.querySelector('#shuffle');
+        this.repeatBtn = this.playerHTML.querySelector('#repeat');  
 
         this.playProgress = this.playerHTML.querySelector('#play-progress');
         this.progressBar = this.playProgress.querySelector('.rectangle-prev');
@@ -132,7 +136,7 @@ export class BottomPlayer extends Component {
 
     initEventListeners() {
         this.playBtn.addEventListener('click', () => this.togglePlay());
-        this.nextBtn.addEventListener('click', () => this.tracksQueue.nextTrack());
+        this.nextBtn.addEventListener('click', () => this.tracksQueue.nextTrack('nextBtn'));
         this.prevBtn.addEventListener('click', () => this.tracksQueue.previousTrack());
 
         this.playProgress.addEventListener('click', (e) => this.playDragging.handleProgressClick(e));
@@ -153,10 +157,12 @@ export class BottomPlayer extends Component {
             'timeupdate', 
             () => {
                 this.playDragging.updateProgress()
-                this.volumeDragging.updateProgress()
                 this.currentSpan.innerHTML = convertDuration(this.player.audio.currentTime);
             }
         );
+        this.player.audio.addEventListener('volumechange', () => {
+            this.volumeDragging.updateProgress();
+        });
 
         this.initImgEventListeners();
     }
@@ -174,6 +180,58 @@ export class BottomPlayer extends Component {
         });
         this.prevBtn.addEventListener('mouseout', () => {
             this.prevBtn.src = '/static/img/player-prev.svg';
+        });
+
+        this.shuffleBtn.addEventListener('mouseover', () => {
+            if (this.tracksQueue.shuffled) {
+                return;
+            }
+
+            this.shuffleBtn.src = '/static/img/player-shuffle-hover.svg';
+        });
+        this.shuffleBtn.addEventListener('mouseout', () => {
+            if (this.tracksQueue.shuffled) {
+                return;
+            }
+
+            this.shuffleBtn.src = '/static/img/player-shuffle.svg';
+        });
+        this.shuffleBtn.addEventListener('click', () => {
+            if (this.tracksQueue.shuffled) {
+                this.tracksQueue.unshuffle();
+            } else {
+                this.tracksQueue.shuffle();
+            }
+
+            this.shuffleBtn.src = tracksQueue.shuffled
+                ? '/static/img/player-shuffle-active.svg' 
+                : '/static/img/player-shuffle.svg';
+        });
+
+        this.repeatBtn.addEventListener('mouseover', () => {
+            if (this.tracksQueue.repeated) {
+                return;
+            }
+
+            this.repeatBtn.src = '/static/img/player-repeat-hover.svg';
+        });
+        this.repeatBtn.addEventListener('mouseout', () => {
+            if (this.tracksQueue.repeated) {
+                return;
+            }
+
+            this.repeatBtn.src = '/static/img/player-repeat.svg';
+        });
+        this.repeatBtn.addEventListener('click', () => {
+            if (this.tracksQueue.repeated) {
+                this.tracksQueue.unrepeat();
+            } else {
+                this.tracksQueue.repeat();
+            }
+
+            this.repeatBtn.src = tracksQueue.repeated
+                ? '/static/img/player-repeat-active.svg' 
+                : '/static/img/player-repeat.svg';
         });
     }
 
