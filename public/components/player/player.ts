@@ -6,7 +6,6 @@ export class Player {
     isPlaying: boolean;
     currentTime: number;
     duration: number;
-    isTransitioning: boolean;
 
     constructor() {
         if (Player.instance) {
@@ -24,7 +23,6 @@ export class Player {
         this.isPlaying = false;
         this.currentTime = 0;
         this.duration = 0;
-        this.isTransitioning = false;
     }
 
     togglePlay() {

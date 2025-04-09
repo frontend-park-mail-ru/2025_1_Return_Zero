@@ -1,18 +1,56 @@
 import '../../../public/audio/audio.mp3';
+import '../../../public/audio/audio2.mp3';
+import '../../../public/audio/audio3.mp3';
+import '../../../public/audio/audio4.mp3';
+
 import './bottomPlayer.precompiled.js';
 import './bottomPlayer.scss';
 
 import player, { Player } from "components/player/player";
+import tracksQueue, { TracksQueue } from 'components/player/tracksQueue';
+import { MusicUnit } from 'components/player/tracksQueue';
 import { convertDuration } from "utils/durationConverter";
 import DragProgressBar from "components/player/draggProgress";
 
 import { Component } from '../../libs/Component.ts';
 
+//test
+const tracks = [
+    {
+        src: '/static/audio/audio.mp3',
+        name: 'Miside main OST',
+        artist: 'aihasto',
+        duration: 190
+    },
+    {
+        src: '/static/audio/audio2.mp3',  
+        name: 'The Real Slim Shady',
+        artist: 'eminem',
+        duration: 285
+    },
+    {
+        src: '/static/audio/audio3.mp3',
+        name: 'Numb',
+        artist: 'Linkin Park',
+        duration: 186
+
+    },
+    {
+        src: '/static/audio/audio4.mp3',
+        name: 'Somebody That I Used To Know',
+        artist: 'Gotye',
+        duration: 245
+    }
+];
+
 export class BottomPlayer extends Component {
     player: Player;
+    tracksQueue: TracksQueue;
 
     playerHTML: HTMLElement;
     playBtn: HTMLImageElement;
+    nextBtn: HTMLImageElement;
+    prevBtn: HTMLImageElement;
 
     playProgress: HTMLElement;
     progressBar: HTMLElement;
@@ -47,14 +85,24 @@ export class BottomPlayer extends Component {
         );
 
         this.player = player;
-        this.player.setTrack('/static/audio/audio.mp3');
-        this.player.setDuration(190);
+        this.tracksQueue = tracksQueue;
+
+        this.tracksQueue.setPlayerCallback((track: MusicUnit) => {
+            this.switchingTrack(track)
+        });
+        
+        this.tracksQueue.addTrack(
+            tracks
+        );
+        
         this.playerHTML = this.element;
         this.initHTMLElements();
     }
 
     initHTMLElements() {
         this.playBtn = this.playerHTML.querySelector('#play');
+        this.nextBtn = this.playerHTML.querySelector('#next');
+        this.prevBtn = this.playerHTML.querySelector('#prev');
 
         this.playProgress = this.playerHTML.querySelector('#play-progress');
         this.progressBar = this.playProgress.querySelector('.rectangle-prev');
@@ -84,6 +132,8 @@ export class BottomPlayer extends Component {
 
     initEventListeners() {
         this.playBtn.addEventListener('click', () => this.togglePlay());
+        this.nextBtn.addEventListener('click', () => this.tracksQueue.nextTrack());
+        this.prevBtn.addEventListener('click', () => this.tracksQueue.previousTrack());
 
         this.playProgress.addEventListener('click', (e) => this.playDragging.handleProgressClick(e));
         this.playProgress.addEventListener('mousedown', (e) => this.playDragging.startDragging(e));
@@ -107,10 +157,27 @@ export class BottomPlayer extends Component {
                 this.currentSpan.innerHTML = convertDuration(this.player.audio.currentTime);
             }
         );
+
+        this.initImgEventListeners();
     }
 
-    setDuration() {
-        const duration = this.player.audio.duration || 0;
+    initImgEventListeners() {
+        this.nextBtn.addEventListener('mouseover', () => {
+            this.nextBtn.src = '/static/img/player-next-hover.svg';
+        });
+        this.nextBtn.addEventListener('mouseout', () => {
+            this.nextBtn.src = '/static/img/player-next.svg';
+        });
+
+        this.prevBtn.addEventListener('mouseover', () => {
+            this.prevBtn.src = '/static/img/player-prev-hover.svg';
+        });
+        this.prevBtn.addEventListener('mouseout', () => {
+            this.prevBtn.src = '/static/img/player-prev.svg';
+        });
+    }
+
+    setDuration(duration: number) {
         this.endSpan.innerHTML = convertDuration(duration);
     }
 
@@ -127,5 +194,10 @@ export class BottomPlayer extends Component {
         } else {
             this.playBtn.src = "/static/img/player-pause.svg";
         }
+    }
+
+    switchingTrack(track: MusicUnit) {
+        this.setDuration(track.duration);
+        this.player.togglePlay();
     }
 }
