@@ -14,39 +14,6 @@ import { ButtonStateHandler, DomManager, DragHandler } from './bottomPlayerUIMan
 
 import { Component } from '../../libs/Component.ts';
 
-//test
-const tracks = [
-    {
-        src: '/static/audio/audio.mp3',
-        name: 'Miside main OST',
-        artist: 'aihasto',
-        image: '/static/img/251912_7_sq.jpg',
-        duration: 190
-    },
-    {
-        src: '/static/audio/audio2.mp3',  
-        name: 'The Real Slim Shady',
-        artist: 'eminem',
-        image: '/static/img/eminem.jpg',
-        duration: 285
-    },
-    {
-        src: '/static/audio/audio3.mp3',
-        name: 'Numb',
-        artist: 'Linkin Park',
-        image: '/static/img/linkin-park.jpg',
-        duration: 186
-
-    },
-    {
-        src: '/static/audio/audio4.mp3',
-        name: 'Somebody That I Used To Know',
-        artist: 'Gotye',
-        image: '/static/img/gotye.jpg',
-        duration: 245
-    }
-];
-
 export class BottomPlayer extends Component {
     player: Player;
     tracksQueue: TracksQueue;
@@ -87,16 +54,6 @@ export class BottomPlayer extends Component {
             this.buttonStateHandler,
             this
         );
-
-        this.testAudioQueue();
-    }
-
-    testAudioQueue() {
-        // test
-        this.domManager.songImg.src = tracks[0].image;
-        this.domManager.songName.innerHTML = tracks[0].name;
-        this.domManager.songArtist.innerHTML = tracks[0].artist;
-        this.tracksQueue.addTrack(tracks);
     }
 
     setDuration(duration: number) {
@@ -108,8 +65,17 @@ export class BottomPlayer extends Component {
         this.domManager.currentSpan.innerHTML = convertDuration(duration);
     }
 
-    togglePlay() {
-        this.player.togglePlay();
+    async togglePlay() {
+        try {
+            await this.player.togglePlay();
+            await this.setPlayButtonState();
+        } catch (error) {
+            console.error('Ошибка воспроизведения:', error);
+            this.domManager.playBtn.src = "/static/img/player-play.svg";
+        }
+    }
+    
+    async setPlayButtonState() {
         this.domManager.playBtn.src = this.player.audio.paused 
             ? "/static/img/player-play.svg" 
             : "/static/img/player-pause.svg";
@@ -120,9 +86,10 @@ export class BottomPlayer extends Component {
         this.domManager.songName.innerHTML = track.name;
         this.domManager.songArtist.innerHTML = track.artist;
         this.setDuration(track.duration);
-        this.player.togglePlay();
+        this.togglePlay();
     }
 }
+
 
 class EventManager {
     private handlers: Array<() => void> = [];

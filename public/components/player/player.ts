@@ -3,7 +3,6 @@ export class Player {
     audio: HTMLAudioElement;
 
     audioLevel: number;
-    isPlaying: boolean;
     currentTime: number;
     duration: number;
     private playPromise: Promise<void> | null = null;
@@ -31,7 +30,7 @@ export class Player {
                 console.error('Failed to save audio level:', error);
             }
         }
-        this.isPlaying = false;
+
         this.currentTime = 0;
         this.duration = 0;
     }
@@ -40,25 +39,20 @@ export class Player {
         try {
             if (this.audio.paused) {
                 await this.play();
-                this.isPlaying = true;
             } else {
                 this.pause();
-                this.isPlaying = false;
             }
         } catch (error) {
             console.error('Playback error:', error);
-            this.isPlaying = false;
         }
     }
 
-    play(): Promise<void> {
+    async play(): Promise<void> {
         this.playPromise = this.audio.play();
         return this.playPromise
             .then(() => {
-                this.isPlaying = true;
             })
             .catch((error) => {
-                this.isPlaying = false;
                 throw error; // Rethrow the error
             });
     }
@@ -70,7 +64,6 @@ export class Player {
             });
         }
         this.audio.pause();
-        this.isPlaying = false;
     }
 
     setTrack(src: string) {

@@ -49,7 +49,7 @@ export class TracksQueue {
         }
     }
 
-    addTrack(tracks: MusicUnit | MusicUnit[]) {
+    addTrack(tracks: MusicUnit | MusicUnit[], start?: number) {
         if (Array.isArray(tracks)) {
             for (const track of tracks) {
                 this.queue.push(track);
@@ -59,6 +59,10 @@ export class TracksQueue {
         }
 
         if (this.idx === -1) {
+            if (start)  {
+                this.idx = start - 1;
+            }
+
             this.nextTrack();
         }
     }
@@ -66,7 +70,7 @@ export class TracksQueue {
     private setTrack() {
         const currentTrack = this.queue[this.idx];
 
-        console.error(currentTrack.name);
+        console.log(`Playing: ${currentTrack.name}`);
         player.setTrack(currentTrack.src);
         player.setDuration(currentTrack.duration);
 

@@ -7,7 +7,7 @@
     z-index: 900;
 
     position: fixed;
-    height: 4.5rem;
+    height: v.$bottomPlayer-height;
 
     bottom: 0;   
     margin-left: calc(2.25rem * 2 + 4.6rem + 0.5rem);
@@ -27,7 +27,7 @@
     }
 
     &__song-container {
-        width: 300px; 
+        width: 20vw; 
         position: relative;
         display: flex;
         align-items: center;
@@ -138,6 +138,7 @@
     }
 
     &__tools {
+        width: 15vw;
         display: flex;
         align-items: center;
         justify-content: flex-end;
