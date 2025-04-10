@@ -1,5 +1,5 @@
 <section class="section"> 
-    <h1>Только для тебя</h1>
+    <h1 class="section__title">Только для тебя</h1>
     {{>collections}}
 </section>
 
@@ -14,3 +14,8 @@
 {{#if this.recommendations}}
     {{>tracks-section title="Рекомендации" href_all="#" tracks=this.recommendations }}
 {{/if}}
+
+{{#if showBottomPlayer}}
+    {{>bottom-player}}
+{{/if}}
+

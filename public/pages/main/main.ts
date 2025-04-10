@@ -9,6 +9,8 @@ import { Component } from '../../libs/Component.ts';
 import { API } from 'utils/api';
 import { userState } from '../../states.ts';
 
+import { queueSectionFill } from 'components/player/queueExportFunctions';
+
 export class MainPage extends Component {
     // @ts-ignore
     static template = Handlebars.templates['main.hbs'];
@@ -38,6 +40,8 @@ export class MainPage extends Component {
                     'beforeend',
                     MainPage.template(content)
                 );
+
+                queueSectionFill(this.element);
             } catch (e) {
                 console.log(e);
             }

@@ -3,7 +3,7 @@
     <a class="section__all" href="{{this.href_all}}">Показать все</a>
     <div class="section__content">
         {{#each this.tracks}}
-            {{>track}}
+            {{> track index=(add @index 1) duration=(convertDuration this.duration)}}
         {{/each}}
     </div>
 </section>
