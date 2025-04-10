@@ -20,18 +20,21 @@ const tracks = [
         src: '/static/audio/audio.mp3',
         name: 'Miside main OST',
         artist: 'aihasto',
+        image: '/static/img/251912_7_sq.jpg',
         duration: 190
     },
     {
         src: '/static/audio/audio2.mp3',  
         name: 'The Real Slim Shady',
         artist: 'eminem',
+        image: '/static/img/eminem.jpg',
         duration: 285
     },
     {
         src: '/static/audio/audio3.mp3',
         name: 'Numb',
         artist: 'Linkin Park',
+        image: '/static/img/linkin-park.jpg',
         duration: 186
 
     },
@@ -39,6 +42,7 @@ const tracks = [
         src: '/static/audio/audio4.mp3',
         name: 'Somebody That I Used To Know',
         artist: 'Gotye',
+        image: '/static/img/gotye.jpg',
         duration: 245
     }
 ];
@@ -53,6 +57,10 @@ export class BottomPlayer extends Component {
     prevBtn: HTMLImageElement;
     shuffleBtn: HTMLImageElement;
     repeatBtn: HTMLImageElement;
+
+    songImg: HTMLImageElement;
+    songName: HTMLElement;
+    songArtist: HTMLElement;
 
     playProgress: HTMLElement;
     progressBar: HTMLElement;
@@ -93,12 +101,19 @@ export class BottomPlayer extends Component {
             this.switchingTrack(track)
         });
         
+        this.playerHTML = this.element;
+        this.initHTMLElements();
+        this.testAudioQueue();
+    }
+
+    testAudioQueue() {
+        //test
+        this.songImg.src = tracks[0].image;
+        this.songName.innerHTML = tracks[0].name;
+        this.songArtist.innerHTML = tracks[0].artist;
         this.tracksQueue.addTrack(
             tracks
         );
-        
-        this.playerHTML = this.element;
-        this.initHTMLElements();
     }
 
     initHTMLElements() {
@@ -107,6 +122,10 @@ export class BottomPlayer extends Component {
         this.prevBtn = this.playerHTML.querySelector('#prev');
         this.shuffleBtn = this.playerHTML.querySelector('#shuffle');
         this.repeatBtn = this.playerHTML.querySelector('#repeat');  
+
+        this.songImg = this.playerHTML.querySelector('#song-img');
+        this.songName = this.playerHTML.querySelector('#song-name');
+        this.songArtist = this.playerHTML.querySelector('#artist-name');
 
         this.playProgress = this.playerHTML.querySelector('#play-progress');
         this.progressBar = this.playProgress.querySelector('.rectangle-prev');
@@ -255,6 +274,11 @@ export class BottomPlayer extends Component {
     }
 
     switchingTrack(track: MusicUnit) {
+        //unsafe
+        this.songImg.src = track.image;
+        this.songName.innerHTML = track.name;
+        this.songArtist.innerHTML = track.artist;
+
         this.setDuration(track.duration);
         this.player.togglePlay();
     }

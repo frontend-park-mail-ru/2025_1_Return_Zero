@@ -82,7 +82,7 @@ class DragProgressBar {
         if(!this.isDragging && this.type == 'volume') {
             const volume = this.player.audio.volume * 100;
             this.progress.style.width = `${volume}%`; 
-            this.circle.style.left = `${volume - 1}%`;
+            this.circle.style.left = `${volume}%`;
 
             this.player.setVolume(this.player.audio.volume);
         }
