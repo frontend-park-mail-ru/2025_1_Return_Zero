@@ -80,11 +80,11 @@ h4 {
 
 .section {
     display: grid;
-    overflow-x: hidden;
-    min-height: min-content; 
     grid-template-areas: "title all" "content content";
     align-items: center;
     row-gap: 1.25rem;
+    overflow-x: auto;
+    scrollbar-width: none;
 
     &__title {
         grid-area: title;
