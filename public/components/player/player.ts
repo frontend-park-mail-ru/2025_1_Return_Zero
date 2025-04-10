@@ -6,6 +6,7 @@ export class Player {
     isPlaying: boolean;
     currentTime: number;
     duration: number;
+    private playPromise: Promise<void> | null = null;
 
     constructor() {
         if (Player.instance) {
@@ -18,27 +19,58 @@ export class Player {
         this.setVolume(this.audioLevel);
     }
     
-    initStates() {
-        this.audioLevel = 0.5;
+    private initStates() {
+        try {
+            this.audioLevel = Number(localStorage.getItem('audio-level'));
+        } catch (error) {
+            console.error('Failed to get audio level:', error);
+            this.audioLevel = 0.5;
+            try {
+                localStorage.setItem('audio-level', String(this.audioLevel));
+            } catch (error) {
+                console.error('Failed to save audio level:', error);
+            }
+        }
         this.isPlaying = false;
         this.currentTime = 0;
         this.duration = 0;
     }
 
-    togglePlay() {
-        if (this.audio.paused) {
-            this.play()
-        } else {
-            this.pause();
+    async togglePlay(): Promise<void> {
+        try {
+            if (this.audio.paused) {
+                await this.play();
+                this.isPlaying = true;
+            } else {
+                this.pause();
+                this.isPlaying = false;
+            }
+        } catch (error) {
+            console.error('Playback error:', error);
+            this.isPlaying = false;
         }
     }
 
-    play() {
-        this.audio.play();
+    play(): Promise<void> {
+        this.playPromise = this.audio.play();
+        return this.playPromise
+            .then(() => {
+                this.isPlaying = true;
+            })
+            .catch((error) => {
+                this.isPlaying = false;
+                throw error; // Rethrow the error
+            });
     }
 
-    pause() {
+    pause(): void {
+        if (this.playPromise) {
+            this.playPromise.catch(() => {
+                // Ignore
+            });
+        }
         this.audio.pause();
+        this.isPlaying = false;
     }
 
     setTrack(src: string) {
@@ -48,6 +80,12 @@ export class Player {
     setVolume(volume: number) {
         this.audioLevel = volume;
         this.audio.volume = volume;
+
+        try {
+            localStorage.setItem('audio-level', String(this.audioLevel));
+        } catch (error) {
+            console.error('Failed to save audio level:', error);
+        }
     }
 
     setCurrentTime(time: number) {

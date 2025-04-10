@@ -12,9 +12,9 @@ export class TracksQueue {
     static instance: TracksQueue;
     playerCallback: (track: MusicUnit) => void;
 
-    queue: MusicUnit[];
-    savedQueue: MusicUnit[];
-    idx: number;
+    private queue: MusicUnit[];
+    private savedQueue: MusicUnit[];
+    private idx: number;
     shuffled: boolean;
     repeated: boolean;
 
@@ -63,7 +63,7 @@ export class TracksQueue {
         }
     }
 
-    setTrack() {
+    private setTrack() {
         const currentTrack = this.queue[this.idx];
 
         console.error(currentTrack.name);

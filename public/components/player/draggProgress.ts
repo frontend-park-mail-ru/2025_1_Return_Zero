@@ -32,7 +32,7 @@ class DragProgressBar {
                 this.player.audio.currentTime = pos * this.player.audio.duration;
             }
             if (this.type == 'volume') {
-                this.player.audio.volume = Math.max(0, Math.min(1, pos));;
+                this.player.setVolume(Math.max(0, Math.min(1, pos)));
             }
         }
     }
@@ -46,7 +46,7 @@ class DragProgressBar {
             this.circle.style.left = `${pos * 100 - 1}%`;
 
             if (this.type == 'volume') {
-                this.player.audio.volume = Math.max(0, Math.min(1, pos));
+                this.player.setVolume(Math.max(0, Math.min(1, pos)));
             }
         }
     }
@@ -65,8 +65,7 @@ class DragProgressBar {
                 this.player.audio.currentTime = pos * this.player.audio.duration;
             }
             if (this.type == 'volume') {
-                this.player.audio.volume = Math.max(0, Math.min(1, pos));
-                this.player.setVolume(this.player.audio.volume);
+                this.player.setVolume(Math.max(0, Math.min(1, pos)));
             }
         }
     }
@@ -82,7 +81,7 @@ class DragProgressBar {
         if(!this.isDragging && this.type == 'volume') {
             const volume = this.player.audio.volume * 100;
             this.progress.style.width = `${volume}%`; 
-            this.circle.style.left = `${volume}%`;
+            this.circle.style.left = `${volume - 1}%`;
 
             this.player.setVolume(this.player.audio.volume);
         }
