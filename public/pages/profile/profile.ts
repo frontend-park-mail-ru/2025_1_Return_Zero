@@ -2,7 +2,7 @@ import './profile.scss';
 import '../pages.scss';
 import './profile.precompiled.js';
 
-import '../../components/playlists/playlists'
+import '../../components/musics'
 import '../../components/tracks'
 import '../../components/artists'
 
@@ -11,7 +11,7 @@ import { State } from '../../libs/State';
 import Router from '../../libs/Router';
 
 import { userState } from '../../states';
-import { routes, reverseRoute } from '../../routes';
+import { routes } from '../../routes';
 
 import { API } from 'utils/api';
 
@@ -26,10 +26,7 @@ export class ProfilePage extends Component {
     protected build() {
         this.element.innerHTML = ''
         if (!userState.getState()) {
-            Router.pushUrl(
-                reverseRoute(routes.pageRoute, ['']) + reverseRoute(routes.authRoute, ['login']),
-                {}
-            );
+            Router.pushUrl('/#login', {})
             return
         };
 

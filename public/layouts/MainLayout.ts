@@ -2,7 +2,7 @@ import { Component } from '../libs/Component.ts';
 import { State } from '../libs/State.ts';
 import Router, { Routable, CallbackData } from '../libs/Router.ts';
 import { userState } from '../states';
-import { routes, reverseRoute } from '../routes';
+import { routes } from '../routes';
 
 import { Header } from '../components/header/header.ts';
 import { Playlists } from '../components/playlists/playlists.ts';
@@ -11,12 +11,13 @@ import { BottomPlayer } from '../components/bottomPlayer/bottomPlayer.ts';
 import { MainPage } from '../pages/main/main.ts';
 import { TracksPage } from '../pages/tracks/tracks.ts';
 import { AlbumsPage } from '../pages/albums/albums.ts';
-import { ArtistsPage } from '../pages/artists/artists.ts';
 import { ProfilePage } from '../pages/profile/profile.ts';
 
 import { AuthForm } from 'components/auth/auth.ts';
 
-import './MainLayout.css';
+import { ArtistsLayout } from './ArtistsLayout';
+
+import './MainLayout.scss';
 
 export class MainLayout extends Component implements Routable {
     protected static path = routes.pageRoute;
@@ -56,7 +57,7 @@ export class MainLayout extends Component implements Routable {
     protected render(state: State<any>, prev: any, cur: any): void {
         switch (state) {
             case this.child:
-                prev && prev.destroy();
+                prev && prev.element.remove();
                 this.element.appendChild(cur.element);
                 break;
             case this.popup:
@@ -103,7 +104,7 @@ export class MainLayout extends Component implements Routable {
                         this.child.setState(new AlbumsPage());
                         break;
                     case 'artists':
-                        this.child.setState(new ArtistsPage());
+                        this.child.setState(new ArtistsLayout());
                         break;
                     case 'profile':
                         this.child.setState(new ProfilePage());
@@ -114,7 +115,7 @@ export class MainLayout extends Component implements Routable {
                 if (params[0] !== MainLayout.logoutPath) 
                     break;
                 userState.setState(null);
-                Router.pushUrl(reverseRoute(routes.pageRoute, ['']), {});
+                Router.pushUrl('/', {});
                 break;
         }
     }

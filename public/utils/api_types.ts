@@ -7,20 +7,20 @@ export type Track = {
     id: number;
     title: string;
     artist: string;
-    image: string;
+    thumbnail_url: string;
 };
 
 export type Album = {
     id: number;
     title: string;
     artist: string;
-    image: string;
+    thumbnail_url: string;
 };
 
 export type Artist = {
     id: number;
     title: string;
-    image: string;
+    thumbnail_url: string;
 };
 
 export type User = {
@@ -40,8 +40,12 @@ export type AuthSendingData = {
 
 export namespace TemplateAPI {
     export type TracksResponse = ApiResponse<Track[]>;
+
     export type ArtistsResponse = ApiResponse<Artist[]>;
+    export type ArtistResponse = ApiResponse<Artist>;
+
     export type AlbumsResponse = ApiResponse<Album[]>;
-    export type playlistsResponse = ApiResponse<Album[]>;
+
+    export type PlaylistsResponse = ApiResponse<Album[]>;
 }
 

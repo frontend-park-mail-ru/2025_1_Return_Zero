@@ -35,7 +35,9 @@ button {
     background-color: d.$color-elements;
     border: 1px solid d.$color-border;
     border-radius: 1rem;
+
     font-size: v.$font-size-main;
+    color: d.$color-text;
 
     &:hover, &.active {
         background-color: d.$color-button;

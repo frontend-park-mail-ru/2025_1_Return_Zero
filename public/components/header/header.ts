@@ -61,14 +61,6 @@ export class Header extends Component implements Routable {
                 user: userState.getState(),
             })
         );
-        this.element
-            .addEventListener('click', (e) => {
-                e.preventDefault();
-
-                if (e.target instanceof HTMLAnchorElement) {
-                    Router.pushUrl((e.target as HTMLAnchorElement).href, {});
-                }
-            });
 
         Router.callCallback(Header.path, this);
         Router.callCallback(Header.authPath, this);
@@ -89,13 +81,12 @@ export class Header extends Component implements Routable {
 
     onRoute({
         path,
-        pathname,
         params,
     }: CallbackData) {
         switch (path) {
             case Header.path:
                 this.active.setState(
-                    this.element.querySelector?.(`.header__nav li>a[href="${pathname}"]`)
+                    this.element.querySelector?.(`.header__nav li>a[href="${params[0]}"]`)
                         ?.parentElement
                 );
                 break;

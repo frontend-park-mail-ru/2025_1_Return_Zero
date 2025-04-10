@@ -45,7 +45,19 @@ export class API {
         return (await API.get('/artists'));
     }
 
-    static async getPlaylists(): Promise<TemplateAPI.playlistsResponse> {
+    static async getArtist(id: number): Promise<TemplateAPI.ArtistResponse> {
+        return (await API.get(`/artists/${id}`));
+    }
+
+    static async getArtistTracks(id: number): Promise<TemplateAPI.TracksResponse> {
+        return (await API.get(`/artists/${id}/tracks`));
+    }
+
+    static async getArtistAlbums(id: number): Promise<TemplateAPI.AlbumsResponse> {
+        return (await API.get(`/artists/${id}/albums`));
+    }
+
+    static async getPlaylists(): Promise<TemplateAPI.PlaylistsResponse> {
         return await API.get('/playlists');
     }
 
