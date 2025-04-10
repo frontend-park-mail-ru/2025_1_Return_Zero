@@ -62,7 +62,6 @@ export class TracksQueue {
             if (start)  {
                 this.idx = start - 1;
             }
-
             this.nextTrack();
         }
     }
@@ -150,6 +149,10 @@ export class TracksQueue {
         this.idx = -1;
         this.shuffled = false;
         this.repeated = false;
+    }
+
+    getQueueLength() {
+        return this.queue.length;
     }
 }
 

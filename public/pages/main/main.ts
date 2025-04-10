@@ -10,6 +10,7 @@ import { API } from 'utils/api';
 import { userState } from '../../states.ts';
 
 import { queueSectionFill } from 'components/player/queueExportFunctions';
+// import { registerArrows } from 'components/arrows/registerArrows';
 
 export class MainPage extends Component {
     // @ts-ignore
@@ -42,6 +43,7 @@ export class MainPage extends Component {
                 );
 
                 queueSectionFill(this.element);
+                // registerArrows(this.element);
             } catch (e) {
                 console.log(e);
             }
