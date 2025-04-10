@@ -83,8 +83,6 @@ h4 {
     grid-template-areas: "title all" "content content";
     align-items: center;
     row-gap: 1.25rem;
-    overflow-x: auto;
-    scrollbar-width: none;
 
     &__title {
         grid-area: title;
@@ -99,5 +97,7 @@ h4 {
     &__content {
         grid-area: content;
         justify-self: stretch;
+        overflow-x: auto;
+        scrollbar-width: none;
     }
 }

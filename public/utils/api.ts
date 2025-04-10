@@ -37,6 +37,10 @@ export class API {
         return (await API.get('/tracks?limit=20'));
     }
 
+    static async getTrack(id: number): Promise<TemplateAPI.TrackResponse> {
+        return (await API.get(`/tracks/${id}`));
+    }
+
     static async getAlbums(): Promise<TemplateAPI.AlbumsResponse> {
         return (await API.get('/albums'));
     }
@@ -50,11 +54,11 @@ export class API {
     }
 
     static async postSignup(data: AuthSendingData) {
-        return await API.post('/signup', data);
+        return await API.post('/auth/signup', data);
     }
 
     static async postLogin(data: AuthSendingData) {
-        return await API.post('/login', data);
+        return await API.post('/auth/login', data);
     }
 
     static async postLogout() {

@@ -3,11 +3,20 @@ export interface ApiResponse<T> {
     body: T;
 }  
 
+export type TrackBody = {
+    id: number;
+    title: string;
+    role: string;
+}
+
 export type Track = {
     id: number;
     title: string;
-    artist: string;
+    artists: TrackBody[];
     image: string;
+    duration: number;
+    file_url: string;
+    thumbnail_url: string;
 };
 
 export type Album = {
@@ -39,6 +48,7 @@ export type AuthSendingData = {
 }
 
 export namespace TemplateAPI {
+    export type TrackResponse = ApiResponse<Track>;
     export type TracksResponse = ApiResponse<Track[]>;
     export type ArtistsResponse = ApiResponse<Artist[]>;
     export type AlbumsResponse = ApiResponse<Album[]>;

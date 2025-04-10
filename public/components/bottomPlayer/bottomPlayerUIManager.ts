@@ -141,6 +141,11 @@ export class ButtonStateHandler {
         } else {
             this.tracksQueue.shuffle();
         }
+        
+        this.checkShuffle();
+    }
+
+    checkShuffle() {
         this.dom.shuffleBtn.src = this.tracksQueue.shuffled
             ? '/static/img/player-shuffle-active.svg'
             : '/static/img/player-shuffle.svg';
@@ -170,6 +175,11 @@ export class ButtonStateHandler {
         } else {
             this.tracksQueue.repeat();
         }
+        
+        this.checkRepeat();
+    }
+
+    checkRepeat() {
         this.dom.repeatBtn.src = this.tracksQueue.repeated
             ? '/static/img/player-repeat-active.svg'
             : '/static/img/player-repeat.svg';

@@ -99,21 +99,25 @@ export class AuthForm extends Component {
         (async () => {
             try {
                 if (this.authType === 'register') {
-                    const response = await API.postSignup(data);
-        
-                    if (response.ok) {
-                        Router.pushUrl('/', {});
-                    } else {
-                        renderGlobalError('Пользователь с таким логином/email уже существует');
+                    try {
+                        const response = (await API.postSignup(data)).body;
+            
+                        if (response) {
+                            Router.pushUrl('/', {});   
+                        }
+                    } catch {
+                        console.warn('Не удалось зарегистрироваться');    
                     }
                 }
                 if (this.authType === 'login') {
-                    const response = await API.postLogin(data);
+                    try {
+                        const response = (await API.postLogin(data)).body;
             
-                    if (response.ok) {
-                        Router.pushUrl('/', {});
-                    } else {
-                        renderGlobalError('Неправильные логин/email или пароль');
+                        if (response) {
+                            Router.pushUrl('/', {});   
+                        }
+                    } catch {
+                        console.warn('Не удалось войти');    
                     }
                 }
             } catch (error) {

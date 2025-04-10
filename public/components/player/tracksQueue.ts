@@ -63,6 +63,11 @@ export class TracksQueue {
                 this.idx = start - 1;
             }
 
+            if (this.repeated) {
+                this.nextTrack('start');
+                return;
+            }  
+            
             this.nextTrack();
         }
     }
@@ -78,18 +83,12 @@ export class TracksQueue {
     }
 
     nextTrack(source?: string) {
-        if (source) {
+        if (source || !this.repeated) {
             this.idx = (this.idx + 1) % this.queue.length;
             this.setTrack();
             return;
         }
 
-        if (this.repeated) {
-            this.setTrack();
-            return;
-        }
-
-        this.idx = (this.idx + 1) % this.queue.length;
         this.setTrack();
     }
 
@@ -147,9 +146,10 @@ export class TracksQueue {
 
     clearQueue() {
         this.queue = [];
+        this.savedQueue = [];
         this.idx = -1;
         this.shuffled = false;
-        this.repeated = false;
+        // this.repeated = false;
     }
 }
 

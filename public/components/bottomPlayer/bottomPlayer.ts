@@ -1,8 +1,3 @@
-import '../../../public/audio/audio.mp3';
-import '../../../public/audio/audio2.mp3';
-import '../../../public/audio/audio3.mp3';
-import '../../../public/audio/audio4.mp3';
-
 import './bottomPlayer.precompiled.js';
 import './bottomPlayer.scss';
 
@@ -86,6 +81,8 @@ export class BottomPlayer extends Component {
         this.domManager.songName.innerHTML = track.name;
         this.domManager.songArtist.innerHTML = track.artist;
         this.setDuration(track.duration);
+        this.buttonStateHandler.checkShuffle();
+        this.buttonStateHandler.checkRepeat();
         this.togglePlay();
     }
 }
