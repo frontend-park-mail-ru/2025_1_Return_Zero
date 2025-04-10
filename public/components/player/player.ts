@@ -44,6 +44,7 @@ export class Player {
             }
         } catch (error) {
             console.error('Playback error:', error);
+            this.pause();
         }
     }
 
