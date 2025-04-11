@@ -6,6 +6,7 @@ export type MusicUnit = {
     duration: number;
     image: string;
     src: string;
+    id: number;
 }
 
 export class TracksQueue {
@@ -135,7 +136,7 @@ export class TracksQueue {
         this.shuffled = false;
     }
 
-    getCurrentTrack() {
+    getCurrentTrack(): MusicUnit | null {
         if (this.idx == -1) {
             return null;
         }

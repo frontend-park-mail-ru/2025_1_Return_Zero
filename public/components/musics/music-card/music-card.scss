@@ -27,6 +27,11 @@
         box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.25);
     }
 
+    &__img:hover {
+        filter: brightness(0.5);
+        transition: filter 0.3s ease;
+    }
+
     &__title {
         text-align: center;
         font-size: v.$font-size-h4;
@@ -38,3 +43,5 @@
         text-align: center;
     }
 }
+
+

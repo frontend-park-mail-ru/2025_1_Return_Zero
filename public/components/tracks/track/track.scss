@@ -25,12 +25,40 @@
         font-weight: v.$font-weight-bold;
     }
 
+    &__wrapper {
+        position: relative;
+        grid-area: img;
+        width: 4.6rem;
+        height: 4.6rem;
+        border-radius: 1rem;
+    }
+
+    &__wrapper:hover {
+        .track__img {
+            filter: brightness(0.5);
+            transition: filter 0.3s ease;
+        }
+
+        .track__play {
+            display: block;
+        }
+    }
+
     &__img {
         cursor: pointer;
         grid-area: img;
         width: 4.6rem;
         height: 4.6rem;
         border-radius: 1rem;
+    }
+
+    &__play {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
     }
 
     &__title {
@@ -74,3 +102,4 @@
         cursor: not-allowed;
     }
 }
+

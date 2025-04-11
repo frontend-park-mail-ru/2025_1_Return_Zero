@@ -4,6 +4,10 @@ import { RootComponent } from './libs/Component.ts';
 import { MainLayout } from './layouts/MainLayout.ts';
 
 import { addToQueueListener } from 'components/player/queueExportFunctions';
+import player from "components/player/player";
+import tracksQueue, { MusicUnit } from 'components/player/tracksQueue';
+
+import { S } from 'libs/handlebars-v4.7.8';
 
 export default class App extends RootComponent {
     protected init() {
@@ -31,23 +35,19 @@ export default class App extends RootComponent {
             if (target instanceof HTMLImageElement && target.id === 'track') {
                 addToQueueListener(target);
             }
-        })
-
-        this.element.addEventListener('mouseover', (e: MouseEvent) => {
-            const target = e.target;
-
-            if (target instanceof HTMLImageElement && target.id === 'track') {
-                target.style.filter = 'brightness(0.5)';
-                target.style.transition = 'filter 0.3s ease';
-            }
         });
-        
-        this.element.addEventListener('mouseout', (e: MouseEvent) => {
-            const target = e.target;
 
-            if (target instanceof HTMLImageElement && target.id === 'track') {
-                target.style.filter = 'brightness(1)';
+        setInterval(() => {
+            const tracks = Array.from(this.element.querySelectorAll('#track'));
+            const currentTrack: MusicUnit = tracksQueue.getCurrentTrack();
+
+            for (const track of tracks) {
+                if (track.getAttribute('data-id') === currentTrack.id.toString()) {
+                    track.classList.add('track-active');
+                } else {
+                    track.classList.remove('track-active');
+                }
             }
-        });
+        }, 300);
     }
 }

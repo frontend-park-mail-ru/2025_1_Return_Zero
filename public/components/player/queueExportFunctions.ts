@@ -27,7 +27,8 @@ export async function addToQueueListener(track: HTMLElement) {
             artist: artist,
             image: img,
             duration: duration,
-            src: src
+            src: src,
+            id: Number(childId)
         });
 
         if (childId === trackId) {
