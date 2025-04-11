@@ -10,8 +10,7 @@ import { Component } from '../../libs/Component';
 import { State } from '../../libs/State';
 import Router from '../../libs/Router';
 
-import { userState } from '../../states';
-import { routes } from '../../routes';
+import { userState } from '../../utils/states';
 
 import { API } from 'utils/api';
 

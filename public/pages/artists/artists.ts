@@ -6,7 +6,7 @@ import '../pages.scss';
 
 import { Component } from '../../libs/Component.ts';
 import { API } from 'utils/api';
-import { userState } from '../../states.ts';
+import { userState } from '../../utils/states';
 
 export class ArtistsPage extends Component {
     // @ts-ignore

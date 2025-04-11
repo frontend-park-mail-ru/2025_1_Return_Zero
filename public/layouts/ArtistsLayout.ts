@@ -2,7 +2,7 @@
 import { Component } from '../libs/Component.ts';
 import { State } from '../libs/State.ts';
 import Router, { Routable, CallbackData } from '../libs/Router.ts';
-import { routes } from '../routes';
+import { routes } from '../utils/routes';
 
 import { ArtistsPage } from '../pages/artists/artists.ts';
 import { ArtistPage } from 'pages/artist/artist';
@@ -40,8 +40,8 @@ export class ArtistsLayout extends Component implements Routable {
         Router.removeCallback(routes.artistsRoute, this);
     }
 
-    onRoute({path, params}: CallbackData) {
-        switch (path) {
+    onRoute({route, params}: CallbackData) {
+        switch (route) {
             case routes.artistsRoute:
                 if (params[1]) {
                     const id = parseInt(params[1])

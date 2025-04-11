@@ -1,8 +1,8 @@
 import { Component } from '../libs/Component.ts';
 import { State } from '../libs/State.ts';
 import Router, { Routable, CallbackData } from '../libs/Router.ts';
-import { userState } from '../states';
-import { routes } from '../routes';
+import { userState } from '../utils/states';
+import { routes } from '../utils/routes';
 
 import { Header } from '../components/header/header.ts';
 import { Playlists } from '../components/playlists/playlists.ts';
@@ -20,10 +20,6 @@ import { ArtistsLayout } from './ArtistsLayout';
 import './MainLayout.scss';
 
 export class MainLayout extends Component implements Routable {
-    protected static path = routes.pageRoute;
-    protected static authPath = routes.authRoute;
-    protected static logoutPath = routes.logoutRoute;
-
     header: Header;
     playlists: Playlists;
     bottomPlayer: BottomPlayer;
@@ -35,9 +31,9 @@ export class MainLayout extends Component implements Routable {
 
         this.child = this.createState(null);
         this.popup = this.createState(null);
-        Router.addCallback(MainLayout.path, this);
-        Router.addCallback(MainLayout.authPath, this);
-        Router.addCallback(MainLayout.logoutPath, this);
+        Router.addCallback(routes.pageRoute, this);
+        Router.addCallback(routes.authRoute, this);
+        Router.addCallback(routes.artistsRoute, this);
     }
 
     protected build() {
@@ -49,9 +45,9 @@ export class MainLayout extends Component implements Routable {
         this.element.appendChild(this.playlists.element);
         this.element.appendChild(this.bottomPlayer.element);
 
-        Router.callCallback(MainLayout.path, this);
-        Router.callCallback(MainLayout.authPath, this);
-        Router.callCallback(MainLayout.logoutPath, this);
+        Router.callCallback(routes.pageRoute, this);
+        Router.callCallback(routes.authRoute, this);
+        Router.callCallback(routes.artistsRoute, this);
     }
 
     protected render(state: State<any>, prev: any, cur: any): void {
@@ -70,17 +66,17 @@ export class MainLayout extends Component implements Routable {
     destroy() {
         super.destroy();
 
-        Router.removeCallback(MainLayout.path, this);
-        Router.removeCallback(MainLayout.authPath, this);
-        Router.removeCallback(MainLayout.logoutPath, this);
+        Router.removeCallback(routes.pageRoute, this);
+        Router.removeCallback(routes.authRoute, this);
+        Router.removeCallback(routes.artistsRoute, this);
     }
 
     onRoute({
-        path,
+        route,
         params,
     }: CallbackData) {
-        switch (path) {
-            case MainLayout.authPath:
+        switch (route) {
+            case routes.authRoute:
                 switch (params[1]) {
                     case 'login':
                         this.popup.setState(new AuthForm('login'));
@@ -92,7 +88,7 @@ export class MainLayout extends Component implements Routable {
                         this.popup.setState(null);
                 }
                 break;
-            case MainLayout.path:
+            case routes.pageRoute:
                 switch (params[1]) {
                     case '':
                         this.child.setState(new MainPage());
@@ -111,8 +107,8 @@ export class MainLayout extends Component implements Routable {
                         break;
                 }
                 break;
-            case MainLayout.logoutPath:
-                if (params[0] !== MainLayout.logoutPath) 
+            case routes.logoutRoute:
+                if (params[0] === '') 
                     break;
                 userState.setState(null);
                 Router.pushUrl('/', {});
