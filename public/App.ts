@@ -64,6 +64,7 @@ export default class App extends RootComponent {
                 } else {
                     trackImg.classList.remove('track-active');
                     trackPlay.classList.remove('track-icon-active');
+                    trackPlay.src = '/static/img/player-play.svg';
                 }
             }
         }, 300);

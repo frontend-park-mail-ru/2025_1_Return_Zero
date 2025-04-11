@@ -42,7 +42,7 @@ export class API {
     }
 
     static async getTracks(): Promise<TemplateAPI.TracksResponse> {
-        const tracks_resp = (await API.get('/tracks'));
+        const tracks_resp = (await API.get('/tracks?limit=20'));
         tracks_resp.body = tracks_resp.body.map((track: any) => this.extendTrack(track));
         return tracks_resp
     }
