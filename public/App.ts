@@ -32,20 +32,38 @@ export default class App extends RootComponent {
                 console.error(`[App] Navigating to ${target.href}`);
                 Router.pushUrl((target as HTMLAnchorElement).href, {});
             }
-            if (target instanceof HTMLImageElement && target.id === 'track') {
-                addToQueueListener(target);
+
+            if (target instanceof HTMLElement && target.closest('div').id === 'track') {
+                const track = target.closest('div');
+                const currentTrack: MusicUnit | null = tracksQueue.getCurrentTrack();
+                
+                if (currentTrack && track.getAttribute('data-id') === currentTrack.id.toString()) {
+                    player.togglePlay();
+                } else {
+                    addToQueueListener(track);
+                }
             }
         });
 
         setInterval(() => {
             const tracks = Array.from(this.element.querySelectorAll('#track'));
-            const currentTrack: MusicUnit = tracksQueue.getCurrentTrack();
-
+            const currentTrack: MusicUnit | null = tracksQueue.getCurrentTrack();
             for (const track of tracks) {
-                if (track.getAttribute('data-id') === currentTrack.id.toString()) {
-                    track.classList.add('track-active');
+                const trackImg: HTMLImageElement = track.querySelector('.track__img') ?? track.querySelector('.music-card__img');;
+                const trackPlay: HTMLImageElement = track.querySelector('.track__play') ?? track.querySelector('.music-card__play'); 
+
+                if (currentTrack && track.getAttribute('data-id') === currentTrack.id.toString()) {
+                    trackImg.classList.add('track-active');
+                    trackPlay.classList.add('track-icon-active');
+                    
+                    if (player.audio.paused) {
+                        trackPlay.src = '/static/img/player-play.svg';
+                    } else {
+                        trackPlay.src = '/static/img/player-pause.svg';
+                    }
                 } else {
-                    track.classList.remove('track-active');
+                    trackImg.classList.remove('track-active');
+                    trackPlay.classList.remove('track-icon-active');
                 }
             }
         }, 300);

@@ -1,5 +1,8 @@
 <div class='music-card {{this.classes}}'>
-    <img src='{{this.thumbnail_url}}' alt='' class='music-card__img' id="track" data-id="{{ this.id }}" />
+    <div class="music-card__wrapper" id="track" data-id="{{ this.id }}">
+        <img src='{{this.thumbnail_url}}' alt='' class='music-card__img' />
+        <img src="/static/img/play.svg" class="music-card__play">
+    </div>
     <span class='music-card__title'>{{this.title}}</span>
     <a href="{{this.artists.0.artist_page}}" class='music-card__artist'>{{this.artists.0.title}}</a>
 </div>
