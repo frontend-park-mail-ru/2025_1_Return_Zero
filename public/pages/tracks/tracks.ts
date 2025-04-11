@@ -7,7 +7,7 @@ import '../pages.scss';
 
 import { Component } from '../../libs/Component.ts';
 import { API } from 'utils/api';
-import { userState } from '../../states.ts';
+import { userState } from '../../utils/states';
 import { queueSectionFill } from 'components/player/queueExportFunctions';
 
 export class TracksPage extends Component {

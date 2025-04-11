@@ -4,9 +4,9 @@ import './header.scss';
 import { Component } from '../../libs/Component.ts';
 import { State } from '../../libs/State.ts';
 import Router, { Routable, CallbackData } from '../../libs/Router.ts';
-import { routes } from '../../routes';
+import { routes } from '../../utils/routes';
 
-import { userState } from '../../states.ts';
+import { userState } from '../../utils/states';
 
 const navItems = {
     '/': {
@@ -33,8 +33,6 @@ const navItems = {
 
 export class Header extends Component implements Routable {
     protected static BASE_ELEMENT = 'header';
-    protected static path = routes.pageRoute;
-    protected static authPath = routes.authRoute;
     // @ts-ignore
     static template = Handlebars.templates['header.hbs'];
 
@@ -47,8 +45,8 @@ export class Header extends Component implements Routable {
         this.active = this.createState(null);
         this.createCallback(userState, () => this.build());
 
-        Router.addCallback(Header.path, this);
-        Router.addCallback(Header.authPath, this);
+        Router.addCallback(routes.pageRoute, this);
+        Router.addCallback(routes.authRoute, this);
     }
 
     protected build() {
@@ -61,17 +59,9 @@ export class Header extends Component implements Routable {
                 user: userState.getState(),
             })
         );
-        this.element
-            .addEventListener('click', (e) => {
-                e.preventDefault();
 
-                if (e.target instanceof HTMLAnchorElement) {
-                    Router.pushUrl((e.target as HTMLAnchorElement).href, {});
-                }
-            });
-
-        Router.callCallback(Header.path, this);
-        Router.callCallback(Header.authPath, this);
+        Router.callCallback(routes.pageRoute, this);
+        Router.callCallback(routes.authRoute, this);
     }
 
     protected render(state: State<any>, prev: any, cur: any) {
@@ -84,22 +74,21 @@ export class Header extends Component implements Routable {
     }
 
     destroy() {
-        Router.removeCallback(Header.path, this);
+        Router.removeCallback(routes.pageRoute, this);
     }
 
     onRoute({
-        path,
-        pathname,
+        route,
         params,
     }: CallbackData) {
-        switch (path) {
-            case Header.path:
+        switch (route) {
+            case routes.pageRoute:
                 this.active.setState(
-                    this.element.querySelector?.(`.header__nav li>a[href="${pathname}"]`)
+                    this.element.querySelector?.(`.header__nav li>a[href="${params[0]}"]`)
                         ?.parentElement
                 );
                 break;
-            case Header.authPath:
+            case routes.authRoute:
                 this.element.querySelectorAll('.header__auth>a').forEach((a) => {
                     a.classList.remove('active');
                 });

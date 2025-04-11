@@ -1,6 +1,5 @@
 export type CallbackData = {
-    path: string,
-    pathname: string,
+    route: Route,
     params: RegExpMatchArray,
     searchParams: URLSearchParams,
     data: any
@@ -10,13 +9,48 @@ export interface Routable {
     onRoute(data: CallbackData): void;
 }
 
-export class Router {
-    static append = '(?!\\w)'
 
+export class Route {
+    private static path_append = '(?!\\w)';
+
+    private _path: string;
+
+    constructor(path: string, build?: (params: any)=>string) {
+        this._path = path;
+        if (build) {
+            this._build = build;
+        }
+    }
+
+    private _build(params: any): string {
+        throw new Error('Not implemented');
+    }
+
+    
+    math(url: string): any {
+        return url.match(this._path + Route.path_append);
+    }
+
+    build(params: any): string {
+        const url = this._build(params);
+        if (!this.math(url)) 
+            throw new Error(`Route "${this._path}" does not match builded "${url}"`);
+        return url;
+    }
+
+    get path(): string {
+        return this._path;
+    }
+
+    toString(): string {
+        return this._path;
+    }
+}
+
+
+export class Router {
     private _href: string = 'http://null.null/';
-    private _callbacks: {
-        [key: string]: Routable[]
-    } = {}
+    private _callbacks: Map<Route, Routable[]> = new Map();
 
     constructor() {
         this._href = location.href;
@@ -31,30 +65,29 @@ export class Router {
         this.callCallbacks(prev_route, this.getRoute());
     }
 
-    addCallback(url_pattern: string, routable: Routable) {
-        console.log(`Adding callback "${routable.constructor.name}" for ${url_pattern}`);
+    addCallback(route: Route, routable: Routable) {
+        console.log(`Adding callback "${routable.constructor.name}" for ${route}`);
 
-        this._callbacks[url_pattern] = this._callbacks[url_pattern] || [];
-        this._callbacks[url_pattern].push(routable);
+        this._callbacks.set(route, this._callbacks.get(route) || []);
+        this._callbacks.get(route).push(routable);
     }
 
-    removeCallback(url_pattern: string, routable: Routable) {
-        console.log(`Removing callback "${routable.constructor.name}" for ${url_pattern}`);
+    removeCallback(route: Route, routable: Routable) {
+        console.log(`Removing callback "${routable.constructor.name}" for ${route}`);
 
-        this._callbacks[url_pattern] = this._callbacks[url_pattern].filter(r => r !== routable);
-        if (this._callbacks[url_pattern].length === 0) {
-            delete this._callbacks[url_pattern];
+        this._callbacks.set(route, this._callbacks.get(route).filter(r => r !== routable));
+        if (this._callbacks.get(route).length === 0) {
+            this._callbacks.delete(route);
         }
     }
 
-    callCallback(url_pattern: string, routable: Routable) {
-        const res = this.getRoute().match(url_pattern + Router.append) ?? [''];
+    callCallback(route: Route, routable: Routable) {
+        const res = route.math(this.getRoute()) ?? [''];
 
-        console.log(`Matching ${url_pattern} with ${this._href} got ${res} [callCallback]`);
+        console.log(`Matching ${route} with ${this._href} got ${res} [callCallback]`);
         setTimeout(
             () => routable.onRoute({
-                path: url_pattern,
-                pathname: this.getPath(),
+                route: route,
                 params: res,
                 searchParams: this.getSearch(),
                 data: history.state
@@ -62,21 +95,19 @@ export class Router {
         )
     }
 
-    private callCallbacks(prev_route: string, cur_route: string
-    ) {
-        Object.keys(this._callbacks).forEach(key => {
-            const prev_res = prev_route.match(key + Router.append) ?? [''];
-            const res = cur_route.match(key + Router.append) ?? [''];
+    private callCallbacks(prev_route: string, cur_route: string) {
+        for (const [route, callbacks] of this._callbacks.entries()) {
+            const prev_res = route.math(prev_route) ?? [''];
+            const res = route.math(cur_route) ?? [''];
 
-            console.log(`Matching ${key} with ${this._href} got ${res} [callCallbackssssssssss]`);
-            prev_res[0] !== res[0] && this._callbacks[key].forEach(r => setTimeout(() => r.onRoute({
-                path: key,
-                pathname: this.getPath(),
+            console.log(`Matching ${route} with ${this._href} got ${res} [callCallbacks]`);
+            prev_res[0] !== res[0] && callbacks.forEach(r => setTimeout(() => r.onRoute({
+                route: route,
                 params: res,
                 searchParams: this.getSearch(),
                 data: history.state
             })))
-        });
+        }
     }
 
     pushUrl(url: string, data: any) {

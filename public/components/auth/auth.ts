@@ -100,24 +100,16 @@ export class AuthForm extends Component {
             try {
                 if (this.authType === 'register') {
                     try {
-                        const response = (await API.postSignup(data)).body;
-            
-                        if (response) {
-                            Router.pushUrl('/', {});   
-                        }
-                    } catch {
-                        console.warn('Не удалось зарегистрироваться');    
+                        const response = await API.postSignup(data);
+                    } catch (error) {
+                        renderGlobalError(error.message);
                     }
                 }
                 if (this.authType === 'login') {
                     try {
-                        const response = (await API.postLogin(data)).body;
-            
-                        if (response) {
-                            Router.pushUrl('/', {});   
-                        }
-                    } catch {
-                        console.warn('Не удалось войти');    
+                        const response = await API.postLogin(data);
+                    } catch (error) {
+                        renderGlobalError(error.message);
                     }
                 }
             } catch (error) {
