@@ -3,7 +3,6 @@ export namespace DataTypes {
         id: number,
         title: string,
         thumbnail_url: string,
-        file_url?: string,
         duration: number,
         album_id: number,
         album: string,
@@ -13,7 +12,8 @@ export namespace DataTypes {
             role: string
             // added fields
             artist_page: string
-        }[]
+        }[],
+        file_url?: string,
     }
     
     export type Album = {

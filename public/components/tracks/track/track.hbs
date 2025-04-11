@@ -1,6 +1,6 @@
-<div class="track {{#unless this.id}}track_norder{{/unless}}" id="track" data-id="{{ this.id }}">
+<div class="track {{#unless this.id}}track_norder{{/unless}}">
     <span class="track__index">{{index}}</span>
-    <img src="{{thumbnail_url}}" alt="" class="track__img">
+    <img src="{{thumbnail_url}}" alt="" class="track__img" id="track" data-id="{{ this.id }}">
     <a style="cursor: not-allowed;" href="{{this.hrefAlbum}}" class="track__title">{{this.title}}</a>
     <a href="{{this.artists.0.artist_page}}" class="track__artist">{{this.artists.0.title}}</a>
     <a style="cursor: not-allowed;" href="{{this.hrefAlbum}}" class="track__album">{{this.album}}</a>

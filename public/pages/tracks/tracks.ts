@@ -8,7 +8,6 @@ import '../pages.scss';
 import { Component } from '../../libs/Component.ts';
 import { API } from 'utils/api';
 import { userState } from '../../utils/states';
-import { queueSectionFill } from 'components/player/queueExportFunctions';
 
 export class TracksPage extends Component {
     // @ts-ignore
@@ -39,8 +38,6 @@ export class TracksPage extends Component {
                     'beforeend',
                     TracksPage.template(content)
                 );
-
-                queueSectionFill(this.element);
             } catch (e) {
                 console.log(e);
             }

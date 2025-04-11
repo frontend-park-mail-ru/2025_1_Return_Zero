@@ -90,12 +90,12 @@ export class API {
     }
 
     static async postLogin(data: AuthSendingData) {
-        return await API.post('auth/login', data);
+        return await API.post('/auth/login', data);
     }
 
 
     static async postLogout() {
-        return await API.post('auth/logout', {});
+        return await API.post('/auth/logout', {});
     }
 
     static async getCurrentUser() {

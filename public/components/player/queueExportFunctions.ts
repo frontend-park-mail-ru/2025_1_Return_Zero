@@ -2,27 +2,18 @@ import { MusicUnit } from "./tracksQueue";
 import tracksQueue, { TracksQueue } from 'components/player/tracksQueue';
 import { API } from "utils/api";
 
-export function queueSectionFill(page: HTMLElement) {
-    const tracksQueue = Array.from(page.querySelectorAll('#track'));
-    for (const track of tracksQueue) {
-        track.addEventListener('click', async (e: Event) => {
-            await addToQueueListener(e)
-        });
-    }
-}
-
-async function addToQueueListener(e: Event) {
-    const track = e.currentTarget as HTMLElement;
-
+export async function addToQueueListener(track: HTMLElement) {
     const trackId = track.getAttribute('data-id');
-    const section = track.parentElement;
+    const section = track.closest('.section');
     const queue: MusicUnit[] = [];
+
+    const tracks = Array.from(section.querySelectorAll('#track'));
 
     let idx = 0;
     let trackIdx = 0;
-    for (const child of section.children) {
+    for (const child of tracks) {
         const childId = child.getAttribute('data-id');
-        
+    
         const response = (await API.getTrack(Number(childId))).body;
 
         const src = response.file_url;
