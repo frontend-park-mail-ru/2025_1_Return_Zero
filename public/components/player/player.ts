@@ -14,6 +14,7 @@ export class Player {
         Player.instance = this;
 
         this.audio = document.createElement('audio');
+        this.audio.autoplay = true;
         this.initStates();
         this.setVolume(this.audioLevel);
     }

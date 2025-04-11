@@ -78,8 +78,8 @@ export class BottomPlayer extends Component {
 
     switchingTrack(track: MusicUnit) {
         this.domManager.songImg.src = track.image;
-        this.domManager.songName.innerHTML = track.name;
-        this.domManager.songArtist.innerHTML = track.artist;
+        this.domManager.songName.innerText = track.name;
+        this.domManager.songArtist.innerText = track.artist;
         this.setDuration(track.duration);
         this.buttonStateHandler.checkShuffle();
         this.buttonStateHandler.checkRepeat();

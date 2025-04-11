@@ -100,6 +100,7 @@ h4 {
         grid-area: content;
         justify-self: stretch;
         overflow-x: auto;
+        overflow-y: hidden;
         scrollbar-width: none;
     }
 }

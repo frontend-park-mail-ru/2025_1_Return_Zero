@@ -1,4 +1,5 @@
 import player, { Player } from "components/player/player";
+import { API } from "utils/api";
 
 export type MusicUnit = {
     name: string;
@@ -13,8 +14,8 @@ export class TracksQueue {
     static instance: TracksQueue;
     playerCallback: (track: MusicUnit) => void;
 
-    private queue: MusicUnit[];
-    private savedQueue: MusicUnit[];
+    private queue: string[];
+    private savedQueue: string[];
     private idx: number;
     shuffled: boolean;
     repeated: boolean;
@@ -50,7 +51,8 @@ export class TracksQueue {
         }
     }
 
-    addTrack(tracks: MusicUnit | MusicUnit[], start?: number) {
+    addTrack(tracks: string | string[], start?: number) {
+        console.warn(tracks);
         if (Array.isArray(tracks)) {
             for (const track of tracks) {
                 this.queue.push(track);
@@ -73,14 +75,23 @@ export class TracksQueue {
         }
     }
 
-    private setTrack() {
-        const currentTrack = this.queue[this.idx];
+    private async setTrack() {
+        const response = (await API.getTrack(Number(this.queue[this.idx]))).body;
 
-        console.log(`Playing: ${currentTrack.name}`);
-        player.setTrack(currentTrack.src);
-        player.setDuration(currentTrack.duration);
+        console.log(`Playing: ${response.title}`);
+        player.setTrack(response.file_url);
+        player.setDuration(response.duration);
 
-        this.callPlayerCallback(currentTrack);
+        const track: MusicUnit = {
+            name: response.title,
+            artist: response.artists[0].title,
+            duration: response.duration,
+            image: response.thumbnail_url,
+            src: response.file_url,
+            id: response.id
+        };
+
+        this.callPlayerCallback(track);
     }
 
     nextTrack(source?: string) {
@@ -136,7 +147,7 @@ export class TracksQueue {
         this.shuffled = false;
     }
 
-    getCurrentTrack(): MusicUnit | null {
+    getCurrentTrack(): string | null {
         if (this.idx == -1) {
             return null;
         }

@@ -35,9 +35,9 @@ export default class App extends RootComponent {
 
             if (target instanceof HTMLElement && target.closest('div').id === 'track') {
                 const track = target.closest('div');
-                const currentTrack: MusicUnit | null = tracksQueue.getCurrentTrack();
+                const currentTrack: string | null = tracksQueue.getCurrentTrack();
                 
-                if (currentTrack && track.getAttribute('data-id') === currentTrack.id.toString()) {
+                if (currentTrack && track.getAttribute('data-id') === currentTrack) {
                     player.togglePlay();
                 } else {
                     addToQueueListener(track);
@@ -47,12 +47,12 @@ export default class App extends RootComponent {
 
         setInterval(() => {
             const tracks = Array.from(this.element.querySelectorAll('#track'));
-            const currentTrack: MusicUnit | null = tracksQueue.getCurrentTrack();
+            const currentTrack: string | null = tracksQueue.getCurrentTrack();
             for (const track of tracks) {
                 const trackImg: HTMLImageElement = track.querySelector('.track__img') ?? track.querySelector('.music-card__img');;
                 const trackPlay: HTMLImageElement = track.querySelector('.track__play') ?? track.querySelector('.music-card__play'); 
 
-                if (currentTrack && track.getAttribute('data-id') === currentTrack.id.toString()) {
+                if (currentTrack && track.getAttribute('data-id') === currentTrack) {
                     trackImg.classList.add('track-active');
                     trackPlay.classList.add('track-icon-active');
                     
