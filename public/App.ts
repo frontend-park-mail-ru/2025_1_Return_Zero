@@ -5,7 +5,8 @@ import { MainLayout } from './layouts/MainLayout.ts';
 
 import { addToQueueListener } from 'components/player/queueExportFunctions';
 import player from "components/player/player";
-import tracksQueue, { MusicUnit } from 'components/player/tracksQueue';
+import tracksQueue from 'components/player/tracksQueue';
+import bottomPlayer from 'components/bottomPlayer/bottomPlayer';
 
 import { S } from 'libs/handlebars-v4.7.8';
 
@@ -61,6 +62,7 @@ export default class App extends RootComponent {
                     } else {
                         trackPlay.src = '/static/img/player-pause.svg';
                     }
+                    bottomPlayer.setPlayButtonState();
                 } else {
                     trackImg.classList.remove('track-active');
                     trackPlay.classList.remove('track-icon-active');

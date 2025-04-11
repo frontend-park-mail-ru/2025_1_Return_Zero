@@ -10,6 +10,7 @@ import { ButtonStateHandler, DomManager, DragHandler } from './bottomPlayerUIMan
 import { Component } from '../../libs/Component.ts';
 
 export class BottomPlayer extends Component {
+    static instance: BottomPlayer;
     player: Player;
     tracksQueue: TracksQueue;
     
@@ -24,6 +25,11 @@ export class BottomPlayer extends Component {
     private dragHandler: DragHandler;
 
     protected init() {
+        if (BottomPlayer.instance) {
+            return BottomPlayer.instance;
+        }
+        BottomPlayer.instance = this;
+
         this.element.classList.add('player');
         this.element.id = 'player';
     }
@@ -154,4 +160,4 @@ class TimeManager {
     }
 }
 
-export default BottomPlayer;
+export default new BottomPlayer();

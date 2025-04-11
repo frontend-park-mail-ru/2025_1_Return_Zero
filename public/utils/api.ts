@@ -7,7 +7,6 @@ import {
 
 import { routes } from './routes';
 
-
 export class API {
     static baseUrl = '/api/v1';
 

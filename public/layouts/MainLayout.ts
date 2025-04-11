@@ -6,7 +6,7 @@ import { routes } from '../utils/routes';
 
 import { Header } from '../components/header/header.ts';
 import { Playlists } from '../components/playlists/playlists.ts';
-import { BottomPlayer } from '../components/bottomPlayer/bottomPlayer.ts';
+import bottomPlayer, { BottomPlayer } from '../components/bottomPlayer/bottomPlayer.ts';
 
 import { MainPage } from '../pages/main/main.ts';
 import { TracksPage } from '../pages/tracks/tracks.ts';
@@ -39,7 +39,7 @@ export class MainLayout extends Component implements Routable {
     protected build() {
         this.header = new Header();
         this.playlists = new Playlists();
-        this.bottomPlayer = new BottomPlayer();
+        this.bottomPlayer = bottomPlayer;
 
         this.element.appendChild(this.header.element);
         this.element.appendChild(this.playlists.element);
