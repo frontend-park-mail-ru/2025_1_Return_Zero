@@ -11,6 +11,9 @@ export default class App extends RootComponent {
         this.element.addEventListener('click', (e) => {
             if (e.target instanceof HTMLAnchorElement) {
                 e.preventDefault();
+                if (e.target.style.cursor == 'not-allowed') {  // just for now
+                    return;
+                }
                 console.error(`[App] Navigating to ${e.target.href}`);
                 Router.pushUrl((e.target as HTMLAnchorElement).href, {});
             }

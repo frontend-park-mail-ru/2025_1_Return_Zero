@@ -2,6 +2,6 @@
     <a style='cursor: not-allowed;' href='{{this.hrefAlbum}}'>
         <img src='{{this.thumbnail_url}}' alt='' class='music-card__img' />
         <span class='music-card__title'>{{this.title}}</span>
-        <span class='music-card__artist'>{{this.artists.0.title}}</span>
+        <a href="{{this.artists.0.artist_page}}" class='music-card__artist'>{{this.artists.0.title}}</a>
     </a>
 </div>

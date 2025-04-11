@@ -19,12 +19,14 @@ export namespace DataTypes {
         id: number,
         title: string,
         thumbnail_url: string,
-        artist: string,
-        artist_id: number,
+        artists: {
+            id: number,
+            title: string
+            // added fields
+            artist_page: string
+        },
         type: string,
         reelase_date: string,
-        // added fields
-        artist_page: string
     }
     
     export type Artist = {
