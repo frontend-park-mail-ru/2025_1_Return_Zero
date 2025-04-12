@@ -4,7 +4,8 @@ export class Player {
 
     audioLevel: number;
     currentTime: number;
-    duration: number;;
+    duration: number;
+    initialized: boolean;
     private playPromise: Promise<void> | null = null;
 
     constructor() {
@@ -34,6 +35,7 @@ export class Player {
 
         this.currentTime = 0;
         this.duration = 0;
+        this.initialized = false;
     }
 
     async togglePlay(): Promise<void> {
@@ -48,11 +50,16 @@ export class Player {
             // this.pause();
         }
 
+        if (this.initialized) {
+            return;
+        }
+
         try {
             this.audio.currentTime = Number(localStorage.getItem('audio-current-time'));
         } catch (error) {
             console.error('Failed to get audio current time:', error);
         }
+        this.initialized = true;
     }
 
     async play(): Promise<void> {
