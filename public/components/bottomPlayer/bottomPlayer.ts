@@ -36,7 +36,6 @@ export class BottomPlayer extends Component {
 
     protected build() {
         this.element.innerHTML = '';
-        // @ts-ignore
         this.element.insertAdjacentHTML('beforeend', BottomPlayer.template({}));
 
         this.player = player;

@@ -1,6 +1,6 @@
 <div class="track {{#unless this.id}}track_norder{{/unless}}">
     <span class="track__index">{{index}}</span>
-    <div class="track__wrapper" id="track" data-id="{{ this.id }}">
+    <div class="track__wrapper" data-type="track" data-track-id="{{ this.id }}">
         <img src="{{thumbnail_url}}" alt="" class="track__img">
         <img src="/static/img/play.svg" class="track__play">
     </div>
