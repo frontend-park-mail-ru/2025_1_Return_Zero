@@ -43,7 +43,14 @@ export namespace DataTypes {
         id: number,
         email: string,
         username: string,
-        avatar: string
+        avatar_url: string,
+        // not included in /auth/check
+        is_public_minutes_listened?: boolean,
+        is_public_tracks_listened?: boolean,
+        is_public_artists_listened?: boolean,
+        is_public_favorite_artists?: boolean,
+        is_public_favorite_tracks?: boolean,
+        is_public_playlists?: boolean,
     }
 }
 
@@ -67,5 +74,6 @@ export namespace TemplateAPI {
     export type ArtistResponse = ApiResponse<DataTypes.Artist>;
     export type AlbumsResponse = ApiResponse<DataTypes.Album[]>;
     export type PlaylistsResponse = ApiResponse<DataTypes.Album[]>;
+    export type UserResponse = ApiResponse<DataTypes.User>;
 }
 

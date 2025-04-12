@@ -13,7 +13,7 @@ export class ArtistsLayout extends Component implements Routable {
     page: State<Component>;
 
     protected init() {
-        this.element.classList.add('artists-layout', 'layout');
+        this.element.classList.add('layout', 'layout--artists');
 
         this.page = this.createState(null);
         

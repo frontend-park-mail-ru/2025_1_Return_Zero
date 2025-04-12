@@ -1,13 +1,13 @@
 <div class="profile__info">
-    <img class="profile__info__img" src="{{this.user.avatar}}" alt="error loading avatar">
+    <img class="profile__info__img" src="{{this.user.avatar_url}}" alt="error loading avatar">
     <div>
         <h2 class="profile__info__username">{{this.user.username}}</h2>
         <img class="profile__info__actions" src="/static/img/dots.svg" alt="edit">
         {{#if this.stats}}
             <div class="profile__info__stats">
-                <span>{{this.stats.minutes}} минут прослушано</span>
-                <span>{{this.stats.tracks}} треков услышано</span>
-                <span>{{this.stats.artists}} артистов изучено</span>
+                <span>{{#if this.user.is_public_minutes_listened}}{{this.stats.minutes}}{{else}}?{{/if}} минут прослушано</span>
+                <span>{{#if this.user.is_public_tracks_listened}}{{this.stats.tracks}}{{else}}?{{/if}} треков услышано</span>
+                <span>{{#if this.user.is_public_artists_listened}}{{this.stats.artists}}{{else}}?{{/if}} артистов изучено</span>
             </div>
         {{/if}}
     </div>

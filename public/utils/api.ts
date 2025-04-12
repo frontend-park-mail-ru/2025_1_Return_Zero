@@ -12,9 +12,6 @@ export class API {
 
     static async get(endpoint: string) {
         const resp = await fetch(this.baseUrl + endpoint);
-        if (resp.ok) {
-            return await resp.json();
-        }
         return (await API.processResponse(resp));
     }
 
@@ -31,13 +28,12 @@ export class API {
     }
 
     static async processResponse(resp: Response): Promise<ApiResponse<any>> {
-        if (resp.ok) {
-            let data = await resp.json();
-            if (data.error)
-                throw new Error(data.status + ': ' + data.error);
-            return data;
-        }
-        throw new Error(resp.statusText);
+        if (!resp.ok)
+            throw new Error(resp.statusText);
+        let data = await resp.json();
+        if (data.error)
+            throw new Error(data.status + ': ' + data.error);
+        return data;
     }
 
     static async getTracks(): Promise<TemplateAPI.TracksResponse> {
@@ -84,25 +80,24 @@ export class API {
         return await API.get('/playlists');
     }
 
-    static async postSignup(data: AuthSendingData) {
+    static async postSignup(data: AuthSendingData): Promise<TemplateAPI.UserResponse> {
         return await API.post('/auth/signup', data);
     }
 
-    static async postLogin(data: AuthSendingData) {
-        return await API.post('/auth/login', data);
+    static async postLogin(data: AuthSendingData): Promise<TemplateAPI.UserResponse> {
+        return (await API.post('/auth/login', data));
     }
-
 
     static async postLogout() {
         return await API.post('/auth/logout', {});
     }
 
-    static async getCurrentUser() {
-        try {
-            return (await API.get('/auth/check'));
-        } catch (e) {
-            return null;
-        }
+    static async getCurrentUser(): Promise<TemplateAPI.UserResponse> {
+        return (await API.get('/auth/check'));
+    }
+
+    static async getUser(username: string): Promise<TemplateAPI.UserResponse> {
+        return (await API.get(`/user/${username}`));
     }
 
 

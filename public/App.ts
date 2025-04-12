@@ -8,7 +8,6 @@ import player from "components/player/player";
 import tracksQueue from 'components/player/tracksQueue';
 import bottomPlayer from 'components/bottomPlayer/bottomPlayer';
 
-import { S } from 'libs/handlebars-v4.7.8';
 
 export default class App extends RootComponent {
     protected init() {
