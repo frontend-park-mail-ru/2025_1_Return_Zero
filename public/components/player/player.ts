@@ -4,7 +4,7 @@ export class Player {
 
     audioLevel: number;
     currentTime: number;
-    duration: number;
+    duration: number;;
     private playPromise: Promise<void> | null = null;
 
     constructor() {
@@ -47,6 +47,12 @@ export class Player {
             console.error('Playback error:', error);
             // this.pause();
         }
+
+        try {
+            this.audio.currentTime = Number(localStorage.getItem('audio-current-time'));
+        } catch (error) {
+            console.error('Failed to get audio current time:', error);
+        }
     }
 
     async play(): Promise<void> {
@@ -76,6 +82,10 @@ export class Player {
         this.audioLevel = volume;
         this.audio.volume = volume;
 
+        this.SaveVolume();
+    }
+
+    async SaveVolume() {
         try {
             localStorage.setItem('audio-level', String(this.audioLevel));
         } catch (error) {
@@ -85,6 +95,15 @@ export class Player {
 
     setCurrentTime(time: number) {
         this.currentTime = time;
+        this.SaveCurrentTime();
+    }
+
+    async SaveCurrentTime() {
+        try {
+            localStorage.setItem('audio-current-time', String(this.currentTime));
+        } catch (error) {
+            console.error('Failed to save audio current time:', error);
+        }
     }
 
     setDuration(duration: number) {
