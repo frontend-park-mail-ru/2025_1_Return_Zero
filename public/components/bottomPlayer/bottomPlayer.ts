@@ -67,6 +67,10 @@ export class BottomPlayer extends Component {
     }
 
     async togglePlay() {
+        if (tracksQueue.getCurrentTrack() == null) {
+            return;
+        }
+
         try {
             await this.player.togglePlay();
             await this.setPlayButtonState();
@@ -131,8 +135,18 @@ class EventManager {
 
     private initButtonEvents() {
         this.dom.playBtn.addEventListener('click', () => this.bottomPlayer.togglePlay());
-        this.dom.nextBtn.addEventListener('click', () => this.tracksQueue.nextTrack('nextBtn'));
-        this.dom.prevBtn.addEventListener('click', () => this.tracksQueue.previousTrack());
+        this.dom.nextBtn.addEventListener('click', () => {
+            if (tracksQueue.getCurrentTrack() == null) {
+                return;
+            }
+            this.tracksQueue.nextTrack('nextBtn'); 
+        });
+        this.dom.prevBtn.addEventListener('click', () => {
+            if (tracksQueue.getCurrentTrack() == null) {
+                return;
+            }
+            this.tracksQueue.previousTrack();
+        });
     }
 
     private initDragEvents() {

@@ -3,6 +3,7 @@ import { Player } from "components/player/player";
 import DragProgressBar from "components/player/draggProgress";
 import { convertDuration } from "utils/durationConverter";
 import tracksQueue, { TracksQueue } from "components/player/tracksQueue";
+import bottomPlayer from "./bottomPlayer";
 
 
 export class DomManager {
@@ -136,6 +137,10 @@ export class ButtonStateHandler {
     }
 
     private toggleShuffle() {
+        if (tracksQueue.getCurrentTrack() == null) {
+            return;
+        }
+
         if (this.tracksQueue.shuffled) {
             this.tracksQueue.unshuffle();
         } else {
@@ -170,6 +175,10 @@ export class ButtonStateHandler {
     }
 
     private toggleRepeat() {
+        if (tracksQueue.getCurrentTrack() == null) {
+            return;
+        }
+
         if (this.tracksQueue.repeated) {
             this.tracksQueue.unrepeat();
         } else {
