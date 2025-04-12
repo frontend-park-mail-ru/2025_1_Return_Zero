@@ -1,6 +1,7 @@
 import {
     ApiResponse,
     DataTypes,
+    ParamTypes,
     TemplateAPI,
     AuthSendingData,
 } from './api_types.ts';
@@ -10,12 +11,12 @@ import { routes } from './routes';
 export class API {
     static baseUrl = '/api/v1';
 
-    static async get(endpoint: string) {
+    private static async get(endpoint: string) {
         const resp = await fetch(this.baseUrl + endpoint);
         return (await API.processResponse(resp));
     }
 
-    static async post(endpoint: string, data: any) {
+    private static async post(endpoint: string, data: any) {
         const resp = await fetch(this.baseUrl + endpoint, {
             method: 'POST',
             headers: {
@@ -24,6 +25,28 @@ export class API {
             body: JSON.stringify(data),
         });
 
+        return (await API.processResponse(resp));
+    }
+
+    private static async put(endpoint: string, data: any) {
+        const resp = await fetch(this.baseUrl + endpoint, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+        return (await API.processResponse(resp));
+    }
+
+    private static async delete(endpoint: string, data: any) {
+        const resp = await fetch(this.baseUrl + endpoint, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
         return (await API.processResponse(resp));
     }
 
@@ -98,6 +121,14 @@ export class API {
 
     static async getUser(username: string): Promise<TemplateAPI.UserResponse> {
         return (await API.get(`/user/${username}`));
+    }
+
+    static async updateUser(username: string, data: ParamTypes.UserUpdate): Promise<TemplateAPI.UserResponse> {
+        return (await API.put(`/user/${username}`, data));
+    }
+
+    static async deleteUser(username: string, data: ParamTypes.UserDelete): Promise<TemplateAPI.UserResponse> {
+        return (await API.delete(`/user/${username}`, data));
     }
 
 

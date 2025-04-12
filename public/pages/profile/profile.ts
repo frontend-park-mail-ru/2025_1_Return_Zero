@@ -10,7 +10,8 @@ import { Component } from '../../libs/Component';
 import { State } from '../../libs/State';
 
 import { API } from 'utils/api';
-import { DataTypes } from 'utils/api_types.js';
+import { DataTypes } from 'utils/api_types';
+import { userState } from 'utils/states';
 
 export class ProfilePage extends Component {
     // @ts-ignore
@@ -19,8 +20,8 @@ export class ProfilePage extends Component {
     username: string;
     user: DataTypes.User;
 
-    init(username: string) {
-        this.username = username;
+    init(username?: string) {
+        this.username = username || userState.getState().username;
         this.element.classList.add('page', 'page--profile');
     }
 

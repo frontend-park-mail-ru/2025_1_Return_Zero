@@ -5,9 +5,9 @@ import Router, { Routable, CallbackData } from '../libs/Router.ts';
 import { routes } from '../utils/routes';
 
 import { ProfilePage } from '../pages/profile/profile.ts';
+import { SettingsPage } from '../pages/settings/settings.ts';
 
 import './layout.scss';
-import { userState } from 'utils/states';
 
 export class ProfileLayout extends Component implements Routable {
     page: State<Component>;
@@ -45,11 +45,7 @@ export class ProfileLayout extends Component implements Routable {
             case routes.profileRoute:
                 switch (params[1]) {
                     case 'settings':
-                        break;
-                    case undefined:
-                        if (!userState.getState() === null)
-                            break;
-                        this.page.setState(new ProfilePage(userState.getState().username));
+                        this.page.setState(new SettingsPage());
                         break;
                     default:
                         this.page.setState(new ProfilePage(params[1]));
