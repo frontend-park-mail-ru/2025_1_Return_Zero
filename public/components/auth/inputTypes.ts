@@ -62,7 +62,7 @@ class InputState {
         return this.valid;
     }
 
-    inputListener() {
+    inputListener(event: Event) {
         const requirement = requirements[this.input.name as keyof typeof requirements];
         const text: string = this.inputHTML.value;
 
@@ -95,6 +95,10 @@ class InputState {
             return;
         }  
         this.setState(true, null);
+
+        if (!event.isTrusted) {
+            return;
+        }
 
         if (this.input.name === 'password') {
             const passwordRepeatInput = this.form.querySelector(
