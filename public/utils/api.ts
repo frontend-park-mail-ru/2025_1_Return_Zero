@@ -174,6 +174,14 @@ export class API {
         };
     }
 
+    static async createStream(id: number) { 
+        return await API.post(`/tracks/${id}/stream`, {});
+    }
+
+    static async updateStream(id: number, duration: number) {
+        return await API.put(`/streams/${id}`, {duration});
+    }
+
     static extendAlbum(album: any): DataTypes.Album {
         return {
             ...album,

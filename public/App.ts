@@ -32,18 +32,11 @@ export default class App extends RootComponent {
                 Router.pushUrl((target as HTMLAnchorElement).href, {});
             }
 
-            if (
-                target instanceof HTMLElement &&
-                target.closest('div').id === 'track'
-            ) {
+            if (target instanceof HTMLElement && target.closest('div').dataset.type === "track") {
                 const track = target.closest('div');
-                const currentTrack: string | null =
-                    tracksQueue.getCurrentTrack();
-
-                if (
-                    currentTrack &&
-                    track.getAttribute('data-id') === currentTrack
-                ) {
+                const currentTrack: string | null = tracksQueue.getCurrentTrackId();
+                
+                if (currentTrack && track.getAttribute('data-track-id') === currentTrack) {
                     player.togglePlay();
                 } else {
                     addToQueueListener(track);
