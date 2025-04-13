@@ -17,9 +17,8 @@
         border: 1px solid d.$color-border;
         border-radius: 0.625rem;
 
-        text-align: center;
-
         ::placeholder {
+            text-align: center;
             color: d.$color-text-transparent;
         }
     }

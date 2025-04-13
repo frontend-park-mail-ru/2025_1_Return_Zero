@@ -11,19 +11,11 @@ export class State<T> {
 
     addCallback(callback: CallbackType<T>) {
         this.callbacks.push(callback);
-
-        console.log(
-            `Added callback [${callback}] to ${this.constructor.name}, total: [${this.callbacks}]`
-        );
     }
 
     removeCallbacks(callbacks: CallbackType<T>[]) {
         this.callbacks = this.callbacks.filter(
             (cb) => callbacks.indexOf(cb) === -1
-        );
-
-        console.log(
-            `Removed [${callbacks}] callbacks from ${this.constructor.name}, left: [${this.callbacks}]`
         );
     }
 
@@ -35,9 +27,6 @@ export class State<T> {
             .slice()
             .reverse()
             .forEach((callback) => {
-                console.log(
-                    `Calling callback "${callback}" for ${this.constructor.name}`
-                );
                 callback(this, prev, this.value);
             });
     }

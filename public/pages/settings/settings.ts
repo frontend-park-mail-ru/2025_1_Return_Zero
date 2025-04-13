@@ -87,20 +87,23 @@ export class SettingsPage extends Component {
     }
 
     private handleSubmit() {
-        const formData = new FormData();
-        formData.append('username', this.user.username);
-        formData.append(
-            'avatar',
-            (this.element.querySelector('#avatar') as HTMLInputElement).files[0]
-        );
-
-        (async () => {
-            try {
-                await API.updateAvatar(this.user.username, formData);
-            } catch (e) {
-                console.error('Failed to update avatar:', e);
-            }
-        })();
+        const avatar_file = (this.element.querySelector('#avatar') as HTMLInputElement).files[0];
+        if (avatar_file) {
+            const formData = new FormData();
+            formData.append('username', this.user.username);
+            formData.append(
+                'avatar',
+                avatar_file
+            );
+    
+            (async () => {
+                try {
+                    await API.updateAvatar(this.user.username, formData);
+                } catch (e) {
+                    console.error('Failed to update avatar:', e.message);
+                }
+            })();
+        }
 
         const data: ParamTypes.UserUpdate = {
             username: this.user.username,
@@ -174,7 +177,7 @@ export class SettingsPage extends Component {
                 ).body;
                 userState.setState(new_user);
             } catch (e) {
-                console.error('Failed to update user:', e);
+                console.error('Failed to update user:', e.message);
             }
         })();
     }

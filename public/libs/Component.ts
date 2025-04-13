@@ -39,10 +39,6 @@ export class Component {
     }
 
     protected createCallback<T>(state: State<T>, callback: CallbackType<T>) {
-        console.log(
-            `Created callback "${callback}" on ${state.constructor.name} for ${this.constructor.name}`
-        );
-
         this.states.set(state, this.states.get(state) || []);
         // @ts-ignore
         this.states.get(state).push(callback);
@@ -54,9 +50,6 @@ export class Component {
         this._element.remove();
 
         for (const [state, callbacks] of this.states.entries()) {
-            console.log(
-                `Removing [${callbacks}] callbacks from ${state.constructor.name} for ${this.constructor.name}`
-            );
             state.removeCallbacks(callbacks);
         }
     }
