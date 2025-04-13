@@ -7,7 +7,7 @@ export const routes = {
         (params) => `/artists/${params.artist_id}`
     ),
     profileRoute: new Route(
-        '^/profile/([^/]+|settings)|^/profile',
+        '^/profile/([^/#]+|settings)|^/profile',
         (params) => `/profile/${params.username}`
     ),
 
