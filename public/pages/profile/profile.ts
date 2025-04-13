@@ -2,9 +2,9 @@ import './profile.scss';
 import '../pages.scss';
 import './profile.precompiled.js';
 
-import '../../components/musics'
-import '../../components/tracks'
-import '../../components/artists'
+import '../../components/musics';
+import '../../components/tracks';
+import '../../components/artists';
 
 import { Component } from '../../libs/Component';
 import { State } from '../../libs/State';
@@ -15,7 +15,7 @@ import { userState } from 'utils/states';
 
 export class ProfilePage extends Component {
     // @ts-ignore
-    static template = Handlebars.templates['profile.hbs']
+    static template = Handlebars.templates['profile.hbs'];
 
     username: string;
     user: DataTypes.User;
@@ -34,27 +34,28 @@ export class ProfilePage extends Component {
             } catch (e) {
                 console.error(e);
             }
-            
+
             const stats = {
                 minutes: 0,
                 tracks: 0,
-                artists: 0
-            }
+                artists: 0,
+            };
             const playlists = (await API.getAlbums()).body;
             const tracks = (await API.getTracks()).body;
             const artists = (await API.getArtists()).body;
 
-            this.element.insertAdjacentHTML('beforeend', ProfilePage.template({
-                user: this.user,
-                stats,
-                playlists,
-                tracks,
-                artists
-            }));
-        })()
+            this.element.insertAdjacentHTML(
+                'beforeend',
+                ProfilePage.template({
+                    user: this.user,
+                    stats,
+                    playlists,
+                    tracks,
+                    artists,
+                })
+            );
+        })();
     }
 
-    protected render(state: State<any>, prev: any, cur: any): void {
-        
-    }
+    protected render(state: State<any>, prev: any, cur: any): void {}
 }

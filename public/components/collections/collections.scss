@@ -23,7 +23,7 @@
     button {
         cursor: pointer;
         aspect-ratio: 1/1;
-        border-radius: 15%;  
+        border-radius: 15%;
         background-color: d.$color-collection;
         background-position: center;
         background-repeat: no-repeat;
@@ -35,22 +35,22 @@
     }
 
     &__favourite {
-        background-image: url('../../img/collections-heart.svg');        
+        background-image: url('../../img/collections-heart.svg');
     }
 
     &__popular {
-        background-image: url('../../img/collections-diamond.svg');     
+        background-image: url('../../img/collections-diamond.svg');
     }
 
     &__new {
-        background-image: url('../../img/collections-bell.svg');     
+        background-image: url('../../img/collections-bell.svg');
     }
 
     &__week {
-        background-image: url('../../img/collections-star.svg');     
+        background-image: url('../../img/collections-star.svg');
     }
 
     &__top {
-        background-image: url('../../img/collections-lightning.svg');     
+        background-image: url('../../img/collections-lightning.svg');
     }
 }

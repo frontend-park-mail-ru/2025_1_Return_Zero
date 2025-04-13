@@ -1,11 +1,15 @@
 import './bottomPlayer.precompiled.js';
 import './bottomPlayer.scss';
 
-import player, { Player } from "components/player/player";
+import player, { Player } from 'components/player/player';
 import tracksQueue, { TracksQueue } from 'components/player/tracksQueue';
 import { MusicUnit } from 'components/player/tracksQueue';
-import { convertDuration } from "utils/durationConverter";
-import { ButtonStateHandler, DomManager, DragHandler } from './bottomPlayerUIManager';
+import { convertDuration } from 'utils/durationConverter';
+import {
+    ButtonStateHandler,
+    DomManager,
+    DragHandler,
+} from './bottomPlayerUIManager';
 
 import { Component } from '../../libs/Component.ts';
 
@@ -13,7 +17,7 @@ export class BottomPlayer extends Component {
     static instance: BottomPlayer;
     player: Player;
     tracksQueue: TracksQueue;
-    
+
     protected static BASE_ELEMENT = 'div';
     // @ts-ignore
     static template = Handlebars.templates['bottomPlayer.hbs'];
@@ -41,16 +45,21 @@ export class BottomPlayer extends Component {
 
         this.player = player;
         this.tracksQueue = tracksQueue;
-        this.tracksQueue.setPlayerCallback((track: MusicUnit) => this.switchingTrack(track));
+        this.tracksQueue.setPlayerCallback((track: MusicUnit) =>
+            this.switchingTrack(track)
+        );
 
         this.domManager = new DomManager(this.element);
         this.timeManager = new TimeManager(this.player, this.domManager);
         this.dragHandler = new DragHandler(this.player, this.domManager);
-        this.buttonStateHandler = new ButtonStateHandler(this.domManager, this.tracksQueue);
+        this.buttonStateHandler = new ButtonStateHandler(
+            this.domManager,
+            this.tracksQueue
+        );
         this.eventManager = new EventManager(
             this.player,
             this.tracksQueue,
-            this.domManager, 
+            this.domManager,
             this.dragHandler,
             this.buttonStateHandler,
             this
@@ -72,14 +81,14 @@ export class BottomPlayer extends Component {
             await this.setPlayButtonState();
         } catch (error) {
             console.error('Ошибка воспроизведения:', error);
-            this.domManager.playBtn.src = "/static/img/player-play.svg";
+            this.domManager.playBtn.src = '/static/img/player-play.svg';
         }
     }
-    
+
     async setPlayButtonState() {
-        this.domManager.playBtn.src = this.player.audio.paused 
-            ? "/static/img/player-play.svg" 
-            : "/static/img/player-pause.svg";
+        this.domManager.playBtn.src = this.player.audio.paused
+            ? '/static/img/player-play.svg'
+            : '/static/img/player-pause.svg';
     }
 
     switchingTrack(track: MusicUnit) {
@@ -92,7 +101,6 @@ export class BottomPlayer extends Component {
         this.togglePlay();
     }
 }
-
 
 class EventManager {
     private handlers: Array<() => void> = [];
@@ -116,23 +124,36 @@ class EventManager {
             this.dragHandler.playDragging.updateProgress();
             this.bottomPlayer.setCurrentDuration();
         };
-        
+
         this.player.audio.addEventListener('timeupdate', timeUpdateHandler);
         this.handlers.push(() => {
-            this.player.audio.removeEventListener('timeupdate', timeUpdateHandler);
+            this.player.audio.removeEventListener(
+                'timeupdate',
+                timeUpdateHandler
+            );
         });
 
-        const volumeChangeHandler = () => this.dragHandler.volumeDragging.updateProgress();
+        const volumeChangeHandler = () =>
+            this.dragHandler.volumeDragging.updateProgress();
         this.player.audio.addEventListener('volumechange', volumeChangeHandler);
         this.handlers.push(() => {
-            this.player.audio.removeEventListener('volumechange', volumeChangeHandler);
+            this.player.audio.removeEventListener(
+                'volumechange',
+                volumeChangeHandler
+            );
         });
     }
 
     private initButtonEvents() {
-        this.dom.playBtn.addEventListener('click', () => this.bottomPlayer.togglePlay());
-        this.dom.nextBtn.addEventListener('click', () => this.tracksQueue.nextTrack('nextBtn'));
-        this.dom.prevBtn.addEventListener('click', () => this.tracksQueue.previousTrack());
+        this.dom.playBtn.addEventListener('click', () =>
+            this.bottomPlayer.togglePlay()
+        );
+        this.dom.nextBtn.addEventListener('click', () =>
+            this.tracksQueue.nextTrack('nextBtn')
+        );
+        this.dom.prevBtn.addEventListener('click', () =>
+            this.tracksQueue.previousTrack()
+        );
     }
 
     private initDragEvents() {
@@ -147,7 +168,7 @@ class EventManager {
     }
 
     destroy() {
-        this.handlers.forEach(removeHandler => removeHandler());
+        this.handlers.forEach((removeHandler) => removeHandler());
     }
 }
 

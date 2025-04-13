@@ -1,7 +1,6 @@
 @use './variables.scss' as v;
 @use './dark.scss' as d;
 
-
 * {
     padding: 0;
     margin: 0;
@@ -39,7 +38,8 @@ button {
     font-size: v.$font-size-main;
     color: d.$color-text;
 
-    &:hover, &.active {
+    &:hover,
+    &.active {
         background-color: d.$color-button;
     }
 }
@@ -82,7 +82,7 @@ h4 {
 
 .section {
     display: grid;
-    grid-template-areas: "title all" "content content";
+    grid-template-areas: 'title all' 'content content';
     align-items: center;
     row-gap: 1.25rem;
 
@@ -113,4 +113,3 @@ h4 {
 .track-icon-active {
     display: block;
 }
-

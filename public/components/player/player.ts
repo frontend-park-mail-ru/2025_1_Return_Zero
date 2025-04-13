@@ -18,7 +18,7 @@ export class Player {
         this.initStates();
         this.setVolume(this.audioLevel);
     }
-    
+
     private initStates() {
         try {
             this.audioLevel = Number(localStorage.getItem('audio-level'));
@@ -52,8 +52,7 @@ export class Player {
     async play(): Promise<void> {
         this.playPromise = this.audio.play();
         return this.playPromise
-            .then(() => {
-            })
+            .then(() => {})
             .catch((error) => {
                 throw error; // Rethrow the error
             });

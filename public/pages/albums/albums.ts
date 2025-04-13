@@ -1,7 +1,6 @@
-import './albums.precompiled.js'
+import './albums.precompiled.js';
 
-import '../../components/albums'
-import '../../components/musics'
+import '../../components/albums';
 import '../../components/collections/collections.js';
 
 import '../pages.scss';
@@ -19,7 +18,7 @@ export class AlbumsPage extends Component {
     }
 
     protected init() {
-        this.element.classList.add("page");
+        this.element.classList.add('page');
     }
 
     protected build() {

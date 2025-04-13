@@ -37,17 +37,17 @@
         &__auth {
             grid-area: auth;
         }
-    
+
         &__security {
             grid-area: security;
         }
-    
+
         &__privacy {
             grid-area: privacy;
 
-            >div {
+            > div {
                 display: grid;
-                grid-template-areas: 
+                grid-template-areas:
                     'playlists stats-minutes'
                     'artists stats-tracks'
                     'tracks stats-artists';
@@ -81,7 +81,9 @@
             }
         }
 
-        &__auth, &__security, &__privacy {
+        &__auth,
+        &__security,
+        &__privacy {
             display: flex;
             flex-direction: column;
             gap: 2.5rem;
