@@ -35,7 +35,7 @@ export default class App extends RootComponent {
 
             if (target instanceof HTMLElement && target.closest('div').dataset.type === "track") {
                 const track = target.closest('div');
-                const currentTrack: string | null = tracksQueue.getCurrentTrack();
+                const currentTrack: string | null = tracksQueue.getCurrentTrackId();
                 
                 if (currentTrack && track.getAttribute('data-track-id') === currentTrack) {
                     player.togglePlay();
@@ -47,7 +47,7 @@ export default class App extends RootComponent {
 
         setInterval(() => {
             const tracks = Array.from(this.element.querySelectorAll('[data-type="track"]'));
-            const currentTrack: string | null = tracksQueue.getCurrentTrack();
+            const currentTrack: string | null = tracksQueue.getCurrentTrackId();
             for (const track of tracks) {
                 const trackImg: HTMLImageElement = track.querySelector('.track__img') ?? track.querySelector('.music-card__img');;
                 const trackPlay: HTMLImageElement = track.querySelector('.track__play') ?? track.querySelector('.music-card__play'); 

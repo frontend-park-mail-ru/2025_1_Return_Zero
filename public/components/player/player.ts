@@ -5,7 +5,6 @@ export class Player {
     audioLevel: number;
     currentTime: number;
     duration: number;
-    initialized: boolean;
     private playPromise: Promise<void> | null = null;
 
     constructor() {
@@ -15,16 +14,17 @@ export class Player {
         Player.instance = this;
 
         this.audio = document.createElement('audio');
-        this.audio.autoplay = true;
         this.initStates();
         this.setVolume(this.audioLevel);
+        this.setCurrentTime(this.currentTime);
     }
     
     private initStates() {
         try {
             this.audioLevel = Number(localStorage.getItem('audio-level'));
+            this.audio.currentTime = Number(localStorage.getItem('audio-current-time'));
         } catch (error) {
-            console.error('Failed to get audio level:', error);
+            console.error('Failed to get states for audio:', error);
             this.audioLevel = 0.5;
             try {
                 localStorage.setItem('audio-level', String(this.audioLevel));
@@ -33,9 +33,7 @@ export class Player {
             }
         }
 
-        this.currentTime = 0;
         this.duration = 0;
-        this.initialized = false;
     }
 
     async togglePlay(): Promise<void> {
@@ -49,17 +47,6 @@ export class Player {
             console.error('Playback error:', error);
             // this.pause();
         }
-
-        if (this.initialized) {
-            return;
-        }
-
-        try {
-            this.audio.currentTime = Number(localStorage.getItem('audio-current-time'));
-        } catch (error) {
-            console.error('Failed to get audio current time:', error);
-        }
-        this.initialized = true;
     }
 
     async play(): Promise<void> {
@@ -103,6 +90,10 @@ export class Player {
     setCurrentTime(time: number) {
         this.currentTime = time;
         this.SaveCurrentTime();
+    }
+
+    getCurrentTime() {
+        return this.currentTime;
     }
 
     async SaveCurrentTime() {

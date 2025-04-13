@@ -1,7 +1,7 @@
 @use '../../dark.scss' as d;
 @use '../../variables.scss' as v;
 
-.player {
+.small-player {
     display: flex;
     align-items: center;
     z-index: 900;
@@ -118,6 +118,14 @@
             border-radius: v.$bottomPlayer-border-radius-progress;
             background-color: d.$color-text;
 
+            &:hover {
+                cursor: pointer;
+            }
+            &:hover .circle,
+            &.dragging .circle {
+                display: block;
+            }
+
             .rectangle-prev {
                 position: absolute; 
                 width: 0px;
@@ -153,6 +161,10 @@
             width: 1.25rem;
         }
 
+        .resize:hover {
+            scale: 1.12;
+        }
+
         .rectangle-volume {
             position: relative;
             display: flex;
@@ -161,6 +173,14 @@
             height: v.$bottomPlayer-height-progress;
             border-radius: v.$bottomPlayer-border-radius-progress;
             width: clamp(0.625rem, 5vw, 6.25rem);            
+
+            &:hover {
+                cursor: pointer;
+            }
+            &:hover .circle,
+            &.dragging .circle {
+                display: block;
+            }
 
             .rectangle-prev {
                 position: absolute;
@@ -183,24 +203,3 @@
         }
     }
 }
-
-.rectangle:hover {
-    cursor: pointer;
-    .circle {
-        display: block;
-    }
-}
-
-.rectangle-volume:hover {
-    cursor: pointer;
-    .circle {
-        display: block;
-    }
-}
-
-.rectangle:hover .circle,
-.rectangle.dragging .circle,
-.rectangle-volume.dragging .circle {
-  display: block;
-}
-

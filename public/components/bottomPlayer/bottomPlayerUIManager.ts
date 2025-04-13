@@ -23,6 +23,7 @@ export class DomManager {
     volumeCircle: HTMLElement;
     currentSpan: HTMLElement;
     endSpan: HTMLElement;
+    resizeBtn: HTMLElement;
 
     constructor(private root: HTMLElement) {
         this.initElements();
@@ -45,6 +46,7 @@ export class DomManager {
         this.volumeCircle = this.volumeProgress.querySelector('.circle')!;
         this.currentSpan = this.getElement('#current-span');
         this.endSpan = this.getElement('#end-span');
+        this.resizeBtn = this.getElement('#resize');
     }
 
     private getElement<T extends HTMLElement>(selector: string): T {
@@ -137,7 +139,7 @@ export class ButtonStateHandler {
     }
 
     private toggleShuffle() {
-        if (tracksQueue.getCurrentTrack() == null) {
+        if (tracksQueue.getCurrentTrackId() == null) {
             return;
         }
 
@@ -175,7 +177,7 @@ export class ButtonStateHandler {
     }
 
     private toggleRepeat() {
-        if (tracksQueue.getCurrentTrack() == null) {
+        if (tracksQueue.getCurrentTrackId() == null) {
             return;
         }
 

@@ -17,6 +17,7 @@ export class TracksQueue {
     private queue: string[];
     private savedQueue: string[];
     private idx: number;
+    private currentTrack: MusicUnit;
     shuffled: boolean;
     repeated: boolean;
 
@@ -125,6 +126,7 @@ export class TracksQueue {
             src: response.file_url,
             id: response.id
         };
+        this.currentTrack = track;
 
         this.callPlayerCallback(track);
         this.saveQueue();
@@ -189,7 +191,7 @@ export class TracksQueue {
         this.saveQueue();
     }
 
-    getCurrentTrack(): string | null {
+    getCurrentTrackId(): string | null {
         if (this.idx == -1) {
             return null;
         }
@@ -197,6 +199,9 @@ export class TracksQueue {
         return this.queue[this.idx];
     }
 
+    getCurrentTrack(): MusicUnit | null {
+        return this.currentTrack;
+    }
 
     clearQueue() {
         this.queue = [];
