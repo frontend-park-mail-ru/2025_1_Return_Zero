@@ -9,27 +9,25 @@ type Input = {
 };
 
 class InputState {
-    form: HTMLFormElement;
-    input: Input;
-    inputHTML: HTMLInputElement;
-    validationMessage: HTMLParagraphElement;
+    form?: HTMLFormElement
+    input: HTMLInputElement;
+    validationMessage: HTMLElement;
+    validationKey: string;
 
     valid: boolean;
     loginForm: boolean;
     error: string | null;
 
-    constructor(form: HTMLFormElement, input: Input, loginForm: boolean, formType?: string) {
-        this.form = form;
+    constructor(input: HTMLInputElement, validationMessage: HTMLElement, validationKey: string, loginForm: boolean, form?: HTMLFormElement) {
+        if (form) {
+            this.form = form;
+        }
         this.input = input;
+        this.validationMessage = validationMessage;
+        this.validationKey = validationKey;
         this.loginForm = loginForm;
-        this.inputHTML = this.form.querySelector(
-            `[name="${this.input.name}"]`
-        ) as HTMLInputElement;
-        this.validationMessage = this.form.querySelector(
-            `[name="${this.input.name}-error"]`
-        ) as HTMLParagraphElement;
-
-        this.inputHTML.addEventListener('input', this.inputListener.bind(this));
+        
+        this.input.addEventListener('input', this.inputListener.bind(this));
 
         this.valid = false;
         this.error = null;
@@ -49,11 +47,11 @@ class InputState {
 
         if (!this.valid) {
             this.validationMessage.textContent = this.error;
-            this.inputHTML.classList.add('border-error');
+            this.input.classList.add('border-error');
             return;
         }
         this.validationMessage.textContent = this.error;
-        this.inputHTML.classList.remove('border-error');
+        this.input.classList.remove('border-error');
     }
 
     isValid() {
@@ -62,8 +60,8 @@ class InputState {
 
     inputListener(event: Event) {
         const requirement =
-            requirements[this.input.name as keyof typeof requirements];
-        const text: string = this.inputHTML.value;
+            requirements[this.validationKey as keyof typeof requirements];
+        const text: string = this.input.value;
 
         let errorMessage: string | undefined;
         if (
@@ -81,6 +79,7 @@ class InputState {
         ) {
             errorMessage = requirement.errorMessages.containsValidChars;
         }
+
         if (requirement.match) {
             if (this.input.name === 'passwordRepeat') {
                 const password: string | null = (
@@ -125,35 +124,6 @@ class InputState {
                 passwordInput.dispatchEvent(new Event('input'));
             }
         }
-    }
-
-    inputSettingsListener(event: Event) {
-        const requirement =
-        requirements[this.input.name as keyof typeof requirements];
-        const text: string = this.inputHTML.value;
-
-        let errorMessage: string | undefined;
-        if (
-            text.length < requirement.minLength ||
-            text.length > requirement.maxLength
-        ) {
-            errorMessage = requirement.errorMessages.length;
-        }
-        if (requirement.containsLetter && !requirement.containsLetter(text)) {
-            errorMessage = requirement.errorMessages.containsLetter;
-        }
-        if (
-            requirement.containsValidChars &&
-            !requirement.containsValidChars(text)
-        ) {
-            errorMessage = requirement.errorMessages.containsValidChars;
-        }
-
-        if (errorMessage) {
-            this.setState(false, errorMessage);
-            return;
-        }
-        this.setState(true, null);
     }
 }
 

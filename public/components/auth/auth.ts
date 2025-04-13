@@ -52,10 +52,16 @@ export class AuthForm extends Component {
         content.inputs.forEach((input) => {
             if (!input) return;
             const element: InputState = new InputState(
-                // @ts-ignore
-                this.element,
-                input,
-                this.authType === 'login' ? true : false
+                this.element.querySelector(
+                    `[name="${input.name}"]`
+                ),
+                this.element.querySelector(
+                    `[name="${input.name}-error"]`
+                ),
+                input.name,
+                this.authType === 'login' ? true : false,
+                //@ts-ignore
+                this.element
             );
             inputList.push(element);
         });
@@ -70,7 +76,7 @@ export class AuthForm extends Component {
                     hasError = true;
                 }
                 sendingData[inputState.input.name as keyof AuthSendingData] =
-                    inputState.inputHTML.value;
+                    inputState.input.value;
             });
 
             if (hasError) {

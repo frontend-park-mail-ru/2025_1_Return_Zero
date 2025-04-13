@@ -12,7 +12,7 @@ export type MusicUnit = {
 
 export class TracksQueue {
     static instance: TracksQueue;
-    playerCallback: (track: MusicUnit) => void;
+    playerCallback: (track: MusicUnit, play: boolean) => void;
 
     private queue: string[];
     private savedQueue: string[];
@@ -43,7 +43,7 @@ export class TracksQueue {
                 this.shuffled = JSON.parse(localStorage.getItem('queue-shuffled'));
                 this.repeated = JSON.parse(localStorage.getItem('queue-repeated'));
 
-                this.setTrack();
+                this.setTrack(false);
             } else {
                 this.saveQueue();
                 this.saveRepated();
@@ -57,10 +57,10 @@ export class TracksQueue {
         this.playerCallback = callback;
     }
 
-    private callPlayerCallback(track: MusicUnit) {
+    private callPlayerCallback(track: MusicUnit, play: boolean = true) {
         if (typeof this.playerCallback === 'function') {
             try {
-                this.playerCallback(track);
+                this.playerCallback(track, play);
             } catch (e) {
                 console.error('Error in player callback:', e);
             }
@@ -111,7 +111,7 @@ export class TracksQueue {
         }
     }
 
-    private async setTrack() {
+    private async setTrack(play: boolean = true) {
         const response = (await API.getTrack(Number(this.queue[this.idx])))
             .body;
 
@@ -128,8 +128,8 @@ export class TracksQueue {
             id: response.id,
         };
         this.currentTrack = track;
-
-        this.callPlayerCallback(track);
+        
+        this.callPlayerCallback(track, play);
         this.saveQueue();
     }
 

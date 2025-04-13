@@ -58,7 +58,9 @@ export class BottomPlayer extends Component {
 
                 this.player = player;
                 this.tracksQueue = tracksQueue;
-                this.tracksQueue.setPlayerCallback((track: MusicUnit) => this.switchingTrack(track));
+                this.tracksQueue.setPlayerCallback((track: MusicUnit, play: boolean = true) => 
+                    this.switchingTrack(track, play)
+                );
 
                 this.domManager = new DomManager(this.element);
                 this.timeManager = new TimeManager(this.player, this.domManager);
@@ -84,7 +86,9 @@ export class BottomPlayer extends Component {
 
                 this.player = player;
                 this.tracksQueue = tracksQueue;
-                this.tracksQueue.setPlayerCallback((track: MusicUnit) => this.switchingTrack(track));
+                this.tracksQueue.setPlayerCallback((track: MusicUnit, play: boolean = true) => 
+                    this.switchingTrack(track, play)
+                );
 
                 this.domManager = new DomManager(this.element);
                 this.timeManager = new TimeManager(this.player, this.domManager);
@@ -142,11 +146,13 @@ export class BottomPlayer extends Component {
             : '/static/img/player-pause.svg';
     }
 
-    switchingTrack(track: MusicUnit) {
+    switchingTrack(track: MusicUnit, play: boolean) {
         this.updateMusicDom(track);
-        this.togglePlay();
-        this.stream.updateStream();
-        this.stream.createStream();
+        if (play) {
+            this.togglePlay();
+            this.stream.updateStream();
+            this.stream.createStream();
+        }
     }
 
     updateMusicDom(track: MusicUnit) {

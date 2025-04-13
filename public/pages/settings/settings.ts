@@ -173,6 +173,15 @@ export class SettingsPage extends Component {
                 ).value === 'true',
         };
 
+        const validationList = [
+            'new-username'
+        ];
+
+        const inputs = Array.from(this.element.querySelectorAll('input'));
+        for (const input of inputs) {
+            if (input.id == 'avatar') break
+        }
+
         (async () => {
             try {
                 const new_user = (
