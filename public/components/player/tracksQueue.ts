@@ -17,6 +17,7 @@ export class TracksQueue {
     private queue: string[];
     private savedQueue: string[];
     private idx: number;
+    private currentTrack: MusicUnit;
     shuffled: boolean;
     repeated: boolean;
 
@@ -33,6 +34,23 @@ export class TracksQueue {
         this.shuffled = false;
         this.repeated = false;
         this.playerCallback = () => {};
+
+        try {
+            if (localStorage.getItem('queue')) {
+                this.queue = JSON.parse(localStorage.getItem('queue'));
+                this.savedQueue = JSON.parse(localStorage.getItem('saved-queue'));
+                this.idx = Number(localStorage.getItem('queue-idx'));
+                this.shuffled = JSON.parse(localStorage.getItem('queue-shuffled'));
+                this.repeated = JSON.parse(localStorage.getItem('queue-repeated'));
+
+                this.setTrack();
+            } else {
+                this.saveQueue();
+                this.saveRepated();
+            }
+        } catch (error) {
+            console.error('Failed to get queue:', error);
+        }
     }
 
     setPlayerCallback(callback: (track: MusicUnit) => void) {
@@ -52,7 +70,6 @@ export class TracksQueue {
     }
 
     addTrack(tracks: string | string[], start?: number) {
-        console.warn(tracks);
         if (Array.isArray(tracks)) {
             for (const track of tracks) {
                 this.queue.push(track);
@@ -75,6 +92,25 @@ export class TracksQueue {
         }
     }
 
+    async saveQueue() {
+        try {
+            localStorage.setItem('queue', JSON.stringify(this.queue));
+            localStorage.setItem('saved-queue', JSON.stringify(this.savedQueue));
+            localStorage.setItem('queue-idx', String(this.idx));
+            localStorage.setItem('queue-shuffled', String(this.shuffled));
+        } catch (error) {
+            console.error('Failed to save queue:', error);
+        }
+    }
+
+    async saveRepated() {
+        try {
+            localStorage.setItem('queue-repeated', String(this.repeated));
+        } catch (error) {
+            console.error('Failed to save queue:', error);
+        }
+    }
+
     private async setTrack() {
         const response = (await API.getTrack(Number(this.queue[this.idx]))).body;
 
@@ -90,8 +126,10 @@ export class TracksQueue {
             src: response.file_url,
             id: response.id
         };
+        this.currentTrack = track;
 
         this.callPlayerCallback(track);
+        this.saveQueue();
     }
 
     nextTrack(source?: string) {
@@ -112,10 +150,12 @@ export class TracksQueue {
 
     repeat() {
         this.repeated = true;
+        this.saveRepated();
     }
 
     unrepeat() {
         this.repeated = false;
+        this.saveRepated();
     }
 
     shuffle() {
@@ -133,6 +173,8 @@ export class TracksQueue {
 
         this.idx = this.queue.indexOf(currentTrack);
         this.shuffled = true;
+
+        this.saveQueue();
     }
 
     unshuffle() {
@@ -145,9 +187,11 @@ export class TracksQueue {
 
         this.idx = this.queue.indexOf(currentTrack);
         this.shuffled = false;
+
+        this.saveQueue();
     }
 
-    getCurrentTrack(): string | null {
+    getCurrentTrackId(): string | null {
         if (this.idx == -1) {
             return null;
         }
@@ -155,6 +199,9 @@ export class TracksQueue {
         return this.queue[this.idx];
     }
 
+    getCurrentTrack(): MusicUnit | null {
+        return this.currentTrack;
+    }
 
     clearQueue() {
         this.queue = [];

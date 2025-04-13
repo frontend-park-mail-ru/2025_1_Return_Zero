@@ -33,11 +33,11 @@ export default class App extends RootComponent {
                 Router.pushUrl((target as HTMLAnchorElement).href, {});
             }
 
-            if (target instanceof HTMLElement && target.closest('div').id === 'track') {
+            if (target instanceof HTMLElement && target.closest('div').dataset.type === "track") {
                 const track = target.closest('div');
-                const currentTrack: string | null = tracksQueue.getCurrentTrack();
+                const currentTrack: string | null = tracksQueue.getCurrentTrackId();
                 
-                if (currentTrack && track.getAttribute('data-id') === currentTrack) {
+                if (currentTrack && track.getAttribute('data-track-id') === currentTrack) {
                     player.togglePlay();
                 } else {
                     addToQueueListener(track);
@@ -46,13 +46,13 @@ export default class App extends RootComponent {
         });
 
         setInterval(() => {
-            const tracks = Array.from(this.element.querySelectorAll('#track'));
-            const currentTrack: string | null = tracksQueue.getCurrentTrack();
+            const tracks = Array.from(this.element.querySelectorAll('[data-type="track"]'));
+            const currentTrack: string | null = tracksQueue.getCurrentTrackId();
             for (const track of tracks) {
                 const trackImg: HTMLImageElement = track.querySelector('.track__img') ?? track.querySelector('.music-card__img');;
                 const trackPlay: HTMLImageElement = track.querySelector('.track__play') ?? track.querySelector('.music-card__play'); 
 
-                if (currentTrack && track.getAttribute('data-id') === currentTrack) {
+                if (currentTrack && track.getAttribute('data-track-id') === currentTrack) {
                     trackImg.classList.add('track-active');
                     trackPlay.classList.add('track-icon-active');
                     
