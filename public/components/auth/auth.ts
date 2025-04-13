@@ -39,8 +39,23 @@ export class AuthForm extends Component {
 
         this.element.insertAdjacentHTML(
             'beforeend',
-            AuthForm.template(content)
+            AuthForm.template(content),
         );
+
+        const changeAuth = this.element.querySelector('#changeAuth');
+        let redirectingForm = 'login';
+        if (this.authType == 'login') { 
+            changeAuth.textContent = 'Нет аккаунта? регистрация';
+            redirectingForm = 'register';
+        }
+        if (this.authType == 'register')  {
+            changeAuth.textContent = 'Уже зарегистрированы? войти';
+        }
+
+        changeAuth.addEventListener('click', () => {
+            console.warn(`${Router.getPath()}/#${redirectingForm}`);
+            Router.pushUrl(`${Router.getPath()}#${redirectingForm}`, {});
+        });
 
         this.element.addEventListener('mousedown', (e) => {
             if ((e.target as HTMLElement).id === 'auth-form') {

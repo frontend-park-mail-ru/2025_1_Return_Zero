@@ -6,8 +6,6 @@
     justify-content: center;
     align-items: center;
     position: fixed;
-    font-size: v.$font-size-h2;
-    font-weight: bold;
 
     top: 0;
     left: 0;
@@ -90,6 +88,11 @@
         margin-bottom: 1rem;
     }
 
+    &__title {
+        font-size: v.$font-size-h2;
+        font-weight: bold;
+    }
+
     &__input-container {
         display: flex;
         flex-direction: column;
@@ -99,6 +102,16 @@
     
         font-weight: bold;
         font-size: v.$font-size-h4;
+    }
+
+    &__change-auth {
+        cursor: pointer;
+        font-weight: v.$font-weight-light;
+        margin-top: 1rem;
+
+        &:hover {
+            border-bottom: 1px solid d.$color-border;
+        }
     }
 }
 
