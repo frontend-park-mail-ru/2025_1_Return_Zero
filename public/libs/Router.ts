@@ -66,15 +66,11 @@ export class Router {
     }
 
     addCallback(route: Route, routable: Routable) {
-        console.log(`Adding callback "${routable.constructor.name}" for ${route}`);
-
         this._callbacks.set(route, this._callbacks.get(route) || []);
         this._callbacks.get(route).push(routable);
     }
 
     removeCallback(route: Route, routable: Routable) {
-        console.log(`Removing callback "${routable.constructor.name}" for ${route}`);
-
         this._callbacks.set(route, this._callbacks.get(route).filter(r => r !== routable));
         if (this._callbacks.get(route).length === 0) {
             this._callbacks.delete(route);
@@ -83,8 +79,6 @@ export class Router {
 
     callCallback(route: Route, routable: Routable) {
         const res = route.math(this.getRoute()) ?? [''];
-
-        console.log(`Matching ${route} with ${this._href} got ${res} [callCallback]`);
         setTimeout(
             () => routable.onRoute({
                 route: route,
@@ -100,7 +94,6 @@ export class Router {
             const prev_res = route.math(prev_route) ?? [''];
             const res = route.math(cur_route) ?? [''];
 
-            console.log(`Matching ${route} with ${this._href} got ${res} [callCallbacks]`);
             prev_res[0] !== res[0] && callbacks.forEach(r => setTimeout(() => r.onRoute({
                 route: route,
                 params: res,

@@ -16,7 +16,6 @@ export class Component {
     constructor(...args: any[]) {   
         this._element = (this.constructor as typeof Component).BASE_ELEMENT_FUNCTION() as RzfElementType;
         this._element.rzf_component = this;
-        console.log(`Created component ${this.constructor.name}`);
 
         this.states = new Map();
         
@@ -30,16 +29,12 @@ export class Component {
     }
 
     protected createState<T>(value: T) {
-        console.log(`Created state for ${this.constructor.name}`);
-
         const state = new State(value);
         this.createCallback(state, (state: State<T>, prev: T, cur: T) => this.render(state, prev, cur));
         return state;
     }
 
     protected createCallback<T>(state: State<T>, callback: CallbackType<T>) {
-        console.log(`Created callback "${callback}" on ${state.constructor.name} for ${this.constructor.name}`);
-
         this.states.set(state, this.states.get(state) || []);
         this.states.get(state).push(callback);
 
@@ -47,12 +42,9 @@ export class Component {
     }
 
     destroy() {
-        console.log(`Destroying component ${this.constructor.name}`);
-
         this._element.remove();
 
         for (const [state, callbacks] of this.states.entries()) {
-            console.log(`Removing [${callbacks}] callbacks from ${state.constructor.name} for ${this.constructor.name}`);
             state.removeCallbacks(callbacks);
         }
     }
