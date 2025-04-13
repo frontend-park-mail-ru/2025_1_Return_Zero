@@ -21,13 +21,14 @@ export class ProfilePage extends Component {
     user: DataTypes.User;
 
     init(username?: string) {
-        this.username = username || userState.getState()?.username;
         this.element.classList.add('page', 'page--profile');
-
-        this.createCallback(userState, () => {
+        this.username = username || userState.getState()?.username;
+        
+        this.username || this.createCallback(userState, () => {
             this.username = userState.getState()?.username;
             this.build();
         });
+
     }
 
     protected build() {

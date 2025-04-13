@@ -1,7 +1,5 @@
 export namespace ParamTypes {
     export type UserUpdate = {
-        username: string;
-        email: string;
         password: string;
         new_email?: string;
         new_username?: string;
@@ -66,16 +64,23 @@ export namespace DataTypes {
 
     export type User = {
         id: number;
-        email: string;
         username: string;
+        email: string;
         avatar_url: string;
         // not included in /auth/check
-        is_public_minutes_listened?: boolean;
-        is_public_tracks_listened?: boolean;
-        is_public_artists_listened?: boolean;
-        is_public_playlists?: boolean;
-        is_public_favorite_tracks?: boolean;
-        is_public_favorite_artists?: boolean;
+        privacy?: {
+            is_public_minutes_listened: boolean;
+            is_public_tracks_listened: boolean;
+            is_public_artists_listened: boolean;
+            is_public_playlists: boolean;
+            is_public_favorite_tracks: boolean;
+            is_public_favorite_artists: boolean;
+        },
+        statistics?: {
+            minutes_listened?: number;
+            tracks_listened?: number;
+            artists_listened?: number;
+        }
     };
 }
 

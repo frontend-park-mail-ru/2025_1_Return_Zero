@@ -77,6 +77,18 @@ export class API {
         return await API.get(`/tracks/${id}`);
     }
 
+    static async getHistoryTracks(username: string, limit?: number, offset?: number): Promise<TemplateAPI.TracksResponse> {
+        let url = `/user/${username}/history`;
+        if (limit) { 
+            url += `?limit=${limit}`
+            if (offset) 
+                url += `&offset=${offset}`;
+        } else if (offset) 
+            url += `?offset=${offset}`;
+
+        return (await API.get(url)).body;
+    }
+
     static async getAlbums(): Promise<TemplateAPI.AlbumsResponse> {
         const albums_resp = await API.get('/albums');
         albums_resp.body = albums_resp.body.map((album: any) =>
@@ -165,6 +177,14 @@ export class API {
         return await API.delete(`/user/${username}`, data);
     }
 
+    static async createStream(id: number) { 
+        return await API.post(`/tracks/${id}/stream`, {});
+    }
+
+    static async updateStream(id: number, duration: number) {
+        return await API.put(`/streams/${id}`, {duration});
+    }
+
     static extendTrack(track: any): DataTypes.Track {
         return {
             ...track,
@@ -172,14 +192,6 @@ export class API {
                 this.extendArtist(artist)
             ),
         };
-    }
-
-    static async createStream(id: number) { 
-        return await API.post(`/tracks/${id}/stream`, {});
-    }
-
-    static async updateStream(id: number, duration: number) {
-        return await API.put(`/streams/${id}`, {duration});
     }
 
     static extendAlbum(album: any): DataTypes.Album {

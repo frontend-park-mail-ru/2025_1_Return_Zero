@@ -15,6 +15,7 @@ import { API } from 'utils/api';
 import { Component } from '../../libs/Component.ts';
 
 export class BottomPlayer extends Component {
+    
     static instance: BottomPlayer;
 
     size: State<string>;
@@ -49,63 +50,41 @@ export class BottomPlayer extends Component {
     }
 
     protected build() {
+        this.element.innerHTML = '';
+        
         switch(this.size.getState()) {
             case 'small':
-                this.element.classList.remove('fullscreen-player');
-                this.element.classList.add('small-player');
-                this.element.innerHTML = '';
-                this.element.insertAdjacentHTML('beforeend', BottomPlayer.smallTemplate({}));
-
-                this.player = player;
-                this.tracksQueue = tracksQueue;
-                this.tracksQueue.setPlayerCallback((track: MusicUnit, play: boolean = true) => 
-                    this.switchingTrack(track, play)
-                );
-
-                this.domManager = new DomManager(this.element);
-                this.timeManager = new TimeManager(this.player, this.domManager);
-                this.dragHandler = new DragHandler(this.player, this.domManager);
-                this.buttonStateHandler = new ButtonStateHandler(this.domManager, this.tracksQueue);
-                this.eventManager = new EventManager(
-                    this.player,
-                    this.tracksQueue,
-                    this.domManager, 
-                    this.dragHandler,
-                    this.buttonStateHandler,
-                    this
-                );       
-
-                this.updateMusicDom(tracksQueue.getCurrentTrack());
+                this.element.classList.remove(`fullscreen-player`);
+                this.element.classList.add(`small-player`);
+                this.element.insertAdjacentHTML('beforeend', BottomPlayer.smallTemplate({}));    
                 break;
-            
             case 'fullscreen':
-                this.element.classList.remove('small-player');
-                this.element.classList.add('fullscreen-player');
-                this.element.innerHTML = '';
+                this.element.classList.remove(`small-player`);
+                this.element.classList.add(`fullscreen-player`);
                 this.element.insertAdjacentHTML('beforeend', BottomPlayer.fullscreenTemplate({}));
-
-                this.player = player;
-                this.tracksQueue = tracksQueue;
-                this.tracksQueue.setPlayerCallback((track: MusicUnit, play: boolean = true) => 
-                    this.switchingTrack(track, play)
-                );
-
-                this.domManager = new DomManager(this.element);
-                this.timeManager = new TimeManager(this.player, this.domManager);
-                this.dragHandler = new DragHandler(this.player, this.domManager);
-                this.buttonStateHandler = new ButtonStateHandler(this.domManager, this.tracksQueue);
-                this.eventManager = new EventManager(
-                    this.player,
-                    this.tracksQueue,
-                    this.domManager, 
-                    this.dragHandler,
-                    this.buttonStateHandler,
-                    this
-                );       
-
-                this.updateMusicDom(tracksQueue.getCurrentTrack());
                 break;
         }
+
+        this.player = player;
+        this.tracksQueue = tracksQueue;
+        this.tracksQueue.setPlayerCallback((track: MusicUnit, play: boolean = true) => 
+            this.switchingTrack(track, play)
+        );
+
+        this.domManager = new DomManager(this.element);
+        this.timeManager = new TimeManager(this.player, this.domManager);
+        this.dragHandler = new DragHandler(this.player, this.domManager);
+        this.buttonStateHandler = new ButtonStateHandler(this.domManager, this.tracksQueue);
+        this.eventManager = new EventManager(
+            this.player,
+            this.tracksQueue,
+            this.domManager, 
+            this.dragHandler,
+            this.buttonStateHandler,
+            this
+        );       
+
+        this.updateMusicDom(tracksQueue.getCurrentTrack());
     }
 
     toggleState() {

@@ -34,7 +34,7 @@ class InputState {
         
         this.input.addEventListener('input', this.inputListener.bind(this));
 
-        this.valid = false;
+        this.valid = formType === "settings";
         this.error = null;
     }
 

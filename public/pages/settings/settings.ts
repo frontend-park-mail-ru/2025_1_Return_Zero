@@ -29,6 +29,7 @@ export class SettingsPage extends Component {
 
     init() {
         this.element.classList.add('page', 'page--settings');
+        this.element.addEventListener('submit', (e) => { e.preventDefault(); });
         this.username = userState.getState()?.username;
 
         this.avatar = this.createState(null);
@@ -69,7 +70,9 @@ export class SettingsPage extends Component {
 
                 this.element
                     .querySelector('#avatar')
-                    .addEventListener('change', this.handleAvatar.bind(this));
+                    .addEventListener('change', e => this.avatar.setState(URL.createObjectURL(
+                        ( e.target as HTMLInputElement).files[0]
+                    )));
                 this.element
                     .querySelector('.page--settings__bottom__button-save')
                     .addEventListener('click', this.handleSubmit.bind(this));
@@ -93,41 +96,42 @@ export class SettingsPage extends Component {
         }
     }
 
-    private handleAvatar() {
-        const avatar = (
-            this.element.querySelector('#avatar') as HTMLInputElement
-        ).files[0];
-        this.avatar.setState(URL.createObjectURL(avatar));
+    private handleSubmit() {
+        this.handleAvatar();
+        this.handleOptions();
     }
 
-    private handleSubmit() {
+    private handleAvatar() {
         const avatar_file = (this.element.querySelector('#avatar') as HTMLInputElement).files[0];
-        if (avatar_file) {
-            const formData = new FormData();
-            formData.append('username', this.user.username);
-            formData.append(
-                'avatar',
-                avatar_file
-            );
-    
-            (async () => {
-                try {
+
+        if (!avatar_file) return;
+
+        const formData = new FormData();
+        formData.append('username', this.user.username);
+        formData.append(
+            'avatar',
+            avatar_file
+        );
+
+        (async () => {
+            try {
+                // @ts-ignore
+                const avatar_url = (await API.updateAvatar(this.user.username, formData)).body.avatar_url;
+                userState.setState({
+                    ...userState.getState(),
                     // @ts-ignore
-                    avatar_url = await API.updateAvatar(this.user.username, formData).body.avatar_url;
-                    userState.setState({
-                        ...userState.getState(),
-                        // @ts-ignore
-                        avatar_url
-                    })
-                } catch (e) {
-                    console.error('Failed to update avatar:', e.message);
-                }
-            })();
-        }
+                    avatar_url
+                })
+            } catch (e) {
+                console.error('Failed to update avatar:', e.message);
+            }
+        })();
+    }
+
+    private handleOptions() {
+        if (!this.validationList.every(input => { console.error(input.isValid()); return input.isValid();})) return;
 
         const data: ParamTypes.UserUpdate = {
-            username: this.user.username,
-            email: this.user.email,
             password:
                 (
                     this.element.querySelector(
@@ -189,15 +193,6 @@ export class SettingsPage extends Component {
                     ) as HTMLInputElement
                 ).value === 'true',
         };
-
-        const validationList = [
-            'new-username'
-        ];
-
-        const inputs = Array.from(this.element.querySelectorAll('input'));
-        for (const input of inputs) {
-            if (input.id == 'avatar') break
-        }
 
         (async () => {
             try {

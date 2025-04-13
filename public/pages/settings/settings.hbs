@@ -51,12 +51,12 @@
                 <div class="form-input-container__radio">
                     <label class="form-input-container__radio__label">
                         <input class="form-input-container__radio__input" type="radio" name="public-playlists"
-                            value="false" {{#unless user.is_public_playlists}}checked{{/unless}}>
+                            value="false" {{#unless user.privacy.is_public_playlists}}checked{{/unless}}>
                         Приватно
                     </label>
                     <label class="form-input-container__radio__label">
                         <input class="form-input-container__radio__input" type="radio" name="public-playlists"
-                            value="true" {{#if user.is_public_playlists}}checked{{/if}}>
+                            value="true" {{#if user.privacy.is_public_playlists}}checked{{/if}}>
                         Публично
                     </label>
                 </div>
@@ -66,12 +66,12 @@
                 <div class="form-input-container__radio">
                     <label class="form-input-container__radio__label">
                         <input class="form-input-container__radio__input" type="radio" name="public-artists"
-                            value="false" {{#unless user.is_public_favorite_artists}}checked{{/unless}}>
+                            value="false" {{#unless user.privacy.is_public_favorite_artists}}checked{{/unless}}>
                         Приватно
                     </label>
                     <label class="form-input-container__radio__label">
                         <input class="form-input-container__radio__input" type="radio" name="public-artists"
-                            value="true" {{#if user.is_public_favorite_artists}}checked{{/if}}>
+                            value="true" {{#if user.privacy.is_public_favorite_artists}}checked{{/if}}>
                         Публично
                     </label>
                 </div>
@@ -81,12 +81,12 @@
                 <div class="form-input-container__radio">
                     <label class="form-input-container__radio__label">
                         <input class="form-input-container__radio__input" type="radio" name="public-tracks"
-                            value="false" {{#unless user.is_public_favorite_tracks}}checked{{/unless}}>
+                            value="false" {{#unless user.privacy.is_public_favorite_tracks}}checked{{/unless}}>
                         Приватно
                     </label>
                     <label class="form-input-container__radio__label">
                         <input class="form-input-container__radio__input" type="radio" name="public-tracks"
-                            value="true" {{#if user.is_public_favorite_tracks}}checked{{/if}}>
+                            value="true" {{#if user.privacy.is_public_favorite_tracks}}checked{{/if}}>
                         Публично
                     </label>
                 </div>
@@ -96,12 +96,12 @@
                 <div class="form-input-container__radio">
                     <label class="form-input-container__radio__label">
                         <input class="form-input-container__radio__input" type="radio" name="public-minutes-listened"
-                            value="false" {{#unless user.is_public_minutes_listened}}checked{{/unless}}>
+                            value="false" {{#unless user.privacy.is_public_minutes_listened}}checked{{/unless}}>
                         Приватно
                     </label>
                     <label class="form-input-container__radio__label">
                         <input class="form-input-container__radio__input" type="radio" name="public-minutes-listened"
-                            value="true" {{#if user.is_public_minutes_listened}}checked{{/if}}>
+                            value="true" {{#if user.privacy.is_public_minutes_listened}}checked{{/if}}>
                         Публично
                     </label>
                 </div>
@@ -111,12 +111,12 @@
                 <div class="form-input-container__radio">
                     <label class="form-input-container__radio__label">
                         <input class="form-input-container__radio__input" type="radio" name="public-tracks-listened"
-                            value="false" {{#unless user.is_public_tracks_listened}}checked{{/unless}}>
+                            value="false" {{#unless user.privacy.is_public_tracks_listened}}checked{{/unless}}>
                         Приватно
                     </label>
                     <label class="form-input-container__radio__label">
                         <input class="form-input-container__radio__input" type="radio" name="public-tracks-listened"
-                            value="true" {{#if user.is_public_tracks_listened}}checked{{/if}}>
+                            value="true" {{#if user.privacy.is_public_tracks_listened}}checked{{/if}}>
                         Публично
                     </label>
                 </div>
@@ -126,12 +126,12 @@
                 <div class="form-input-container__radio">
                     <label class="form-input-container__radio__label">
                         <input class="form-input-container__radio__input" type="radio" name="public-artists-listened"
-                            value="false" {{#unless user.is_public_artists_listened}}checked{{/unless}}>
+                            value="false" {{#unless user.privacy.is_public_artists_listened}}checked{{/unless}}>
                         Приватно
                     </label>
                     <label class="form-input-container__radio__label">
                         <input class="form-input-container__radio__input" type="radio" name="public-artists-listened"
-                            value="true" {{#if user.is_public_artists_listened}}checked{{/if}}>
+                            value="true" {{#if user.privacy.is_public_artists_listened}}checked{{/if}}>
                         Публично
                     </label>
                 </div>
