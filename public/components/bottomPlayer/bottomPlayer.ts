@@ -6,7 +6,7 @@ import './fullscreen.scss';
 import player, { Player } from 'components/player/player';
 import tracksQueue, { TracksQueue } from 'components/player/tracksQueue';
 import { MusicUnit } from 'components/player/tracksQueue';
-import { convertDuration } from "utils/durationConverter";
+import { convertDuration, parseDuration } from "utils/durationConverter";
 import { ButtonStateHandler, DomManager, DragHandler } from './bottomPlayerUIManager';
 import { State } from '../../libs/State.ts';
 
@@ -122,8 +122,7 @@ export class BottomPlayer extends Component {
 
     setCurrentDuration() {
         const duration = this.player.audio.currentTime || 0;
-        this.domManager.currentSpan.innerHTML = convertDuration(duration);
-        this.stream.duration += 1;
+        this.domManager.currentSpan.innerText = convertDuration(duration);
     }
 
     async togglePlay() {
@@ -150,9 +149,13 @@ export class BottomPlayer extends Component {
         this.updateMusicDom(track);
         if (play) {
             this.togglePlay();
-            this.stream.updateStream();
-            this.stream.createStream();
+            this.toggleStream();
         }
+    }
+
+    async toggleStream() {
+        await this.stream.updateStream();
+        await this.stream.createStream();
     }
 
     updateMusicDom(track: MusicUnit) {
@@ -179,6 +182,13 @@ class Stream {
 
     constructor() {
         this.duration = 0;
+        setInterval(() => {this.setDuration()}, 1000);
+    }
+
+    setDuration() { 
+        if (!player.audio.paused) {
+            this.duration += 1;
+        }
     }
 
     async createStream() {
