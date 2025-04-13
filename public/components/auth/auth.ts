@@ -59,7 +59,7 @@ export class AuthForm extends Component {
                     `[name="${input.name}-error"]`
                 ),
                 input.name,
-                this.authType === 'login' ? true : false,
+                this.authType,
                 //@ts-ignore
                 this.element
             );

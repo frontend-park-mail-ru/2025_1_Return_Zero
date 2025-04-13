@@ -154,7 +154,7 @@ export class API {
         return await API.put(`/user/${username}`, data);
     }
 
-    static async updateAvatar(username: string, data: FormData) {
+    static async updateAvatar(username: string, data: FormData): Promise<any> {
         return await API.postMultipart(`/user/${username}/avatar`, data);
     }
 

@@ -15,17 +15,22 @@ class InputState {
     validationKey: string;
 
     valid: boolean;
-    loginForm: boolean;
+    showValidate: boolean;
+    formType: string;
     error: string | null;
 
-    constructor(input: HTMLInputElement, validationMessage: HTMLElement, validationKey: string, loginForm: boolean, form?: HTMLFormElement) {
+    constructor(input: HTMLInputElement, validationMessage: HTMLElement, validationKey: string, formType: string, form?: HTMLFormElement) {
         if (form) {
             this.form = form;
         }
         this.input = input;
         this.validationMessage = validationMessage;
         this.validationKey = validationKey;
-        this.loginForm = loginForm;
+        this.formType = formType;
+        this.showValidate = false;
+        if (formType == 'login') {
+            this.showValidate = true;
+        }
         
         this.input.addEventListener('input', this.inputListener.bind(this));
 
@@ -41,7 +46,7 @@ class InputState {
     }
 
     mark() {
-        if (!this.validationMessage || this.loginForm) {
+        if (!this.validationMessage || this.showValidate) {
             return;
         }
 
@@ -62,6 +67,11 @@ class InputState {
         const requirement =
             requirements[this.validationKey as keyof typeof requirements];
         const text: string = this.input.value;
+
+        if (this.formType == 'settings' && text.length == 0) {
+            this.setState(true, null);
+            return;
+        }
 
         let errorMessage: string | undefined;
         if (

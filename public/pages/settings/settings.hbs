@@ -21,12 +21,12 @@
         <h1 class="page--settings__main__auth__title">Учетные данные</h1>
         <div class="form-input-container">
             <label class="form-input-container__label" for="username">Логин</label>
-            <input class="form-input-container__input" name="new-username" type="text" id="username" placeholder="новый логин">
-            <p class="form-input-container__error">Some error</p>
+            <input class="form-input-container__input" name="new-username" type="text" id="username" data-validation="username" placeholder="новый логин">
+            <p class="form-input-container__error"></p>
         </div>
         <div class="form-input-container">
             <label class="form-input-container__label" for="email">Email</label>
-            <input class="form-input-container__input" name="new-email" type="email" id="email" placeholder="новый email">
+            <input class="form-input-container__input" name="new-email" type="email" id="email" data-validation="email" placeholder="новый email">
             <p class="form-input-container__error"></p>
         </div>
     </div>
@@ -39,7 +39,7 @@
         </div>
         <div class="form-input-container">
             <label class="form-input-container__label" for="new-password">Новый пароль</label>
-            <input class="form-input-container__input" name="new-password" type="password" id="new-password" placeholder="новый пароль">
+            <input class="form-input-container__input" name="new-password" type="password" id="new-password" data-validation="password" placeholder="новый пароль">
             <p class="form-input-container__error"></p>
         </div>
     </div>

@@ -14,7 +14,7 @@ import { API } from 'utils/api';
 import { DataTypes, ParamTypes } from '../../utils/api_types';
 import { userState } from '../../utils/states';
 
-import { InputState, Input } from '../../components/auth/inputTypes.js';
+import { InputState } from 'components/auth/inputTypes';
 
 export class SettingsPage extends Component {
     protected static BASE_ELEMENT = 'form';
@@ -24,6 +24,8 @@ export class SettingsPage extends Component {
     username?: string;
     user?: DataTypes.User;
     avatar: State<string>;
+
+    validationList: InputState[] = [];
 
     init() {
         this.element.classList.add('page', 'page--settings');
@@ -53,6 +55,15 @@ export class SettingsPage extends Component {
                         user: this.user,
                     })
                 );
+
+                this.validationList = Array.from(this.element.querySelectorAll(
+                    'input[data-validation="username"], input[data-validation="email"], input[data-validation="password"]'
+                )).map(input => new InputState(
+                    input as HTMLInputElement,
+                    input.nextElementSibling as HTMLParagraphElement,
+                    (input as HTMLInputElement).dataset.validation,
+                    'settings',
+                ));
 
                 this.avatar.setState(this.user.avatar_url);
 
@@ -101,7 +112,13 @@ export class SettingsPage extends Component {
     
             (async () => {
                 try {
-                    await API.updateAvatar(this.user.username, formData);
+                    // @ts-ignore
+                    avatar_url = await API.updateAvatar(this.user.username, formData).body.avatar_url;
+                    userState.setState({
+                        ...userState.getState(),
+                        // @ts-ignore
+                        avatar_url
+                    })
                 } catch (e) {
                     console.error('Failed to update avatar:', e.message);
                 }
