@@ -194,7 +194,6 @@ class Stream {
     async createStream() {
         const trackIdNumber = Number(tracksQueue.getCurrentTrackId());
         const response = await API.createStream(trackIdNumber);
-        console.warn(response);
         this.id = response.body.id;
         this.duration = 0;
     }
@@ -205,8 +204,7 @@ class Stream {
         }
 
         const response = await API.updateStream(this.id, this.duration);
-        console.warn(response);
-        console.warn(this.id, this.duration);
+        console.log(response);
     }
 }
 
