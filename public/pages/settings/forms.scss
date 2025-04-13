@@ -1,7 +1,6 @@
 @use '../../dark.scss' as d;
 @use '../../variables.scss' as v;
 
-
 .form-input-container {
     display: flex;
     flex-direction: column;
@@ -13,11 +12,11 @@
 
     &__input {
         padding: 0.6rem;
-        
+
         background-color: d.$color-elements;
         border: 1px solid d.$color-border;
         border-radius: 0.625rem;
-        
+
         text-align: center;
 
         ::placeholder {
@@ -76,7 +75,7 @@
         border: 1px solid d.$color-border;
         border-radius: 50%;
 
-        >img {
+        > img {
             width: 1.25rem;
             height: 1.25rem;
         }
@@ -109,10 +108,10 @@
 
 .form-apply-button {
     @include form-button;
-    background-color: #1F68F2;
+    background-color: #1f68f2;
 }
 
 .form-reject-button {
     @include form-button;
-    background-color: #C83126;
+    background-color: #c83126;
 }

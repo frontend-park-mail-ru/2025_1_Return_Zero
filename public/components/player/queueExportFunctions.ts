@@ -22,4 +22,3 @@ export async function addToQueueListener(track: HTMLElement) {
     tracksQueue.clearQueue();
     tracksQueue.addTrack(queue, trackIdx);
 }
-

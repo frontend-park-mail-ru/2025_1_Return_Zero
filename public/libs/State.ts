@@ -28,8 +28,6 @@ export class State<T> {
     }
 
     setState(value: T) {
-        console.log(`Set state from ${this.value} to ${value}`);
-
         const prev = this.value;
         this.value = value;
 

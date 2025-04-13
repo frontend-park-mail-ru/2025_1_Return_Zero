@@ -1,4 +1,4 @@
-import { Player } from "components/player/player";
+import { Player } from 'components/player/player';
 
 class DragProgressBar {
     player: Player;
@@ -8,7 +8,13 @@ class DragProgressBar {
     isDragging: boolean;
     type: string;
 
-    constructor(player: Player, fullProgress: HTMLElement, progress: HTMLElement, circle: HTMLElement, type: string) {
+    constructor(
+        player: Player,
+        fullProgress: HTMLElement,
+        progress: HTMLElement,
+        circle: HTMLElement,
+        type: string
+    ) {
         this.player = player;
         this.fullProgress = fullProgress;
         this.progress = progress;
@@ -16,7 +22,7 @@ class DragProgressBar {
         this.isDragging = false;
         this.type = type;
 
-        if (this.type == 'volume') { 
+        if (this.type == 'volume') {
             this.updateProgress();
         }
     }
@@ -24,12 +30,13 @@ class DragProgressBar {
     stopDragging(e: MouseEvent) {
         if (this.isDragging) {
             this.isDragging = false;
-            this.fullProgress.classList.remove('dragging'); 
+            this.fullProgress.classList.remove('dragging');
             const rect = this.fullProgress.getBoundingClientRect();
             const pos = (e.clientX - rect.left) / rect.width;
 
             if (this.type == 'play') {
-                this.player.audio.currentTime = pos * this.player.audio.duration;
+                this.player.audio.currentTime =
+                    pos * this.player.audio.duration;
             }
             if (this.type == 'volume') {
                 this.player.setVolume(Math.max(0, Math.min(1, pos)));
@@ -62,7 +69,8 @@ class DragProgressBar {
             const pos = (e.clientX - rect.left) / rect.width;
 
             if (this.type == 'play') {
-                this.player.audio.currentTime = pos * this.player.audio.duration;
+                this.player.audio.currentTime =
+                    pos * this.player.audio.duration;
             }
             if (this.type == 'volume') {
                 this.player.setVolume(Math.max(0, Math.min(1, pos)));
@@ -72,15 +80,16 @@ class DragProgressBar {
 
     updateProgress() {
         if (!this.isDragging && this.type == 'play' && this.player.duration) {
-            const progress = (this.player.audio.currentTime / this.player.duration) * 100;
+            const progress =
+                (this.player.audio.currentTime / this.player.duration) * 100;
             this.progress.style.width = `${progress}%`;
             this.circle.style.left = `${progress - 1}%`;
 
             this.player.setCurrentTime(this.player.audio.currentTime);
         }
-        if(!this.isDragging && this.type == 'volume') {
+        if (!this.isDragging && this.type == 'volume') {
             const volume = this.player.audio.volume * 100;
-            this.progress.style.width = `${volume}%`; 
+            this.progress.style.width = `${volume}%`;
             this.circle.style.left = `${volume - 1}%`;
 
             this.player.setVolume(this.player.audio.volume);
@@ -88,6 +97,4 @@ class DragProgressBar {
     }
 }
 
-
 export default DragProgressBar;
-

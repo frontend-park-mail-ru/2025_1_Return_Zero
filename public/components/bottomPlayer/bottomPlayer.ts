@@ -3,7 +3,7 @@ import './fullscreen.precompiled.js';
 import './small.scss';
 import './fullscreen.scss';
 
-import player, { Player } from "components/player/player";
+import player, { Player } from 'components/player/player';
 import tracksQueue, { TracksQueue } from 'components/player/tracksQueue';
 import { MusicUnit } from 'components/player/tracksQueue';
 import { convertDuration } from "utils/durationConverter";
@@ -132,14 +132,14 @@ export class BottomPlayer extends Component {
             await this.setPlayButtonState();
         } catch (error) {
             console.error('Ошибка воспроизведения:', error);
-            this.domManager.playBtn.src = "/static/img/player-play.svg";
+            this.domManager.playBtn.src = '/static/img/player-play.svg';
         }
     }
-    
+
     async setPlayButtonState() {
-        this.domManager.playBtn.src = this.player.audio.paused 
-            ? "/static/img/player-play.svg" 
-            : "/static/img/player-pause.svg";
+        this.domManager.playBtn.src = this.player.audio.paused
+            ? '/static/img/player-play.svg'
+            : '/static/img/player-pause.svg';
     }
 
     switchingTrack(track: MusicUnit) {
@@ -215,16 +215,23 @@ class EventManager {
             this.dragHandler.playDragging.updateProgress();
             this.bottomPlayer.setCurrentDuration();
         };
-        
+
         this.player.audio.addEventListener('timeupdate', timeUpdateHandler);
         this.handlers.push(() => {
-            this.player.audio.removeEventListener('timeupdate', timeUpdateHandler);
+            this.player.audio.removeEventListener(
+                'timeupdate',
+                timeUpdateHandler
+            );
         });
 
-        const volumeChangeHandler = () => this.dragHandler.volumeDragging.updateProgress();
+        const volumeChangeHandler = () =>
+            this.dragHandler.volumeDragging.updateProgress();
         this.player.audio.addEventListener('volumechange', volumeChangeHandler);
         this.handlers.push(() => {
-            this.player.audio.removeEventListener('volumechange', volumeChangeHandler);
+            this.player.audio.removeEventListener(
+                'volumechange',
+                volumeChangeHandler
+            );
         });
     }
 
@@ -257,7 +264,7 @@ class EventManager {
     }
 
     destroy() {
-        this.handlers.forEach(removeHandler => removeHandler());
+        this.handlers.forEach((removeHandler) => removeHandler());
     }
 }
 

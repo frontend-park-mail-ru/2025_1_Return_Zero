@@ -1,4 +1,3 @@
-
 import { Component } from '../libs/Component.ts';
 import { State } from '../libs/State.ts';
 import Router, { Routable, CallbackData } from '../libs/Router.ts';
@@ -16,7 +15,7 @@ export class ArtistsLayout extends Component implements Routable {
         this.element.classList.add('layout', 'layout--artists');
 
         this.page = this.createState(null);
-        
+
         Router.addCallback(routes.artistsRoute, this);
     }
 
@@ -24,7 +23,6 @@ export class ArtistsLayout extends Component implements Routable {
         Router.callCallback(routes.artistsRoute, this);
     }
 
-    
     protected render(state: State<any>, prev: any, cur: any): void {
         switch (state) {
             case this.page:
@@ -33,18 +31,18 @@ export class ArtistsLayout extends Component implements Routable {
                 break;
         }
     }
-    
+
     destroy() {
-        super.destroy()
+        super.destroy();
 
         Router.removeCallback(routes.artistsRoute, this);
     }
 
-    onRoute({route, params}: CallbackData) {
+    onRoute({ route, params }: CallbackData) {
         switch (route) {
             case routes.artistsRoute:
                 if (params[1]) {
-                    const id = parseInt(params[1])
+                    const id = parseInt(params[1]);
                     this.page.setState(new ArtistPage(id));
                     break;
                 }

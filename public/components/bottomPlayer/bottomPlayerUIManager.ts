@@ -69,7 +69,7 @@ export class DragHandler {
             dom.progressCircle,
             'play'
         );
-        
+
         this.volumeDragging = new DragProgressBar(
             player,
             dom.volumeProgress,
@@ -80,27 +80,22 @@ export class DragHandler {
     }
 
     initPlayDrag() {
-        this.initDragHandlers(
-            this.dom.playProgress,
-            this.playDragging
-        );
+        this.initDragHandlers(this.dom.playProgress, this.playDragging);
     }
 
     initVolumeDrag() {
-        this.initDragHandlers(
-            this.dom.volumeProgress,
-            this.volumeDragging
-        );
+        this.initDragHandlers(this.dom.volumeProgress, this.volumeDragging);
     }
 
-    private initDragHandlers(
-        progress: HTMLElement,
-        dragging: DragProgressBar
-    ) {
-        progress.addEventListener('click', e => dragging.handleProgressClick(e));
-        progress.addEventListener('mousedown', e => dragging.startDragging(e));
-        document.addEventListener('mousemove', e => dragging.handleDrag(e));
-        document.addEventListener('mouseup', e => dragging.stopDragging(e));
+    private initDragHandlers(progress: HTMLElement, dragging: DragProgressBar) {
+        progress.addEventListener('click', (e) =>
+            dragging.handleProgressClick(e)
+        );
+        progress.addEventListener('mousedown', (e) =>
+            dragging.startDragging(e)
+        );
+        document.addEventListener('mousemove', (e) => dragging.handleDrag(e));
+        document.addEventListener('mouseup', (e) => dragging.stopDragging(e));
     }
 }
 
@@ -116,14 +111,26 @@ export class ButtonStateHandler {
     }
 
     private initButtonHover(btn: HTMLImageElement, baseName: string) {
-        btn.addEventListener('mouseover', () => btn.src = `/static/img/${baseName}-hover.svg`);
-        btn.addEventListener('mouseout', () => btn.src = `/static/img/${baseName}.svg`);
+        btn.addEventListener(
+            'mouseover',
+            () => (btn.src = `/static/img/${baseName}-hover.svg`)
+        );
+        btn.addEventListener(
+            'mouseout',
+            () => (btn.src = `/static/img/${baseName}.svg`)
+        );
     }
 
     initShuffleHandler() {
-        this.dom.shuffleBtn.addEventListener('mouseover', () => this.handleShuffleHover());
-        this.dom.shuffleBtn.addEventListener('mouseout', () => this.handleShuffleHoverOut());
-        this.dom.shuffleBtn.addEventListener('click', () => this.toggleShuffle());
+        this.dom.shuffleBtn.addEventListener('mouseover', () =>
+            this.handleShuffleHover()
+        );
+        this.dom.shuffleBtn.addEventListener('mouseout', () =>
+            this.handleShuffleHoverOut()
+        );
+        this.dom.shuffleBtn.addEventListener('click', () =>
+            this.toggleShuffle()
+        );
     }
 
     private handleShuffleHover() {
@@ -148,7 +155,7 @@ export class ButtonStateHandler {
         } else {
             this.tracksQueue.shuffle();
         }
-        
+
         this.checkShuffle();
     }
 
@@ -159,8 +166,12 @@ export class ButtonStateHandler {
     }
 
     initRepeatHandler() {
-        this.dom.repeatBtn.addEventListener('mouseover', () => this.handleRepeatHover());
-        this.dom.repeatBtn.addEventListener('mouseout', () => this.handleRepeatHoverOut());
+        this.dom.repeatBtn.addEventListener('mouseover', () =>
+            this.handleRepeatHover()
+        );
+        this.dom.repeatBtn.addEventListener('mouseout', () =>
+            this.handleRepeatHoverOut()
+        );
         this.dom.repeatBtn.addEventListener('click', () => this.toggleRepeat());
     }
 
@@ -186,7 +197,7 @@ export class ButtonStateHandler {
         } else {
             this.tracksQueue.repeat();
         }
-        
+
         this.checkRepeat();
     }
 
@@ -196,5 +207,3 @@ export class ButtonStateHandler {
             : '/static/img/player-repeat.svg';
     }
 }
-
-

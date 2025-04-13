@@ -1,7 +1,8 @@
-.section.section--artists {
+.section.section--albums-card {
     .section {
         &__content {
             display: flex;
+            justify-content: flex-start;
             gap: 1.614rem;
         }
     }
