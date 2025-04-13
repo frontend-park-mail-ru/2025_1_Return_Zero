@@ -25,10 +25,6 @@ export class ArtistPage extends Component {
         this.element.innerHTML = '';
 
         (async () => {
-            const stats = {
-                listeners: 0,
-            };
-
             const artist = (await API.getArtist(this.id)).body;
             const albums = (await API.getArtistAlbums(this.id)).body;
             const tracks = (await API.getArtistTracks(this.id)).body;
@@ -38,8 +34,7 @@ export class ArtistPage extends Component {
                 ArtistPage.template({
                     artist,
                     albums,
-                    tracks,
-                    stats,
+                    tracks
                 })
             );
         })();

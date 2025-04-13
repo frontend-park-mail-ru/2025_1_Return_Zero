@@ -58,6 +58,8 @@ export namespace DataTypes {
         title: string;
         description: string;
         thumbnail_url: string;
+        listeners_count: number;
+        favorites_count: number;
         // added fields
         artist_page: string;
     };
