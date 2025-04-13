@@ -12,10 +12,10 @@ import { Input, InputState, signupContent, loginContent } from './inputTypes';
 import { renderGlobalError } from './authFunctions';
 
 type AuthFormData = {
-    inputs: Input[],
-    submitText: string,
-    header: string
-}
+    inputs: Input[];
+    submitText: string;
+    header: string;
+};
 
 type AuthType = 'login' | 'register';
 
@@ -34,25 +34,27 @@ export class AuthForm extends Component {
 
     protected build() {
         this.element.innerHTML = '';
-        
-        const content = this.getContent(); 
 
-        this.element.insertAdjacentHTML('beforeend', 
+        const content = this.getContent();
+
+        this.element.insertAdjacentHTML(
+            'beforeend',
             AuthForm.template(content)
         );
-        
+
         this.element.addEventListener('mousedown', (e) => {
-            if ((e.target as HTMLElement).id === "auth-form") {
+            if ((e.target as HTMLElement).id === 'auth-form') {
                 Router.pushUrl(Router.getPath(), {});
             }
         });
 
         const inputList: InputState[] = [];
         content.inputs.forEach((input) => {
-            if(!input) return;
+            if (!input) return;
             const element: InputState = new InputState(
                 // @ts-ignore
-                this.element, input, 
+                this.element,
+                input,
                 this.authType === 'login' ? true : false
             );
             inputList.push(element);
@@ -60,32 +62,39 @@ export class AuthForm extends Component {
 
         this.element.addEventListener('submit', (event) => {
             event.preventDefault();
-            
+
             let hasError = false;
             const sendingData: AuthSendingData = {};
             inputList.forEach((inputState) => {
                 if (!inputState.isValid()) {
                     hasError = true;
                 }
-                sendingData[inputState.input.name as keyof AuthSendingData] = inputState.inputHTML.value;
+                sendingData[inputState.input.name as keyof AuthSendingData] =
+                    inputState.inputHTML.value;
             });
-            
+
             if (hasError) {
                 return;
             }
-    
-            if (sendingData.identifier && sendingData.identifier.includes('@')) {
+
+            if (
+                sendingData.identifier &&
+                sendingData.identifier.includes('@')
+            ) {
                 sendingData.email = sendingData.identifier;
                 delete sendingData.identifier;
-            } 
-            if (sendingData.identifier && !sendingData.identifier.includes('@')) {
+            }
+            if (
+                sendingData.identifier &&
+                !sendingData.identifier.includes('@')
+            ) {
                 sendingData.username = sendingData.identifier;
                 delete sendingData.identifier;
             }
-    
+
             renderGlobalError('');
             this.sendData(sendingData);
-        });   
+        });
     }
 
     private getContent(): AuthFormData {
@@ -94,7 +103,7 @@ export class AuthForm extends Component {
                 return loginContent as AuthFormData;
             case 'register' as AuthType:
                 return signupContent as AuthFormData;
-        }    
+        }
     }
 
     private sendData(data: AuthSendingData): void {
@@ -104,7 +113,7 @@ export class AuthForm extends Component {
                     try {
                         const response = await API.postSignup(data);
                         userState.setState(response.body);
-                        Router.pushUrl(Router.getPath(), {})
+                        Router.pushUrl(Router.getPath(), {});
                     } catch (error) {
                         renderGlobalError(error.message);
                     }
@@ -113,7 +122,7 @@ export class AuthForm extends Component {
                     try {
                         const response = await API.postLogin(data);
                         userState.setState(response.body);
-                        Router.pushUrl(Router.getPath(), {})
+                        Router.pushUrl(Router.getPath(), {});
                     } catch (error) {
                         renderGlobalError(error.message);
                     }
@@ -124,4 +133,3 @@ export class AuthForm extends Component {
         })();
     }
 }
-

@@ -3,8 +3,8 @@ import { requirements } from './requirements';
 type Input = {
     type: 'text' | 'email' | 'password';
     text: string;
-    name: string; 
-    errorName: string; 
+    name: string;
+    errorName: string;
     placeholder: string;
 };
 
@@ -27,11 +27,9 @@ class InputState {
         ) as HTMLInputElement;
         this.validationMessage = this.form.querySelector(
             `[name="${this.input.name}-error"]`
-        ) as HTMLParagraphElement; 
+        ) as HTMLParagraphElement;
 
-        this.inputHTML.addEventListener('input',
-            this.inputListener.bind(this)
-        );
+        this.inputHTML.addEventListener('input', this.inputListener.bind(this));
 
         this.valid = false;
         this.error = null;
@@ -45,17 +43,17 @@ class InputState {
     }
 
     mark() {
-        if(!this.validationMessage || this.loginForm) {
+        if (!this.validationMessage || this.loginForm) {
             return;
         }
 
         if (!this.valid) {
             this.validationMessage.textContent = this.error;
-            this.inputHTML.classList.add('border-error'); 
+            this.inputHTML.classList.add('border-error');
             return;
         }
         this.validationMessage.textContent = this.error;
-        this.inputHTML.classList.remove('border-error'); 
+        this.inputHTML.classList.remove('border-error');
     }
 
     isValid() {
@@ -63,37 +61,49 @@ class InputState {
     }
 
     inputListener(event: Event) {
-        const requirement = requirements[this.input.name as keyof typeof requirements];
+        const requirement =
+            requirements[this.input.name as keyof typeof requirements];
         const text: string = this.inputHTML.value;
 
         let errorMessage: string | undefined;
-        if (text.length < requirement.minLength || text.length > requirement.maxLength) {
+        if (
+            text.length < requirement.minLength ||
+            text.length > requirement.maxLength
+        ) {
             errorMessage = requirement.errorMessages.length;
         }
         if (requirement.containsLetter && !requirement.containsLetter(text)) {
             errorMessage = requirement.errorMessages.containsLetter;
         }
-        if (requirement.containsValidChars && !requirement.containsValidChars(text)) {
+        if (
+            requirement.containsValidChars &&
+            !requirement.containsValidChars(text)
+        ) {
             errorMessage = requirement.errorMessages.containsValidChars;
         }
         if (requirement.match) {
             if (this.input.name === 'passwordRepeat') {
                 const password: string | null = (
-                    this.form.querySelector(`[name="password"]`) as HTMLInputElement
+                    this.form.querySelector(
+                        `[name="password"]`
+                    ) as HTMLInputElement
                 ).value;
                 if (password && !requirement.match(text, password)) {
                     errorMessage = requirement.errorMessages.match;
                 }
             }
-            if (this.input.name !== 'passwordRepeat' && !requirement.match(text)) {
+            if (
+                this.input.name !== 'passwordRepeat' &&
+                !requirement.match(text)
+            ) {
                 errorMessage = requirement.errorMessages.match;
             }
         }
-        
+
         if (errorMessage) {
             this.setState(false, errorMessage);
             return;
-        }  
+        }
         this.setState(true, null);
 
         if (!event.isTrusted) {
@@ -175,4 +185,3 @@ const loginContent = {
 };
 
 export { Input, InputState, signupContent, loginContent };
-

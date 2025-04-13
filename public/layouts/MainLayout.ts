@@ -8,7 +8,9 @@ import { routes } from '../utils/routes';
 
 import { Header } from '../components/header/header.ts';
 import { Playlists } from '../components/playlists/playlists.ts';
-import bottomPlayer, { BottomPlayer } from '../components/bottomPlayer/bottomPlayer.ts';
+import bottomPlayer, {
+    BottomPlayer,
+} from '../components/bottomPlayer/bottomPlayer.ts';
 
 import { MainPage } from '../pages/main/main.ts';
 import { TracksPage } from '../pages/tracks/tracks.ts';
@@ -73,10 +75,7 @@ export class MainLayout extends Component implements Routable {
         Router.removeCallback(routes.logoutRoute, this);
     }
 
-    onRoute({
-        route,
-        params,
-    }: CallbackData) {
+    onRoute({ route, params }: CallbackData) {
         switch (route) {
             case routes.authRoute:
                 switch (params[1]) {
@@ -110,9 +109,8 @@ export class MainLayout extends Component implements Routable {
                 }
                 break;
             case routes.logoutRoute:
-                if (params[0] === '') 
-                    break;
-                (async() => {
+                if (params[0] === '') break;
+                (async () => {
                     try {
                         await API.postLogout();
                         userState.setState(null);
@@ -120,7 +118,7 @@ export class MainLayout extends Component implements Routable {
                     } catch (e) {
                         console.error(e);
                     }
-                })()
+                })();
                 break;
         }
     }

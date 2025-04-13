@@ -3,7 +3,7 @@
 
 .artist__info {
     align-self: flex-start;
-    
+
     display: flex;
     gap: 3.125rem;
 
@@ -35,17 +35,17 @@
 
     &__actions {
         margin-top: 1.75rem;
-        
+
         display: flex;
         align-items: center;
         gap: 1.125rem;
-        
+
         &__play {
             width: 2.375rem;
         }
-        
+
         // &__subscribe {
-            
+
         // }
     }
 }

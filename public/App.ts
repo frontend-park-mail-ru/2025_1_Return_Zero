@@ -4,10 +4,9 @@ import { RootComponent } from './libs/Component.ts';
 import { MainLayout } from './layouts/MainLayout.ts';
 
 import { addToQueueListener } from 'components/player/queueExportFunctions';
-import player from "components/player/player";
+import player from 'components/player/player';
 import tracksQueue from 'components/player/tracksQueue';
 import bottomPlayer from 'components/bottomPlayer/bottomPlayer';
-
 
 export default class App extends RootComponent {
     protected init() {
@@ -26,18 +25,25 @@ export default class App extends RootComponent {
 
             if (target instanceof HTMLAnchorElement) {
                 e.preventDefault();
-                if (target.style.cursor == 'not-allowed') {  // just for now
+                if (target.style.cursor == 'not-allowed') {
+                    // just for now
                     return;
                 }
-                console.error(`[App] Navigating to ${target.href}`);
                 Router.pushUrl((target as HTMLAnchorElement).href, {});
             }
 
-            if (target instanceof HTMLElement && target.closest('div').dataset.type === "track") {
+            if (
+                target instanceof HTMLElement &&
+                target.closest('div').id === 'track'
+            ) {
                 const track = target.closest('div');
-                const currentTrack: string | null = tracksQueue.getCurrentTrackId();
-                
-                if (currentTrack && track.getAttribute('data-track-id') === currentTrack) {
+                const currentTrack: string | null =
+                    tracksQueue.getCurrentTrack();
+
+                if (
+                    currentTrack &&
+                    track.getAttribute('data-id') === currentTrack
+                ) {
                     player.togglePlay();
                 } else {
                     addToQueueListener(track);
@@ -49,13 +55,20 @@ export default class App extends RootComponent {
             const tracks = Array.from(this.element.querySelectorAll('[data-type="track"]'));
             const currentTrack: string | null = tracksQueue.getCurrentTrackId();
             for (const track of tracks) {
-                const trackImg: HTMLImageElement = track.querySelector('.track__img') ?? track.querySelector('.music-card__img');;
-                const trackPlay: HTMLImageElement = track.querySelector('.track__play') ?? track.querySelector('.music-card__play'); 
+                const trackImg: HTMLImageElement =
+                    track.querySelector('.track__img') ??
+                    track.querySelector('.music-card__img');
+                const trackPlay: HTMLImageElement =
+                    track.querySelector('.track__play') ??
+                    track.querySelector('.music-card__play');
 
-                if (currentTrack && track.getAttribute('data-track-id') === currentTrack) {
+                if (
+                    currentTrack &&
+                    track.getAttribute('data-id') === currentTrack
+                ) {
                     trackImg.classList.add('track-active');
                     trackPlay.classList.add('track-icon-active');
-                    
+
                     if (player.audio.paused) {
                         trackPlay.src = '/static/img/player-play.svg';
                     } else {

@@ -19,8 +19,6 @@ export class Component {
             this.constructor as typeof Component
         ).BASE_ELEMENT_FUNCTION() as RzfElementType;
         this._element.rzf_component = this;
-        console.log(`Created component ${this.constructor.name}`);
-
         this.states = new Map();
 
         this.init(...args);
@@ -33,8 +31,6 @@ export class Component {
     }
 
     protected createState<T>(value: T) {
-        console.log(`Created state for ${this.constructor.name}`);
-
         const state = new State(value);
         this.createCallback(state, (state: State<T>, prev: T, cur: T) =>
             this.render(state, prev, cur)
@@ -55,8 +51,6 @@ export class Component {
     }
 
     destroy() {
-        console.log(`Destroying component ${this.constructor.name}`);
-
         this._element.remove();
 
         for (const [state, callbacks] of this.states.entries()) {

@@ -12,12 +12,12 @@
         flex-direction: column;
         align-items: center;
         gap: 0.6rem;
-    
+
         *:not(a) {
             pointer-events: none;
         }
     }
-    
+
     &__wrapper {
         position: relative;
         width: 8.75rem;
@@ -65,7 +65,9 @@
     &__artist {
         font-weight: v.$font-weight-light;
         text-align: center;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 }
-
-

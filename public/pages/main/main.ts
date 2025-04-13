@@ -1,7 +1,7 @@
-import './main.precompiled.js'
+import './main.precompiled.js';
 
-import '../../components/musics'
-import '../../components/tracks'
+import '../../components/musics';
+import '../../components/tracks';
 
 import '../pages.scss';
 
@@ -31,7 +31,7 @@ export class MainPage extends Component {
                 const content = {
                     loved: tracks,
                     recent: tracks,
-                    recommendations: tracks
+                    recommendations: tracks,
                 };
 
                 this.element.insertAdjacentHTML(

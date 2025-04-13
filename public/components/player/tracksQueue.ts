@@ -1,5 +1,5 @@
-import player, { Player } from "components/player/player";
-import { API } from "utils/api";
+import player, { Player } from 'components/player/player';
+import { API } from 'utils/api';
 
 export type MusicUnit = {
     name: string;
@@ -8,7 +8,7 @@ export type MusicUnit = {
     image: string;
     src: string;
     id: number;
-}
+};
 
 export class TracksQueue {
     static instance: TracksQueue;
@@ -79,15 +79,15 @@ export class TracksQueue {
         }
 
         if (this.idx === -1) {
-            if (start)  {
+            if (start) {
                 this.idx = start - 1;
             }
 
             if (this.repeated) {
                 this.nextTrack('start');
                 return;
-            }  
-            
+            }
+
             this.nextTrack();
         }
     }
@@ -112,7 +112,8 @@ export class TracksQueue {
     }
 
     private async setTrack() {
-        const response = (await API.getTrack(Number(this.queue[this.idx]))).body;
+        const response = (await API.getTrack(Number(this.queue[this.idx])))
+            .body;
 
         console.log(`Playing: ${response.title}`);
         player.setTrack(response.file_url);
@@ -124,7 +125,7 @@ export class TracksQueue {
             duration: response.duration,
             image: response.thumbnail_url,
             src: response.file_url,
-            id: response.id
+            id: response.id,
         };
         this.currentTrack = track;
 
@@ -146,7 +147,6 @@ export class TracksQueue {
         this.idx = Math.max(this.idx - 1, 0);
         this.setTrack();
     }
-
 
     repeat() {
         this.repeated = true;

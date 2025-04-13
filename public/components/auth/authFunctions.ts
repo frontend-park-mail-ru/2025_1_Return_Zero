@@ -10,5 +10,4 @@ function renderGlobalError(text: string): void {
     errorMessage.className = 'error-message';
 }
 
-export { renderGlobalError }
-
+export { renderGlobalError };

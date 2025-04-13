@@ -1,6 +1,6 @@
-import './artists.precompiled.js'
+import './artists.precompiled.js';
 
-import '../../components/artists'
+import '../../components/artists';
 
 import '../pages.scss';
 
@@ -26,10 +26,10 @@ export class ArtistsPage extends Component {
         (async () => {
             try {
                 const artists = (await API.getArtists()).body;
-                
+
                 const content = {
                     loved: artists,
-                    recommendations: artists
+                    recommendations: artists,
                 };
 
                 this.element.insertAdjacentHTML(

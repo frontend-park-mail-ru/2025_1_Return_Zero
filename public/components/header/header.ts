@@ -38,7 +38,6 @@ export class Header extends Component implements Routable {
 
     active: State<HTMLElement>;
 
-
     protected init() {
         this.element.classList.add('header');
 
@@ -77,21 +76,21 @@ export class Header extends Component implements Routable {
         Router.removeCallback(routes.pageRoute, this);
     }
 
-    onRoute({
-        route,
-        params,
-    }: CallbackData) {
+    onRoute({ route, params }: CallbackData) {
         switch (route) {
             case routes.pageRoute:
                 this.active.setState(
-                    this.element.querySelector?.(`.header__nav li>a[href="${params[0]}"]`)
-                        ?.parentElement
+                    this.element.querySelector?.(
+                        `.header__nav li>a[href="${params[0]}"]`
+                    )?.parentElement
                 );
                 break;
             case routes.authRoute:
-                this.element.querySelectorAll('.header__auth>a').forEach((a) => {
-                    a.classList.remove('active');
-                });
+                this.element
+                    .querySelectorAll('.header__auth>a')
+                    .forEach((a) => {
+                        a.classList.remove('active');
+                    });
                 this.element
                     .querySelector(`.header__auth>a[href="#${params[1]}"]`)
                     ?.classList.add('active');

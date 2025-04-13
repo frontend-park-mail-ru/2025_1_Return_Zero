@@ -25,6 +25,10 @@
     &__name {
         font-size: v.$font-size-h4;
         font-weight: v.$font-weight-bold;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 
     &__like {

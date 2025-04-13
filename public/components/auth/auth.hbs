@@ -1,6 +1,8 @@
 <div id='auth' class='auth-main'>
     <p>{{this.header}}</p>
     <div class='auth-main__line'></div>
+    <p>{{this.header}}</p>
+    <div class='auth-main__line'></div>
 
     {{#each inputs}}
         <div class='auth-main__input-container'>
@@ -20,6 +22,9 @@
         </div>
     {{/each}}
 
+    <p class='error-message' name='global-error'></p>
+    <input type='submit' value='{{submitText}}' class='auth-form__submit-btn' />
+</div>
     <p class='error-message' name='global-error'></p>
     <input type='submit' value='{{submitText}}' class='auth-form__submit-btn' />
 </div>
