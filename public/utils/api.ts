@@ -27,6 +27,18 @@ export class API {
         return (await API.processResponse(resp));
     }
 
+    static async put(endpoint: string, data: any) {
+        const resp = await fetch(this.baseUrl + endpoint, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        return (await API.processResponse(resp));
+    }
+
     static async processResponse(resp: Response): Promise<ApiResponse<any>> {
         if (!resp.ok)
             throw new Error(resp.statusText);
@@ -100,6 +112,13 @@ export class API {
         return (await API.get(`/user/${username}`));
     }
 
+    static async createStream(id: number) { 
+        return await API.post(`/tracks/${id}/stream`, {});
+    }
+
+    static async updateStream(id: number, duration: number) {
+        return await API.put(`/streams/${id}`, {duration});
+    }
 
     static extendTrack(track: any): DataTypes.Track {
         return {

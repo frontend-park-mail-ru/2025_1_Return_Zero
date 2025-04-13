@@ -10,6 +10,8 @@ import { convertDuration } from "utils/durationConverter";
 import { ButtonStateHandler, DomManager, DragHandler } from './bottomPlayerUIManager';
 import { State } from '../../libs/State.ts';
 
+import { API } from 'utils/api';
+
 import { Component } from '../../libs/Component.ts';
 
 export class BottomPlayer extends Component {
@@ -19,6 +21,7 @@ export class BottomPlayer extends Component {
 
     player: Player;
     tracksQueue: TracksQueue;
+    stream: Stream;
     
     protected static BASE_ELEMENT = 'div';
     // @ts-ignore
@@ -42,6 +45,7 @@ export class BottomPlayer extends Component {
 
         this.size = this.createState('small');
         this.createCallback(this.size, () => this.build());
+        this.stream = new Stream();
     }
 
     protected build() {
@@ -115,6 +119,7 @@ export class BottomPlayer extends Component {
     setCurrentDuration() {
         const duration = this.player.audio.currentTime || 0;
         this.domManager.currentSpan.innerHTML = convertDuration(duration);
+        this.stream.duration += 1;
     }
 
     async togglePlay() {
@@ -140,6 +145,8 @@ export class BottomPlayer extends Component {
     switchingTrack(track: MusicUnit) {
         this.updateMusicDom(track);
         this.togglePlay();
+        this.stream.updateStream();
+        this.stream.createStream();
     }
 
     updateMusicDom(track: MusicUnit) {
@@ -159,6 +166,32 @@ export class BottomPlayer extends Component {
     }
 }
 
+class Stream {
+    id: number;
+    duration: number;
+
+    constructor() {
+        this.duration = 0;
+    }
+
+    async createStream() {
+        const trackIdNumber = Number(tracksQueue.getCurrentTrackId());
+        const response = await API.createStream(trackIdNumber);
+        console.warn(response);
+        this.id = response.body.id;
+        this.duration = 0;
+    }
+
+    async updateStream() {
+        if (!this.id) {
+            return;
+        }
+
+        const response = await API.updateStream(this.id, this.duration);
+        console.warn(response);
+        console.warn(this.id, this.duration);
+    }
+}
 
 class EventManager {
     private handlers: Array<() => void> = [];
