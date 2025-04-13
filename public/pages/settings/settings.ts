@@ -14,7 +14,10 @@ import { API } from 'utils/api';
 import { DataTypes, ParamTypes } from '../../utils/api_types';
 import { userState } from '../../utils/states';
 
+import { InputState, Input } from '../../components/auth/inputTypes.js';
+
 export class SettingsPage extends Component {
+    protected static BASE_ELEMENT = 'form';
     // @ts-ignore
     static template = Handlebars.templates['settings.hbs'];
 

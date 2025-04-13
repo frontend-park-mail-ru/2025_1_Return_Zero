@@ -40,6 +40,10 @@ class Requirements {
     email: Requirement;
     identifier: Requirement;
 
+    newUsername: Requirement;
+    newPassword: Requirement;
+    newEmail: Requirement;
+
     constructor() {
         this.password = {
             minLength: 4,
@@ -96,6 +100,44 @@ class Requirements {
             containsValidChars: globalValidEmailCharsChecker,
             errorMessages: {},
         };
+
+        this.newUsername = {
+            minLength: 3,
+            maxLength: 20,
+            containsLetter: globalLetterChecker,
+            containsValidChars: globalValidLoginCharsChecker,
+            errorMessages: {
+                length: 'Логин должен быть от 3 до 20 символов',
+                containsLetter: 'Логин должен содержать хотя бы одну букву',
+                containsValidChars:
+                    'Логин может содержать только латинские буквы, цифры и подчеркивания',
+            },
+        };
+
+        this.newPassword = {
+            minLength: 4,
+            maxLength: 25,
+            containsLetter: globalLetterChecker,
+            containsValidChars: globalValidLoginCharsChecker,
+            errorMessages: {
+                length: 'Пароль должен быть от 4 до 25 символов',
+                containsLetter: 'Пароль должен содержать хотя бы одну букву',
+                containsValidChars:
+                    'Пароль может содержать только латинские буквы, цифры и подчеркивания',
+            },
+        };
+
+        this.newEmail = {
+            minLength: 5,
+            maxLength: 30,
+            containsValidChars: globalValidEmailCharsChecker,
+            match: (text: string): boolean => emailRegexp.test(text),
+            errorMessages: {
+                length: 'Email должен быть от 5 до 30 символов',
+                containsValidChars: 'Введите корректный email',
+                match: 'Введите корректный email',
+            },
+        }
     }
 }
 

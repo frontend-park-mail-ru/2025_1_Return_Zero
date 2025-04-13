@@ -23,6 +23,17 @@
         }
     }
 
+    &__error {
+        width: 100%;
+        height: calc(1em * v.$font-line-height);
+        line-height: v.$font-line-height;
+
+        font-size: v.$font-size-small;
+        color: d.$color-highlight;
+
+        text-align: center;
+    }
+
     &__radio {
         display: flex;
         flex-direction: column;
@@ -93,6 +104,8 @@
     &__input {
         opacity: 0;
         position: absolute;
+        
+        pointer-events: none;
     }
 }
 

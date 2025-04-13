@@ -57,7 +57,7 @@ export default class App extends RootComponent {
 
                 if (
                     currentTrack &&
-                    track.getAttribute('data-id') === currentTrack
+                    track.getAttribute('data-track-id') === currentTrack
                 ) {
                     trackImg.classList.add('track-active');
                     trackPlay.classList.add('track-icon-active');

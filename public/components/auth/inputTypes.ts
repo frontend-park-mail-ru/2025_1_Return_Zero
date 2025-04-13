@@ -18,7 +18,7 @@ class InputState {
     loginForm: boolean;
     error: string | null;
 
-    constructor(form: HTMLFormElement, input: Input, loginForm: boolean) {
+    constructor(form: HTMLFormElement, input: Input, loginForm: boolean, formType?: string) {
         this.form = form;
         this.input = input;
         this.loginForm = loginForm;
@@ -125,6 +125,35 @@ class InputState {
                 passwordInput.dispatchEvent(new Event('input'));
             }
         }
+    }
+
+    inputSettingsListener(event: Event) {
+        const requirement =
+        requirements[this.input.name as keyof typeof requirements];
+        const text: string = this.inputHTML.value;
+
+        let errorMessage: string | undefined;
+        if (
+            text.length < requirement.minLength ||
+            text.length > requirement.maxLength
+        ) {
+            errorMessage = requirement.errorMessages.length;
+        }
+        if (requirement.containsLetter && !requirement.containsLetter(text)) {
+            errorMessage = requirement.errorMessages.containsLetter;
+        }
+        if (
+            requirement.containsValidChars &&
+            !requirement.containsValidChars(text)
+        ) {
+            errorMessage = requirement.errorMessages.containsValidChars;
+        }
+
+        if (errorMessage) {
+            this.setState(false, errorMessage);
+            return;
+        }
+        this.setState(true, null);
     }
 }
 
