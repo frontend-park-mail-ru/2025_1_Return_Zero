@@ -14,16 +14,17 @@ export class Player {
         Player.instance = this;
 
         this.audio = document.createElement('audio');
-        this.audio.autoplay = true;
         this.initStates();
         this.setVolume(this.audioLevel);
+        this.setCurrentTime(this.currentTime);
     }
     
     private initStates() {
         try {
             this.audioLevel = Number(localStorage.getItem('audio-level'));
+            this.audio.currentTime = Number(localStorage.getItem('audio-current-time'));
         } catch (error) {
-            console.error('Failed to get audio level:', error);
+            console.error('Failed to get states for audio:', error);
             this.audioLevel = 0.5;
             try {
                 localStorage.setItem('audio-level', String(this.audioLevel));
@@ -32,7 +33,6 @@ export class Player {
             }
         }
 
-        this.currentTime = 0;
         this.duration = 0;
     }
 
@@ -76,6 +76,10 @@ export class Player {
         this.audioLevel = volume;
         this.audio.volume = volume;
 
+        this.SaveVolume();
+    }
+
+    async SaveVolume() {
         try {
             localStorage.setItem('audio-level', String(this.audioLevel));
         } catch (error) {
@@ -85,6 +89,19 @@ export class Player {
 
     setCurrentTime(time: number) {
         this.currentTime = time;
+        this.SaveCurrentTime();
+    }
+
+    getCurrentTime() {
+        return this.currentTime;
+    }
+
+    async SaveCurrentTime() {
+        try {
+            localStorage.setItem('audio-current-time', String(this.currentTime));
+        } catch (error) {
+            console.error('Failed to save audio current time:', error);
+        }
     }
 
     setDuration(duration: number) {

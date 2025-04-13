@@ -3,6 +3,7 @@ import { Player } from "components/player/player";
 import DragProgressBar from "components/player/draggProgress";
 import { convertDuration } from "utils/durationConverter";
 import tracksQueue, { TracksQueue } from "components/player/tracksQueue";
+import bottomPlayer from "./bottomPlayer";
 
 
 export class DomManager {
@@ -22,6 +23,7 @@ export class DomManager {
     volumeCircle: HTMLElement;
     currentSpan: HTMLElement;
     endSpan: HTMLElement;
+    resizeBtn: HTMLElement;
 
     constructor(private root: HTMLElement) {
         this.initElements();
@@ -44,6 +46,7 @@ export class DomManager {
         this.volumeCircle = this.volumeProgress.querySelector('.circle')!;
         this.currentSpan = this.getElement('#current-span');
         this.endSpan = this.getElement('#end-span');
+        this.resizeBtn = this.getElement('#resize');
     }
 
     private getElement<T extends HTMLElement>(selector: string): T {
@@ -136,6 +139,10 @@ export class ButtonStateHandler {
     }
 
     private toggleShuffle() {
+        if (tracksQueue.getCurrentTrackId() == null) {
+            return;
+        }
+
         if (this.tracksQueue.shuffled) {
             this.tracksQueue.unshuffle();
         } else {
@@ -170,6 +177,10 @@ export class ButtonStateHandler {
     }
 
     private toggleRepeat() {
+        if (tracksQueue.getCurrentTrackId() == null) {
+            return;
+        }
+
         if (this.tracksQueue.repeated) {
             this.tracksQueue.unrepeat();
         } else {
