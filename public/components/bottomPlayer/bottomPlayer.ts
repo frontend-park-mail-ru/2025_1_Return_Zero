@@ -159,6 +159,7 @@ export class BottomPlayer extends Component {
         this.domManager.songName.innerText = track.name;
         this.domManager.songArtist.innerText = track.artist;
         this.setDuration(track.duration);
+        this.setPlayButtonState();
         this.player.getCurrentTime();
         this.setCurrentDuration();
         this.buttonStateHandler.checkShuffle();
