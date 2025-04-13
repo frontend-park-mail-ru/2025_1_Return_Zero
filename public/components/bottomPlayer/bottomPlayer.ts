@@ -183,7 +183,7 @@ class Stream {
         }
 
         const response = await API.updateStream(this.id, this.duration);
-        console.log(response);
+        console.warn(this.id, this.duration);
     }
 }
 

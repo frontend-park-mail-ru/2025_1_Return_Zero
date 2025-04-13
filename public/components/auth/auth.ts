@@ -53,7 +53,6 @@ export class AuthForm extends Component {
         }
 
         changeAuth.addEventListener('click', () => {
-            console.warn(`${Router.getPath()}/#${redirectingForm}`);
             Router.pushUrl(`${Router.getPath()}#${redirectingForm}`, {});
         });
 
