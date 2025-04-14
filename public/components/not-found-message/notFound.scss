@@ -1,0 +1,14 @@
+@use '../../dark.scss' as d;
+@use '../../variables.scss' as v;
+
+.not-found {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: d.$color-background-root;
+
+    div {
+        color: d.$color-text;
+        font-size: v.$font-size-h1;
+    }
+}

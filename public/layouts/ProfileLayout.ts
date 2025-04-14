@@ -7,6 +7,8 @@ import { ProfilePage } from '../pages/profile/profile.ts';
 import { SettingsPage } from '../pages/settings/settings.ts';
 
 import './layout.scss';
+import { API } from 'utils/api';
+import { NotFound } from 'components/not-found-message/notFound';
 
 export class ProfileLayout extends Component implements Routable {
     page: State<Component>;
@@ -41,6 +43,17 @@ export class ProfileLayout extends Component implements Routable {
     onRoute({ route, params }: CallbackData) {
         switch (route) {
             case routes.profileRoute:
+                (async () => {
+                    try {
+                        (await API.getUser(params[1])).body;
+                    } catch(error) {
+                        const notFound = new NotFound();
+                        this.element.innerHTML = '';
+                        this.element.appendChild(notFound.element);
+                        throw new Error('404 User not Found');
+                    }
+                })();
+                
                 switch (params[1]) {
                     case 'settings':
                         this.page.setState(new SettingsPage());
