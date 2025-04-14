@@ -78,7 +78,7 @@ export class API {
     }
 
     static async getHistoryTracks(username: string, limit?: number, offset?: number): Promise<TemplateAPI.TracksResponse> {
-        let url = `/users/${username}/history`;
+        let url = `/user/${username}/history`;
 
         const params = new URLSearchParams();
         limit && params.append('limit', limit.toString());
