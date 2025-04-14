@@ -27,7 +27,12 @@ export class MainPage extends Component {
                 const tracks = (await API.getTracks()).body;
 
                 const loved = tracks;
-                const recent = userState.getState()?.username && (await API.getHistoryTracks(userState.getState().username)).body;
+                let recent;
+                try {
+                    recent = userState.getState()?.username && (await API.getHistoryTracks(userState.getState().username)).body;
+                } catch (e) {
+                    console.log(e.message);
+                }
                 const recommendations = tracks;
 
                 this.element.insertAdjacentHTML(
