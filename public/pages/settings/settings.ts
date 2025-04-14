@@ -156,42 +156,44 @@ export class SettingsPage extends Component {
                         'input[name="new-password"]'
                     ) as HTMLInputElement
                 ).value || undefined,
-            is_public_playlists:
-                (
-                    this.element.querySelector(
-                        'input[name="public-playlists"]:checked'
-                    ) as HTMLInputElement
-                ).value === 'true',
-            is_public_favorite_tracks:
-                (
-                    this.element.querySelector(
-                        'input[name="public-tracks"]:checked'
-                    ) as HTMLInputElement
-                ).value === 'true',
-            is_public_favorite_artists:
-                (
-                    this.element.querySelector(
-                        'input[name="public-artists"]:checked'
-                    ) as HTMLInputElement
-                ).value === 'true',
-            is_public_minutes_listened:
-                (
-                    this.element.querySelector(
-                        'input[name="public-minutes-listened"]:checked'
-                    ) as HTMLInputElement
-                ).value === 'true',
-            is_public_tracks_listened:
-                (
-                    this.element.querySelector(
-                        'input[name="public-tracks-listened"]:checked'
-                    ) as HTMLInputElement
-                ).value === 'true',
-            is_public_artists_listened:
-                (
-                    this.element.querySelector(
-                        'input[name="public-artists-listened"]:checked'
-                    ) as HTMLInputElement
-                ).value === 'true',
+            privacy: {
+                is_public_playlists:
+                    (
+                        this.element.querySelector(
+                            'input[name="public-playlists"]:checked'
+                        ) as HTMLInputElement
+                    ).value === 'true',
+                is_public_favorite_tracks:
+                    (
+                        this.element.querySelector(
+                            'input[name="public-tracks"]:checked'
+                        ) as HTMLInputElement
+                    ).value === 'true',
+                is_public_favorite_artists:
+                    (
+                        this.element.querySelector(
+                            'input[name="public-artists"]:checked'
+                        ) as HTMLInputElement
+                    ).value === 'true',
+                is_public_minutes_listened:
+                    (
+                        this.element.querySelector(
+                            'input[name="public-minutes-listened"]:checked'
+                        ) as HTMLInputElement
+                    ).value === 'true',
+                is_public_tracks_listened:
+                    (
+                        this.element.querySelector(
+                            'input[name="public-tracks-listened"]:checked'
+                        ) as HTMLInputElement
+                    ).value === 'true',
+                is_public_artists_listened:
+                    (
+                        this.element.querySelector(
+                            'input[name="public-artists-listened"]:checked'
+                        ) as HTMLInputElement
+                    ).value === 'true',
+            }
         };
 
         (async () => {

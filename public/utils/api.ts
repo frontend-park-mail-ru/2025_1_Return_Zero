@@ -78,15 +78,20 @@ export class API {
     }
 
     static async getHistoryTracks(username: string, limit?: number, offset?: number): Promise<TemplateAPI.TracksResponse> {
-        let url = `/user/${username}/history`;
-        if (limit) { 
-            url += `?limit=${limit}`
-            if (offset) 
-                url += `&offset=${offset}`;
-        } else if (offset) 
-            url += `?offset=${offset}`;
+        let url = `/users/${username}/history`;
 
-        return (await API.get(url)).body;
+        const params = new URLSearchParams();
+        limit && params.append('limit', limit.toString());
+        offset && params.append('offset', offset.toString());
+        if (params)
+            console.error('params', params.toString());
+        params && (url += `?${params.toString()}`);
+
+        const tracks_resp = (await API.get(url));
+        tracks_resp.body = tracks_resp.body.map((track: any) =>
+            this.extendTrack(track)
+        );
+        return tracks_resp;
     }
 
     static async getAlbums(): Promise<TemplateAPI.AlbumsResponse> {

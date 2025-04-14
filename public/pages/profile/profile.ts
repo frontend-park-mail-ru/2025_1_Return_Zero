@@ -2,7 +2,7 @@ import './profile.scss';
 import '../pages.scss';
 import './profile.precompiled.js';
 
-import '../../components/musics';
+import 'components/playlists_section/playlists_section';
 import '../../components/tracks';
 import '../../components/artists';
 
@@ -28,7 +28,6 @@ export class ProfilePage extends Component {
             this.username = userState.getState()?.username;
             this.build();
         });
-
     }
 
     protected build() {

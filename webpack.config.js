@@ -113,6 +113,7 @@ module.exports = {
       libs: path.join(publicPath, 'libs'),
       pages: path.join(publicPath, 'pages'),
       utils: path.join(publicPath, 'utils'),
+      root: publicPath,
     },
   },
 };

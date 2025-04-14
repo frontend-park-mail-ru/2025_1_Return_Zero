@@ -28,15 +28,17 @@ export class TracksPage extends Component {
             try {
                 const tracks = (await API.getTracks()).body;
 
-                const content = {
-                    loved: tracks,
-                    recent: tracks,
-                    recommendations: tracks,
-                };
+                const loved = tracks;
+                const recent = userState.getState()?.username && (await API.getHistoryTracks(userState.getState().username)).body;
+                const recommendations = tracks;
 
                 this.element.insertAdjacentHTML(
                     'beforeend',
-                    TracksPage.template(content)
+                    TracksPage.template({
+                        loved,
+                        recent,
+                        recommendations
+                    })
                 );
             } catch (e) {
                 console.log(e);

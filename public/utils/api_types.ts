@@ -4,12 +4,14 @@ export namespace ParamTypes {
         new_email?: string;
         new_username?: string;
         new_password?: string;
-        is_public_playlists: boolean;
-        is_public_favorite_tracks: boolean;
-        is_public_favorite_artists: boolean;
-        is_public_minutes_listened: boolean;
-        is_public_tracks_listened: boolean;
-        is_public_artists_listened: boolean;
+        privacy?: {
+            is_public_playlists: boolean;
+            is_public_favorite_tracks: boolean;
+            is_public_favorite_artists: boolean;
+            is_public_minutes_listened: boolean;
+            is_public_tracks_listened: boolean;
+            is_public_artists_listened: boolean;
+        }
     };
 
     export type UserDelete = {
