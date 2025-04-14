@@ -93,6 +93,10 @@ module.exports = {
           from: path.join(publicPath, 'img'),
           to: path.join(buildPath, 'img'),
         },
+        {
+          from: path.join(publicPath, 'sw.js'),
+          to: path.join(buildPath, 'sw.js'),
+        }
       ],
     }),
   ],

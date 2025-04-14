@@ -83,8 +83,6 @@ export class API {
         const params = new URLSearchParams();
         limit && params.append('limit', limit.toString());
         offset && params.append('offset', offset.toString());
-        if (params)
-            console.error('params', params.toString());
         params && (url += `?${params.toString()}`);
 
         const tracks_resp = (await API.get(url));
