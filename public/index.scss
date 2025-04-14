@@ -50,6 +50,7 @@ input {
 }
 
 h1 {
+    user-select: none;
     font-size: v.$font-size-h1;
     font-family: v.$font-family-header;
     font-weight: 100;
