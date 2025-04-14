@@ -44,6 +44,8 @@ export class ProfileLayout extends Component implements Routable {
         switch (route) {
             case routes.profileRoute:
                 (async () => {
+                    if (!params[1] || params[1] == 'settings') return;
+
                     try {
                         (await API.getUser(params[1])).body;
                     } catch(error) {
