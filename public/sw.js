@@ -8,8 +8,8 @@ const mediaCacheExpiry = 60 * 60 * 2; // 2 hours in seconds
 const workerHeader = "Worker-Cached-At";
 
 const cacheFirstRoutes = [
-    '^/',
-    '^/static/bundle.js',
+    '^/$',
+    '^/static/bundle.js$',
     '\.css$',
 ];
 
@@ -37,26 +37,7 @@ self.addEventListener('activate', async function(event) {
 
 self.addEventListener('install', async (event) => {
     console.log('Installing Service Worker', version);
-    
-    // Pre-cache important routes
-    // event.waitUntil(
-    //     caches.open(staticCache).then(cache => {
-    //         console.log('Pre-caching important routes');
-    //         return Promise.all(
-    //             cacheFirstRoutes.map(route => {
-    //                 return fetch(route)
-    //                     .then(response => {
-    //                         if (response.ok) {
-    //                             return cache.put(route, cloneResponse(response));
-    //                         }
-    //                     })
-    //                     .catch(err => console.error(`Failed to pre-cache ${route}:`, err));
-    //             })
-    //         );
-    //     }).then(() => {
-    //         return self.skipWaiting();
-    //     })
-    // );
+    self.skipWaiting();
 });
 
 self.addEventListener('fetch', (event) => {
@@ -79,33 +60,6 @@ self.addEventListener('fetch', (event) => {
     }
 });
 
-
-async function handleRequestFirst(request) {
-    try {
-        const networkResponse = await fetch(request);
-        
-        if (networkResponse.ok) {
-            const cache = await caches.open(staticCache);
-            await cache.put(request, cloneResponse(networkResponse));
-            console.log('Updated cache after successful network request:', request.url);
-        }
-        
-        return networkResponse;
-    } catch (error) {
-        console.warn('Network request failed, falling back to cache:', request.url);
-        
-        const cache = await caches.open(staticCache);
-        const cachedResponse = await cache.match(request);
-        
-        if (cachedResponse) {
-            console.log('Serving from cache as fallback:', request.url);
-            return cachedResponse;
-        }
-        
-        console.error('No cached version available for:', request.url);
-        throw error;
-    }
-}
 
 function checkCachedResponse(response, expiry) {
     const headers = new Headers(response.headers);
@@ -132,6 +86,31 @@ function cloneResponse(response) {
 }
 
 
+async function handleRequestFirst(request) {
+    try {
+        const networkResponse = await fetch(request);
+        
+        if (networkResponse.ok) {
+            const cache = await caches.open(staticCache);
+            await cache.put(request, cloneResponse(networkResponse));
+            console.log('Updated cache after successful network request:', request.url);
+        }
+        
+        return networkResponse;
+    } catch (error) {
+        console.warn('Network request failed, falling back to cache:', request.url);
+        
+        const cache = await caches.open(staticCache);
+        const cachedResponse = await cache.match(request);
+        
+        if (cachedResponse) {
+            return cachedResponse;
+        }
+        throw error;
+    }
+}
+
+
 async function handleStaticFetch(request) {
     try {
         const cache = await caches.open(staticCache);
@@ -142,21 +121,17 @@ async function handleStaticFetch(request) {
             return cachedResponse;
         }
         
-        // If no cache or expired, fetch from network
         const networkResponse = await fetch(request);
         if (networkResponse.ok) {
             await cache.put(request, cloneResponse(networkResponse));
-            console.log('Cached static content:', request.url);
         }
         
         return networkResponse;
     } catch (error) {
         console.error('Failed to handle static fetch:', error);
         
-        // Try to get any cached version regardless of expiry
         const cachedResponse = await caches.match(request);
         if (cachedResponse) {
-            console.warn('Serving probably expired static content as fallback:', request.url);
             return cachedResponse;
         }
         
@@ -177,16 +152,14 @@ async function handleMediaFetch(request) {
         const networkResponse = await fetch(request);
         if (networkResponse.ok) {
             await cache.put(request, cloneResponse(networkResponse));
-            console.log('Cached media content:', request.url);
         }
         
         return networkResponse;
     } catch (error) {
-        console.error('Failed to handle media fetch:', error);
+        console.warn('Failed to handle media fetch:', error);
         
         const cachedResponse = await caches.match(request);
         if (cachedResponse) {
-            console.warn('Serving probably expired media content as fallback:', request.url);
             return cachedResponse;
         }
         
@@ -212,11 +185,9 @@ async function handleApiFetch(request) {
         const cachedResponse = await cache.match(request);
         
         if (cachedResponse) {
-            console.log('Serving API response from cache:', request.url);
             return cachedResponse;
         }
-        
-        console.error('No cached API response available for:', request.url);
+
         throw error;
     }
 }
