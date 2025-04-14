@@ -135,7 +135,7 @@ export class AuthForm extends Component {
                         userState.setState(response.body);
                         Router.pushUrl(Router.getPath(), {});
                     } catch (error) {
-                        renderGlobalError(error.message);
+                        renderGlobalError('Пользователь с таким username/email уже существует');
                     }
                 }
                 if (this.authType === 'login') {
@@ -144,7 +144,7 @@ export class AuthForm extends Component {
                         userState.setState(response.body);
                         Router.pushUrl(Router.getPath(), {});
                     } catch (error) {
-                        renderGlobalError(error.message);
+                        renderGlobalError('Неверное имя/email или пароль');
                     }
                 }
             } catch (error) {

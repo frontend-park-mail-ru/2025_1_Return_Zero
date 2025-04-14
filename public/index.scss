@@ -92,6 +92,7 @@ h4 {
     }
 
     &__all {
+        cursor: not-allowed;
         grid-area: all;
         justify-self: end;
     }

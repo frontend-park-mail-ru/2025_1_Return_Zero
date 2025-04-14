@@ -12,6 +12,7 @@
     font-weight: v.$font-weight-light;
 
     div {
+        cursor: not-allowed;
         display: flex;
         flex-direction: column;
         text-align: center;
@@ -21,7 +22,7 @@
     }
 
     button {
-        cursor: pointer;
+        cursor: not-allowed;
         aspect-ratio: 1/1;
         border-radius: 15%;
         background-color: d.$color-collection;

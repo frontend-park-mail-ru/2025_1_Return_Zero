@@ -9,6 +9,7 @@
     align-items: center;
 
     &__logo-container {
+        cursor: pointer;
         padding-left: 2.25rem;
         padding-right: 2.25rem;
         display: flex;
@@ -102,10 +103,15 @@
             transform: translateX(50%);
             padding: 1.2rem;
             margin-top: 1.75rem; // same
+            border: 1px solid d.$color-border;
             border-radius: 0 0 1rem 1rem;
             background-color: d.$color-background;
             box-shadow: 0 4px 6px 0 d.$color-background;
             z-index: 1;
+
+            a:hover {
+                text-decoration: underline;
+            }
 
             &::before {
                 content: '';

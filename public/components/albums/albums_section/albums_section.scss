@@ -1,6 +1,7 @@
 .section.section--albums {
     .section {
         &__content {
+            cursor: not-allowed;
             display: flex;
             flex-direction: column;
             gap: 1.25rem;

@@ -19,25 +19,14 @@
     }
 
     &__wrapper {
+        cursor: not-allowed;
         position: relative;
         width: 8.75rem;
         height: 8.75rem;
         border-radius: 1rem;
     }
 
-    &__wrapper:hover {
-        .playlist-card__img {
-            filter: brightness(0.5);
-            transition: filter 0.3s ease;
-        }
-
-        .playlist-card__play {
-            display: block;
-        }
-    }
-
     &__img {
-        cursor: pointer;
         width: 8.75rem;
         height: 8.75rem;
         border-radius: 1rem;

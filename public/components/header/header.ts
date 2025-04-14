@@ -59,6 +59,11 @@ export class Header extends Component implements Routable {
             })
         );
 
+        const logo = this.element.querySelector('#logo');
+        logo.addEventListener('click', () => {
+            Router.pushUrl('/', {});
+        });
+
         Router.callCallback(routes.pageRoute, this);
         Router.callCallback(routes.authRoute, this);
     }
