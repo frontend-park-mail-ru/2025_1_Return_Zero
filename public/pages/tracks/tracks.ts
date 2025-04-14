@@ -34,7 +34,10 @@ export class TracksPage extends Component {
 
             let recent;
             try {
-                recent = userState.getState()?.username && (await API.getHistoryTracks(userState.getState().username)).body;
+                recent =
+                    userState.getState()?.username &&
+                    (await API.getHistoryTracks(userState.getState().username))
+                        .body;
             } catch (e) {
                 console.error(e.message);
             }
@@ -45,7 +48,7 @@ export class TracksPage extends Component {
                 TracksPage.template({
                     recent,
                     loved,
-                    recommendations
+                    recommendations,
                 })
             );
         })();

@@ -23,11 +23,12 @@ export class ProfilePage extends Component {
     init(username?: string) {
         this.element.classList.add('page', 'page--profile');
         this.username = username || userState.getState()?.username;
-        
-        this.username || this.createCallback(userState, () => {
-            this.username = userState.getState()?.username;
-            this.build();
-        });
+
+        this.username ||
+            this.createCallback(userState, () => {
+                this.username = userState.getState()?.username;
+                this.build();
+            });
     }
 
     protected build() {
@@ -38,14 +39,17 @@ export class ProfilePage extends Component {
         (async () => {
             try {
                 this.user = (await API.getUser(this.username)).body;
-                this.user.statistics.minutes_listened === -1 && (this.user.statistics.minutes_listened = undefined);
-                this.user.statistics.tracks_listened === -1 && (this.user.statistics.tracks_listened = undefined);
-                this.user.statistics.artists_listened === -1 && (this.user.statistics.artists_listened = undefined);
+                this.user.statistics.minutes_listened === -1 &&
+                    (this.user.statistics.minutes_listened = undefined);
+                this.user.statistics.tracks_listened === -1 &&
+                    (this.user.statistics.tracks_listened = undefined);
+                this.user.statistics.artists_listened === -1 &&
+                    (this.user.statistics.artists_listened = undefined);
             } catch (e) {
                 console.error(e);
             }
 
-            console.log(this.user)
+            console.log(this.user);
             const playlists = (await API.getAlbums()).body;
             const tracks = (await API.getTracks()).body;
             const artists = (await API.getArtists()).body;

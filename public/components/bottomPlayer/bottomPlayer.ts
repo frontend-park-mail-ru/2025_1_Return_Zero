@@ -6,8 +6,12 @@ import './fullscreen.scss';
 import player, { Player } from 'components/player/player';
 import tracksQueue, { TracksQueue } from 'components/player/tracksQueue';
 import { MusicUnit } from 'components/player/tracksQueue';
-import { convertDuration, parseDuration } from "utils/durationConverter";
-import { ButtonStateHandler, DomManager, DragHandler } from './bottomPlayerUIManager';
+import { convertDuration, parseDuration } from 'utils/durationConverter';
+import {
+    ButtonStateHandler,
+    DomManager,
+    DragHandler,
+} from './bottomPlayerUIManager';
 import { State } from '../../libs/State.ts';
 
 import { API } from 'utils/api';
@@ -15,7 +19,6 @@ import { API } from 'utils/api';
 import { Component } from '../../libs/Component.ts';
 
 export class BottomPlayer extends Component {
-    
     static instance: BottomPlayer;
 
     size: State<string>;
@@ -23,7 +26,7 @@ export class BottomPlayer extends Component {
     player: Player;
     tracksQueue: TracksQueue;
     stream: Stream;
-    
+
     protected static BASE_ELEMENT = 'div';
     // @ts-ignore
     static smallTemplate = Handlebars.templates['small.hbs'];
@@ -51,38 +54,48 @@ export class BottomPlayer extends Component {
 
     protected build() {
         this.element.innerHTML = '';
-        
-        switch(this.size.getState()) {
+
+        switch (this.size.getState()) {
             case 'small':
                 this.element.classList.remove(`fullscreen-player`);
                 this.element.classList.add(`small-player`);
-                this.element.insertAdjacentHTML('beforeend', BottomPlayer.smallTemplate({}));    
+                this.element.insertAdjacentHTML(
+                    'beforeend',
+                    BottomPlayer.smallTemplate({})
+                );
                 break;
             case 'fullscreen':
                 this.element.classList.remove(`small-player`);
                 this.element.classList.add(`fullscreen-player`);
-                this.element.insertAdjacentHTML('beforeend', BottomPlayer.fullscreenTemplate({}));
+                this.element.insertAdjacentHTML(
+                    'beforeend',
+                    BottomPlayer.fullscreenTemplate({})
+                );
                 break;
         }
 
         this.player = player;
         this.tracksQueue = tracksQueue;
-        this.tracksQueue.setPlayerCallback((track: MusicUnit, play: boolean = true) => 
-            this.switchingTrack(track, play)
+        this.tracksQueue.setPlayerCallback(
+            (track: MusicUnit, play: boolean = true) =>
+                this.switchingTrack(track, play)
         );
 
         this.domManager = new DomManager(this.element);
         this.timeManager = new TimeManager(this.player, this.domManager);
         this.dragHandler = new DragHandler(this.player, this.domManager);
-        this.buttonStateHandler = new ButtonStateHandler(this.domManager, this.tracksQueue);
+        this.buttonStateHandler = new ButtonStateHandler(
+            this.domManager,
+            this.tracksQueue
+        );
         this.eventManager = new EventManager(
             this.player,
             this.tracksQueue,
-            this.domManager, 
+            this.domManager,
             this.dragHandler,
             this.buttonStateHandler,
             this
-        );       
+        );
 
         this.updateMusicDom(tracksQueue.getCurrentTrack());
     }
@@ -161,10 +174,12 @@ class Stream {
 
     constructor() {
         this.duration = 0;
-        setInterval(() => {this.setDuration()}, 1000);
+        setInterval(() => {
+            this.setDuration();
+        }, 1000);
     }
 
-    setDuration() { 
+    setDuration() {
         if (!player.audio.paused) {
             this.duration += 1;
         }
@@ -230,12 +245,14 @@ class EventManager {
     }
 
     private initButtonEvents() {
-        this.dom.playBtn.addEventListener('click', () => this.bottomPlayer.togglePlay());
+        this.dom.playBtn.addEventListener('click', () =>
+            this.bottomPlayer.togglePlay()
+        );
         this.dom.nextBtn.addEventListener('click', () => {
             if (tracksQueue.getCurrentTrackId() == null) {
                 return;
             }
-            this.tracksQueue.nextTrack('nextBtn'); 
+            this.tracksQueue.nextTrack('nextBtn');
         });
         this.dom.prevBtn.addEventListener('click', () => {
             if (tracksQueue.getCurrentTrackId() == null) {
@@ -243,7 +260,9 @@ class EventManager {
             }
             this.tracksQueue.previousTrack();
         });
-        this.dom.resizeBtn.addEventListener('click', () => this.bottomPlayer.toggleState());
+        this.dom.resizeBtn.addEventListener('click', () =>
+            this.bottomPlayer.toggleState()
+        );
     }
 
     private initDragEvents() {

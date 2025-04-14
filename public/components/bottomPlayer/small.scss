@@ -172,7 +172,7 @@
             background-color: d.$color-text;
             height: v.$bottomPlayer-height-progress;
             border-radius: v.$bottomPlayer-border-radius-progress;
-            width: clamp(0.625rem, 5vw, 6.25rem);            
+            width: clamp(0.625rem, 5vw, 6.25rem);
 
             &:hover {
                 cursor: pointer;

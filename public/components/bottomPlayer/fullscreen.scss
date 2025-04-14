@@ -49,7 +49,7 @@
             font-size: calc(3vw / 2 + 3vh / 2);
             font-family: v.$font-family-main;
             font-weight: v.$font-weight-bold;
-            user-select: none; 
+            user-select: none;
             color: d.$color-text;
         }
 
@@ -57,7 +57,7 @@
             font-size: calc(2vw / 2 + 2vh / 2);
             font-family: v.$font-family-main;
             font-weight: v.$font-weight-light;
-            user-select: none; 
+            user-select: none;
             color: d.$color-text;
         }
     }
@@ -105,7 +105,7 @@
             }
 
             .rectangle-prev {
-                position: absolute; 
+                position: absolute;
                 width: 0px;
                 left: 0;
                 height: v.$bottomPlayer-height-progress;
@@ -116,9 +116,9 @@
             .circle {
                 display: none;
                 position: absolute;
-                left: 0; 
+                left: 0;
                 height: v.$bottomPlayer-width-circle;
-                width: v.$bottomPlayer-width-circle; 
+                width: v.$bottomPlayer-width-circle;
                 border-radius: 50%;
                 background-color: d.$color-button;
             }
@@ -128,7 +128,7 @@
     &__bottom-content {
         display: grid;
         grid-template-rows: auto auto;
-        
+
         gap: 1.25rem;
     }
 
@@ -168,8 +168,8 @@
                 background-color: d.$color-text;
                 height: v.$bottomPlayer-height-progress;
                 border-radius: v.$bottomPlayer-border-radius-progress;
-                width: clamp(3rem, 8vw, 6.25rem);            
-                
+                width: clamp(3rem, 8vw, 6.25rem);
+
                 &:hover {
                     cursor: pointer;
                 }
@@ -182,17 +182,17 @@
                     position: absolute;
                     left: 0;
                     width: 0px;
-                    height: v.$bottomPlayer-height-progress; 
+                    height: v.$bottomPlayer-height-progress;
                     border-radius: v.$bottomPlayer-border-radius-progress;
                     background-color: d.$color-button;
                 }
-    
+
                 .circle {
                     display: none;
                     position: absolute;
-                    left: 0; 
+                    left: 0;
                     height: v.$bottomPlayer-width-circle;
-                    width: v.$bottomPlayer-width-circle; 
+                    width: v.$bottomPlayer-width-circle;
                     border-radius: 50%;
                     background-color: d.$color-button;
                 }

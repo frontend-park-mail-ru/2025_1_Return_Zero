@@ -48,14 +48,14 @@ export class ProfileLayout extends Component implements Routable {
 
                     try {
                         (await API.getUser(params[1])).body;
-                    } catch(error) {
+                    } catch (error) {
                         const notFound = new NotFound();
                         this.element.innerHTML = '';
                         this.element.appendChild(notFound.element);
                         throw new Error('404 User not Found');
                     }
                 })();
-                
+
                 switch (params[1]) {
                     case 'settings':
                         this.page.setState(new SettingsPage());

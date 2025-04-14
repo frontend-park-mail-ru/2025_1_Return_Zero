@@ -22,7 +22,9 @@ export class Player {
     private initStates() {
         try {
             this.audioLevel = Number(localStorage.getItem('audio-level'));
-            this.audio.currentTime = Number(localStorage.getItem('audio-current-time'));
+            this.audio.currentTime = Number(
+                localStorage.getItem('audio-current-time')
+            );
         } catch (error) {
             console.error('Failed to get states for audio:', error);
             this.audioLevel = 0.5;
@@ -97,7 +99,10 @@ export class Player {
 
     async SaveCurrentTime() {
         try {
-            localStorage.setItem('audio-current-time', String(this.currentTime));
+            localStorage.setItem(
+                'audio-current-time',
+                String(this.currentTime)
+            );
         } catch (error) {
             console.error('Failed to save audio current time:', error);
         }

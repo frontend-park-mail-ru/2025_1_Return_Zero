@@ -34,7 +34,7 @@ export class ArtistPage extends Component {
                 ArtistPage.template({
                     artist,
                     albums,
-                    tracks
+                    tracks,
                 })
             );
         })();

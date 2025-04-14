@@ -16,9 +16,6 @@ export class NotFound extends Component {
     protected build() {
         this.element.innerHTML = '';
 
-        this.element.insertAdjacentHTML(
-            'beforeend',
-            NotFound.template({}),
-        );
+        this.element.insertAdjacentHTML('beforeend', NotFound.template({}));
     }
 }

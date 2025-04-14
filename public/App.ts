@@ -32,11 +32,18 @@ export default class App extends RootComponent {
                 Router.pushUrl((target as HTMLAnchorElement).href, {});
             }
 
-            if (target instanceof HTMLElement && target.closest('div').dataset.type === "track") {
+            if (
+                target instanceof HTMLElement &&
+                target.closest('div').dataset.type === 'track'
+            ) {
                 const track = target.closest('div');
-                const currentTrack: string | null = tracksQueue.getCurrentTrackId();
-                
-                if (currentTrack && track.getAttribute('data-track-id') === currentTrack) {
+                const currentTrack: string | null =
+                    tracksQueue.getCurrentTrackId();
+
+                if (
+                    currentTrack &&
+                    track.getAttribute('data-track-id') === currentTrack
+                ) {
                     player.togglePlay();
                 } else {
                     addToQueueListener(track);
@@ -45,7 +52,9 @@ export default class App extends RootComponent {
         });
 
         setInterval(() => {
-            const tracks = Array.from(this.element.querySelectorAll('[data-type="track"]'));
+            const tracks = Array.from(
+                this.element.querySelectorAll('[data-type="track"]')
+            );
             const currentTrack: string | null = tracksQueue.getCurrentTrackId();
             for (const track of tracks) {
                 const trackImg: HTMLImageElement =

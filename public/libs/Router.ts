@@ -1,21 +1,20 @@
 export type CallbackData = {
-    route: Route,
-    params: RegExpMatchArray,
-    searchParams: URLSearchParams,
-    data: any
+    route: Route;
+    params: RegExpMatchArray;
+    searchParams: URLSearchParams;
+    data: any;
 };
 
 export interface Routable {
     onRoute(data: CallbackData): void;
 }
 
-
 export class Route {
     private static path_append = '(?!\\w)';
 
     private _path: string;
 
-    constructor(path: string, build?: (params: any)=>string) {
+    constructor(path: string, build?: (params: any) => string) {
         this._path = path;
         if (build) {
             this._build = build;
@@ -26,15 +25,16 @@ export class Route {
         throw new Error('Not implemented');
     }
 
-    
     math(url: string): any {
         return url.match(this._path + Route.path_append);
     }
 
     build(params: any): string {
         const url = this._build(params);
-        if (!this.math(url)) 
-            throw new Error(`Route "${this._path}" does not match builded "${url}"`);
+        if (!this.math(url))
+            throw new Error(
+                `Route "${this._path}" does not match builded "${url}"`
+            );
         return url;
     }
 
@@ -47,18 +47,17 @@ export class Route {
     }
 }
 
-
 export class Router {
     private _href: string = 'http://null.null/';
     private _callbacks: Map<Route, Routable[]> = new Map();
 
     constructor() {
         this._href = location.href;
-        window.addEventListener("popstate", e =>  {
+        window.addEventListener('popstate', (e) => {
             this.setUrl(location.href);
         });
     }
-    
+
     private setUrl(value: string) {
         const prev_route = this.getRoute();
         this._href = value;
@@ -71,7 +70,10 @@ export class Router {
     }
 
     removeCallback(route: Route, routable: Routable) {
-        this._callbacks.set(route, this._callbacks.get(route).filter(r => r !== routable));
+        this._callbacks.set(
+            route,
+            this._callbacks.get(route).filter((r) => r !== routable)
+        );
         if (this._callbacks.get(route).length === 0) {
             this._callbacks.delete(route);
         }
@@ -79,14 +81,14 @@ export class Router {
 
     callCallback(route: Route, routable: Routable) {
         const res = route.math(this.getRoute()) ?? [''];
-        setTimeout(
-            () => routable.onRoute({
+        setTimeout(() =>
+            routable.onRoute({
                 route: route,
                 params: res,
                 searchParams: this.getSearch(),
-                data: history.state
+                data: history.state,
             })
-        )
+        );
     }
 
     private callCallbacks(prev_route: string, cur_route: string) {
@@ -94,24 +96,29 @@ export class Router {
             const prev_res = route.math(prev_route) ?? [''];
             const res = route.math(cur_route) ?? [''];
 
-            prev_res[0] !== res[0] && callbacks.forEach(r => setTimeout(() => r.onRoute({
-                route: route,
-                params: res,
-                searchParams: this.getSearch(),
-                data: history.state
-            })))
+            prev_res[0] !== res[0] &&
+                callbacks.forEach((r) =>
+                    setTimeout(() =>
+                        r.onRoute({
+                            route: route,
+                            params: res,
+                            searchParams: this.getSearch(),
+                            data: history.state,
+                        })
+                    )
+                );
         }
     }
 
     pushUrl(url: string, data: any) {
         url = new URL(url, this._href).href;
-        history.pushState(data, "", url);
+        history.pushState(data, '', url);
         this.setUrl(url);
     }
 
     replaceUrl(url: string, data: any) {
         url = new URL(url, this._href).href;
-        history.replaceState(data, "", url);
+        history.replaceState(data, '', url);
         this.setUrl(url);
     }
 

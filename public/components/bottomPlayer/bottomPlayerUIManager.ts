@@ -1,10 +1,8 @@
-
-import { Player } from "components/player/player";
-import DragProgressBar from "components/player/draggProgress";
-import { convertDuration } from "utils/durationConverter";
-import tracksQueue, { TracksQueue } from "components/player/tracksQueue";
-import bottomPlayer from "./bottomPlayer";
-
+import { Player } from 'components/player/player';
+import DragProgressBar from 'components/player/draggProgress';
+import { convertDuration } from 'utils/durationConverter';
+import tracksQueue, { TracksQueue } from 'components/player/tracksQueue';
+import bottomPlayer from './bottomPlayer';
 
 export class DomManager {
     playBtn: HTMLImageElement;

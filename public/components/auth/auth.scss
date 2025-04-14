@@ -17,15 +17,15 @@
 
     input {
         display: block;
-    
+
         border-radius: 1rem;
         border: 1px solid d.$color-border;
-    
+
         color: d.$color-text;
-    
+
         background-color: d.$color-font-element;
     }
-    
+
     input::placeholder {
         font-weight: v.$font-weight-light;
         color: d.$color-text-transparent;
@@ -99,7 +99,7 @@
         align-items: center;
         margin: 0 1rem 0 1rem;
         gap: 1rem;
-    
+
         font-weight: bold;
         font-size: v.$font-size-h4;
     }
@@ -123,10 +123,10 @@
 }
 
 .border-error {
-    border: 1px solid d.$color-highlight !important; 
+    border: 1px solid d.$color-highlight !important;
 }
 
 .border-error:focus {
-    border: 1px solid d.$color-highlight !important; 
+    border: 1px solid d.$color-highlight !important;
     outline: none;
 }

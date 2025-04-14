@@ -32,7 +32,10 @@ export class MainPage extends Component {
 
             let recent;
             try {
-                recent = userState.getState()?.username && (await API.getHistoryTracks(userState.getState().username)).body;
+                recent =
+                    userState.getState()?.username &&
+                    (await API.getHistoryTracks(userState.getState().username))
+                        .body;
             } catch (e) {
                 console.error(e.message);
             }
@@ -43,7 +46,7 @@ export class MainPage extends Component {
                 MainPage.template({
                     recent,
                     loved,
-                    recommendations
+                    recommendations,
                 })
             );
         })();

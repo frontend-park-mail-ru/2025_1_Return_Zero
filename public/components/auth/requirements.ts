@@ -137,7 +137,7 @@ class Requirements {
                 containsValidChars: 'Введите корректный email',
                 match: 'Введите корректный email',
             },
-        }
+        };
     }
 }
 

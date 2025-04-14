@@ -29,7 +29,9 @@ export class SettingsPage extends Component {
 
     init() {
         this.element.classList.add('page', 'page--settings');
-        this.element.addEventListener('submit', (e) => { e.preventDefault(); });
+        this.element.addEventListener('submit', (e) => {
+            e.preventDefault();
+        });
         this.username = userState.getState()?.username;
 
         this.avatar = this.createState(null);
@@ -57,22 +59,31 @@ export class SettingsPage extends Component {
                     })
                 );
 
-                this.validationList = Array.from(this.element.querySelectorAll(
-                    'input[data-validation="username"], input[data-validation="email"], input[data-validation="password"]'
-                )).map(input => new InputState(
-                    input as HTMLInputElement,
-                    input.nextElementSibling as HTMLParagraphElement,
-                    (input as HTMLInputElement).dataset.validation,
-                    'settings',
-                ));
+                this.validationList = Array.from(
+                    this.element.querySelectorAll(
+                        'input[data-validation="username"], input[data-validation="email"], input[data-validation="password"]'
+                    )
+                ).map(
+                    (input) =>
+                        new InputState(
+                            input as HTMLInputElement,
+                            input.nextElementSibling as HTMLParagraphElement,
+                            (input as HTMLInputElement).dataset.validation,
+                            'settings'
+                        )
+                );
 
                 this.avatar.setState(this.user.avatar_url);
 
                 this.element
                     .querySelector('#avatar')
-                    .addEventListener('change', e => this.avatar.setState(URL.createObjectURL(
-                        ( e.target as HTMLInputElement).files[0]
-                    )));
+                    .addEventListener('change', (e) =>
+                        this.avatar.setState(
+                            URL.createObjectURL(
+                                (e.target as HTMLInputElement).files[0]
+                            )
+                        )
+                    );
                 this.element
                     .querySelector('.page--settings__bottom__button-save')
                     .addEventListener('click', this.handleSubmit.bind(this));
@@ -102,28 +113,31 @@ export class SettingsPage extends Component {
     }
 
     private handleAvatar() {
-        const avatar_file = (this.element.querySelector('#avatar') as HTMLInputElement).files[0];
+        const avatar_file = (
+            this.element.querySelector('#avatar') as HTMLInputElement
+        ).files[0];
 
         if (!avatar_file) return;
 
         const formData = new FormData();
         formData.append('username', this.user.username);
-        formData.append(
-            'avatar',
-            avatar_file
-        );
+        formData.append('avatar', avatar_file);
 
         (async () => {
             try {
                 // @ts-ignore
-                const avatar_url = (await API.updateAvatar(this.user.username, formData)).body.avatar_url;
+                const avatar_url = (
+                    await API.updateAvatar(this.user.username, formData)
+                ).body.avatar_url;
                 userState.setState({
                     ...userState.getState(),
                     // @ts-ignore
-                    avatar_url
-                })
+                    avatar_url,
+                });
             } catch (e) {
-                const msg_elm = this.element.querySelector('.page--settings__bottom__message');
+                const msg_elm = this.element.querySelector(
+                    '.page--settings__bottom__message'
+                );
                 msg_elm.textContent = 'Failed to update avatar: ' + e.message;
                 console.error('Failed to update avatar:', e.message);
             }
@@ -131,7 +145,8 @@ export class SettingsPage extends Component {
     }
 
     private handleOptions() {
-        if (!this.validationList.every(input => input.isValid())) return false;
+        if (!this.validationList.every((input) => input.isValid()))
+            return false;
 
         const data: ParamTypes.UserUpdate = {
             password:
@@ -195,7 +210,7 @@ export class SettingsPage extends Component {
                             'input[name="public-artists-listened"]:checked'
                         ) as HTMLInputElement
                     ).value === 'true',
-            }
+            },
         };
 
         (async () => {
@@ -205,7 +220,9 @@ export class SettingsPage extends Component {
                 ).body;
                 userState.setState(new_user);
             } catch (e) {
-                const msg_elm = this.element.querySelector('.page--settings__bottom__message');
+                const msg_elm = this.element.querySelector(
+                    '.page--settings__bottom__message'
+                );
                 msg_elm.textContent = 'Failed to update user: ' + e.message;
                 console.error('Failed to update user:', e.message);
             }
@@ -213,8 +230,8 @@ export class SettingsPage extends Component {
     }
 
     private handleDelete() {
-        if (!this.validationList.every(input => input.isValid())) return;
-        
+        if (!this.validationList.every((input) => input.isValid())) return;
+
         const data: ParamTypes.UserDelete = {
             username: userState.getState().username,
             email: userState.getState().email,
@@ -224,13 +241,15 @@ export class SettingsPage extends Component {
                 ) as HTMLInputElement
             ).value,
         };
-        
+
         (async () => {
             try {
                 await API.deleteUser(this.user.username, data);
                 userState.setState(null);
             } catch (e) {
-                const msg_elm = this.element.querySelector('.page--settings__bottom__message');
+                const msg_elm = this.element.querySelector(
+                    '.page--settings__bottom__message'
+                );
                 msg_elm.textContent = 'Failed to delete user: ' + e.message;
                 console.error('Failed to delete user:', e.message);
             }

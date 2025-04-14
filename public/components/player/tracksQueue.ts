@@ -38,10 +38,16 @@ export class TracksQueue {
         try {
             if (localStorage.getItem('queue')) {
                 this.queue = JSON.parse(localStorage.getItem('queue'));
-                this.savedQueue = JSON.parse(localStorage.getItem('saved-queue'));
+                this.savedQueue = JSON.parse(
+                    localStorage.getItem('saved-queue')
+                );
                 this.idx = Number(localStorage.getItem('queue-idx'));
-                this.shuffled = JSON.parse(localStorage.getItem('queue-shuffled'));
-                this.repeated = JSON.parse(localStorage.getItem('queue-repeated'));
+                this.shuffled = JSON.parse(
+                    localStorage.getItem('queue-shuffled')
+                );
+                this.repeated = JSON.parse(
+                    localStorage.getItem('queue-repeated')
+                );
 
                 this.setTrack(false);
             } else {
@@ -95,7 +101,10 @@ export class TracksQueue {
     async saveQueue() {
         try {
             localStorage.setItem('queue', JSON.stringify(this.queue));
-            localStorage.setItem('saved-queue', JSON.stringify(this.savedQueue));
+            localStorage.setItem(
+                'saved-queue',
+                JSON.stringify(this.savedQueue)
+            );
             localStorage.setItem('queue-idx', String(this.idx));
             localStorage.setItem('queue-shuffled', String(this.shuffled));
         } catch (error) {
@@ -128,7 +137,7 @@ export class TracksQueue {
             id: response.id,
         };
         this.currentTrack = track;
-        
+
         this.callPlayerCallback(track, play);
         this.saveQueue();
     }

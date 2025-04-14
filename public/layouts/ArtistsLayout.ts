@@ -49,12 +49,12 @@ export class ArtistsLayout extends Component implements Routable {
                     (async () => {
                         try {
                             (await API.getArtist(parseInt(params[1]))).body;
-                        } catch(error) {
+                        } catch (error) {
                             const notFound = new NotFound();
                             this.element.innerHTML = notFound.element.outerHTML;
                             throw new Error('404 User not Found');
                         }
-                    })();    
+                    })();
 
                     const id = parseInt(params[1]);
                     this.page.setState(new ArtistPage(id));

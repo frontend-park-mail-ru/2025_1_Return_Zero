@@ -39,16 +39,16 @@ export class AuthForm extends Component {
 
         this.element.insertAdjacentHTML(
             'beforeend',
-            AuthForm.template(content),
+            AuthForm.template(content)
         );
 
         const changeAuth = this.element.querySelector('#changeAuth');
         let redirectingForm = 'login';
-        if (this.authType == 'login') { 
+        if (this.authType == 'login') {
             changeAuth.textContent = 'Нет аккаунта? регистрация';
             redirectingForm = 'register';
         }
-        if (this.authType == 'register')  {
+        if (this.authType == 'register') {
             changeAuth.textContent = 'Уже зарегистрированы? войти';
         }
 
@@ -66,12 +66,8 @@ export class AuthForm extends Component {
         content.inputs.forEach((input) => {
             if (!input) return;
             const element: InputState = new InputState(
-                this.element.querySelector(
-                    `[name="${input.name}"]`
-                ),
-                this.element.querySelector(
-                    `[name="${input.name}-error"]`
-                ),
+                this.element.querySelector(`[name="${input.name}"]`),
+                this.element.querySelector(`[name="${input.name}-error"]`),
                 input.name,
                 this.authType,
                 //@ts-ignore
@@ -135,7 +131,9 @@ export class AuthForm extends Component {
                         userState.setState(response.body);
                         Router.pushUrl(Router.getPath(), {});
                     } catch (error) {
-                        renderGlobalError('Пользователь с таким username/email уже существует');
+                        renderGlobalError(
+                            'Пользователь с таким username/email уже существует'
+                        );
                     }
                 }
                 if (this.authType === 'login') {

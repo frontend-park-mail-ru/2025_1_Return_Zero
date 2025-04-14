@@ -77,7 +77,11 @@ export class API {
         return await API.get(`/tracks/${id}`);
     }
 
-    static async getHistoryTracks(username: string, limit?: number, offset?: number): Promise<TemplateAPI.TracksResponse> {
+    static async getHistoryTracks(
+        username: string,
+        limit?: number,
+        offset?: number
+    ): Promise<TemplateAPI.TracksResponse> {
         let url = `/user/${username}/history`;
 
         const params = new URLSearchParams();
@@ -180,12 +184,12 @@ export class API {
         return await API.delete(`/user/${username}`, data);
     }
 
-    static async createStream(id: number) { 
+    static async createStream(id: number) {
         return await API.post(`/tracks/${id}/stream`, {});
     }
 
     static async updateStream(id: number, duration: number) {
-        return await API.put(`/streams/${id}`, {duration});
+        return await API.put(`/streams/${id}`, { duration });
     }
 
     static extendTrack(track: any): DataTypes.Track {

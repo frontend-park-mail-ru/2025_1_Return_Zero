@@ -9,7 +9,7 @@ type Input = {
 };
 
 class InputState {
-    form?: HTMLFormElement
+    form?: HTMLFormElement;
     input: HTMLInputElement;
     validationMessage: HTMLElement;
     validationKey: string;
@@ -19,7 +19,13 @@ class InputState {
     formType: string;
     error: string | null;
 
-    constructor(input: HTMLInputElement, validationMessage: HTMLElement, validationKey: string, formType: string, form?: HTMLFormElement) {
+    constructor(
+        input: HTMLInputElement,
+        validationMessage: HTMLElement,
+        validationKey: string,
+        formType: string,
+        form?: HTMLFormElement
+    ) {
         if (form) {
             this.form = form;
         }
@@ -31,10 +37,10 @@ class InputState {
         if (formType == 'login') {
             this.showValidate = true;
         }
-        
+
         this.input.addEventListener('input', this.inputListener.bind(this));
 
-        this.valid = formType === "settings";
+        this.valid = formType === 'settings';
         this.error = null;
     }
 
