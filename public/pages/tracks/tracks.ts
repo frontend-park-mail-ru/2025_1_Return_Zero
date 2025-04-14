@@ -22,32 +22,32 @@ export class TracksPage extends Component {
     }
 
     protected build() {
-        this.element.innerHTML = '';
-
         (async () => {
+            let tracks;
             try {
-                const tracks = (await API.getTracks()).body;
-
-                const loved = tracks;
-                let recent;
-                try {
-                    recent = userState.getState()?.username && (await API.getHistoryTracks(userState.getState().username)).body;
-                } catch (e) {
-                    console.log(e.message);
-                }
-                const recommendations = tracks;
-
-                this.element.insertAdjacentHTML(
-                    'beforeend',
-                    TracksPage.template({
-                        loved,
-                        recent,
-                        recommendations
-                    })
-                );
+                tracks = (await API.getTracks()).body;
             } catch (e) {
-                console.log(e);
+                console.error(e.message);
             }
+            const loved = tracks;
+            const recommendations = tracks;
+
+            let recent;
+            try {
+                recent = userState.getState()?.username && (await API.getHistoryTracks(userState.getState().username)).body;
+            } catch (e) {
+                console.error(e.message);
+            }
+
+            this.element.innerHTML = '';
+            this.element.insertAdjacentHTML(
+                'beforeend',
+                TracksPage.template({
+                    recent,
+                    loved,
+                    recommendations
+                })
+            );
         })();
     }
 }

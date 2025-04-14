@@ -93,5 +93,10 @@
     &__bottom {
         display: flex;
         justify-content: space-between;
+
+        &__message {
+            font-size: v.$font-size-h3;
+            color: d.$color-highlight;
+        }
     }
 }

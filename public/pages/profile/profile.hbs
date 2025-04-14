@@ -3,19 +3,17 @@
     <div>
         <h2 class="profile__info__username">{{this.user.username}}</h2>
         <img class="profile__info__actions" src="/static/img/dots.svg" alt="edit">
-        {{#if this.stats}}
-            <div class="profile__info__stats">
-                <span>{{#if this.user.privacy.is_public_minutes_listened}}
-                    {{this.user.statistics.minutes_listened}}{{else}}?{{/if}} минут прослушано
-                </span>
-                <span>{{#if this.user.privacy.is_public_tracks_listened}}
-                    {{this.user.statistics.tracks_listened}}{{else}}?{{/if}} треков услышано
-                </span>
-                <span>{{#if this.user.privacy.is_public_artists_listened}}
-                    {{this.user.statistics.artists_listened}}{{else}}?{{/if}} артистов изучено
-                </span>
-            </div>
-        {{/if}}
+        <div class="profile__info__stats">
+            <span>{{#if this.user.statistics.minutes_listened includeZero=true}}
+                {{this.user.statistics.minutes_listened}}{{else}}?{{/if}} минут прослушано
+            </span>
+            <span>{{#if this.user.statistics.tracks_listened includeZero=true}}
+                {{this.user.statistics.tracks_listened}}{{else}}?{{/if}} треков услышано
+            </span>
+            <span>{{#if this.user.statistics.artists_listened includeZero=true}}
+                {{this.user.statistics.artists_listened}}{{else}}?{{/if}} артистов изучено
+            </span>
+        </div>
     </div>
 </div>
 

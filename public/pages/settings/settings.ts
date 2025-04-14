@@ -123,13 +123,15 @@ export class SettingsPage extends Component {
                     avatar_url
                 })
             } catch (e) {
+                const msg_elm = this.element.querySelector('.page--settings__bottom__message');
+                msg_elm.textContent = 'Failed to update avatar: ' + e.message;
                 console.error('Failed to update avatar:', e.message);
             }
         })();
     }
 
     private handleOptions() {
-        if (!this.validationList.every(input => { console.error(input.isValid()); return input.isValid();})) return;
+        if (!this.validationList.every(input => input.isValid())) return false;
 
         const data: ParamTypes.UserUpdate = {
             password:
@@ -203,12 +205,35 @@ export class SettingsPage extends Component {
                 ).body;
                 userState.setState(new_user);
             } catch (e) {
+                const msg_elm = this.element.querySelector('.page--settings__bottom__message');
+                msg_elm.textContent = 'Failed to update user: ' + e.message;
                 console.error('Failed to update user:', e.message);
             }
         })();
     }
 
     private handleDelete() {
-        console.error('DELETE ACCOUNT');
+        if (!this.validationList.every(input => input.isValid())) return;
+        
+        const data: ParamTypes.UserDelete = {
+            username: userState.getState().username,
+            email: userState.getState().email,
+            password: (
+                this.element.querySelector(
+                    'input[name="password"]'
+                ) as HTMLInputElement
+            ).value,
+        };
+        
+        (async () => {
+            try {
+                await API.deleteUser(this.user.username, data);
+                userState.setState(null);
+            } catch (e) {
+                const msg_elm = this.element.querySelector('.page--settings__bottom__message');
+                msg_elm.textContent = 'Failed to delete user: ' + e.message;
+                console.error('Failed to delete user:', e.message);
+            }
+        })();
     }
 }

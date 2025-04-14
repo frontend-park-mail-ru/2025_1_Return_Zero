@@ -38,15 +38,14 @@ export class ProfilePage extends Component {
         (async () => {
             try {
                 this.user = (await API.getUser(this.username)).body;
+                this.user.statistics.minutes_listened === -1 && (this.user.statistics.minutes_listened = undefined);
+                this.user.statistics.tracks_listened === -1 && (this.user.statistics.tracks_listened = undefined);
+                this.user.statistics.artists_listened === -1 && (this.user.statistics.artists_listened = undefined);
             } catch (e) {
                 console.error(e);
             }
 
-            const stats = {
-                minutes: 0,
-                tracks: 0,
-                artists: 0,
-            };
+            console.log(this.user)
             const playlists = (await API.getAlbums()).body;
             const tracks = (await API.getTracks()).body;
             const artists = (await API.getArtists()).body;
@@ -55,7 +54,6 @@ export class ProfilePage extends Component {
                 'beforeend',
                 ProfilePage.template({
                     user: this.user,
-                    stats,
                     playlists,
                     tracks,
                     artists,

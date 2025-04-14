@@ -67,8 +67,8 @@ export class API {
 
     static async getTracks(): Promise<TemplateAPI.TracksResponse> {
         const tracks_resp = await API.get('/tracks?limit=20');
-        tracks_resp.body = tracks_resp.body.map((track: any) =>
-            this.extendTrack(track)
+        tracks_resp.body = tracks_resp.body.map((track: DataTypes.Track) =>
+            API.extendTrack(track)
         );
         return tracks_resp;
     }
@@ -85,32 +85,32 @@ export class API {
         offset && params.append('offset', offset.toString());
         params && (url += `?${params.toString()}`);
 
-        const tracks_resp = (await API.get(url));
-        tracks_resp.body = tracks_resp.body.map((track: any) =>
-            this.extendTrack(track)
+        const tracks_resp = await API.get(url);
+        tracks_resp.body = tracks_resp.body.map((track: DataTypes.Track) =>
+            API.extendTrack(track)
         );
         return tracks_resp;
     }
 
     static async getAlbums(): Promise<TemplateAPI.AlbumsResponse> {
         const albums_resp = await API.get('/albums');
-        albums_resp.body = albums_resp.body.map((album: any) =>
-            this.extendAlbum(album)
+        albums_resp.body = albums_resp.body.map((album: DataTypes.Album) =>
+            API.extendAlbum(album)
         );
         return albums_resp;
     }
 
     static async getArtists(): Promise<TemplateAPI.ArtistsResponse> {
         const artists_resp = await API.get('/artists');
-        artists_resp.body = artists_resp.body.map((artist: any) =>
-            this.extendArtist(artist)
+        artists_resp.body = artists_resp.body.map((artist: DataTypes.Artist) =>
+            API.extendArtist(artist)
         );
         return artists_resp;
     }
 
     static async getArtist(id: number): Promise<TemplateAPI.ArtistResponse> {
         const artist_resp = await API.get(`/artists/${id}`);
-        artist_resp.body = this.extendArtist(artist_resp.body);
+        artist_resp.body = API.extendArtist(artist_resp.body);
         return artist_resp;
     }
 
@@ -118,8 +118,8 @@ export class API {
         id: number
     ): Promise<TemplateAPI.TracksResponse> {
         const tracks_resp = await API.get(`/artists/${id}/tracks`);
-        tracks_resp.body = tracks_resp.body.map((track: any) =>
-            this.extendTrack(track)
+        tracks_resp.body = tracks_resp.body.map((track: DataTypes.Track) =>
+            API.extendTrack(track)
         );
         return tracks_resp;
     }
@@ -128,8 +128,8 @@ export class API {
         id: number
     ): Promise<TemplateAPI.AlbumsResponse> {
         const albums_resp = await API.get(`/artists/${id}/albums`);
-        albums_resp.body = albums_resp.body.map((album: any) =>
-            this.extendAlbum(album)
+        albums_resp.body = albums_resp.body.map((album: DataTypes.Album) =>
+            API.extendAlbum(album)
         );
         return albums_resp;
     }
@@ -192,7 +192,7 @@ export class API {
         return {
             ...track,
             artists: track.artists.map((artist: any) =>
-                this.extendArtist(artist)
+                API.extendArtist(artist)
             ),
         };
     }
@@ -201,7 +201,7 @@ export class API {
         return {
             ...album,
             artists: album.artists.map((artist: any) =>
-                this.extendArtist(artist)
+                API.extendArtist(artist)
             ),
         };
     }
