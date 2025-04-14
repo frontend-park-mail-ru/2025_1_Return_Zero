@@ -1,0 +1,17 @@
+<div class='artist-card'>
+    <a href='{{this.artist_page}}'>
+        <img
+            class='artist-card__img'
+            src='{{this.thumbnail_url}}'
+            alt='artist'
+        />
+        <span class='artist-card__name'>{{this.title}}</span>
+        {{#if this.isFollowed}}
+            <img
+                class='artist-card__like'
+                src='/static/img/like-active.svg'
+                alt='like'
+            />
+        {{/if}}
+    </a>
+</div>

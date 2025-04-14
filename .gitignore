@@ -1,5 +1,6 @@
 **/node_modules
-public/**/*.precompiled.js
-backend/
-gogo
-
+**/*.precompiled.js
+dist
+backend
+.vscode
+.qodo

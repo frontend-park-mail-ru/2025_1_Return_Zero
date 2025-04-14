@@ -1,0 +1,16 @@
+<section class="section"> 
+    <h1 class="section__title">Только для тебя</h1>
+    {{>collections}}
+</section>
+
+{{#if this.recent}}
+    {{>musics-section title="Недавно прослушанные" href_all="#" musics=this.recent }}
+{{/if}}
+
+{{#if this.loved}}
+    {{>musics-section title="Любимые треки" href_all="#" musics=this.loved }}
+{{/if}}
+
+{{#if this.recommendations}}
+    {{>tracks-section title="Рекомендации" href_all="#" tracks=this.recommendations }}
+{{/if}}

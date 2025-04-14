@@ -1,22 +1,12 @@
-<div id="albums">
-    <section id="collections"> 
-        {{>collections}}
-    </section>  
-    <section id="loved">
-        <h1>Любимые альбомы</h1>
-        <div class="cards">
-            {{#each this.loved}}
-                {{>album-card}}
-            {{/each}}
-        </div>
-    </section>
-    <section id="recommendations">
-        <h1>Рекомендации</h1>
-        <div class="albums">
-            {{#each this.recommendations}}
-                {{>album}}
-            {{/each}}
-        </div>
-    </section>
-</div>
+<section class="section"> 
+    <h1 class="section__title">Только для тебя</h1>
+    {{>collections}}
+</section>
 
+{{#if this.loved}}
+    {{>albums-card-section title="Любимые альбомы" href_all="#" albums=this.loved }}
+{{/if}}
+
+{{#if this.recommendations}}
+    {{>albums-section title="Рекомендации" href_all="#" albums=this.recommendations }}
+{{/if}}

@@ -1,0 +1,20 @@
+<div class="artist__info">
+    <img class="artist__info__img" src="{{this.artist.thumbnail_url}}" alt="error loading avatar">
+    <div>
+        <span class="artist__info__type">Исполнитель</span>
+        <h2 class="artist__info__username">{{this.artist.title}}</h2>
+        <span class="artist__info__stats">{{this.artist.listeners_count}} слушателей за месяц</span>
+        <div class="artist__info__actions">
+            <img class="artist__info__actions__play" src="/static/img/play.svg" alt="edit">
+            <button class="artist__info__actions__subscribe btn" disabled>Подписаться</button>
+        </div>
+    </div>
+</div>
+
+{{#if this.albums }}
+    {{>albums-card-section title="Популярные альбомы" href_all="#" musics=this.albums }}
+{{/if}}
+
+{{#if this.tracks }}
+    {{>tracks-section title="Популярные треки" href_all="#" tracks=this.tracks }}
+{{/if}}

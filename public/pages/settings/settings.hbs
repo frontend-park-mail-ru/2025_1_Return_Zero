@@ -1,0 +1,146 @@
+<div class="page--settings__top">
+    <div class="page--settings__top__avatar">
+        <div class="form-input-container--image">
+            <img class="form-input-container--image__image" src="">
+            <label class="form-input-container--image__button" for="avatar">
+                <img src="/static/img/pencil.svg">
+            </label>
+            <input class="form-input-container--image__input" type="file" id="avatar" accept="image/*">
+            <p class="form-input-container--image__error"></p>
+        </div>
+    </div>
+    <div class="page--settings__top__info">
+        <span>Логин:</span>
+        <span>{{this.user.username}}</span>
+        <span>Email:</span>
+        <span>{{this.user.email}}</span>
+    </div>
+</div>
+<div class="page--settings__main">
+    <div class="page--settings__main__auth">
+        <h1 class="page--settings__main__auth__title">Учетные данные</h1>
+        <div class="form-input-container">
+            <label class="form-input-container__label" for="username">Логин</label>
+            <input class="form-input-container__input" name="new-username" type="text" id="username" data-validation="username" placeholder="новый логин">
+            <p class="form-input-container__error"></p>
+        </div>
+        <div class="form-input-container">
+            <label class="form-input-container__label" for="email">Email</label>
+            <input class="form-input-container__input" name="new-email" type="email" id="email" data-validation="email" placeholder="новый email">
+            <p class="form-input-container__error"></p>
+        </div>
+    </div>
+    <div class="page--settings__main__security">
+        <h1 class="page--settings__main__security__title">Безопасность</h1>
+        <div class="form-input-container">
+            <label class="form-input-container__label" for="password">Действующий пароль</label>
+            <input class="form-input-container__input" name="password" type="password" id="password" placeholder="действующий пароль">
+            <p class="form-input-container__error"></p>
+        </div>
+        <div class="form-input-container">
+            <label class="form-input-container__label" for="new-password">Новый пароль</label>
+            <input class="form-input-container__input" name="new-password" type="password" id="new-password" data-validation="password" placeholder="новый пароль">
+            <p class="form-input-container__error"></p>
+        </div>
+    </div>
+    <div class="page--settings__main__privacy">
+        <h1 class="page--settings__main__privacy__title">Приватность</h1>
+        <div>
+            <div class="form-input-container page--settings__main__privacy__playlists">
+                <label class="form-input-container__label">Плейлисты</label>
+                <div class="form-input-container__radio">
+                    <label class="form-input-container__radio__label">
+                        <input class="form-input-container__radio__input" type="radio" name="public-playlists"
+                            value="false" {{#unless user.privacy.is_public_playlists}}checked{{/unless}}>
+                        Приватно
+                    </label>
+                    <label class="form-input-container__radio__label">
+                        <input class="form-input-container__radio__input" type="radio" name="public-playlists"
+                            value="true" {{#if user.privacy.is_public_playlists}}checked{{/if}}>
+                        Публично
+                    </label>
+                </div>
+            </div>
+            <div class="form-input-container page--settings__main__privacy__artists">
+                <label class="form-input-container__label">Любимые исполнители</label>
+                <div class="form-input-container__radio">
+                    <label class="form-input-container__radio__label">
+                        <input class="form-input-container__radio__input" type="radio" name="public-artists"
+                            value="false" {{#unless user.privacy.is_public_favorite_artists}}checked{{/unless}}>
+                        Приватно
+                    </label>
+                    <label class="form-input-container__radio__label">
+                        <input class="form-input-container__radio__input" type="radio" name="public-artists"
+                            value="true" {{#if user.privacy.is_public_favorite_artists}}checked{{/if}}>
+                        Публично
+                    </label>
+                </div>
+            </div>
+            <div class="form-input-container page--settings__main__privacy__tracks">
+                <label class="form-input-container__label">Любимые треки</label>
+                <div class="form-input-container__radio">
+                    <label class="form-input-container__radio__label">
+                        <input class="form-input-container__radio__input" type="radio" name="public-tracks"
+                            value="false" {{#unless user.privacy.is_public_favorite_tracks}}checked{{/unless}}>
+                        Приватно
+                    </label>
+                    <label class="form-input-container__radio__label">
+                        <input class="form-input-container__radio__input" type="radio" name="public-tracks"
+                            value="true" {{#if user.privacy.is_public_favorite_tracks}}checked{{/if}}>
+                        Публично
+                    </label>
+                </div>
+            </div>
+            <div class="form-input-container page--settings__main__privacy__stats-minutes">
+                <label class="form-input-container__label">Минут прослушано</label>
+                <div class="form-input-container__radio">
+                    <label class="form-input-container__radio__label">
+                        <input class="form-input-container__radio__input" type="radio" name="public-minutes-listened"
+                            value="false" {{#unless user.privacy.is_public_minutes_listened}}checked{{/unless}}>
+                        Приватно
+                    </label>
+                    <label class="form-input-container__radio__label">
+                        <input class="form-input-container__radio__input" type="radio" name="public-minutes-listened"
+                            value="true" {{#if user.privacy.is_public_minutes_listened}}checked{{/if}}>
+                        Публично
+                    </label>
+                </div>
+            </div>
+            <div class="form-input-container page--settings__main__privacy__stats-tracks">
+                <label class="form-input-container__label">Треков прослушано</label>
+                <div class="form-input-container__radio">
+                    <label class="form-input-container__radio__label">
+                        <input class="form-input-container__radio__input" type="radio" name="public-tracks-listened"
+                            value="false" {{#unless user.privacy.is_public_tracks_listened}}checked{{/unless}}>
+                        Приватно
+                    </label>
+                    <label class="form-input-container__radio__label">
+                        <input class="form-input-container__radio__input" type="radio" name="public-tracks-listened"
+                            value="true" {{#if user.privacy.is_public_tracks_listened}}checked{{/if}}>
+                        Публично
+                    </label>
+                </div>
+            </div>
+            <div class="form-input-container page--settings__main__privacy__stats-artists">
+                <label class="form-input-container__label">Артистов прослушано</label>
+                <div class="form-input-container__radio">
+                    <label class="form-input-container__radio__label">
+                        <input class="form-input-container__radio__input" type="radio" name="public-artists-listened"
+                            value="false" {{#unless user.privacy.is_public_artists_listened}}checked{{/unless}}>
+                        Приватно
+                    </label>
+                    <label class="form-input-container__radio__label">
+                        <input class="form-input-container__radio__input" type="radio" name="public-artists-listened"
+                            value="true" {{#if user.privacy.is_public_artists_listened}}checked{{/if}}>
+                        Публично
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page--settings__bottom">
+    <button class="page--settings__bottom__button-reject form-reject-button">Удалить аккаунт</button>
+    <p class="page--settings__bottom__message"></p>
+    <button class="page--settings__bottom__button-save form-apply-button">Сохранить настройки</button>
+</div>

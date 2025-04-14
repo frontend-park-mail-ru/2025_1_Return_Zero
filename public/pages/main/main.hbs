@@ -1,32 +1,21 @@
-<div id="main">
-    <section id="collections"> 
-        <section id="collections">
-            {{>collections}}
-        </section>
-    </section>
-    <section id="recent">
-        <h1>Недавно прослушанные</h1>
-        <div class="cards">
-            {{#each this.recent}}
-                {{>music-card}}
-            {{/each}}
-        </div>
-    </section>
-    <section id="loved">
-        <h1>Любимые треки</h1>
-        <div class="cards">
-            {{#each this.loved}}
-                {{>music-card}}
-            {{/each}}
-        </div>
-    </section>
-    <section id="recommendations">
-        <h1>Рекомендации</h1>
-        <div class="songs">
-            {{#each this.recommendations}}
-                {{>song}}
-            {{/each}}
-        </div>
-    </section>
-</div>
+<section class="section"> 
+    <h1 class="section__title">Только для тебя</h1>
+    {{>collections}}
+</section>
+
+{{#if this.recent}}
+    {{>musics-section title="Недавно прослушанные" href_all="#" musics=this.recent }}
+{{/if}}
+
+{{#if this.loved}}
+    {{>musics-section title="Любимые треки" href_all="#" musics=this.loved }}
+{{/if}}
+
+{{#if this.recommendations}}
+    {{>tracks-section title="Рекомендации" href_all="#" tracks=this.recommendations }}
+{{/if}}
+
+{{#if showBottomPlayer}}
+    {{>bottom-player}}
+{{/if}}
 

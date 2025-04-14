@@ -1,0 +1,50 @@
+@use '../../dark.scss' as d;
+@use '../../variables.scss' as v;
+
+.profile__info {
+    align-self: flex-start;
+
+    display: flex;
+    gap: 3.125rem;
+
+    > div {
+        display: grid;
+        grid-template-areas:
+            'username    actions'
+            'stats       stats';
+        row-gap: 1.719rem;
+        column-gap: 1.25rem;
+
+        align-content: baseline;
+        align-items: center;
+
+        padding: 1rem 0;
+    }
+
+    &__img {
+        width: 13.625rem;
+        height: 13.625rem;
+        border-radius: 50%;
+    }
+
+    &__username {
+        grid-area: username;
+        font-family: v.$font-family-main;
+    }
+
+    &__actions {
+        grid-area: actions;
+
+        width: 2rem;
+        cursor: not-allowed;
+    }
+
+    &__stats {
+        grid-area: stats;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+
+        font-size: v.$font-size-h4;
+    }
+}

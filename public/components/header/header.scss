@@ -1,0 +1,181 @@
+@use '../../dark.scss' as d;
+@use '../../variables.scss' as v;
+
+.header {
+    padding: 1.75rem 0;
+    width: 100vw;
+    grid-area: header;
+    display: flex;
+    align-items: center;
+
+    &__logo-container {
+        cursor: pointer;
+        padding-left: 2.25rem;
+        padding-right: 2.25rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__main {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-left: calc(1rem + 0.5rem);
+        padding-right: calc(1.875rem + v.$width-scroll);
+    }
+
+    &__search {
+        > input {
+            height: 2.5rem;
+            width: 20rem;
+            padding-top: 0.188rem;
+            padding-left: calc(
+                1.5rem + 1em + 0.6rem
+            ); // padding + icon width + gap
+            font-size: v.$font-size-additional;
+            background-color: d.$color-elements;
+            border: 1px solid d.$color-border;
+            border-radius: 3rem;
+
+            &:focus {
+                outline: none;
+            }
+            &::placeholder {
+                font-size: v.$font-size-additional;
+                color: d.$color-text-transparent;
+            }
+        }
+    }
+
+    &__nav {
+        > ul {
+            display: flex;
+            align-items: center;
+            gap: 1.56rem;
+            list-style: none;
+
+            .item {
+                > a {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.6rem;
+                    width: 1.375rem;
+                    transition: width 0.2s ease-in-out;
+                    overflow: hidden;
+
+                    > img {
+                        color: d.$color-text;
+                        width: 1.375rem;
+                    }
+
+                    * {
+                        pointer-events: none;
+                    }
+                }
+
+                &:hover > a,
+                &.active > a {
+                    width: 100%;
+                }
+            }
+        }
+    }
+
+    &__profile {
+        margin-left: auto;
+        position: relative;
+        overflow: visible;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: d.$color-text;
+        border-radius: 50%;
+        margin-right: v.$width-scroll;
+
+        .profile__dropdown {
+            max-width: 9.5rem;
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 50%;
+            transform: translateX(50%);
+            padding: 1.2rem;
+            margin-top: 1.75rem; // same
+            border: 1px solid d.$color-border;
+            border-radius: 0 0 1rem 1rem;
+            background-color: d.$color-background;
+            box-shadow: 0 4px 6px 0 d.$color-background;
+            z-index: 1;
+
+            a:hover {
+                text-decoration: underline;
+            }
+
+            &::before {
+                content: '';
+                display: block;
+                position: absolute;
+                top: -1.75rem; // same
+                height: 1.75rem; // same
+                width: 100%;
+                background-color: transparent;
+            }
+        }
+
+        &:hover {
+            .profile__dropdown {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1.2rem;
+            }
+        }
+
+        .profile__img {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+        }
+
+        .profile__user {
+            max-width: 100%;
+            padding-bottom: 1.2rem;
+            border-bottom: 1px solid d.$color-border;
+            font-size: v.$font-size-h4;
+            color: d.$color-text;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    &__auth {
+        margin-left: auto;
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    &__span {
+        font-size: v.$font-size-main;
+    }
+
+    &__icon {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+/* Global selectors not nested under .header */
+.search-icon {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    margin-left: 12px;
+    margin-top: 8.5px;
+}
+
+.header-list {
+    padding-left: 1.688rem;
+}

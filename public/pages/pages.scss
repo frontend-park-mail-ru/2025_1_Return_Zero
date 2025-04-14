@@ -1,0 +1,24 @@
+@use '../dark.scss' as d;
+@use '../variables.scss' as v;
+
+.page {
+    grid-area: page;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+
+    padding: 1.875rem;
+    padding-bottom: calc(1.875rem + v.$bottomPlayer-height - 1rem);
+
+    border-radius: 1.25rem;
+
+    background-color: d.$color-background;
+
+    overflow-y: scroll;
+    height: 100%;
+
+    > * {
+        flex-shrink: 0;
+    }
+}
