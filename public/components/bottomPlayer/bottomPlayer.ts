@@ -145,6 +145,17 @@ export class BottomPlayer extends Component {
         }
     }
 
+    toggleVolume() {
+        this.player.toggleMute();
+        this.updateVolume(); 
+    }
+
+    updateVolume() {
+        this.domManager.volumeBtn.src = this.player.audio.volume > 0
+        ? '/static/img/volume.svg'
+        : '/static/img/volume-mute.svg';
+    }
+
     async toggleStream() {
         await this.stream.updateStream();
         await this.stream.createStream();
@@ -165,6 +176,7 @@ export class BottomPlayer extends Component {
         this.setCurrentDuration();
         this.buttonStateHandler.checkShuffle();
         this.buttonStateHandler.checkRepeat();
+        this.updateVolume();
     }
 }
 
@@ -233,8 +245,10 @@ class EventManager {
             );
         });
 
-        const volumeChangeHandler = () =>
+        const volumeChangeHandler = () => {
             this.dragHandler.volumeDragging.updateProgress();
+            this.bottomPlayer.updateVolume();
+        };
         this.player.audio.addEventListener('volumechange', volumeChangeHandler);
         this.handlers.push(() => {
             this.player.audio.removeEventListener(
@@ -262,6 +276,10 @@ class EventManager {
         });
         this.dom.resizeBtn.addEventListener('click', () =>
             this.bottomPlayer.toggleState()
+        );
+        this.dom.volumeBtn.addEventListener('click', () => {
+                this.bottomPlayer.toggleVolume()
+            }
         );
     }
 

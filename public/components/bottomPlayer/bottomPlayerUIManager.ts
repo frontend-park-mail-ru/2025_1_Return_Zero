@@ -22,6 +22,7 @@ export class DomManager {
     currentSpan: HTMLElement;
     endSpan: HTMLElement;
     resizeBtn: HTMLElement;
+    volumeBtn: HTMLImageElement;
 
     constructor(private root: HTMLElement) {
         this.initElements();
@@ -45,6 +46,7 @@ export class DomManager {
         this.currentSpan = this.getElement('#current-span');
         this.endSpan = this.getElement('#end-span');
         this.resizeBtn = this.getElement('#resize');
+        this.volumeBtn = this.getElement('#volume');
     }
 
     private getElement<T extends HTMLElement>(selector: string): T {

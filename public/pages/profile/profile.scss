@@ -21,6 +21,12 @@
         padding: 1rem 0;
     }
 
+    &__header {
+        display: flex;
+        flex-direction: row;
+        gap: 1.25rem;
+    }
+
     &__img {
         width: 13.625rem;
         height: 13.625rem;

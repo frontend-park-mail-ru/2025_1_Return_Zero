@@ -3,6 +3,7 @@ export class Player {
     audio: HTMLAudioElement;
 
     audioLevel: number;
+    prevAudioLevel: number;
     currentTime: number;
     duration: number;
     private playPromise: Promise<void> | null = null;
@@ -22,12 +23,14 @@ export class Player {
     private initStates() {
         try {
             this.audioLevel = Number(localStorage.getItem('audio-level'));
+            this.prevAudioLevel = this.audioLevel;
             this.audio.currentTime = Number(
                 localStorage.getItem('audio-current-time')
             );
         } catch (error) {
             console.error('Failed to get states for audio:', error);
             this.audioLevel = 0.5;
+            this.prevAudioLevel = 0.5;
             try {
                 localStorage.setItem('audio-level', String(this.audioLevel));
             } catch (error) {
@@ -60,6 +63,17 @@ export class Player {
             });
     }
 
+    toggleMute() {
+        if (this.audioLevel > 0.00001) {
+            this.prevAudioLevel = this.audioLevel;
+            this.setVolume(0);
+            return;
+        } 
+        if (this.prevAudioLevel) {
+            this.setVolume(this.prevAudioLevel);
+        }
+    }
+
     pause(): void {
         if (this.playPromise) {
             this.playPromise.catch(() => {
@@ -75,7 +89,7 @@ export class Player {
 
     setVolume(volume: number) {
         this.audioLevel = volume;
-        this.audio.volume = volume;
+        this.audio.volume = this.audioLevel;
 
         this.SaveVolume();
     }

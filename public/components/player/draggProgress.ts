@@ -92,7 +92,7 @@ class DragProgressBar {
             this.progress.style.width = `${volume}%`;
             this.circle.style.left = `${volume - 1}%`;
 
-            this.player.setVolume(this.player.audio.volume);
+            this.player.setVolume(volume / 100);
         }
     }
 }

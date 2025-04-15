@@ -1,8 +1,10 @@
 <div class="profile__info">
     <img class="profile__info__img" src="{{this.user.avatar_url}}" alt="error loading avatar">
     <div>
-        <h2 class="profile__info__username">{{this.user.username}}</h2>
-        <img class="profile__info__actions" src="/static/img/dots.svg" alt="edit">
+        <div class="profile__info__header">
+            <h2 class="profile__info__username">{{this.user.username}}</h2>
+            <img class="profile__info__actions" src="/static/img/dots.svg" alt="edit">
+        </div>
         <div class="profile__info__stats">
             <span>{{#if this.user.statistics.minutes_listened includeZero=true}}
                 {{this.user.statistics.minutes_listened}}{{else}}?{{/if}} минут прослушано
