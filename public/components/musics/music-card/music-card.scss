@@ -57,12 +57,14 @@
     }
 
     &__title {
+        width: 10rem;
         text-align: center;
         font-size: v.$font-size-h4;
         font-weight: v.$font-weight-bold;
     }
 
     &__artist {
+        width: 10rem;
         font-weight: v.$font-weight-light;
         text-align: center;
 
