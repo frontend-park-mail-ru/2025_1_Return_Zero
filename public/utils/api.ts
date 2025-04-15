@@ -8,11 +8,17 @@ import {
 
 import { routes } from './routes';
 
+
+let csrf: string = undefined;
+const CSRF_HEADER = 'X-Csrf-Token';
+
+
 export class API {
     static baseUrl = '/api/v1';
 
     private static async get(endpoint: string) {
         const resp = await fetch(this.baseUrl + endpoint);
+        csrf = resp.headers.get(CSRF_HEADER);
         return await API.processResponse(resp);
     }
 
@@ -21,6 +27,7 @@ export class API {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-Csrf-Token': csrf,
             },
             body: JSON.stringify(data),
         });
@@ -31,6 +38,9 @@ export class API {
     private static async postMultipart(endpoint: string, data: FormData) {
         const resp = await fetch(this.baseUrl + endpoint, {
             method: 'POST',
+            headers: {
+                'X-Csrf-Token': csrf,
+            },
             body: data,
         });
         return await API.processResponse(resp);
@@ -41,6 +51,7 @@ export class API {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'X-Csrf-Token': csrf,
             },
             body: JSON.stringify(data),
         });
@@ -52,6 +63,7 @@ export class API {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
+                'X-Csrf-Token': csrf,
             },
             body: JSON.stringify(data),
         });
