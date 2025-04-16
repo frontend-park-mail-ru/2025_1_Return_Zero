@@ -3,9 +3,9 @@ export class Describer {
     protected _args: any[] = [];
     protected _func: (...args: any[]) => any;
 
-    constructor (func: (...args: any[]) => any, ...args: any[]) {
+    protected constructor (func: (...args: any[]) => any, ...args: any[]) {
         this._func = func;
-        this._args = args.slice(0, args.length - 1);
+        this._args = args;
     }
 
     protected put(describer: Describer): Describer {
@@ -14,19 +14,9 @@ export class Describer {
     }
 
     call(value: any) {
-        return this._func(value, ...this.args);
-    }
-
-    required(message?: string): Describer {
-        return this.put(
-            new Describer(Describer.applyRequired, message)
-        );
-    }
-
-    protected static applyRequired(value: any, message?: string) {
-        if (value === null || value === undefined)
-            throw (message ? new Error(message) : new Error('Required'));
-        return value;
+        if (this._prev)
+            value = this._prev.call(value);
+        return this._func(value, ...this._args);
     }
 
     get prev() {
@@ -39,6 +29,25 @@ export class Describer {
 
     get method() {
         return this._func;
+    }
+
+    static string(): StringDescriber {
+        return new StringDescriber(Describer.applyString);
+    }
+
+    static applyString(value: any): string {
+        return value.toString()
+    }
+
+    static number(): NumberDescriber {
+        return new NumberDescriber(Describer.applyNumber);
+    }
+
+    static applyNumber(value: any): number {
+        const res = Number(value)
+        if (isNaN(res))
+            throw new Error('Not a number');
+        return res
     }
 }
 
@@ -80,6 +89,30 @@ export class StringDescriber extends Describer {
         return value;
     }
 
+    contains(value: string, message?: string): StringDescriber {
+        return this.put(
+            new StringDescriber(StringDescriber.applyContains, value, message)
+        ) as StringDescriber;
+    }
+
+    protected static applyContains(value: string, contains: string, message?: string) {
+        if (!value.match(new RegExp(`[${contains}]`)))
+            throw (message ? new Error(message) : new Error('Does not contain'));
+        return value;
+    }
+
+    characters(characters: string, message?: string): StringDescriber {
+        return this.put(
+            new StringDescriber(StringDescriber.applyCharacters, characters, message)
+        ) as StringDescriber;
+    }
+
+    protected static applyCharacters(value: string, characters: string, message?: string) {
+        if (!value.match(new RegExp(`^[${characters}]*$`)))
+            throw (message ? new Error(message) : new Error('Invalid characters'));
+        return value;
+    }
+
     pattern(pattern: RegExp, message?: string): StringDescriber {
         return this.put(
             new StringDescriber(StringDescriber.applyPattern, pattern, message)
@@ -92,6 +125,7 @@ export class StringDescriber extends Describer {
         return value;
     }
 }
+
 
 export class NumberDescriber extends Describer {
     min(n: number, message?: string): NumberDescriber {

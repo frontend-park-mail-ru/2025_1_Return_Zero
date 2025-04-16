@@ -6,12 +6,18 @@ import '../../components/tracks';
 import '../pages.scss';
 
 import { Component } from '../../libs/Component.ts';
+
+import { Form } from 'libs/rzv/form';
+import { describers } from 'utils/validation';
+
 import { API } from 'utils/api';
 import { userState } from 'utils/states';
 
 export class MainPage extends Component {
     // @ts-ignore
     static template = Handlebars.templates['main.hbs'];
+
+    form: Form;
 
     protected init() {
         this.element.classList.add('page');
@@ -49,6 +55,20 @@ export class MainPage extends Component {
                     recommendations,
                 })
             );
+
+            this.form = new Form({
+                username: describers.username,
+                password: describers.password,
+            })
+            this.form.bind(this.element.querySelector('form'));
+            this.element.querySelector('form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.form.validate(this.form.values)
+                if (this.form.okay())
+                    console.log(this.form)
+                else
+                    console.error(this.form)
+            })
         })();
     }
 }

@@ -1,3 +1,15 @@
+<form>
+    <div class="form-input-container">
+        <input class="form-input-container__input" name="username" data-rzv="username" type="text" placeholder="Логин">
+        <p class="form-input-container__error" data-rzv="username-error"></p>
+    </div>
+    <div class="form-input-container">
+        <input class="form-input-container__input" name="password" data-rzv="password" type="password" placeholder="Пароль">
+        <p class="form-input-container__error" data-rzv="password-error"></p>
+    </div>
+    <button class="form-apply-button">Вход</button>
+</form>
+
 <section class="section"> 
     <h1 class="section__title">Только для тебя</h1>
     {{>collections}}

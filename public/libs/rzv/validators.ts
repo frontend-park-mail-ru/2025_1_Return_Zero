@@ -11,16 +11,12 @@ export class Validator {
         return this._describer;
     }
 
-    validate(value: any): string|null {
-        let describer = this._describer;
+    validate(value: any): [string|null, null|any] {
         try {
-            while (describer) {
-                value = describer.method()(value, ...describer.args);
-                describer = describer.prev;
-            }
+            value = this._describer.call(value);
         } catch (e) {
-            return e.message;
+            return [e.message, null];
         }
-        return null;
+        return [null, value];
     }
 }
