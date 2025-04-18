@@ -40,6 +40,7 @@
         width: 17.5rem;
         height: 2.438rem;
         padding-left: 1rem;
+        padding-right: 1rem;
         font-size: v.$font-size-small;
     }
 
@@ -70,7 +71,7 @@
     position: relative;
     background: d.$color-elements;
 
-    gap: 1rem;
+    gap: 1.5vh;
     width: 26.25rem;
 
     padding: 2rem;
@@ -107,17 +108,21 @@
     &__change-auth {
         cursor: pointer;
         font-weight: v.$font-weight-light;
-        margin-top: 1rem;
+        margin-top: 1vh;
 
         &:hover {
             text-decoration: underline;
+        }
+
+        @media (max-height: 700px) {
+            display: none;
         }
     }
 }
 
 .error-message {
+    font-size: 14px;
     text-align: center;
-    font-size: v.$font-size-small;
     color: d.$color-highlight;
     font-weight: v.$font-weight-light;
 }

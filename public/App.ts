@@ -83,6 +83,15 @@ export default class App extends RootComponent {
                     trackPlay.src = '/static/img/player-play.svg';
                 }
             }
+
+            if (tracksQueue.getCurrentTrack()) {
+                const bottomPlayer: HTMLElement = this.element.querySelector('#player');
+                const page: HTMLElement = this.element.querySelector('.page');
+                if (bottomPlayer) {
+                    bottomPlayer.style.display = 'flex';
+                    page.style.paddingBottom = '5.675rem';
+                }
+            }
         }, 300);
     }
 }

@@ -2,7 +2,7 @@
 @use '../../variables.scss' as v;
 
 .header {
-    padding: 1.75rem 0;
+    padding: 1.4rem 0;
     width: 100vw;
     grid-area: header;
     display: flex;
@@ -32,7 +32,8 @@
             width: 20rem;
             padding-left: calc(
                 1.5rem + 1em + 0.6rem
-            ); // padding + icon width + gap
+            );
+            padding-right: 1rem; // padding + icon width + gap
             font-size: v.$font-size-additional;
             background-color: d.$color-elements;
             border: 1px solid d.$color-border;
