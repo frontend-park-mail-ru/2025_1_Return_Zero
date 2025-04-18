@@ -38,7 +38,6 @@ export class MainLayout extends Component implements Routable {
         this.popup = this.createState(null);
         Router.addCallback(routes.pageRoute, this);
         Router.addCallback(routes.authRoute, this);
-        Router.addCallback(routes.logoutRoute, this);
     }
 
     protected build() {
@@ -52,7 +51,6 @@ export class MainLayout extends Component implements Routable {
 
         Router.callCallback(routes.pageRoute, this);
         Router.callCallback(routes.authRoute, this);
-        Router.callCallback(routes.logoutRoute, this);
     }
 
     protected render(state: State<any>, prev: any, cur: any): void {
@@ -73,7 +71,6 @@ export class MainLayout extends Component implements Routable {
 
         Router.removeCallback(routes.pageRoute, this);
         Router.removeCallback(routes.authRoute, this);
-        Router.removeCallback(routes.logoutRoute, this);
     }
 
     onRoute({ route, params }: CallbackData) {
@@ -85,6 +82,20 @@ export class MainLayout extends Component implements Routable {
                         break;
                     case 'register':
                         this.popup.setState(new AuthForm('register'));
+                        break;
+                    case 'logout':
+                        if (confirm('Вы действительно хотите выйти?')) {;
+                            (async () => {
+                                try {
+                                    await API.postLogout();
+                                    userState.setState(null);
+                                    Router.pushUrl('/', {});
+                                } catch (e) {
+                                    console.error(e);
+                                }
+                            })();
+                        }
+                        Router.pushUrl(Router.getPath(), {});
                         break;
                     default:
                         this.popup.setState(null);
@@ -111,18 +122,6 @@ export class MainLayout extends Component implements Routable {
                         this.child.setState(new DisplayAllLayout());
                         break;
                 }
-                break;
-            case routes.logoutRoute:
-                if (params[0] === '') break;
-                (async () => {
-                    try {
-                        await API.postLogout();
-                        userState.setState(null);
-                        Router.pushUrl('/', {});
-                    } catch (e) {
-                        console.error(e);
-                    }
-                })();
                 break;
         }
     }

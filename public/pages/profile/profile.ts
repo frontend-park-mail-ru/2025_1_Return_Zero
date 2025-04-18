@@ -50,7 +50,6 @@ export class ProfilePage extends Component {
                 console.error(e);
             }
 
-            console.log(this.user);
             const playlists = (await API.getAlbums()).body;
             const tracks = (await API.getTracks()).body;
             const artists = (await API.getArtists()).body;

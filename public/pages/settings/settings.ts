@@ -289,7 +289,7 @@ export class SettingsPage extends Component {
 
     private handleDelete() {
         if (!this.validationList.every((input) => input.isValid())) return;
-        if (!confirm('Are you sure you want to delete your account?')) return;
+        if (!confirm('Вы уверены что хотите удалить аккаунт?')) return;
 
         const data: ParamTypes.UserDelete = {
             username: userState.getState().username,
@@ -310,7 +310,13 @@ export class SettingsPage extends Component {
                 const msg_elm = this.element.querySelector(
                     '.page--settings__bottom__message'
                 );
-                msg_elm.textContent = 'Failed to delete user: ' + e.message;
+                switch (true) {
+                    case e.message.includes('validation failed'):
+                        msg_elm.textContent = 'Действующий пароль указан не верно';
+                        break;
+                    default:
+                        msg_elm.textContent = 'Возникла ошибка, попробуйте позже';
+                };
                 console.error('Failed to delete user:', e.message);
             }
         })();

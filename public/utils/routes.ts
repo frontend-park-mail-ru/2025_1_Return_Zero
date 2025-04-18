@@ -15,6 +15,5 @@ export const routes = {
         (params) => `/all/${params.type}`
     ),
 
-    authRoute: new Route('#(login|register)'),
-    logoutRoute: new Route('/logout'),
+    authRoute: new Route('#(login|register|logout)')
 };
