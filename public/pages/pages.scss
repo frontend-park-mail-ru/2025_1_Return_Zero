@@ -3,6 +3,7 @@
 
 .page {
     grid-area: page;
+    position: relative;
 
     display: flex;
     flex-direction: column;

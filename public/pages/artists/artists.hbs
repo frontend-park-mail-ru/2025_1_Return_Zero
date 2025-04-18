@@ -4,9 +4,9 @@
 </section>  
 
 {{#if this.loved}}
-    {{>artists-section title="Любимые исполнители" href_all="#" artists=this.loved }}
+    {{>artists-section title="Любимые исполнители" href_all="/all/loved-artists" artists=this.loved }}
 {{/if}}
 
 {{#if this.recommendations}}
-    {{>artists-section title="Рекомендации" href_all="#" artists=this.recommendations }}
+    {{>artists-section title="Рекомендации" href_all="/all/recommendations-artists" artists=this.recommendations }}
 {{/if}}

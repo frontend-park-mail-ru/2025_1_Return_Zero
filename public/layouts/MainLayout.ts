@@ -20,6 +20,7 @@ import { AuthForm } from 'components/auth/auth.ts';
 
 import { ArtistsLayout } from './ArtistsLayout';
 import { ProfileLayout } from './ProfileLayout';
+import { DisplayAllLayout } from './DisplayAllLayout';
 
 import './MainLayout.scss';
 
@@ -105,6 +106,9 @@ export class MainLayout extends Component implements Routable {
                         break;
                     case 'profile':
                         this.child.setState(new ProfileLayout());
+                        break;
+                    case 'all':
+                        this.child.setState(new DisplayAllLayout());
                         break;
                 }
                 break;

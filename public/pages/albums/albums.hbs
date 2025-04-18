@@ -4,9 +4,9 @@
 </section>
 
 {{#if this.loved}}
-    {{>albums-card-section title="Любимые альбомы" href_all="#" albums=this.loved }}
+    {{>albums-card-section title="Любимые альбомы" href_all="/all/loved-albums" albums=this.loved }}
 {{/if}}
 
 {{#if this.recommendations}}
-    {{>albums-section title="Рекомендации" href_all="#" albums=this.recommendations }}
+    {{>albums-section title="Рекомендации" href_all="/all/recommendations-albums" albums=this.recommendations }}
 {{/if}}
