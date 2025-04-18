@@ -89,7 +89,7 @@ export class DisplayAll extends Component {
             this.element.insertAdjacentHTML('beforeend', 
                 (this.constructor as typeof DisplayAll).template({
                     ...item,
-                    index: this.offset - removed_count + this.items.getState().length + index + 1
+                    index: this.offset - received_items.length + this.items.getState().length + index + 1
                 })
             );
         })

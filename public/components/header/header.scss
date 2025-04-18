@@ -101,7 +101,7 @@
             right: 50%;
             transform: translateX(50%);
             padding: 1.2rem;
-            margin-top: 1.75rem; // same
+            margin-top: 1.75rem;
             border: 1px solid d.$color-border;
             border-radius: 0 0 1rem 1rem;
             background-color: d.$color-background;
@@ -116,8 +116,8 @@
                 content: '';
                 display: block;
                 position: absolute;
-                top: -1.75rem; // same
-                height: 1.75rem; // same
+                top: -3rem; // same
+                height: 3rem; // same
                 width: 100%;
                 background-color: transparent;
             }

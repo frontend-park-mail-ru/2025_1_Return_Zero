@@ -1,5 +1,6 @@
 @use '../../dark.scss' as d;
 @use '../../variables.scss' as v;
+@use 'sass:color';
 
 .page--settings {
     display: flex;
@@ -8,6 +9,7 @@
 
     &__top {
         display: flex;
+        align-items: center;
         gap: 3.125rem;
 
         &__avatar {
@@ -23,6 +25,31 @@
             gap: 1.563rem;
 
             font-size: v.$font-size-h4;
+        }
+
+        &__help {
+            width: 20%;
+
+            margin-left: auto;
+
+            display: flex;
+            flex-direction: column;
+            gap: 1.563rem;
+
+            font-size: v.$font-size-small;
+            color: color.change(d.$color-text, $alpha: 0.25);
+
+            p {
+                display: flex;
+            }
+
+            p::before {
+                content: url(/public/img/tip.svg);
+                margin-right: 0.75rem;
+
+                width: 1rem;
+                height: 1rem;
+            }
         }
     }
 
@@ -92,6 +119,7 @@
 
     &__bottom {
         display: flex;
+        align-items: center;
         justify-content: space-between;
 
         &__message {

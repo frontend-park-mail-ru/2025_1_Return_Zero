@@ -15,6 +15,7 @@ import { DataTypes, ParamTypes } from '../../utils/api_types';
 import { userState } from '../../utils/states';
 
 import { InputState } from 'components/auth/inputTypes';
+import Router from 'libs/Router';
 
 export class SettingsPage extends Component {
     protected static BASE_ELEMENT = 'form';
@@ -231,6 +232,7 @@ export class SettingsPage extends Component {
 
     private handleDelete() {
         if (!this.validationList.every((input) => input.isValid())) return;
+        if (!confirm('Are you sure you want to delete your account?')) return;
 
         const data: ParamTypes.UserDelete = {
             username: userState.getState().username,
@@ -246,6 +248,7 @@ export class SettingsPage extends Component {
             try {
                 await API.deleteUser(this.user.username, data);
                 userState.setState(null);
+                Router.pushUrl('/', {});
             } catch (e) {
                 const msg_elm = this.element.querySelector(
                     '.page--settings__bottom__message'
