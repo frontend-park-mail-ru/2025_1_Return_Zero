@@ -93,9 +93,13 @@ h4 {
     }
 
     &__all {
-        cursor: not-allowed;
+        cursor: pointer;
         grid-area: all;
         justify-self: end;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 
     &__content {

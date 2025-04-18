@@ -1,11 +1,11 @@
 import './main.precompiled.js';
 
-import '../../components/musics';
-import '../../components/tracks';
+import 'components/musics';
+import 'components/tracks';
 
 import '../pages.scss';
 
-import { Component } from '../../libs/Component.ts';
+import { Component } from 'libs/Component.ts';
 import { API } from 'utils/api';
 import { userState } from 'utils/states';
 

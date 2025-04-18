@@ -12,9 +12,9 @@
 </div>
 
 {{#if this.albums }}
-    {{>albums-card-section title="Популярные альбомы" href_all="#" musics=this.albums }}
+    {{>albums-card-section title="Популярные альбомы" href_all=this.popular_albums_href musics=this.albums }}
 {{/if}}
 
 {{#if this.tracks }}
-    {{>tracks-section title="Популярные треки" href_all="#" tracks=this.tracks }}
+    {{>tracks-section title="Популярные треки" href_all=this.popular_tracks_href tracks=this.tracks }}
 {{/if}}

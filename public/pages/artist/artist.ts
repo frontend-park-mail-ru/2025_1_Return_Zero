@@ -9,6 +9,7 @@ import { Component } from '../../libs/Component';
 import { State } from '../../libs/State';
 
 import { API } from 'utils/api';
+import { routes } from 'utils/routes';
 
 export class ArtistPage extends Component {
     // @ts-ignore
@@ -35,6 +36,14 @@ export class ArtistPage extends Component {
                     artist,
                     albums,
                     tracks,
+                    popular_albums_href: routes.artistsRoute.build({
+                        type: 'popular-albums',
+                        artist_id: this.id,
+                    }),
+                    popular_tracks_href: routes.artistsRoute.build({
+                        type: 'popular-tracks',
+                        artist_id: this.id,
+                    }),
                 })
             );
         })();
