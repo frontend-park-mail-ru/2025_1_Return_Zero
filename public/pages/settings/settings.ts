@@ -311,6 +311,7 @@ export class SettingsPage extends Component {
                     '.page--settings__bottom__message'
                 );
                 switch (true) {
+                    case e.message.includes('wrong password'):
                     case e.message.includes('validation failed'):
                         msg_elm.textContent = 'Действующий пароль указан не верно';
                         break;
