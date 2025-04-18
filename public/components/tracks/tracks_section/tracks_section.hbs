@@ -1,9 +1,9 @@
-<section class="section section--tracks">
+<section class="section section--tracks" data-request="{{ this.data_request }}">
     <h1 class="section__title">{{this.title}}</h1>
     <a class="section__all" href="{{this.href_all}}">Показать все</a>
     <div class="section__content">
         {{#each this.tracks}}
-            {{> track index=(add @index 1) duration=(convertDuration this.duration)}}
+            {{> track index=(add @index 1) }}
         {{/each}}
     </div>
 </section>

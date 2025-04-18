@@ -98,6 +98,18 @@ export class TracksQueue {
         }
     }
 
+    switchToTrack(trackIdx: string) { 
+        let i = 0;
+        for (const idx of this.queue) {
+            if (idx == trackIdx) {
+                this.idx = i - 1;
+                this.nextTrack();
+                return;
+            }
+            i++;
+        }
+    }
+
     async saveQueue() {
         try {
             localStorage.setItem('queue', JSON.stringify(this.queue));

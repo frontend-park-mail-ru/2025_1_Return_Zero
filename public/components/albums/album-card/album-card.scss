@@ -21,6 +21,7 @@
 
     &__title {
         text-align: center;
+        width: 10rem;
         font-size: v.$font-size-h4;
         font-weight: v.$font-weight-bold;
     }
@@ -28,6 +29,7 @@
     &__artist {
         font-weight: v.$font-weight-light;
         text-align: center;
+        width: 10rem;
 
         &:hover {
             text-decoration: underline;

@@ -95,16 +95,16 @@
         margin-right: v.$width-scroll;
 
         .profile__dropdown {
-            max-width: 9.5rem;
+            width: 8.4rem;
             display: none;
             position: absolute;
             top: 100%;
             right: 50%;
             transform: translateX(50%);
-            padding: 1.2rem;
-            margin-top: 1.75rem;
+            padding: 1.2rem 0.7rem;
+            margin-top: 1.4rem;
             border: 1px solid d.$color-border;
-            border-radius: 0 0 1rem 1rem;
+            border-radius: 0.5rem;
             background-color: d.$color-background;
             box-shadow: 0 4px 6px 0 d.$color-background;
             z-index: 1;
@@ -113,27 +113,56 @@
                 text-decoration: underline;
             }
 
-            &::before {
-                content: '';
-                display: block;
-                position: absolute;
-                top: -3rem; // same
-                height: 3rem; // same
+            div {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+            }
+
+            &__line {
                 width: 100%;
-                background-color: transparent;
+                height: 0.063rem;
+                background-color: d.$color-border;
+            }
+
+            &__icon {
+                width: 1rem;
+                height: 1rem;
+                margin-right: 0.5rem;
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+
+            &__me {
+                background-image: url('img/profile.svg');
+            }
+
+            &__settings {
+                background-image: url('img/settings.svg');
+            }
+
+            &__logout {
+                background-image: url('img/logout.svg');
             }
         }
 
-        &:hover {
-            .profile__dropdown {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 1.2rem;
-            }
+        // &:hover {
+        //     .profile__dropdown {
+        //         display: flex;
+        //         flex-direction: column;
+        //         align-items: center;
+        //         gap: 1.2rem;
+        //     }
+        // }
+
+        .profile__dropdown {
+            // display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
         }
 
         .profile__img {
+            cursor: pointer;
             width: 3rem;
             height: 3rem;
             border-radius: 50%;
@@ -142,7 +171,7 @@
         .profile__user {
             max-width: 100%;
             padding-bottom: 1.2rem;
-            border-bottom: 1px solid d.$color-border;
+            border: 1px solid d.$color-border;
             font-size: v.$font-size-h4;
             color: d.$color-text;
             text-align: center;

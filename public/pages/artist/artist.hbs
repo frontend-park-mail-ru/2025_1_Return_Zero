@@ -16,5 +16,5 @@
 {{/if}}
 
 {{#if this.tracks }}
-    {{>tracks-section title="Популярные треки" href_all=this.popular_tracks_href tracks=this.tracks }}
+    {{>tracks-section title="Популярные треки" data_request="artist" href_all=this.popular_tracks_href tracks=this.tracks }}
 {{/if}}

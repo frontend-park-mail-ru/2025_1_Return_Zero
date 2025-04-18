@@ -139,8 +139,36 @@ export class SettingsPage extends Component {
                 const msg_elm = this.element.querySelector(
                     '.page--settings__bottom__message'
                 );
-                msg_elm.textContent = 'Failed to update avatar: ' + e.message;
-                console.error('Failed to update avatar:', e.message);
+
+                switch (true) {
+                    case e.message.includes('user not found'):
+                        msg_elm.textContent = 'Пользователь не найден';
+                        break;
+                    case e.message.includes('http: multipart handled by MultipartReader'):
+                        msg_elm.textContent = 'Попробуйте позже';
+                        break;
+                    case e.message.includes('failed to parse form'):
+                        msg_elm.textContent = 'Попробуйте позже';
+                        break;
+                    case e.message.includes('failed to get file from form'):
+                        msg_elm.textContent = 'Невозможно получить аватар';
+                        break;
+                    case e.message.includes('file size exceeds limit'):
+                        msg_elm.textContent = 'Превышен допустимый вес файла';
+                        break;
+                    case e.message.includes('only image files are allowed'):
+                        msg_elm.textContent = 'Можно отправлять только';
+                        break;
+                    case e.message.includes('failed to parse image'):
+                        msg_elm.textContent = 'Ошибка обработки картинки';
+                        break;
+                    case e.message.includes('unsupported image format'):
+                        msg_elm.textContent = 'Поддерживаемые форматы изображений: .png, .jpg';
+                        break;
+                    case e.message.includes('failed to upload avatar'):
+                        msg_elm.textContent = 'Попробуйте позже';
+                        break;
+                }
             }
         })();
     }
@@ -221,11 +249,40 @@ export class SettingsPage extends Component {
                 ).body;
                 userState.setState(new_user);
             } catch (e) {
+                
                 const msg_elm = this.element.querySelector(
                     '.page--settings__bottom__message'
                 );
-                msg_elm.textContent = 'Failed to update user: ' + e.message;
-                console.error('Failed to update user:', e.message);
+                
+                switch (true) {
+                    case e.message.includes('user not auth'):
+                        msg_elm.textContent = 'Пользователь не зарегистрирован';
+                        break;
+                    case e.message.includes('failed to convert change user data'):
+                        msg_elm.textContent = 'Попробуйте позже';
+                        break;
+                    case e.message.includes('invalid request body'):
+                        msg_elm.textContent = 'Некорректная форма';
+                        break;
+                    case e.message.includes('validation failed'):
+                        msg_elm.textContent = 'Действующий пароль не указан или неправильный';
+                        break;
+                    case e.message.includes('user not found'):
+                        msg_elm.textContent = 'Пользователь не найден';
+                        break;
+                    case e.message.includes('user with this username already exists'):
+                        msg_elm.textContent = 'Пользователь с таким логином уже существует';
+                        break;
+                    case e.message.includes('user with this email already exists'):
+                        msg_elm.textContent = 'Пользователь с таким email уже существует';
+                        break;
+                    case e.message.includes('wrong password'):
+                        msg_elm.textContent = 'Неправильный пароль';
+                        break;
+                    case e.message.includes('password required'):
+                        msg_elm.textContent = 'Необходим действующий пароль';
+                        break;
+                }
             }
         })();
     }

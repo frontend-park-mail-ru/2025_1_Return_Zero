@@ -23,6 +23,22 @@ export default class App extends RootComponent {
         this.element.addEventListener('click', (e) => {
             const target = e.target;
 
+            if (target instanceof HTMLElement && !target.classList.contains('profile__dropdown') 
+                && !target.classList.contains('profile__img')) {
+                const dropDown = this.element.querySelector('.profile__dropdown') as HTMLElement;
+                if (dropDown) {
+                    dropDown.style.display = 'none';
+                }
+            }
+
+            // if (target instanceof HTMLElement && !target.classList.contains('dropdown__content') 
+            //     && !target.classList.contains('copy-profile-url')) {
+            //     const dropDown = this.element.querySelector('.dropdown__content') as HTMLElement;
+            //     if (dropDown) {
+            //         dropDown.style.display = 'none';
+            //     }
+            // }
+
             if (target instanceof HTMLAnchorElement) {
                 e.preventDefault();
                 if (target.style.cursor == 'not-allowed') {
@@ -42,7 +58,7 @@ export default class App extends RootComponent {
 
                 if (
                     currentTrack &&
-                    track.getAttribute('data-track-id') === currentTrack
+                    track.getAttribute('data-track-id') == currentTrack
                 ) {
                     player.togglePlay();
                 } else {
@@ -56,6 +72,7 @@ export default class App extends RootComponent {
                 this.element.querySelectorAll('[data-type="track"]')
             );
             const currentTrack: string | null = tracksQueue.getCurrentTrackId();
+        
             for (const track of tracks) {
                 const trackImg: HTMLImageElement =
                     track.querySelector('.track__img') ??
@@ -63,10 +80,10 @@ export default class App extends RootComponent {
                 const trackPlay: HTMLImageElement =
                     track.querySelector('.track__play') ??
                     track.querySelector('.music-card__play');
-
+                
                 if (
                     currentTrack &&
-                    track.getAttribute('data-track-id') === currentTrack
+                    track.getAttribute('data-track-id') == currentTrack
                 ) {
                     trackImg.classList.add('track-active');
                     trackPlay.classList.add('track-icon-active');

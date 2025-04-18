@@ -7,7 +7,7 @@
     <a style="cursor: not-allowed;" href="{{this.hrefAlbum}}" class="track__title">{{this.title}}</a>
     <a href="{{this.artists.0.artist_page}}" class="track__artist">{{this.artists.0.title}}</a>
     <a style="cursor: not-allowed;" href="{{this.hrefAlbum}}" class="track__album">{{this.album}}</a>
-    <span class="track__duration">{{this.duration}}</span>
+    <span class="track__duration">{{ convertDuration this.duration }}</span>
     {{#if this.isLiked}}
         <img src="/static/img/like-active.svg" alt="like" class="track__like">
     {{else}}

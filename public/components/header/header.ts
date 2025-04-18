@@ -63,6 +63,18 @@ export class Header extends Component implements Routable {
         logo.addEventListener('click', () => {
             Router.pushUrl('/', {});
         });
+        const profileImg = this.element.querySelector('.profile__img');
+        if (profileImg) {
+            if (profileImg)
+            profileImg.addEventListener('click', () => {
+                const profileDropdown = document.querySelector('.profile__dropdown') as HTMLElement;
+                if (profileDropdown.style.display != 'flex') {
+                    profileDropdown.style.display = 'flex';
+                } else {
+                    profileDropdown.style.display = 'none';
+                }
+            });
+        }
 
         Router.callCallback(routes.pageRoute, this);
         Router.callCallback(routes.authRoute, this);

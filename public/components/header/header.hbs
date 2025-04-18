@@ -29,10 +29,19 @@
                 alt='profile'
             />
             <div class='profile__dropdown'>
-                <span class='profile__user'>{{this.user.username}}</span>
-                <a href='/profile'>Профиль</a>
-                <a href='/profile/settings'>Настройки</a>
-                <a href='/logout'>Выйти</a>
+                <div>
+                    <div class="profile__dropdown__me profile__dropdown__icon"></div>
+                    <a href='/profile'>Профиль</a>
+                </div>
+                <div>
+                    <div class="profile__dropdown__settings profile__dropdown__icon"></div>
+                    <a href='/profile/settings'>Настройки</a>
+                </div>
+                <div class='profile__dropdown__line'></div>
+                <div>
+                    <div class="profile__dropdown__logout profile__dropdown__icon"></div>
+                    <a href='/logout'>Выйти</a>
+                </div>
             </div>
         </div>
     {{else}}

@@ -49,6 +49,14 @@ export class MainPage extends Component {
                     recommendations,
                 })
             );
+
+            const recentSection = this.element.querySelector('[data-request="recent"]');
+            if (recentSection) {
+                const href = recentSection.querySelector('.section__all');
+                if (href) { 
+                    recentSection.removeChild(href);
+                }
+            }
         })();
     }
 }

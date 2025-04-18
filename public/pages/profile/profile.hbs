@@ -5,11 +5,10 @@
             <h2 class="profile__info__username">{{this.user.username}}</h2>
             <div class="profile__info__actions dropdown">
                 <label class="dropdown__label" for="actions">
-                    <img  src="/static/img/dots.svg" alt="edit">
+                    <img  src="/static/img/dots.svg" class="copy-profile-url" alt="edit">
                 </label>
                 <input id="actions" class="dropdown__checkbox" type="checkbox" id="edit" class="profile__info__actions__checkbox">
                 <div class="dropdown__content">
-                    <a href="/profile/settings" class="profile__info__actions__edit">Редактировать</a>
                     <a class="profile__info__actions__copy-link">Скопировать ссылку</a>
                 </div>
             </div>
@@ -33,7 +32,7 @@
 {{/if}}
 
 {{#if this.tracks }}
-    {{>tracks-section title="Любимые треки" href_all="/all/loved" tracks=this.tracks }}
+    {{>tracks-section title="Любимые треки" data_request="loved" href_all="/all/loved" tracks=this.tracks }}
 {{/if}}
 
 {{#if this.artists}}

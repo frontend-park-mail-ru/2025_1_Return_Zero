@@ -65,14 +65,22 @@ export class ProfilePage extends Component {
                 })
             );
 
+            const recentSection = this.element.querySelector('.section--playlists');
+            if (recentSection) {
+                const href = recentSection.querySelector('.section__all');
+                if (href) { 
+                    recentSection.removeChild(href);
+                }
+            }
+
             this.element.querySelector('.profile__info__actions__copy-link')?.addEventListener('click', () => {
                 const link = new URL(routes.profileRoute.build({
                     username: this.user.username,
                 }), window.location.origin).href;
                 navigator.clipboard.writeText(link).then(() => {
-                    alert('Link copied to clipboard!');
+                    alert('Ссылка успешно скопирована!');
                 }, () => {
-                    alert('Failed to copy link to clipboard...');
+                    alert('Не получилось скопировать ссылку!');
                 });
             });
         })();

@@ -4,13 +4,13 @@
 </section>
 
 {{#if this.recent}}
-    {{>musics-section title="Недавно прослушанные" href_all="/all/history" musics=this.recent }}
+    {{>musics-section title="Недавно прослушанные" data_request="recent" href_all="/all/history" musics=this.recent }}
 {{/if}}
 
 {{#if this.loved}}
-    {{>musics-section title="Любимые треки" href_all="/all/loved" musics=this.loved }}
+    {{>musics-section title="Любимые треки" data_request="loved" href_all="/all/loved" musics=this.loved }}
 {{/if}}
 
 {{#if this.recommendations}}
-    {{>tracks-section title="Рекомендации" href_all="/all/recommendations" tracks=this.recommendations }}
+    {{>tracks-section title="Рекомендации" data_request="recommendations" href_all="/all/recommendations" tracks=this.recommendations }}
 {{/if}}
