@@ -41,8 +41,31 @@
     &__actions {
         grid-area: actions;
 
-        width: 2rem;
-        cursor: not-allowed;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+
+        img {
+            width: 2rem;
+            cursor: pointer;
+        }
+
+        .dropdown__content {
+            top: 0;
+            left: 100%;
+
+            margin-left: 1.25rem;
+
+            translate: 0;
+
+            >* {
+                cursor: pointer;
+            }
+    
+            >*:hover {
+                text-decoration: underline;
+            }
+        }
     }
 
     &__stats {

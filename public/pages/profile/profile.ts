@@ -10,6 +10,7 @@ import { Component } from '../../libs/Component';
 import { State } from '../../libs/State';
 
 import { API } from 'utils/api';
+import { routes } from 'utils/routes';
 import { DataTypes } from 'utils/api_types';
 import { userState } from 'utils/states';
 
@@ -63,6 +64,17 @@ export class ProfilePage extends Component {
                     artists,
                 })
             );
+
+            this.element.querySelector('.profile__info__actions__copy-link')?.addEventListener('click', () => {
+                const link = new URL(routes.profileRoute.build({
+                    username: this.user.username,
+                }), window.location.origin).href;
+                navigator.clipboard.writeText(link).then(() => {
+                    alert('Link copied to clipboard!');
+                }, () => {
+                    alert('Failed to copy link to clipboard...');
+                });
+            });
         })();
     }
 

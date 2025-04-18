@@ -111,6 +111,43 @@ h4 {
     }
 }
 
+.dropdown {
+    position: relative;
+
+    &__label {
+        cursor: pointer;
+    }
+
+    &__checkbox {
+        visibility: hidden;
+        pointer-events: none;
+        position: absolute;
+    }
+
+    &__checkbox:checked ~ &__content {
+        visibility: visible;
+    }
+
+    &__content {
+        visibility: hidden;
+
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        translate: -50% 0;
+
+        padding: 1.2rem;
+
+        background-color: d.$color-background;
+        border: 1px solid d.$color-border;
+        border-radius: 15px;
+    }
+}
+
 .track-active {
     filter: brightness(0.5);
     transition: filter 0.3s ease;
