@@ -45,11 +45,11 @@ export class AuthForm extends Component {
         const changeAuth = this.element.querySelector('#changeAuth');
         let redirectingForm = 'login';
         if (this.authType == 'login') {
-            changeAuth.textContent = 'Нет аккаунта? регистрация';
+            changeAuth.textContent = 'Нет аккаунта? Регистрация';
             redirectingForm = 'register';
         }
         if (this.authType == 'register') {
-            changeAuth.textContent = 'Уже зарегистрированы? войти';
+            changeAuth.textContent = 'Уже зарегистрированы? Войти';
         }
 
         changeAuth.addEventListener('click', () => {

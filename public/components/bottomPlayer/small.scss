@@ -2,7 +2,8 @@
 @use '../../variables.scss' as v;
 
 .small-player {
-    display: flex;
+    // display: flex;
+    display: none;
     align-items: center;
     z-index: 900;
 
