@@ -182,18 +182,18 @@ export class API {
         username: string,
         data: ParamTypes.UserUpdate
     ): Promise<TemplateAPI.UserResponse> {
-        return await API.put(`/user/${username}`, data);
+        return await API.put(`/user/me`, data);
     }
 
     static async updateAvatar(username: string, data: FormData): Promise<any> {
-        return await API.postMultipart(`/user/${username}/avatar`, data);
+        return await API.postMultipart(`/user/me/avatar`, data);
     }
 
     static async deleteUser(
         username: string,
         data: ParamTypes.UserDelete
     ): Promise<TemplateAPI.UserResponse> {
-        return await API.delete(`/user/${username}`, data);
+        return await API.delete(`/user/me`, data);
     }
 
     static async createStream(id: number) {
