@@ -27,6 +27,7 @@ export class SettingsPage extends Component {
     avatar: State<string>;
 
     validationList: InputState[] = [];
+    isSending = false;
 
     init() {
         this.element.classList.add('page', 'page--settings');
@@ -44,6 +45,8 @@ export class SettingsPage extends Component {
     }
 
     protected build() {
+        if (this.isSending) return;
+        
         this.element.innerHTML = '';
 
         if (!this.username) return;
@@ -108,72 +111,75 @@ export class SettingsPage extends Component {
         }
     }
 
-    private handleSubmit() {
-        this.handleAvatar();
-        this.handleOptions();
+    private async handleSubmit() {
+        if (this.isSending) return;
+        this.isSending = true;
+        if (await this.handleAvatar()) {
+            await this.handleOptions();
+        };
+        this.isSending = false;
     }
 
-    private handleAvatar() {
+    private async handleAvatar() {
         const avatar_file = (
             this.element.querySelector('#avatar') as HTMLInputElement
         ).files[0];
 
-        if (!avatar_file) return;
+        if (!avatar_file) return true;
 
         const formData = new FormData();
         formData.append('username', this.user.username);
         formData.append('avatar', avatar_file);
 
-        (async () => {
-            try {
-                // @ts-ignore
-                const avatar_url = (
-                    await API.updateAvatar(this.user.username, formData)
-                ).body.avatar_url;
-                userState.setState({
-                    ...userState.getState(),
-                    // @ts-ignore
-                    avatar_url,
-                });
-            } catch (e) {
-                const msg_elm = this.element.querySelector(
-                    '.page--settings__bottom__message'
-                );
+        try {
+            const avatar_url = (
+                await API.updateAvatar(this.user.username, formData)
+            ).body.avatar_url;
+            userState.setState({
+                ...userState.getState(),
+                avatar_url,
+            });
+            return true;
+        } catch (e) {
+            const msg_elm = this.element.querySelector(
+                '.page--settings__bottom__message'
+            );
 
-                switch (true) {
-                    case e.message.includes('user not found'):
-                        msg_elm.textContent = 'Пользователь не найден';
-                        break;
-                    case e.message.includes('http: multipart handled by MultipartReader'):
-                        msg_elm.textContent = 'Попробуйте позже';
-                        break;
-                    case e.message.includes('failed to parse form'):
-                        msg_elm.textContent = 'Попробуйте позже';
-                        break;
-                    case e.message.includes('failed to get file from form'):
-                        msg_elm.textContent = 'Невозможно получить аватар';
-                        break;
-                    case e.message.includes('file size exceeds limit'):
-                        msg_elm.textContent = 'Превышен допустимый вес файла';
-                        break;
-                    case e.message.includes('only image files are allowed'):
-                        msg_elm.textContent = 'Можно отправлять только';
-                        break;
-                    case e.message.includes('failed to parse image'):
-                        msg_elm.textContent = 'Ошибка обработки картинки';
-                        break;
-                    case e.message.includes('unsupported image format'):
-                        msg_elm.textContent = 'Поддерживаемые форматы изображений: .png, .jpg';
-                        break;
-                    case e.message.includes('failed to upload avatar'):
-                        msg_elm.textContent = 'Попробуйте позже';
-                        break;
-                }
+            switch (true) {
+                case e.message.includes('user not found'):
+                    msg_elm.textContent = 'Пользователь не найден';
+                    break;
+                case e.message.includes('http: multipart handled by MultipartReader'):
+                    msg_elm.textContent = 'Попробуйте позже';
+                    break;
+                case e.message.includes('failed to parse form'):
+                    msg_elm.textContent = 'Попробуйте позже';
+                    break;
+                case e.message.includes('failed to get file from form'):
+                    msg_elm.textContent = 'Невозможно получить аватар';
+                    break;
+                case e.message.includes('file size exceeds limit'):
+                    msg_elm.textContent = 'Превышен допустимый вес файла';
+                    break;
+                case e.message.includes('only image files are allowed'):
+                    msg_elm.textContent = 'Можно отправлять только';
+                    break;
+                case e.message.includes('failed to parse image'):
+                    msg_elm.textContent = 'Ошибка обработки картинки';
+                    break;
+                case e.message.includes('unsupported image format'):
+                    msg_elm.textContent = 'Поддерживаемые форматы изображений: .png, .jpg';
+                    break;
+                case e.message.includes('failed to upload avatar'):
+                    msg_elm.textContent = 'Попробуйте позже';
+                    break;
             }
-        })();
+        }
+
+        return false;
     }
 
-    private handleOptions() {
+    private async handleOptions() {
         if (!this.validationList.every((input) => input.isValid()))
             return false;
 
@@ -248,6 +254,7 @@ export class SettingsPage extends Component {
                     await API.updateUser(this.user.username, data)
                 ).body;
                 userState.setState(new_user);
+                return true;
             } catch (e) {
                 
                 const msg_elm = this.element.querySelector(
@@ -285,6 +292,8 @@ export class SettingsPage extends Component {
                 }
             }
         })();
+
+        return false;
     }
 
     private handleDelete() {
