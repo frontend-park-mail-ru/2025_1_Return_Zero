@@ -4,6 +4,7 @@ import { API } from 'utils/api';
 export type MusicUnit = {
     name: string;
     artist: string;
+    artistId: number;
     duration: number;
     image: string;
     src: string;
@@ -68,10 +69,10 @@ export class TracksQueue {
             try {
                 this.playerCallback(track, play);
             } catch (e) {
-                console.error('Error in player callback:', e);
+                // console.error('Error in player callback:', e);
             }
         } else {
-            console.error('Player callback is not a function');
+            // console.error('Player callback is not a function');
         }
     }
 
@@ -136,13 +137,14 @@ export class TracksQueue {
         const response = (await API.getTrack(Number(this.queue[this.idx])))
             .body;
 
-        console.log(`Playing: ${response.title}`);
+        // console.log(`Playing: ${response.title}`);
         player.setTrack(response.file_url);
         player.setDuration(response.duration);
 
         const track: MusicUnit = {
             name: response.title,
             artist: response.artists[0].title,
+            artistId: response.artists[0].id,
             duration: response.duration,
             image: response.thumbnail_url,
             src: response.file_url,

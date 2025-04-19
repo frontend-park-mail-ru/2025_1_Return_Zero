@@ -168,7 +168,7 @@ export class SettingsPage extends Component {
                     msg_elm.textContent = 'Ошибка обработки картинки';
                     break;
                 case e.message.includes('unsupported image format'):
-                    msg_elm.textContent = 'Поддерживаемые форматы изображений: .png, .jpg';
+                    msg_elm.textContent = 'Поддерживаемые форматы изображений: .png, .jpg, .gif';
                     break;
                 case e.message.includes('failed to upload avatar'):
                     msg_elm.textContent = 'Попробуйте позже';
@@ -322,7 +322,7 @@ export class SettingsPage extends Component {
                 switch (true) {
                     case e.message.includes('wrong password'):
                     case e.message.includes('validation failed'):
-                        msg_elm.textContent = 'Действующий пароль указан не верно';
+                        msg_elm.textContent = 'Действующий пароль указан неверно';
                         break;
                     default:
                         msg_elm.textContent = 'Возникла ошибка, попробуйте позже';

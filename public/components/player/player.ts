@@ -28,7 +28,7 @@ export class Player {
                 localStorage.getItem('audio-current-time')
             );
         } catch (error) {
-            console.error('Failed to get states for audio:', error);
+            // console.error('Failed to get states for audio:', error);
             this.audioLevel = 0.5;
             this.prevAudioLevel = 0.5;
             try {
@@ -49,7 +49,7 @@ export class Player {
                 this.pause();
             }
         } catch (error) {
-            console.error('Playback error:', error);
+            // console.error('Playback error:', error);
             // this.pause();
         }
     }

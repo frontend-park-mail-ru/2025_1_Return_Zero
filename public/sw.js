@@ -10,7 +10,7 @@ const workerHeader = 'Worker-Cached-At';
 const cacheFirstRoutes = ['^/$', '^/static/bundle.js$', '\.css$'];
 
 self.addEventListener('activate', async function (event) {
-    console.log('Activating Service Worker', version);
+    // console.log('Activating Service Worker', version);
 
     event.waitUntil(
         caches
@@ -23,21 +23,21 @@ self.addEventListener('activate', async function (event) {
                             cacheName.includes('CACHE') &&
                             !cacheName.includes(version)
                         ) {
-                            console.log('Deleting old cache:', cacheName);
+                            // console.log('Deleting old cache:', cacheName);
                             return caches.delete(cacheName);
                         }
                     })
                 );
             })
             .then(() => {
-                console.log('Claiming control');
+                // console.log('Claiming control');
                 return self.clients.claim();
             })
     );
 });
 
 self.addEventListener('install', async (event) => {
-    console.log('Installing Service Worker', version);
+    // console.log('Installing Service Worker', version);
     self.skipWaiting();
 });
 
@@ -96,18 +96,18 @@ async function handleRequestFirst(request) {
         if (networkResponse.ok) {
             const cache = await caches.open(staticCache);
             await cache.put(request, cloneResponse(networkResponse));
-            console.log(
-                'Updated cache after successful network request:',
-                request.url
-            );
+            // console.log(
+            //     'Updated cache after successful network request:',
+            //     request.url
+            // );
         }
 
         return networkResponse;
     } catch (error) {
-        console.warn(
-            'Network request failed, falling back to cache:',
-            request.url
-        );
+        // console.warn(
+        //     'Network request failed, falling back to cache:',
+        //     request.url
+        // );
 
         const cache = await caches.open(staticCache);
         const cachedResponse = await cache.match(request);
@@ -128,7 +128,7 @@ async function handleStaticFetch(request) {
             cachedResponse &&
             checkCachedResponse(cachedResponse, staticCacheExpiry)
         ) {
-            console.log('Serving static content from cache:', request.url);
+            // console.log('Serving static content from cache:', request.url);
             return cachedResponse;
         }
 
@@ -139,7 +139,7 @@ async function handleStaticFetch(request) {
 
         return networkResponse;
     } catch (error) {
-        console.error('Failed to handle static fetch:', error);
+        // console.error('Failed to handle static fetch:', error);
 
         const cachedResponse = await caches.match(request);
         if (cachedResponse) {
@@ -159,7 +159,7 @@ async function handleMediaFetch(request) {
             cachedResponse &&
             checkCachedResponse(cachedResponse, mediaCacheExpiry)
         ) {
-            console.log('Serving media content from cache:', request.url);
+            // console.log('Serving media content from cache:', request.url);
             return cachedResponse;
         }
 
@@ -170,7 +170,7 @@ async function handleMediaFetch(request) {
 
         return networkResponse;
     } catch (error) {
-        console.warn('Failed to handle media fetch:', error);
+        // console.warn('Failed to handle media fetch:', error);
 
         const cachedResponse = await caches.match(request);
         if (cachedResponse) {
@@ -188,12 +188,12 @@ async function handleApiFetch(request) {
         if (networkResponse.ok) {
             const cache = await caches.open(apiCache);
             await cache.put(request, cloneResponse(networkResponse));
-            console.log('Cached API response for offline use:', request.url);
+            // console.log('Cached API response for offline use:', request.url);
         }
 
         return networkResponse;
     } catch (error) {
-        console.warn('API network request failed, trying cache:', request.url);
+        // console.warn('API network request failed, trying cache:', request.url);
 
         const cache = await caches.open(apiCache);
         const cachedResponse = await cache.match(request);

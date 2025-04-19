@@ -58,7 +58,7 @@ export class ArtistsLayout extends Component implements Routable {
                             throw new Error('404 Artist not Found');
                         }
                     })();
-                    console.log(artist_id)
+                    // console.log(artist_id)
                     switch (params[2]) {
                         case '/popular-tracks':
                             this.page.setState(new DisplayAllArtistTracks(artist_id));

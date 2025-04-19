@@ -59,6 +59,11 @@
             font-weight: v.$font-weight-light;
             user-select: none;
             color: d.$color-text;
+
+            &:hover {
+                cursor: pointer;
+                text-decoration: underline;
+            }
         }
     }
 

@@ -10,7 +10,7 @@ export async function addToQueueListener(track: HTMLElement) {
 
     const type = section.getAttribute('data-request');
     const tracks: any = await getTracks(type, track);
-    console.warn(tracks);
+    // console.warn(tracks);
 
     let idx = 0;
     let flag = false;

@@ -1,3 +1,4 @@
+
 export type CallbackType<T> = (state: State<T>, prev: T, cur: T) => void;
 
 export class State<T> {

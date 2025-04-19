@@ -17,6 +17,7 @@ import { State } from '../../libs/State.ts';
 import { API } from 'utils/api';
 
 import { Component } from '../../libs/Component.ts';
+import Router from 'libs/Router';
 
 export class BottomPlayer extends Component {
     static instance: BottomPlayer;
@@ -126,7 +127,7 @@ export class BottomPlayer extends Component {
             await this.player.togglePlay();
             await this.setPlayButtonState();
         } catch (error) {
-            console.error('Ошибка воспроизведения:', error);
+            // console.error('Ошибка воспроизведения:', error);
             this.domManager.playBtn.src = '/static/img/player-play.svg';
         }
     }
@@ -177,23 +178,40 @@ export class BottomPlayer extends Component {
         this.buttonStateHandler.checkShuffle();
         this.buttonStateHandler.checkRepeat();
         this.updateVolume();
+        this.domManager.songArtist.onclick = () => { 
+            Router.pushUrl(`/artists/${track.artistId}`, {});
+            this.size.setState('small');
+        } 
     }
 }
 
 class Stream {
     id: number;
     duration: number;
+    intervalId: any;
 
     constructor() {
         this.duration = 0;
-        setInterval(() => {
-            this.setDuration();
-        }, 1000);
+        try {
+            this.duration = Number(localStorage.getItem('stream-duration'));
+        } catch(e) {
+            console.error('Failed to get stream duration from local storage');
+        }
+        this.intervalId = setInterval(() => this.setDuration(), 1000);
     }
 
     setDuration() {
         if (!player.audio.paused) {
             this.duration += 1;
+            this.saveDuration();
+        }
+    }
+
+    async saveDuration() {
+        try {
+            localStorage.setItem('stream-duration', String(this.duration));
+        } catch(e) {
+            console.error('Failed to set stream duration from local storage');
         }
     }
 
@@ -202,6 +220,9 @@ class Stream {
         const response = await API.createStream(trackIdNumber);
         this.id = response.body.id;
         this.duration = 0;
+        clearInterval(this.intervalId);
+        await this.saveDuration();
+        this.intervalId = setInterval(() => this.setDuration(), 1000);
     }
 
     async updateStream() {
@@ -210,7 +231,6 @@ class Stream {
         }
 
         const response = await API.updateStream(this.id, this.duration);
-        console.warn(this.id, this.duration);
     }
 }
 

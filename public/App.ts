@@ -10,8 +10,6 @@ import bottomPlayer from 'components/bottomPlayer/bottomPlayer';
 
 export default class App extends RootComponent {
     protected init() {
-        console.log('App init');
-
         this.initEventListeners();
     }
 
@@ -68,6 +66,15 @@ export default class App extends RootComponent {
         });
 
         setInterval(() => {
+            if (tracksQueue.getCurrentTrack()) {
+                const bottomPlayer: HTMLElement = this.element.querySelector('#player');
+                const page: HTMLElement = this.element.querySelector('.page');
+                if (bottomPlayer && bottomPlayer.style.display != 'flex') {
+                    bottomPlayer.style.display = 'flex';
+                    page.style.paddingBottom = '5.675rem';
+                }
+            }
+
             const tracks = Array.from(
                 this.element.querySelectorAll('[data-type="track"]')
             );
@@ -98,15 +105,6 @@ export default class App extends RootComponent {
                     trackImg.classList.remove('track-active');
                     trackPlay.classList.remove('track-icon-active');
                     trackPlay.src = '/static/img/player-play.svg';
-                }
-            }
-
-            if (tracksQueue.getCurrentTrack()) {
-                const bottomPlayer: HTMLElement = this.element.querySelector('#player');
-                const page: HTMLElement = this.element.querySelector('.page');
-                if (bottomPlayer) {
-                    bottomPlayer.style.display = 'flex';
-                    page.style.paddingBottom = '5.675rem';
                 }
             }
         }, 300);
