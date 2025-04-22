@@ -19,13 +19,14 @@
         "eslint-plugin-import": "^2.31.0",
         "fork-ts-checker-webpack-plugin": "^9.0.2",
         "globals": "^16.0.0",
-        "handlebars-loader": "^1.7.3",
         "html-webpack-plugin": "^5.6.3",
         "jsdoc": "^4.0.4",
         "mini-css-extract-plugin": "^2.9.2",
         "prettier": "3.5.1",
         "sass": "^1.86.3",
         "sass-loader": "^16.0.5",
+        "tern": "^0.24.3",
+        "ts-loader": "^9.5.2",
         "typescript": "^5.7.3",
         "typescript-eslint": "^8.24.1",
         "webpack": "^5.98.0",
@@ -47,10 +48,5 @@
     "bugs": {
         "url": "https://github.com/frontend-park-mail-ru/2025_1_Return_Zero/issues"
     },
-    "homepage": "https://github.com/frontend-park-mail-ru/2025_1_Return_Zero#readme",
-    "dependencies": {
-        "handlebars": "^4.7.8",
-        "handlebars-helpers": "^0.10.0",
-        "tern": "^0.24.3"
-    }
+    "homepage": "https://github.com/frontend-park-mail-ru/2025_1_Return_Zero#readme"
 }

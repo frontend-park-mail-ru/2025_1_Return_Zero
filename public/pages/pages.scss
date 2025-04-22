@@ -10,7 +10,6 @@
     gap: 2.5rem;
 
     padding: 1.875rem;
-    // padding-bottom: calc(1.875rem + v.$bottomPlayer-height - 1rem);
 
     border-radius: 1.25rem;
 
@@ -21,5 +20,64 @@
 
     > * {
         flex-shrink: 0;
+    }
+}
+
+.page--404 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: v.$font-size-large;
+    font-weight: v.$font-size-large;
+}
+
+.page--artist__info {
+    align-self: flex-start;
+
+    display: flex;
+    gap: 3.125rem;
+
+    > div {
+        padding: 1rem 0;
+    }
+
+    &__img {
+        width: 13.625rem;
+        height: 13.625rem;
+        border-radius: 50%;
+    }
+
+    &__type {
+        font-size: v.$font-size-small;
+        color: d.$color-text-transparent;
+
+        margin-bottom: -0.5rem;
+    }
+
+    &__title {
+        font-size: v.$font-size-large;
+        font-family: v.$font-family-header;
+    }
+
+    &__stats {
+        font-size: v.$font-size-small;
+    }
+
+    &__actions {
+        cursor: not-allowed;
+        margin-top: 1.75rem;
+
+        display: flex;
+        align-items: center;
+        gap: 1.125rem;
+
+        &__play {
+            width: 2.375rem;
+        }
+
+        &__subscribe {
+            cursor: not-allowed;
+        }
     }
 }

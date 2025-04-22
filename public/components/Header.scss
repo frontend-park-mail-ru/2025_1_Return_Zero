@@ -1,0 +1,86 @@
+@use "root/variables.scss" as v;
+@use "root/dark.scss" as d;
+
+.header {
+    grid-area: header;
+
+    display: flex;
+    gap: 1.688rem;
+
+    padding: 1.4rem 0;
+    padding-right: 2.675rem;
+
+    &__logo {
+        cursor: pointer;
+        padding-left: 2.25rem;
+        padding-right: 2.25rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__search {
+        height: 2.5rem;
+        width: 20rem;
+
+        padding: 0.625rem;
+
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        background-color: d.$color-elements;
+        border: 1px solid d.$color-border;
+        border-radius: 3rem;
+
+        > img {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        > input {
+            flex-grow: 1;
+            background-color: transparent;
+        }
+    }
+
+    &__nav {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+
+        &__item {
+            a {
+                display: flex;
+                align-items: center;
+                gap: 0.625rem;
+
+                font-size: v.$font-size-main;
+
+                width: 1.375rem;
+                overflow: hidden;
+                transition: all 0.2s ease-in-out;
+            }
+            
+            img {
+                width: 1.375rem;
+                height: 1.375rem;
+            }
+
+            &.active,
+            &:hover {
+                a {
+                    width: 100%
+                }
+            }
+        }
+    }
+
+    &__auth {
+        margin-left: auto;
+
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+}

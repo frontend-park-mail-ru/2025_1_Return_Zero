@@ -2,7 +2,6 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const BeforeBuildPlugin = require('before-build-webpack');
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
@@ -11,7 +10,7 @@ const publicPath = path.resolve(__dirname, 'public');
 
 module.exports = {
   mode: 'development', 
-  entry: path.join(publicPath, 'index.ts'),
+  entry: path.join(publicPath, 'index.tsx'),
   output: {
     path: buildPath,
     clean: true,
@@ -21,16 +20,6 @@ module.exports = {
   },
   module: {
     rules: [
-      {
-        test: /\.js$/i,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-          },
-        },
-      },
       {
         test: /\.ts$/i,
         use: {
@@ -45,15 +34,15 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
+        test: /\.tsx$/,
+        use: 'ts-loader'
+      },
+      {
         test: /\.s?css$/,
         use: [MiniCssExtractPlugin.loader, 
           'css-loader', 
           'sass-loader'
         ],
-      },
-      {
-        test: /\.hbs$/i,
-        loader: 'handlebars-loader',
       },
       {
         test: /\.ttf$/i,
@@ -71,12 +60,6 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new ForkTsCheckerWebpackPlugin(),
-    new BeforeBuildPlugin(function(stats, callback) {
-      console.log('Compiling Handlebars templates...');
-      const { execSync } = require('child_process');
-      execSync('for file in $(find public -name *.hbs); do echo \"Compiling $file\"; handlebars $file -f ${file%.hbs}.precompiled.js; done');
-      callback();
-    }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, './public/index.html'),
     }),
@@ -85,10 +68,6 @@ module.exports = {
     }),
     new CopyWebpackPlugin({
       patterns: [
-        {
-          from: path.join(publicPath, 'libs/handlebars-v4.7.8.js'),
-          to: path.join(buildPath, 'libs/handlebars-v4.7.8.js'),
-        },
         {
           from: path.join(publicPath, 'img'),
           to: path.join(buildPath, 'img'),
@@ -109,14 +88,15 @@ module.exports = {
     },
   },
   resolve: {
-    extensions: ['.js', '.ts'],
+    extensions: ['.js', '.ts', '.tsx'],
     alias: {
-      components: path.join(publicPath, 'components'),
-      fonts: path.join(publicPath, 'fonts'),
-      img: path.join(publicPath, 'img'),
       libs: path.join(publicPath, 'libs'),
-      pages: path.join(publicPath, 'pages'),
       utils: path.join(publicPath, 'utils'),
+      components: path.join(publicPath, 'components'),
+      pages: path.join(publicPath, 'pages'),
+      layouts: path.join(publicPath, 'layouts'),
+      img: path.join(publicPath, 'img'),
+      fonts: path.join(publicPath, 'fonts'),
       root: publicPath,
     },
   },

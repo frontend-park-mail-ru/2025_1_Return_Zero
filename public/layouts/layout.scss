@@ -1,6 +1,18 @@
+@use "root/variables.scss" as v;
+@use "root/dark.scss" as d;
+
 .layout {
     width: 100%;
     height: 100%;
+}
 
-    overflow: hidden;
+.layout--main {
+    display: grid;
+    grid-template-areas:
+        'header header'
+        'playlists-panel page'
+        'playlists-panel player';
+    grid-template-rows: min-content 1fr min-content;
+    grid-template-columns: min-content 1fr;
+    column-gap: 0.5rem;
 }

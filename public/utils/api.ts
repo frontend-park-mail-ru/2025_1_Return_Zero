@@ -1,6 +1,5 @@
 import {
     ApiResponse,
-    DataTypes,
     ParamTypes,
     TemplateAPI,
     AuthSendingData,
@@ -88,7 +87,7 @@ export class API {
 
     static async getTracks(limit?: number, offset?: number): Promise<TemplateAPI.TracksResponse> {
         const tracks_resp = await API.get(API.addParams('/tracks', {limit, offset}));
-        tracks_resp.body = tracks_resp.body.map((track: DataTypes.Track) =>
+        tracks_resp.body = tracks_resp.body.map((track: AppTypes.Track) =>
             API.extendTrack(track)
         );
         return tracks_resp;
@@ -104,7 +103,7 @@ export class API {
         offset?: number
     ): Promise<TemplateAPI.TracksResponse> {
         const tracks_resp = await API.get(API.addParams(`/user/${username}/history`, {limit, offset}));
-        tracks_resp.body = tracks_resp.body.map((track: DataTypes.Track) =>
+        tracks_resp.body = tracks_resp.body.map((track: AppTypes.Track) =>
             API.extendTrack(track)
         );
         return tracks_resp;
@@ -112,7 +111,7 @@ export class API {
 
     static async getAlbums(limit?: number, offset?: number): Promise<TemplateAPI.AlbumsResponse> {
         const albums_resp = await API.get(API.addParams('/albums', {limit, offset}));
-        albums_resp.body = albums_resp.body.map((album: DataTypes.Album) =>
+        albums_resp.body = albums_resp.body.map((album: AppTypes.Album) =>
             API.extendAlbum(album)
         );
         return albums_resp;
@@ -120,7 +119,7 @@ export class API {
 
     static async getArtists(limit?: number, offset?: number): Promise<TemplateAPI.ArtistsResponse> {
         const artists_resp = await API.get(API.addParams('/artists', {limit, offset}));
-        artists_resp.body = artists_resp.body.map((artist: DataTypes.Artist) =>
+        artists_resp.body = artists_resp.body.map((artist: AppTypes.Artist) =>
             API.extendArtist(artist)
         );
         return artists_resp;
@@ -138,7 +137,7 @@ export class API {
         offset?: number
     ): Promise<TemplateAPI.TracksResponse> {
         const tracks_resp = await API.get(API.addParams(`/artists/${id}/tracks`, {limit, offset}));
-        tracks_resp.body = tracks_resp.body.map((track: DataTypes.Track) =>
+        tracks_resp.body = tracks_resp.body.map((track: AppTypes.Track) =>
             API.extendTrack(track)
         );
         return tracks_resp;
@@ -150,7 +149,7 @@ export class API {
         offset?: number
     ): Promise<TemplateAPI.AlbumsResponse> {
         const albums_resp = await API.get(API.addParams(`/artists/${id}/albums`, {limit, offset}));
-        albums_resp.body = albums_resp.body.map((album: DataTypes.Album) =>
+        albums_resp.body = albums_resp.body.map((album: AppTypes.Album) =>
             API.extendAlbum(album)
         );
         return albums_resp;
@@ -210,7 +209,7 @@ export class API {
         return await API.put(`/streams/${id}`, { duration });
     }
 
-    static extendTrack(track: any): DataTypes.Track {
+    static extendTrack(track: any): AppTypes.Track {
         return {
             ...track,
             artists: track.artists.map((artist: any) =>
@@ -219,7 +218,7 @@ export class API {
         };
     }
 
-    static extendAlbum(album: any): DataTypes.Album {
+    static extendAlbum(album: any): AppTypes.Album {
         return {
             ...album,
             artists: album.artists.map((artist: any) =>
@@ -228,7 +227,7 @@ export class API {
         };
     }
 
-    static extendArtist(artist: any): DataTypes.Artist {
+    static extendArtist(artist: any): AppTypes.Artist {
         return {
             ...artist,
             artist_page: routes.artistsRoute.build({ artist_id: artist.id }),

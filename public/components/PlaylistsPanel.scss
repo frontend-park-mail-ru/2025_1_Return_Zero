@@ -1,0 +1,31 @@
+@use "root/variables.scss" as v;
+@use "root/dark.scss" as d;
+
+.playlists-panel {
+    grid-area: playlists-panel;
+
+    padding: 2.25rem;
+
+    background-color: d.$color-background;
+    border-radius: 0 1.25rem 1.25rem 0;
+
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-width: none;
+
+    .playlists-panel__item {
+        width: 4.625rem;
+        height: 4.625rem;
+
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+            scale: 1.1;
+        }
+
+        &:first-child {
+            width: 1.75rem;
+            height: 1.75rem;
+        }
+    }
+}
