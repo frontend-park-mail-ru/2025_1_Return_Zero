@@ -1,6 +1,7 @@
-import h from "libs/rzf/jsx";
+import { initAt } from "libs/rzf/VDom";
+import router from "libs/rzf/Router";
+
 import App from "./App";
-import vdom from "libs/rzf/VDom";
 
 import "./index.scss";
 
@@ -28,5 +29,5 @@ async function registerServiceWorker() {
 
 registerServiceWorker();
 
-vdom.bind(document.getElementById('root') as HTMLDivElement);
-vdom.build(<App />)
+initAt(<App />, document.getElementById('root')!);
+router.callRoutes();

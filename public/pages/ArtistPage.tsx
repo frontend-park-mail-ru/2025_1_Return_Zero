@@ -1,9 +1,8 @@
-import h from "libs/rzf/jsx";
 import { Component } from "libs/rzf/Component";
 
 import { TrackLine } from "components/Track";
 import { AlbumCard } from "components/Album";
-import { Section, SectionHorizontal } from "components/Section";
+import { Section } from "components/Section";
 import { Button } from "components/elements/Button";
 
 import { API } from "utils/api";
@@ -60,33 +59,33 @@ export class ArtistPage extends Component {
 
     render() {
         if (!this.state.artist) {
-            return <div classes={["page", "page--404"]}>Артист не найден{'('}</div>
+            return [<div className="page page--404">Артист не найден{'('}</div>]
         }
-        return (
-            <div classes={["page", "page--artist"]}>
-                <div classes={["page--artist__info"]}>
-                    <img classes={["page--artist__info__img"]} src={this.state.artist.thumbnail_url} alt="error" />
+        return [
+            <div className="page page--artist">
+                <div className="page--artist__info">
+                    <img className="page--artist__info__img" src={this.state.artist.thumbnail_url} alt="error" />
                     <div>
-                        <span classes={["page--artist__info__type"]}>Исполнитель</span>
-                        <h2 classes={["page--artist__info__title"]}>{this.state.artist.title}</h2>
-                        <span classes={["page--artist__info__stats"]}>{this.state.artist.listeners_count} слушателей за месяц</span>
-                        <div classes={["page--artist__info__actions"]}>
+                        <span className="page--artist__info__type">Исполнитель</span>
+                        <h2 className="page--artist__info__title">{this.state.artist.title}</h2>
+                        <span className="page--artist__info__stats">{this.state.artist.listeners_count} слушателей за месяц</span>
+                        <div className="page--artist__info__actions">
                             <img src="/static/img/play.svg" alt="play"/>
                             <Button>Подписаться</Button>
                         </div>
                     </div>
                 </div>
-                <SectionHorizontal title="Популярные альбомы">
-                    {...this.state.albums.map((album, index) => (
+                <Section title="Популярные альбомы" horizontal>
+                    {this.state.albums.map((album, index) => (
                         <AlbumCard key={album.id} album={album}/>
                     ))}
-                </SectionHorizontal>
+                </Section>
                 <Section title="Популярные треки">
-                    {...this.state.tracks.map((track, index) => (
+                    {this.state.tracks.map((track, index) => (
                         <TrackLine key={track.id} ind={index} track={track}/>
                     ))}
                 </Section>
             </div>
-        )
+        ]
     }
 }

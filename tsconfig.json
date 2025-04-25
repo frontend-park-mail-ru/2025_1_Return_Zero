@@ -9,14 +9,14 @@
     "outDir": "dist",
     "noImplicitAny": true,
 
-    "jsx": "react",
-    "jsxFactory": "h",
+    "jsx": "react-jsx",
+    "jsxImportSource": "libs/rzf",
     
     "paths": {
       "libs/*": ["public/libs/*"],
       "utils/*": ["public/utils/*"],
       "components/*": ["public/components/*"],
-      "pages/*": ["public/pages/*"]
+      "pages/*": ["public/pages/*"],
     }
   },
   "include": ["public/**/*"],

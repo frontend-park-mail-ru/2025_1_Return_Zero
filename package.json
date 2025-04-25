@@ -48,5 +48,9 @@
     "bugs": {
         "url": "https://github.com/frontend-park-mail-ru/2025_1_Return_Zero/issues"
     },
-    "homepage": "https://github.com/frontend-park-mail-ru/2025_1_Return_Zero#readme"
+    "homepage": "https://github.com/frontend-park-mail-ru/2025_1_Return_Zero#readme",
+    "dependencies": {
+        "@babel/preset-react": "^7.26.3",
+        "save-dev": "^0.0.1-security"
+    }
 }

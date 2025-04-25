@@ -1,4 +1,3 @@
-import h from "libs/rzf/jsx";
 import { Component } from "libs/rzf/Component";
 import { Route, Link } from "libs/rzf/Router";
 
@@ -8,39 +7,39 @@ import "./Header.scss";
 
 export class Header extends Component {
     render() {
-        return (
-            <header classes={["header"]}>
-                <div classes={["header__logo"]}>
+        return [
+            <header className="header">
+                <div className="header__logo">
                     <Link to='/'><img src="/static/img/logo.png" alt="Return Zero" /></Link>
                 </div>
-                <form classes={["header__search"]}>
-                    <img classes={["header__search__icon"]} src="/static/img/icon-search.svg" />
-                    <input classes={["header__search__input"]} type="text" placeholder="Поиск..." />
+                <form className="header__search">
+                    <img className="header__search__icon" src="/static/img/icon-search.svg" />
+                    <input className="header__search__input" type="text" placeholder="Поиск..." />
                 </form>
-                <nav classes={["header__nav"]}>
+                <nav className="header__nav">
                     <NavItem link="/" icon="/static/img/icon-home.svg" text="Главная" />
                     <NavItem link="/tracks" icon="/static/img/icon-tracks.svg" text="Треки" />
                     <NavItem link="/albums" icon="/static/img/icon-albums.svg" text="Альбомы" />
                     <NavItem link="/artists" icon="/static/img/icon-artists.svg" text="Артисты" />
                 </nav>
-                <div classes={["header__auth"]}>
-                    <Button classes={["header__auth__login"]} handle={{"click": () => console.log("click")}}>Войти</Button>
-                    <Button classes={["header__auth__register"]} handle={{"click": () => console.log("click")}}>Регистрация</Button>
+                <div className="header__auth">
+                    <Button className="header__auth__login" onClick={() => console.log("login click")}>Войти</Button>
+                    <Button className="header__auth__register" onClick={() => console.log("register click")}>Регистрация</Button>
                 </div>
             </header>
-        );
+        ];
     }
 }
 
 class NavItem extends Component {
     render() {
-        return (
-            <div classes={["header__nav__item"]}>
+        return [
+            <div className="header__nav__item">
                 <Link to={this.props.link}>
                     <img src={this.props.icon} />
                     <span>{this.props.text}</span>
                 </Link>
             </div>
-        );
+        ];
     }
 }

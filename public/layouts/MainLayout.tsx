@@ -1,4 +1,3 @@
-import h from "libs/rzf/jsx";
 import { Component } from "libs/rzf/Component";
 import { Route } from "libs/rzf/Router";
 
@@ -12,16 +11,16 @@ import "./layout.scss";
 
 export default class MainLayout extends Component {
     render() {
-        return (
-            <div classes={["layout", "layout--main"]}>
+        return [
+            <div className="layout layout--main">
                 <Header />
                 <PlaylistsPanel />
-                <Route path="/"><MainPage /></Route>
-                <Route path="/tracks"><TracksPage /></Route>
-                <Route path="/albums"><AlbumsPage /></Route>
-                <Route path="/artists"><ArtistsPage /></Route>
-                <Route path="/artists/1"><ArtistPage artist_id="1" /></Route>
+                <Route path="^/" exact component={MainPage}></Route>
+                <Route path="^/tracks/" exact component={TracksPage} />
+                <Route path="^/albums/" exact component={AlbumsPage} />
+                <Route path="^/artists/" exact component={ArtistsPage} />
+                <Route path="^/artists/:artist_id<int>/" exact component={ArtistPage} />
             </div>
-        )
+        ]
     }
 }
