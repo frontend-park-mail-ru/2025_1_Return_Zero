@@ -1,4 +1,4 @@
-export type ActionCallback<T> = (action: Action<T>) => void;
+export type ActionCallback<T = any> = (action: Action<T>) => void;
 
 export class Action<T = any> {
     payload: T

@@ -4,7 +4,7 @@ type StorageStor = Record<string, any>;
 
 export class Storage<T extends StorageStor = StorageStor> {
     protected stor: T;
-    private subs: ActionCallback<any>[];
+    private subs: ActionCallback[];
 
     constructor(initialState: Partial<T> = {} as T) {
         this.stor = initialState as T;
@@ -15,17 +15,17 @@ export class Storage<T extends StorageStor = StorageStor> {
         return this.stor;
     }
 
-    protected callSubs(action: Action<any>): void {
+    protected callSubs(action: Action): void {
         this.subs.forEach(sub => {
             sub(action);
         })
     }
 
-    subscribe(sub: ActionCallback<any>): void {
+    subscribe(sub: ActionCallback): void {
         this.subs.push(sub);
     }
 
-    unSubscribe(sub: ActionCallback<any>): void {
+    unSubscribe(sub: ActionCallback): void {
         const index = this.subs.indexOf(sub);
         if (index !== -1) {
             this.subs.splice(index, 1);

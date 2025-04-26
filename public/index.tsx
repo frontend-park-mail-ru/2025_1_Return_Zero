@@ -3,6 +3,10 @@ import router from "libs/rzf/Router";
 
 import App from "./App";
 
+import Dispatcher from "libs/flux/Dispatcher";
+import { ACTIONS } from "utils/flux/actions";
+import { API } from "utils/api";
+
 import "./index.scss";
 
 async function registerServiceWorker() {
@@ -31,3 +35,7 @@ registerServiceWorker();
 
 initAt(<App />, document.getElementById('root')!);
 router.callRoutes();
+
+API.getCurrentUser().then((user) => {
+    Dispatcher.dispatch(new ACTIONS.USER_LOGIN(user.body));
+})

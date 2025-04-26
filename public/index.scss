@@ -22,6 +22,10 @@
 a {
     text-decoration: none;
     color: d.$color-text;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 input {

@@ -71,7 +71,7 @@ export function h(
 }
 
 function processChildren(children: child[]): VNode[] {
-    return children.filter(child => child !== undefined && child !== null).map(child => {
+    return children.filter(child => child !== undefined && child !== null && typeof child !== 'boolean').map(child => {
         if (typeof child === 'string' || typeof child === 'number' || typeof child === 'boolean') {
             return {
                 type: VNodeType.TEXT,

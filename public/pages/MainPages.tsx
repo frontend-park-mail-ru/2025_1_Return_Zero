@@ -5,7 +5,6 @@ import { AlbumCard, AlbumLine } from "components/Album";
 import { ArtistCard } from "components/Artist";
 import { Section } from "components/Section";
 
-import { STORAGES } from "utils/flux/storages";
 import { API } from "utils/api";
 
 import './pages.scss';

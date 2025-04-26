@@ -19,3 +19,15 @@
         background-color: d.$color-button-active;
     }
 }
+
+.button--danger {
+    &.active,&:hover {
+        background-color: d.$color-highlight;
+    }
+}
+
+.button--success {
+    &.active,&:hover {
+        background-color: d.$color-success;
+    }
+}

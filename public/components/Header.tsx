@@ -3,6 +3,8 @@ import router, { Link } from "libs/rzf/Router";
 
 import { Button } from "components/elements/Button";
 
+import { USER_STORAGE } from "utils/flux/storages";
+
 import "./Header.scss";
 
 export class Header extends Component {
@@ -22,10 +24,7 @@ export class Header extends Component {
                     <NavItem link="/albums" icon="/static/img/icon-albums.svg" text="Альбомы" />
                     <NavItem link="/artists" icon="/static/img/icon-artists.svg" text="Артисты" />
                 </nav>
-                <div className="header__auth">
-                    <Button onClick={() => router.push(location.pathname+'#login', {})} className="header__auth__login">Войти</Button>
-                    <Button onClick={() => router.push(location.pathname+'#register', {})} className="header__auth__register">Регистрация</Button>
-                </div>
+                <HeaderProfile />
             </header>
         ];
     }
@@ -33,7 +32,6 @@ export class Header extends Component {
 
 class NavItem extends Component {
     render() {
-        console.log(location.pathname, this.props.link)
         return [
             <div className={"header__nav__item" + (location.pathname === this.props.link ? " active" : "")}>
                 <Link to={this.props.link}>
@@ -42,5 +40,60 @@ class NavItem extends Component {
                 </Link>
             </div>
         ];
+    }
+}
+
+class HeaderProfile extends Component {
+    constructor(props: Record<string, any>) {
+        super(props);
+        this.state = {
+            opened: false,
+        }
+    }
+
+    componentDidMount(): void {
+        USER_STORAGE.subscribe(this.userCallback.bind(this));
+    }
+
+    userCallback() {
+        this.setState({});
+    }
+
+    render() {
+        const user = USER_STORAGE.getUser();
+        if (user) return this.renderProfile(user);
+        return this.renderAuth();
+    }
+
+    renderAuth() {
+        return [
+            <div className="header__auth">
+                <Button onClick={() => router.push(location.pathname+'#login', {})} className="header__auth__login">Войти</Button>
+                <Button onClick={() => router.push(location.pathname+'#register', {})} className="header__auth__register">Регистрация</Button>
+            </div> 
+        ]
+    }
+
+    renderProfile(user: AppTypes.User) {
+        return [
+            <div className="header__profile" onClick={() => this.setState({ opened: !this.state.opened })}>
+                <img src={user.avatar_url} className="header__profile__avatar" />
+                {this.state.opened && <div className="header__profile__menu">
+                    <Link className="item" to="/profile">
+                        <img src='/static/img/icon-profile.svg' />
+                        <span>Профиль</span>
+                    </Link>
+                    <Link className="item" to="profile/settings">
+                        <img src='/static/img/icon-settings.svg' />
+                        <span>Настройки</span>
+                    </Link>
+                    <div className="header__profile__menu__separator"></div>
+                    <Link className="item" to="#logout">
+                        <img src='/static/img/icon-logout.svg' />
+                        <span>Выйти</span>
+                    </Link>
+                </div>}
+            </div>
+        ]
     }
 }

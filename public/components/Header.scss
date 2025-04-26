@@ -83,4 +83,53 @@
         align-items: center;
         gap: 1.5rem;
     }
+
+    &__profile {
+        position: relative;
+        margin-left: auto;
+
+        &__avatar {
+            cursor: pointer;
+
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+        }
+
+        &__menu {
+            z-index: 1;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            translate: -50% 0;
+
+            margin-top: 1.32rem;
+            padding: 1.2rem 0.7rem;
+
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+
+            background-color: d.$color-elements;
+            border: 1px solid d.$color-border;
+            border-radius: 10px;
+
+            .item {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+
+                img {
+                    width: 1rem;
+                    height: 1rem;
+                }
+            }
+
+            &__separator {
+                width: 100%;
+                height: 1px;
+                background-color: d.$color-border;
+            }
+        }
+    }
 }

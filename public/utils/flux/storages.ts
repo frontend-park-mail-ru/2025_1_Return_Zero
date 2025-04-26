@@ -2,6 +2,8 @@ import Dispatcher from "libs/flux/Dispatcher";
 import { Storage } from "libs/flux/Storage";
 import { Action } from "libs/flux/Action";
 
+import { ACTIONS } from "./actions";
+
 type UserStorageStor = {
     user: AppTypes.User | null,
     history: AppTypes.Track[],
@@ -16,7 +18,8 @@ class UserStorage extends Storage<UserStorageStor> {
         Dispatcher.register(this.handleAction.bind(this));
     }
 
-    protected handleAction(action: Action<any>) {
+    protected handleAction(action: Action) {
+        console.log(action)
         switch (true) {
             case action instanceof ACTIONS.USER_LOGIN:
             case action instanceof ACTIONS.USER_CHANGE:
@@ -32,6 +35,4 @@ class UserStorage extends Storage<UserStorageStor> {
     }
 }
 
-export namespace STORAGES {
-    export const USER_STORAGE = new UserStorage();
-}
+export const USER_STORAGE = new UserStorage();

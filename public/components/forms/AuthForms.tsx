@@ -3,14 +3,16 @@ import router, { Link } from "libs/rzf/Router";
 
 import { LOGIN_FORM_VALIDATOR, REGISTRATION_FORM_VALIDATOR } from "utils/validators";
 
-import { Button } from "components/elements/Button";
+import { Button, ButtonDanger } from "components/elements/Button";
 import { Popup } from "components/elements/Popup";
+
+import Dispatcher from "libs/flux/Dispatcher";
+import { ACTIONS } from "utils/flux/actions";
 
 import { API } from "utils/api";
 
 import "./forms.scss";
 import "./AuthForms.scss";
-import { VNode } from "libs/rzf/VDom";
 
 
 export class LoginForm extends Component {
@@ -50,7 +52,8 @@ export class LoginForm extends Component {
             else payload.username = vr.identifier.value;
 
             const reply = (await API.postLogin(payload)).body;
-            console.log(reply)
+            Dispatcher.dispatch(new ACTIONS.USER_LOGIN(reply));
+            router.push(location.pathname, {});
         } catch (e) {
             this.setState({
                 'error': e.message
@@ -112,6 +115,7 @@ export class SignupForm extends Component {
     async onSubmit(e: SubmitEvent) {
         e.preventDefault();
 
+        console.log(REGISTRATION_FORM_VALIDATOR)
         if (!REGISTRATION_FORM_VALIDATOR.ok()) return;
 
         try {
@@ -122,7 +126,7 @@ export class SignupForm extends Component {
             };
 
             const reply = (await API.postSignup(payload)).body;
-            console.log(reply)
+            Dispatcher.dispatch(new ACTIONS.USER_LOGIN(reply));
             router.push(location.pathname, {});
         } catch (e) {
             this.setState({
@@ -132,7 +136,7 @@ export class SignupForm extends Component {
         }
     }
 
-    render(): VNode[] {
+    render() {
         const vr = REGISTRATION_FORM_VALIDATOR.result;
         return [
             <Popup className="popup--auth" onClick={this.onClose.bind(this)}>
@@ -159,7 +163,7 @@ export class SignupForm extends Component {
                     <div className="form-input-container">
                         <label className="form-input-container__label">Повторите пароль</label>
                         <div className="form-input-container__password">
-                            <input className="form-input-container__input" onInput={this.onInput.bind(this)} value={vr.password.uprocessed} type={this.state.repas_hidden ? "password" : "text"} name="repeatPassword" placeholder="пароль" />
+                            <input className="form-input-container__input" onInput={this.onInput.bind(this)} value={vr.repeatPassword.uprocessed} type={this.state.repas_hidden ? "password" : "text"} name="repeatPassword" placeholder="пароль" />
                             <img className="form-input-container__password__show" src={this.state.repas_hidden ? "/static/img/hidden.svg" : "/static/img/shown.svg"} alt={this.state.repas_hidden ? "+" : "-"} onClick={() => this.setState({ repas_hidden: !this.state.repas_hidden })} />
                         </div>
                         {vr.repeatPassword?.error && <p className="form-input-container__error">{vr.repeatPassword.error}</p>}
@@ -167,6 +171,35 @@ export class SignupForm extends Component {
                     <Button className="form__apply">Зарегистрироваться</Button>
                     {this.state.error && <p className="form-input-container__error">{this.state.error}</p>}
                     <Link to='#login' className="form__link">Уже есть аккаунт? Войти</Link>
+                </form>
+            </Popup>
+        ];
+    }
+}
+
+export class LogoutForm extends Component {
+    onClose(e: MouseEvent) {
+        if (e.target instanceof HTMLElement && e.target.classList.contains("popup")) {
+            router.replace(location.pathname, {});
+        }
+    }
+    onSubmit() {
+        console.log('logout')
+        try {
+            API.postLogout();
+            Dispatcher.dispatch(new ACTIONS.USER_LOGOUT(null));
+            router.push(location.pathname, {});
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    render() {
+        return [
+            <Popup className="popup--auth" onClick={this.onClose.bind(this)}>
+                <form className="form form--auth" onSubmit={this.onSubmit.bind(this)}>
+                    <h2 className="form__title">Вы уверены, что хотите выйти?</h2>
+                    <ButtonDanger className="form__apply">Выйти</ButtonDanger>
                 </form>
             </Popup>
         ];

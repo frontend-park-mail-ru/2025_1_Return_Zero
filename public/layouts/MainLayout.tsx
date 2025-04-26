@@ -4,7 +4,7 @@ import { Route } from "libs/rzf/Router";
 import { Header } from "components/Header";
 import { PlaylistsPanel } from "components/PlaylistsPanel";
 
-import { LoginForm, SignupForm } from "components/forms/AuthForms";
+import { LoginForm, LogoutForm, SignupForm } from "components/forms/AuthForms";
 
 import { MainPage, TracksPage, AlbumsPage, ArtistsPage } from "pages/MainPages";
 import { ArtistPage } from "pages/ArtistPage";
@@ -26,6 +26,7 @@ export default class MainLayout extends Component {
 
                 <Route path="#login$" component={LoginForm} />
                 <Route path="#register$" component={SignupForm} />
+                <Route path="#logout$" component={LogoutForm} />
             </div>
         ]
     }
