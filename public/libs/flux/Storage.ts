@@ -29,6 +29,8 @@ export class Storage<T extends StorageStor = StorageStor> {
         const index = this.subs.indexOf(sub);
         if (index !== -1) {
             this.subs.splice(index, 1);
+        } else {
+            console.error('Subscription not found');
         }
     }
 }

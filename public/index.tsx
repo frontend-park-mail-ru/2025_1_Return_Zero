@@ -9,6 +9,10 @@ import { API } from "utils/api";
 
 import "./index.scss";
 
+// mocks
+import 'utils/api_mocks';
+
+
 async function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
         try {
@@ -33,9 +37,10 @@ async function registerServiceWorker() {
 
 registerServiceWorker();
 
+
 initAt(<App />, document.getElementById('root')!);
 router.callRoutes();
 
-API.getCurrentUser().then((user) => {
+API.getCheck().then((user) => {
     Dispatcher.dispatch(new ACTIONS.USER_LOGIN(user.body));
 })

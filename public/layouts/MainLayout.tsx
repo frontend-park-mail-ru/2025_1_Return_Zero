@@ -8,6 +8,8 @@ import { LoginForm, LogoutForm, SignupForm } from "components/forms/AuthForms";
 
 import { MainPage, TracksPage, AlbumsPage, ArtistsPage } from "pages/MainPages";
 import { ArtistPage } from "pages/ArtistPage";
+import { ProfilePage } from "pages/Profile";
+import { SettingsPage } from "pages/Settings";
 
 import "./layout.scss";
 
@@ -23,6 +25,9 @@ export default class MainLayout extends Component {
                 <Route path="^/albums/" exact component={AlbumsPage} />
                 <Route path="^/artists/" exact component={ArtistsPage} />
                 <Route path="^/artists/:artist_id<int>/" exact component={ArtistPage} />
+
+                <Route path="^/profile/:username/" exact component={ProfilePage} />
+                <Route path="^/settings/" exact component={SettingsPage} />
 
                 <Route path="#login$" component={LoginForm} />
                 <Route path="#register$" component={SignupForm} />

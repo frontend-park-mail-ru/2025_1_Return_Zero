@@ -6,7 +6,6 @@ import { ACTIONS } from "./actions";
 
 type UserStorageStor = {
     user: AppTypes.User | null,
-    history: AppTypes.Track[],
 }
 
 class UserStorage extends Storage<UserStorageStor> {
@@ -14,12 +13,10 @@ class UserStorage extends Storage<UserStorageStor> {
         super();
 
         this.stor.user = null;
-        this.stor.history = [];
         Dispatcher.register(this.handleAction.bind(this));
     }
 
     protected handleAction(action: Action) {
-        console.log(action)
         switch (true) {
             case action instanceof ACTIONS.USER_LOGIN:
             case action instanceof ACTIONS.USER_CHANGE:

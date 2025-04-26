@@ -81,3 +81,136 @@
         }
     }
 }
+
+.page--profile__info {
+    display: flex;
+    align-items: center;
+    gap: 3.125rem;
+
+    &__avatar {
+        width: 13.625rem;
+        height: 13.625rem;
+        border-radius: 50%;
+    }
+
+    > div {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+
+        &__action {
+            cursor: pointer;
+            width: 2.375rem;
+        }
+    }
+
+    &__stats {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+}
+
+.page--settings{
+    &__info{
+        display: flex;
+        align-items: center;
+        gap: 3.125rem;
+    
+    
+        &__avatar {
+            position: relative;
+            width: 13.625rem;
+            height: 13.625rem;
+            border-radius: 50%;
+        }
+    
+        &__data {
+            display: flex;
+            flex-direction: column;
+            gap: 1.563rem;
+    
+            font-size: v.$font-size-h4;
+        }
+    
+        &__help {
+            width: 20%;
+            margin-left: auto;
+
+            display: flex;
+            flex-direction: column;
+            gap: 1.563rem;
+
+            color: rgba(d.$color-text-transparent, 0.25);
+
+            p {
+                display: flex;
+                align-items: flex-start;
+                gap: 0.625rem;
+
+                &::before {
+                    content: url(/public/img/tip.svg);
+                    width: 1rem;
+                    height: 1rem;
+                }
+            }
+        }
+    }
+
+    &__main {
+        display: grid;
+        grid-template-areas: 'auth privacy' 'security privacy';
+        grid-template-rows: repeat(2, min-content);
+        grid-template-columns: 1fr 2.2fr;
+        row-gap: 2.5rem;
+        column-gap: 9.875rem;
+
+        &__auth {
+            grid-area: auth;
+        }
+
+        &__security {
+            grid-area: security;
+        }
+
+        &__privacy {
+            grid-area: privacy;
+
+            > div {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, min-content);
+                align-content: space-between;
+                row-gap: 6.15rem;
+                column-gap: 4.25rem;
+            }
+        }
+
+        &__auth,
+        &__security,
+        &__privacy {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+    }
+
+    &__submit {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        > * {
+            flex-shrink: 0;
+        }
+        p {
+            width: fit-content;
+        }
+    }
+} 

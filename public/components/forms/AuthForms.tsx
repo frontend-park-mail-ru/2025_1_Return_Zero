@@ -115,7 +115,6 @@ export class SignupForm extends Component {
     async onSubmit(e: SubmitEvent) {
         e.preventDefault();
 
-        console.log(REGISTRATION_FORM_VALIDATOR)
         if (!REGISTRATION_FORM_VALIDATOR.ok()) return;
 
         try {
@@ -184,7 +183,6 @@ export class LogoutForm extends Component {
         }
     }
     onSubmit() {
-        console.log('logout')
         try {
             API.postLogout();
             Dispatcher.dispatch(new ACTIONS.USER_LOGOUT(null));

@@ -44,6 +44,8 @@ class NavItem extends Component {
 }
 
 class HeaderProfile extends Component {
+    createdUserCallback: any = undefined;
+
     constructor(props: Record<string, any>) {
         super(props);
         this.state = {
@@ -52,7 +54,12 @@ class HeaderProfile extends Component {
     }
 
     componentDidMount(): void {
-        USER_STORAGE.subscribe(this.userCallback.bind(this));
+        this.createdUserCallback = this.userCallback.bind(this);
+        USER_STORAGE.subscribe(this.createdUserCallback);
+    }
+    componentWillUnmount(): void {
+        USER_STORAGE.unSubscribe(this.createdUserCallback);
+        this.createdUserCallback = undefined;
     }
 
     userCallback() {
@@ -79,11 +86,11 @@ class HeaderProfile extends Component {
             <div className="header__profile" onClick={() => this.setState({ opened: !this.state.opened })}>
                 <img src={user.avatar_url} className="header__profile__avatar" />
                 {this.state.opened && <div className="header__profile__menu">
-                    <Link className="item" to="/profile">
+                    <Link className="item" to={"/profile/" + user.username}>
                         <img src='/static/img/icon-profile.svg' />
                         <span>Профиль</span>
                     </Link>
-                    <Link className="item" to="profile/settings">
+                    <Link className="item" to="/settings">
                         <img src='/static/img/icon-settings.svg' />
                         <span>Настройки</span>
                     </Link>

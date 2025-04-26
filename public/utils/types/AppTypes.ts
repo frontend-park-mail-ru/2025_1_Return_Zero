@@ -4,17 +4,21 @@ declare global {
             id: number;
             title: string;
             thumbnail_url: string;
+            liked: boolean;
             duration: number;
+            file_url?: string;
+
             album_id: number;
             album: string;
+            album_page: string; // extended
+
             artists: {
                 id: number;
                 title: string;
                 role: string;
-                // added fields
-                artist_page: string;
+                artist_page: string; // extended
             }[];
-            file_url?: string;
+            
         };
     
         type Album = {
@@ -35,6 +39,7 @@ declare global {
             id: number;
             title: string;
             description: string;
+            liked: boolean;
             thumbnail_url: string;
             listeners_count: number;
             favorites_count: number;
@@ -62,6 +67,11 @@ declare global {
                 artists_listened?: number;
             };
         };
+
+        type Like = {
+            id: number;
+            value: boolean;
+        }
     }
 } 
 
