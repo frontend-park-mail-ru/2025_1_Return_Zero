@@ -1,5 +1,5 @@
 import { Component } from "libs/rzf/Component";
-import { Route, Link } from "libs/rzf/Router";
+import router, { Link } from "libs/rzf/Router";
 
 import { Button } from "components/elements/Button";
 
@@ -23,8 +23,8 @@ export class Header extends Component {
                     <NavItem link="/artists" icon="/static/img/icon-artists.svg" text="Артисты" />
                 </nav>
                 <div className="header__auth">
-                    <Button className="header__auth__login" onClick={() => console.log("login click")}>Войти</Button>
-                    <Button className="header__auth__register" onClick={() => console.log("register click")}>Регистрация</Button>
+                    <Button onClick={() => router.push(location.pathname+'#login', {})} className="header__auth__login">Войти</Button>
+                    <Button onClick={() => router.push(location.pathname+'#register', {})} className="header__auth__register">Регистрация</Button>
                 </div>
             </header>
         ];
@@ -33,8 +33,9 @@ export class Header extends Component {
 
 class NavItem extends Component {
     render() {
+        console.log(location.pathname, this.props.link)
         return [
-            <div className="header__nav__item">
+            <div className={"header__nav__item" + (location.pathname === this.props.link ? " active" : "")}>
                 <Link to={this.props.link}>
                     <img src={this.props.icon} />
                     <span>{this.props.text}</span>
