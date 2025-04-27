@@ -2,9 +2,12 @@
 @use "root/dark.scss" as d;
 
 .artist-card > a {
+    width: 8.75rem;
+
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 1rem;
 }
 
@@ -17,11 +20,16 @@
     }
 
     &__info {
+        display: flex;
+        justify-content: center;
+
         &__title {
+            width: 10rem;
+
             font-size: v.$font-size-h4;
             font-weight: v.$font-weight-bold;
-    
+
             text-align: center;
-        }
+        } 
     }
 }

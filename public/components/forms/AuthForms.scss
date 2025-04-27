@@ -33,6 +33,7 @@
 
     .form__title {
         align-self: stretch;
+        font-family: v.$font-family-main;
     }
 
     .form-input-container {
@@ -44,6 +45,15 @@
         padding: 0 2rem;
         
         gap: 1.25rem;
+
+        input {
+            font-size: v.$font-size-small;
+        }
+    }
+
+    .form-bottom-container {
+        margin-top: 2rem;
+        text-align: center;
     }
 
     .form__link {
