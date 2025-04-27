@@ -12,7 +12,7 @@ const PAS_LET = 'a-zA-Z';
 
 export const LOGIN_FORM_VALIDATOR = new rzv.Validator({
     'identifier': rzv.string().required().or([
-        d => d.email(),
+        d => d.email('Некорректный email'),
         d => d.min(USER_MIL).max(USER_MAL).consistOf(USER_SYM)
     ], 'Invalid identifier'),
     'password': rzv.string().required().min(PAS_MIL).max(PAS_MAL).consistOf(PASS_SYMB)

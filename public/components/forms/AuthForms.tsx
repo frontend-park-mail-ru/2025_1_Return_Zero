@@ -86,8 +86,8 @@ export class LoginForm extends Component {
                     </div>
 
                     <div className="form-input-container form-bottom-container">
-                        <Button className="form__apply">Войти</Button>
                         {this.state.error && <p className="form-input-container__error">{this.state.error}</p>}
+                        <Button className="form__apply">Войти</Button>
                         <Link to='#register' className="form__link">Нет аккаунта? Зарегистрироваться</Link>
                     </div>
                 </form>
@@ -183,8 +183,8 @@ export class SignupForm extends Component {
                     </div>
 
                     <div className="form-input-container form-bottom-container">
-                        <Button className="form__apply">Зарегистрироваться</Button>
                         {this.state.error && <p className="form-input-container__error">{this.state.error}</p>}
+                        <Button className="form__apply">Зарегистрироваться</Button>
                         <Link to='#login' className="form__link">Уже есть аккаунт? Войти</Link>
                     </div>
                 </form>
