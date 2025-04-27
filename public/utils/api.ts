@@ -147,6 +147,12 @@ export class API {
         return albums_resp;
     }
 
+    static async getAlbum(id: number): Promise<TemplateAPI.AlbumResponse> {
+        const album_resp = (await API.get(`/albums/${id}`));
+        album_resp.body = this.extendAlbum(album_resp.body);
+        return album_resp;
+    }
+
     static async getArtistAlbums(
         id: number,
         limit?: number,
@@ -264,6 +270,7 @@ export class API {
     static extendTrack(track: any): AppTypes.Track {
         return {
             ...track,
+            album_page: `/albums/${track.album_id}`,
             artists: track.artists.map((artist: any) =>
                 API.extendArtist(artist)
             ),
@@ -273,9 +280,11 @@ export class API {
     static extendAlbum(album: any): AppTypes.Album {
         return {
             ...album,
+            album_page: `/albums/${album.id}`,
             artists: album.artists.map((artist: any) =>
                 API.extendArtist(artist)
             ),
+            release_date: new Date(album.release_date),
         };
     }
 

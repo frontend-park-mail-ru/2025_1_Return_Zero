@@ -21,6 +21,89 @@
     > * {
         flex-shrink: 0;
     }
+
+    &__info {
+        align-self: flex-start;
+    
+        display: flex;
+        align-items: center;
+        gap: 3.125rem;
+    
+        &__img {
+            width: 13.625rem;
+            height: 13.625rem;
+            border-radius: 15px;
+    
+            box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.25);
+        }
+    
+        > div {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    
+        &__type {
+            font-size: v.$font-size-small;
+            color: d.$color-text-transparent;
+    
+            margin-bottom: -0.5rem;
+        }
+    
+        &__title {
+            font-size: v.$font-size-large;
+            font-family: v.$font-family-header;
+        }
+    
+        &__actions {
+            margin-top: 1.75rem;
+    
+            display: flex;
+            align-items: center;
+            gap: 1.125rem;
+        }
+    }
+}
+
+.page.page--album {
+    .page__info {
+        &__artists {
+            a:first-child {
+                font-weight: v.$font-weight-bold;
+            }
+        }
+
+        &__actions {
+            * {
+                width: 2.375rem;
+                height: 2.375rem;
+            }
+        }
+    }
+}
+
+.page--artist.page {
+    align-self: flex-start;
+
+    display: flex;
+    gap: 3.125rem;
+
+    .page__info {
+        &__img {
+            border-radius: 50%;
+        }
+    
+        &__stats {
+            font-size: v.$font-size-small;
+        }
+    
+        &__actions {
+            img {
+                width: 2.375rem;
+                height: 2.375rem;
+            }
+        }
+    }
 }
 
 .page--404 {
@@ -30,56 +113,6 @@
 
     font-size: v.$font-size-large;
     font-weight: v.$font-size-large;
-}
-
-.page--artist__info {
-    align-self: flex-start;
-
-    display: flex;
-    gap: 3.125rem;
-
-    > div {
-        padding: 1rem 0;
-    }
-
-    &__img {
-        width: 13.625rem;
-        height: 13.625rem;
-        border-radius: 50%;
-    }
-
-    &__type {
-        font-size: v.$font-size-small;
-        color: d.$color-text-transparent;
-
-        margin-bottom: -0.5rem;
-    }
-
-    &__title {
-        font-size: v.$font-size-large;
-        font-family: v.$font-family-header;
-    }
-
-    &__stats {
-        font-size: v.$font-size-small;
-    }
-
-    &__actions {
-        cursor: not-allowed;
-        margin-top: 1.75rem;
-
-        display: flex;
-        align-items: center;
-        gap: 1.125rem;
-
-        &__play {
-            width: 2.375rem;
-        }
-
-        &__subscribe {
-            cursor: not-allowed;
-        }
-    }
 }
 
 .page--profile__info {

@@ -7,4 +7,6 @@ export namespace ACTIONS {
 
     export class TRACK_PLAY extends Action<AppTypes.Track> {}
     export class TRACK_PAUSE extends Action<AppTypes.Track> {}
+    export class TRACK_LIKE extends Action<AppTypes.Track> {}
+    export class TRACK_UNLIKE extends Action<AppTypes.Track> {}
 }

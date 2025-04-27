@@ -152,6 +152,21 @@ export class SettingsPage extends Component {
             })
             return;
         }
+
+        try {
+            const data = {
+                username: this.state.user!.username,
+                email: this.state.user!.email,
+                password: this.validator.result.password.value
+            };
+            const result = (await API.deleteUser(data)).body;
+            Dispatcher.dispatch(new ACTIONS.USER_LOGOUT(null));
+        } catch (e) {
+            this.setState({
+                error: e.message
+            })
+            console.error(e.message);
+        }
     }
 
     render() {

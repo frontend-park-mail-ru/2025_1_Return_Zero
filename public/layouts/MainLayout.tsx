@@ -7,6 +7,7 @@ import { PlaylistsPanel } from "components/PlaylistsPanel";
 import { LoginForm, LogoutForm, SignupForm } from "components/forms/AuthForms";
 
 import { MainPage, TracksPage, AlbumsPage, ArtistsPage } from "pages/MainPages";
+import { AlbumPage } from "pages/AlbumPage";
 import { ArtistPage } from "pages/ArtistPage";
 import { ProfilePage } from "pages/ProfilePage";
 import { SettingsPage } from "pages/SettingsPage";
@@ -22,7 +23,10 @@ export default class MainLayout extends Component {
 
                 <Route path="^/" exact component={MainPage}></Route>
                 <Route path="^/tracks/" exact component={TracksPage} />
+
                 <Route path="^/albums/" exact component={AlbumsPage} />
+                <Route path="^/albums/:album_id<int>/" exact component={AlbumPage} />
+
                 <Route path="^/artists/" exact component={ArtistsPage} />
                 <Route path="^/artists/:artist_id<int>/" exact component={ArtistPage} />
 

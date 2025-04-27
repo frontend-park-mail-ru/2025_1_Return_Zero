@@ -25,36 +25,15 @@ export class ArtistPage extends Component {
     }
 
     componentDidMount() {
-        this.getArtist().then(artist => this.setState({ artist }));
-        this.getArtistTracks().then(tracks => this.setState({ tracks }));
-        this.getArtistAlbums().then(albums => this.setState({ albums }));
-    }
-
-    private async getArtist() {
-        try {
-            return (await API.getArtist(this.props.artist_id)).body;
-        } catch (e) {
-            console.error(e.message);
-            return null;
-        }
-    }
-
-    private async getArtistTracks() {
-        try {
-            return (await API.getArtistTracks(this.props.artist_id)).body;
-        } catch (e) {
-            console.error(e.message);
-            return [];
-        }
-    }
-
-    private async getArtistAlbums() {
-        try {
-            return (await API.getArtistAlbums(this.props.artist_id)).body;
-        } catch (e) {
-            console.error(e.message);
-            return [];
-        }
+        API.getArtist(this.props.artist_id)
+            .then(artist => {this.setState({artist: artist.body})})
+            .catch(e => console.error(e.message));
+        API.getArtistAlbums(this.props.artist_id)
+            .then(albums => {this.setState({albums: albums.body})})
+            .catch(e => console.error(e.message));
+        API.getArtistTracks(this.props.artist_id)
+            .then(tracks => {this.setState({tracks: tracks.body})})
+            .catch(e => console.error(e.message));
     }
 
     render() {
@@ -63,13 +42,13 @@ export class ArtistPage extends Component {
         }
         return [
             <div className="page page--artist">
-                <div className="page--artist__info">
-                    <img className="page--artist__info__img" src={this.state.artist.thumbnail_url} alt="error" />
+                <div className="page__info">
+                    <img className="page__info__img" src={this.state.artist.thumbnail_url} alt="error" />
                     <div>
-                        <span className="page--artist__info__type">Исполнитель</span>
-                        <h2 className="page--artist__info__title">{this.state.artist.title}</h2>
-                        <span className="page--artist__info__stats">{this.state.artist.listeners_count} слушателей за месяц</span>
-                        <div className="page--artist__info__actions">
+                        <span className="page__info__type">Исполнитель</span>
+                        <h2 className="page__info__title">{this.state.artist.title}</h2>
+                        <span className="page__info__stats">{this.state.artist.listeners_count} слушателей за месяц</span>
+                        <div className="page__info__actions">
                             <img src="/static/img/play.svg" alt="play"/>
                             <Button>Подписаться</Button>
                         </div>

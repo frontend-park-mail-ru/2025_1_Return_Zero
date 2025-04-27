@@ -42,7 +42,7 @@ export class AlbumCard extends Component {
     render() {
         const album: AppTypes.Album = this.props.album;
         return [
-            <Link to={`/album/${album.id}`} className="album-card">
+            <Link to={album.album_page} className="album-card">
                 <img className="album-card__img" src={album.thumbnail_url} alt="error"/>
                 <div className="album-card__info">
                     <span className="album-card__info__title">{album.title}</span>

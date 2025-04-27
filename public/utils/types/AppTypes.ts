@@ -25,14 +25,14 @@ declare global {
             id: number;
             title: string;
             thumbnail_url: string;
+            album_page: string; // extended
             artists: {
                 id: number;
                 title: string;
-                // added fields
-                artist_page: string;
+                artist_page: string; // extended
             }[];
             type: string;
-            reelase_date: string;
+            release_date: Date;
         };
     
         type Artist = {

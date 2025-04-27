@@ -17,7 +17,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    > * { flex-shrink: 0; }
 
     padding: 2rem;
 
@@ -31,6 +30,8 @@
     overflow-x: hidden;
     overflow-y: auto;
 
+    > * { flex-shrink: 0; }
+    
     .form__title {
         align-self: stretch;
         font-family: v.$font-family-main;

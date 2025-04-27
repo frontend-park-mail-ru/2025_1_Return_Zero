@@ -1,5 +1,5 @@
 import { Component } from "libs/rzf/Component";
-import router, { Link } from "libs/rzf/Router";
+import router, { Route, Link } from "libs/rzf/Router";
 
 import { Button } from "components/elements/Button";
 
@@ -19,10 +19,10 @@ export class Header extends Component {
                     <input className="header__search__input" type="text" placeholder="поиск..." />
                 </form>
                 <nav className="header__nav">
-                    <NavItem link="/" icon="/static/img/icon-home.svg" text="Главная" />
-                    <NavItem link="/tracks" icon="/static/img/icon-tracks.svg" text="Треки" />
-                    <NavItem link="/albums" icon="/static/img/icon-albums.svg" text="Альбомы" />
-                    <NavItem link="/artists" icon="/static/img/icon-artists.svg" text="Артисты" />
+                    <Route path="^/" exact component={NavItem} elseComponent={NavItem} link="/" icon="/static/img/icon-home.svg" text="Главная" />
+                    <Route path="^/tracks/" exact component={NavItem} elseComponent={NavItem} link="/tracks" icon="/static/img/icon-tracks.svg" text="Треки" />
+                    <Route path="^/albums/" exact component={NavItem} elseComponent={NavItem} link="/albums" icon="/static/img/icon-albums.svg" text="Альбомы" />
+                    <Route path="^/artists/" exact component={NavItem} elseComponent={NavItem} link="/artists" icon="/static/img/icon-artists.svg" text="Артисты" />
                 </nav>
                 <HeaderProfile />
             </header>

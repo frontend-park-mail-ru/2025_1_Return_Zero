@@ -4,6 +4,9 @@ import { Link } from "libs/rzf/Router";
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
 import { TRACKS_STORAGE } from "utils/flux/storages";
+import { API } from "utils/api";
+
+import { Like } from "./elements/Like";
 
 import "./Track.scss";
 
@@ -16,10 +19,18 @@ function durationToString(duration: number): string {
 abstract class TrackBase extends Component {
     state: {
         playing: 'play' | 'pause' | null,
+        liked: boolean,
         hover: boolean
     } = {
         playing: null,
+        liked: false,
         hover: false
+    }
+
+    constructor(props: Record<string, any>) {
+        super(props);
+
+        this.state.liked = props.track.liked;
     }
 
     componentDidMount(): void {
@@ -43,8 +54,12 @@ abstract class TrackBase extends Component {
             case action instanceof ACTIONS.TRACK_PAUSE:
                 this.setState({playing: this.props.track.id === action.payload.id ? 'pause' : null});
                 break;
-            default:
-                this.setState({playing: null});
+            case action instanceof ACTIONS.TRACK_LIKE:
+                this.props.track.id === action.payload.id && this.setState({liked: true});
+                break;
+            case action instanceof ACTIONS.TRACK_UNLIKE:
+                this.props.track.id === action.payload.id && this.setState({liked: false});
+                break;
         }
     }
 
@@ -53,6 +68,17 @@ abstract class TrackBase extends Component {
             Dispatcher.dispatch(new ACTIONS.TRACK_PAUSE(this.props.track));
         } else {
             Dispatcher.dispatch(new ACTIONS.TRACK_PLAY(this.props.track));
+        }
+    }
+
+    onLike = async () => {
+        try {
+            const res = (await API.postTrackLike(this.props.track.id, !this.state.liked)).body;
+            if (res.value) Dispatcher.dispatch(new ACTIONS.TRACK_LIKE(this.props.track));
+            else Dispatcher.dispatch(new ACTIONS.TRACK_UNLIKE(this.props.track));
+        } catch (e) {
+            console.error(e);
+            return;
         }
     }
 }
@@ -87,14 +113,14 @@ export class TrackLine extends TrackBase {
                 </div>
 
                 <div className="track-line__album">
-                    <Link to={`/album/${track.album_id}`}>{track.album}</Link>
+                    <Link to={track.album_page}>{track.album}</Link>
                 </div>
 
                 <div className="track-line__controls">
                     <div className="track-line__controls__duration-container">
                         <span className="track-line__controls__duration">{durationToString(track.duration)}</span>
                     </div>
-                    <img src="/static/img/like-default.svg" alt="like"/>
+                    <Like active={this.state.liked} onClick={this.onLike}/>
                     <img src="/static/img/dots.svg" alt="more"/>
                 </div>
             </div>

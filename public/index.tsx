@@ -39,7 +39,6 @@ registerServiceWorker();
 
 
 initAt(<App />, document.getElementById('root')!);
-router.callRoutes();
 
 API.getCheck().then((user) => {
     Dispatcher.dispatch(new ACTIONS.USER_LOGIN(user.body));

@@ -19,16 +19,9 @@ export class MainPage extends Component {
     }
 
     componentDidMount() {
-        this.getTracks().then(tracks => this.setState({ tracks }));
-    }
-
-    private async getTracks() {
-        try {
-            return (await API.getTracks(20)).body;
-        } catch (e) {
-            console.error(e.message);
-            return [];
-        }
+        API.getTracks()
+            .then(tracks => this.setState({ tracks: tracks.body, history: tracks.body }))
+            .catch(e => console.error(e.message));
     }
 
     render() {
@@ -59,7 +52,9 @@ export class TracksPage extends Component {
     }
 
     componentDidMount() {
-        this.getTracks().then(tracks => this.setState({ tracks }));
+        API.getTracks()
+            .then(tracks => this.setState({ tracks: tracks.body, history: tracks.body }))
+            .catch(e => console.error(e.message));
     }
 
     private async getTracks() {
@@ -97,16 +92,9 @@ export class AlbumsPage extends Component {
     }
 
     componentDidMount() {
-        this.getAlbums().then(albums => this.setState({ albums }));
-    }
-
-    private async getAlbums() {
-        try {
-            return (await API.getAlbums()).body;
-        } catch (e) {
-            console.error(e.message);
-            return [];
-        }
+        API.getAlbums()
+            .then(albums => this.setState({ albums: albums.body }))
+            .catch(e => console.error(e.message));
     }
 
     render() {
@@ -135,16 +123,9 @@ export class ArtistsPage extends Component {
     }
 
     componentDidMount() {
-        this.getArtists().then(artists => this.setState({ artists }));
-    }
-
-    private async getArtists() {
-        try {
-            return (await API.getArtists()).body;
-        } catch (e) {
-            console.error(e.message);
-            return [];
-        }
+        API.getArtists()
+            .then(artists => this.setState({ artists: artists.body }))
+            .catch(e => console.error(e.message));
     }
 
     render() {

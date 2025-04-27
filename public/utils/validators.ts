@@ -23,7 +23,7 @@ export const LOGIN_FORM_VALIDATOR = new rzv.Validator({
         d => d.email(EMAIL_MES),
         d => d.min(USER_MIL, USER_MIL_MES).max(USER_MAL, USER_MAL_MES).consistOf(USER_SYM, USER_SYM_MES)
     ], 'Invalid identifier'),
-    'password': rzv.string().required().min(PAS_MIL, PAS_MIL_MES).max(PAS_MAL, PAS_MAL_MES).consistOf(PAS_SYMB, PAS_SYMB_MES)
+    'password': rzv.string().required(REQ_MES).min(PAS_MIL, PAS_MIL_MES).max(PAS_MAL, PAS_MAL_MES).consistOf(PAS_SYMB, PAS_SYMB_MES)
 });
 
 export const REGISTRATION_FORM_VALIDATOR = new rzv.Validator({
@@ -40,7 +40,7 @@ export function getSettingsFormValidator(user: AppTypes.User) {
 
         'password': rzv.string().ifThen(
             rzv.isOr(rzv.isNotEmpty(rzv.ref('new_password')), rzv.isRefOneOf(rzv.ref('submit'), ['delete'])), 
-            (d) => d.required()
+            (d) => d.required(REQ_MES)
         ).optional().min(PAS_MIL, PAS_MIL_MES).max(PAS_MAL, PAS_MAL_MES).consistOf(PAS_SYMB, PAS_SYMB_MES),
         'new_password': rzv.string().optional().min(PAS_MIL, PAS_MIL_MES).max(PAS_MAL, PAS_MAL_MES).consistOf(PAS_SYMB, PAS_SYMB_MES),
 

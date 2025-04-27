@@ -10,20 +10,23 @@ class Router {
     
     addRoute(route: Route) {
         this.routes.push(route);
+        this.callRoute(route);
     }
     
     removeRoute(route: Route) {
         this.routes = this.routes.filter(r => r !== route);
     }
 
-    callRoutes() {
+    callRoute(route: Route) {
         const url = window.location.href;
-        [...this.routes].forEach(route => {
-            const match = route.match(url);
-            route.setState({
-                match
-            })
+        const match = route.match(url);
+        route.setState({
+            match
         })
+    }
+
+    callRoutes() {
+        [...this.routes].forEach(this.callRoute);
     }
 
     push(url: string, data: any) {
@@ -37,10 +40,6 @@ class Router {
     }
 }
 
-const router = new Router();
-window.addEventListener('popstate', router.handleRoute.bind(router));
-export default router;
-
 
 enum ParamType {
     String,
@@ -51,6 +50,7 @@ export type RouteProps = {
     path: string,
     exact?: boolean,
     component: typeof Component,
+    elseComponent?: typeof Component,
     [key: string]: any
 }
 
@@ -113,23 +113,19 @@ export class Route extends Component {
     }
     
     render() {
-        const { path, exact, component: Child, ...other } = this.props;
-        return this.state.match ? [<Child {...this.state.match} {...other} />] : [];
+        const { path, exact, component: Child, elseComponent: ElseChild, ...other } = this.props;
+        if (this.state.match) return [<Child {...this.state.match} {...other} />];
+        if (ElseChild) return [<ElseChild {...other} />];
+        return [];
     }
 }
 
-export type LinkProps = {
-    to: string,
-    [key: string]: any
-}
 
 export class Link extends Component {
-    props: LinkProps;
-
-    constructor(props: LinkProps) {
-        super(props);
-        this.props = props;
-    }
+    props: {
+        to: string,
+        [key: string]: any
+    };
 
     handleClck(e: MouseEvent) {
         e.preventDefault();
@@ -143,3 +139,7 @@ export class Link extends Component {
         </a>]
     }
 }
+
+const router = new Router();
+window.addEventListener('popstate', router.handleRoute.bind(router));
+export default router;
