@@ -16,7 +16,7 @@ export class Header extends Component {
                 </div>
                 <form className="header__search">
                     <img className="header__search__icon" src="/static/img/icon-search.svg" />
-                    <input className="header__search__input" type="text" placeholder="Поиск..." />
+                    <input className="header__search__input" type="text" placeholder="поиск..." />
                 </form>
                 <nav className="header__nav">
                     <NavItem link="/" icon="/static/img/icon-home.svg" text="Главная" />

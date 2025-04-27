@@ -14,6 +14,7 @@
         display: flex;
         align-items: center;
         gap: 1rem;
+        width: 10%;
 
         &__index {
             font-size: v.$font-size-h4;
@@ -35,6 +36,7 @@
 
             &__title {
                 font-weight: v.$font-weight-bold;
+                font-size: v.$font-size-h4;
             }
 
             &__artists {
@@ -53,9 +55,11 @@
 
     &__album {
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
+        padding-left: 20%;
 
         font-weight: v.$font-weight-light;
+        font-size: v.$font-size-main;
     }
 
     &__controls {
@@ -63,6 +67,20 @@
         justify-content: flex-end;
         align-items: center;
         gap: 1rem;
+
+        img {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        &__duration {
+            font-size: v.$font-size-h4;
+            font-weight: v.$font-weight-light;
+        }
+
+        &__duration-container {
+            padding-right: 1.5rem;
+        }
     }
 }
 
@@ -89,6 +107,7 @@
 
         &__title {
             text-align: center;
+            font-size: v.$font-size-h4;
             font-weight: v.$font-weight-bold;
         }
 

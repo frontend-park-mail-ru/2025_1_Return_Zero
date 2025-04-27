@@ -37,7 +37,9 @@ export class TrackLine extends Component {
                 </div>
 
                 <div className="track-line__controls">
-                    <span className="track-line__controls__duration">{durationToString(track.duration)}</span>
+                    <div className="track-line__controls__duration-container">
+                        <span className="track-line__controls__duration">{durationToString(track.duration)}</span>
+                    </div>
                     <img src="/static/img/like-default.svg" alt="like"/>
                     <img src="/static/img/dots.svg" alt="more"/>
                 </div>

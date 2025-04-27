@@ -79,9 +79,12 @@ export class LoginForm extends Component {
                             <img className="form-input-container__password__show" src={this.state.pas_hidden ? "/static/img/hidden.svg" : "/static/img/shown.svg"} alt={this.state.pas_hidden ? "+" : "-"} onClick={() => this.setState({ pas_hidden: !this.state.pas_hidden })} />
                         </div>
                     </div>
-                    <Button className="form__apply">Войти</Button>
-                    {this.state.error && <p className="form-input-container__error">{this.state.error}</p>}
-                    <Link to='#register' className="form__link">Нет аккаунта? Зарегистрироваться</Link>
+
+                    <div className="form-input-container form-bottom-container">
+                        <Button className="form__apply">Войти</Button>
+                        {this.state.error && <p className="form-input-container__error">{this.state.error}</p>}
+                        <Link to='#register' className="form__link">Нет аккаунта? Зарегистрироваться</Link>
+                    </div>
                 </form>
             </Popup>
         ];
@@ -167,9 +170,12 @@ export class SignupForm extends Component {
                         </div>
                         {vr.repeatPassword?.error && <p className="form-input-container__error">{vr.repeatPassword.error}</p>}
                     </div>
-                    <Button className="form__apply">Зарегистрироваться</Button>
-                    {this.state.error && <p className="form-input-container__error">{this.state.error}</p>}
-                    <Link to='#login' className="form__link">Уже есть аккаунт? Войти</Link>
+
+                    <div className="form-input-container form-bottom-container">
+                        <Button className="form__apply">Зарегистрироваться</Button>
+                        {this.state.error && <p className="form-input-container__error">{this.state.error}</p>}
+                        <Link to='#login' className="form__link">Уже есть аккаунт? Войти</Link>
+                    </div>
                 </form>
             </Popup>
         ];
