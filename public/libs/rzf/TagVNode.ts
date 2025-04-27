@@ -39,6 +39,24 @@ export function hTag(
     } as TagVNode;
 }
 
+function getClickOutsideHandler(vnode: TagVNode, handler: EventListenerOrEventListenerObject) {
+    const res_handler = (e: MouseEvent) => {
+        if (!vnode.firstDom!.contains(e.target as HTMLElement)) {
+            if (typeof handler === 'function') {
+                handler(e);
+            } else {
+                handler.handleEvent(e);
+            }
+        }
+    };
+
+    const res = {
+        setup: () => { document.body.addEventListener('click', res_handler) },
+        drop: () => { document.body.removeEventListener('click', res_handler) }
+    }
+    return res;
+}
+
 export function renderTag(vnode: TagVNode, dom: HTMLElement, before: HTMLElement|Text|null=null) {
     vnode.firstDom = document.createElement(vnode.tag);
     dom.insertBefore(vnode.firstDom!, before);
@@ -52,6 +70,11 @@ export function renderTag(vnode: TagVNode, dom: HTMLElement, before: HTMLElement
     })
 
     Object.keys(on).forEach(key => {
+        if (key === 'clickoutside') {
+            vnode.clickOutside = getClickOutsideHandler(vnode, on[key]);
+            vnode.clickOutside.setup();
+            return;
+        }
         vnode.firstDom!.addEventListener(key, on[key]);
     })
 
@@ -68,6 +91,7 @@ export function renderTag(vnode: TagVNode, dom: HTMLElement, before: HTMLElement
 }
 
 export function destroyTag(vnode: TagVNode) {
+    vnode.clickOutside?.drop();
     vnode.firstDom!.remove();
     Object.entries(vnode.props.on).forEach(([key, value]) => {
         vnode.firstDom!.removeEventListener(key, value);
@@ -109,10 +133,19 @@ export function updateTag(vnode: TagVNode, newVNode: TagVNode) {
 
     // remove events that are not in new
     Object.entries(on).filter(([key, value]) => newOn[key] !== value).forEach(([key, value]) => {
+        if (key === 'clickoutside') {
+            vnode.clickOutside!.drop();
+            return;
+        }
         vnode.firstDom!.removeEventListener(key, value);
     })
     // add events that are not in old
     Object.entries(newOn).filter(([key, value]) => on[key] !== value).forEach(([key, value]) => {
+        if (key === 'clickoutside') {
+            vnode.clickOutside = getClickOutsideHandler(vnode, value);
+            vnode.clickOutside.setup();
+            return;
+        }
         vnode.firstDom!.addEventListener(key, value);
     })
 

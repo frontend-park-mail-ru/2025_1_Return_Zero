@@ -18,7 +18,6 @@ export class ProfilePage extends Component {
     }
 
     componentDidMount(): void {
-        console.log(this.props)
         API.getUserSettings(this.props.username).then(user => {
             this.setState({user: user.body});
         }).catch((reason: Error) => console.error(reason.message));

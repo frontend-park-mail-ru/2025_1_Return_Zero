@@ -41,7 +41,11 @@ export type TagVNode = NonTextVNode & {
     type: VNodeType.TAG,
     tag: string,
     props: TagProps,
-    firstDom?: HTMLElement
+    firstDom?: HTMLElement,
+    clickOutside?: {
+        setup: () => void,
+        drop: () => void,
+    }
 }
 
 export type ComponentVNode = NonTextVNode & {

@@ -8,8 +8,8 @@ import { LoginForm, LogoutForm, SignupForm } from "components/forms/AuthForms";
 
 import { MainPage, TracksPage, AlbumsPage, ArtistsPage } from "pages/MainPages";
 import { ArtistPage } from "pages/ArtistPage";
-import { ProfilePage } from "pages/Profile";
-import { SettingsPage } from "pages/Settings";
+import { ProfilePage } from "pages/ProfilePage";
+import { SettingsPage } from "pages/SettingsPage";
 
 import "./layout.scss";
 
