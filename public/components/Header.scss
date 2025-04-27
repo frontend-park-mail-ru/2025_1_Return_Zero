@@ -14,10 +14,16 @@
     &__logo {
         cursor: pointer;
 
-        width: 7rem;
+        width: 6.25rem;
+        height: 2.5rem;
         display: flex;
         justify-content: center;
         align-items: center;
+
+        img {
+            width: 2.3rem;
+            height: auto;
+        }
     }
 
     &__search {
@@ -25,6 +31,7 @@
         width: 20rem;
 
         padding: 0.625rem;
+        margin-left: 0.5rem;
 
         display: flex;
         align-items: center;

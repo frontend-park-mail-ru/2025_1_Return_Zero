@@ -12,7 +12,7 @@ export class Header extends Component {
         return [
             <header className="header">
                 <div className="header__logo">
-                    <Link to='/'><img src="/static/img/logo.png" alt="Return Zero" /></Link>
+                    <Link to='/'><img src="/static/img/logo.svg" alt="Return Zero" /></Link>
                 </div>
                 <form className="header__search">
                     <img className="header__search__icon" src="/static/img/icon-search.svg" />
