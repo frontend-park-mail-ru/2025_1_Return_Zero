@@ -60,7 +60,7 @@
 
     &__error {
         width: 100%;
-        height: calc(1em * v.$font-line-height);
+        min-height: calc(1em * v.$font-line-height);
         line-height: v.$font-line-height;
 
         font-size: v.$font-size-small;

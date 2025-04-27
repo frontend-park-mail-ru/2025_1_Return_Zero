@@ -1,7 +1,9 @@
 import { Reference, Condition } from "./Utils";
+import { Validator } from "./Validator";
 
 export type DescriberContext = {
     readonly results: Record<string, DescriberResult>,
+    readonly validator: Validator,
     readonly [key: string]: any
 };
 
@@ -14,7 +16,7 @@ export type DescriberResult = {
 export type DescriberFunc<T> = (context: DescriberContext, result: DescriberResult) => void
 
 export class Describer<T = any> {
-    protected start: Describer;
+    start: Describer;
     protected next: Describer | undefined;
     protected func: DescriberFunc<T>;
 
@@ -34,6 +36,13 @@ export class Describer<T = any> {
         if (typeof result.error === 'string') return;
         if (this.next) this.next.call(context, result);
     };
+
+    with(field: string): this {
+        const constructor = this.constructor as new (func?: DescriberFunc<T>) => this;
+        return this.push(new constructor((context: DescriberContext, result: DescriberResult) => {
+            context.validator.validate(field, undefined, context);
+        })) as this;
+    }
 
     oneof(comps: (T|Reference)[], message: string = 'Invalid value'): this {
         const constructor = this.constructor as new (func?: DescriberFunc<T>) => this;

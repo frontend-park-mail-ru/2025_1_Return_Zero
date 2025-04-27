@@ -1,11 +1,11 @@
-import { DescriberResult } from "./Describer";
+import { Describer, DescriberResult } from "./Describer";
 
 export type ValidatorResult = DescriberResult & {
     unprocessed: string,
 }
 
 export class Validator {
-    protected description: Record<string, any>
+    protected description: Record<string, Describer>
     result: Record<string, ValidatorResult>
 
     constructor(description: Record<string, any>, initialValue: Record<string, string> = {}) {
@@ -29,7 +29,7 @@ export class Validator {
             unprocessed: value === undefined ? this.result[key].unprocessed : value,
             value: value === undefined ? this.result[key].unprocessed : value
         };
-        this.description[key].call({ ...context, results: this.result }, this.result[key]);
+        this.description[key].call({ ...context, results: this.result, validator: this }, this.result[key]);
         return this.ok(key);
     }
 

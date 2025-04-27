@@ -95,7 +95,8 @@ export class SettingsPage extends Component {
         this.setState({
             avatar_url: URL.createObjectURL((event.target as HTMLInputElement).files![0]),
             avatar_file: (event.target as HTMLInputElement).files![0],
-            avatar_error: undefined
+            avatar_error: undefined,
+            error: undefined
         })
     }
 
