@@ -1,6 +1,8 @@
-export type DescriberContext<T> = {
-    value: T,
+import { Reference, Condition } from "./Utils";
+
+export type DescriberContext = {
     readonly results: Record<string, DescriberResult>,
+    readonly [key: string]: any
 };
 
 export type DescriberResult = {
@@ -9,7 +11,7 @@ export type DescriberResult = {
     check?: string,
 }
 
-export type DescriberFunc<T> = (context: DescriberContext<T>, result: DescriberResult) => void
+export type DescriberFunc<T> = (context: DescriberContext, result: DescriberResult) => void
 
 export class Describer<T = any> {
     protected start: Describer;
@@ -27,34 +29,38 @@ export class Describer<T = any> {
         return describer;
     }
 
-    call(context: DescriberContext<T>, result: DescriberResult): void {
+    call(context: DescriberContext, result: DescriberResult): void {
         this.func(context, result);
         if (typeof result.error === 'string') return;
         if (this.next) this.next.call(context, result);
     };
 
-    required(message: string = 'Required'): this {
+    oneof(comps: (T|Reference)[], message: string = 'Invalid value'): this {
         const constructor = this.constructor as new (func?: DescriberFunc<T>) => this;
-        return this.push(new constructor((context: DescriberContext<T>, result: DescriberResult) => {
-            if (!context.value) {
-                result.error = message;
-                result.check = 'required';
-            };
+        return this.push(new constructor((context: DescriberContext, result: DescriberResult) => {
+            for (const c of comps) {
+                const val = c instanceof Reference ? c.resolve(context) : c;
+                if (result.value === val) return;
+            }
+            result.error = message;
+            result.check = 'oneof';
         })) as this;
     }
 
-    oneof(comps: (T|Reference)[], message: string = 'Invalid value'): this {
+    ifThen(con: Condition, gen: (d: this) => this): this {
         const constructor = this.constructor as new (func?: DescriberFunc<T>) => this;
-        return this.push(new constructor((context: DescriberContext<T>, result: DescriberResult) => {
-            for (const c of comps) {
-                const val = c instanceof Reference ? c.resolve(context) : c;
-                if (context.value !== val) {
-                    result.error = message;
-                    result.check = 'oneof';
-                    return;
-                };
+        const describer = gen(this);
+        return this.push(new constructor((context: DescriberContext, result: DescriberResult) => {
+            if (!con(context)) return;
+            const c = { ...context };
+            const r = { ...result };
+            describer.call(c, r);
+            if (typeof r.error === 'string') {
+                Object.assign(context, c);
+                Object.assign(result, r);
+                return;
             }
-        })) as this;
+        }));
     }
     
     /**
@@ -67,11 +73,11 @@ export class Describer<T = any> {
      */
     or(generators: ((d: this) => Describer)[], message: string = 'Doesnt match any of variants'): Describer<T> {
         const variants: Describer[] = [];
-        for (const generator of generators) {
-            generator(this);
+        for (const gen of generators) {
+            gen(this);
             variants.push(this.next);
         }
-        return this.push(new Describer<T>((context: DescriberContext<T>, result: DescriberResult) => {
+        return this.push(new Describer<T>((context: DescriberContext, result: DescriberResult) => {
             for (const variant of variants) {
                 const c = { ...context };
                 const r = { ...result };
@@ -86,20 +92,4 @@ export class Describer<T = any> {
             result.check = 'or';
         }));
     }
-}
-
-export class Reference {
-    protected name: string;
-
-    constructor(name: string) {
-        this.name = name;
-    }
-
-    resolve(context: DescriberContext<any>): any {
-        return context.results[this.name].value;
-    }
-}
-
-export function ref(name: string): Reference {
-    return new Reference(name);
 }

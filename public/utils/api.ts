@@ -235,20 +235,18 @@ export class API {
     }
     
 
-    static async postAvatar(username: string, data: FormData): Promise<any> {
+    static async postAvatar(data: FormData): Promise<any> {
         return await API.postMultipart(`/user/me/avatar`, data);
     }
 
     static async putUser(
-        username: string,
-        data: ParamTypes.UserUpdate
+        data: ParamTypes.PutUser
     ): Promise<TemplateAPI.UserResponse> {
         return await API.put(`/user/me`, data);
     }
 
 
     static async deleteUser(
-        username: string,
         data: ParamTypes.UserDelete
     ): Promise<TemplateAPI.UserResponse> {
         return await API.delete(`/user/me`, data);

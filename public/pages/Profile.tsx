@@ -36,18 +36,18 @@ export class ProfilePage extends Component {
             return [<div className="page page--404">Пользователь не найден{'('}</div>]
         }
         return [
-            <div class="page page--profile">
-                <div class="page--profile__info">
-                    <img class="page--profile__info__avatar" src={user.avatar_url} alt="avatar" />
+            <div className="page page--profile">
+                <div className="page--profile__info">
+                    <img className="page--profile__info__avatar" src={user.avatar_url} alt="avatar" />
                     <div>
-                        <div class="page--profile__info__header">
-                            <h2 class="page--profile__info__username">{user.username}</h2>
-                            <img src="/static/img/dots.svg" class="page--profile__info__action" alt="edit" onClick={() => this.setState({actions_opened: !this.state.actions_opened})} />
-                            {/* {this.state.actions_opened && <div class="profile__info__action-items">
-                                <span class="item" onClick={() => navigator.clipboard.writeText(window.location.origin + '/profile/' + user.username)}>Скопировать ссылку</span>
+                        <div className="page--profile__info__header">
+                            <h2 className="page--profile__info__username">{user.username}</h2>
+                            <img src="/static/img/dots.svg" className="page--profile__info__action" alt="edit" onClick={() => this.setState({actions_opened: !this.state.actions_opened})} />
+                            {/* {this.state.actions_opened && <div className="profile__info__action-items">
+                                <span className="item" onClick={() => navigator.clipboard.writeText(window.location.origin + '/profile/' + user.username)}>Скопировать ссылку</span>
                             </div>} */}
                         </div>
-                        <div class="page--profile__info__stats">
+                        <div className="page--profile__info__stats">
                             <span className="item">{user.statistics.minutes_listened === -1 ? '?' : user.statistics.minutes_listened} минут прослушано</span>
                             <span className="item">{user.statistics.tracks_listened === -1 ? '?' : user.statistics.tracks_listened} треков услышано</span>
                             <span className="item">{user.statistics.artists_listened === -1 ? '?' : user.statistics.artists_listened} артистов изучено</span>

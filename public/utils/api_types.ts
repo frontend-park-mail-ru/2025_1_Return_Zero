@@ -1,10 +1,10 @@
 export namespace ParamTypes {
-    export type UserUpdate = {
-        password: string;
+    export type PutUser = {
+        password?: string;
         new_email?: string;
         new_username?: string;
         new_password?: string;
-        privacy?: {
+        privacy: {
             is_public_playlists: boolean;
             is_public_favorite_tracks: boolean;
             is_public_favorite_artists: boolean;

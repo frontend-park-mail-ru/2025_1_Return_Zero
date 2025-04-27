@@ -1,28 +1,56 @@
 import * as rzv from "libs/rzv/rzv";
 
-const USERNAME_MIN_LENGTH = 3;
-const USERNAME_MAX_LENGTH = 20;
-const USERNAME_SYMBOLS = 'a-zA-Z0-9_';
+const USER_MIL = 3;
+const USER_MAL = 20;
+const USER_SYM = 'a-zA-Z0-9_';
 
-const PASSWORD_MIN_LENGTH = 4;
-const PASSWORD_MAX_LENGTH = 25;
-const PASSSWORD_SYMBOLS = 'a-zA-Z0-9_';
-const PASSWORD_CONTAINS_NUMBER = '0-9';
-const PASSWORD_CONTAINS_LETTER = 'a-zA-Z';
+const PAS_MIL = 4;
+const PAS_MAL = 25;
+const PASS_SYMB = 'a-zA-Z0-9_';
+const PAS_NUM = '0-9';
+const PAS_LET = 'a-zA-Z';
 
 export const LOGIN_FORM_VALIDATOR = new rzv.Validator({
     'identifier': rzv.string().required().or([
         d => d.email(),
-        d => d.min(USERNAME_MIN_LENGTH).max(USERNAME_MAX_LENGTH).consistOf(USERNAME_SYMBOLS)
+        d => d.min(USER_MIL).max(USER_MAL).consistOf(USER_SYM)
     ], 'Invalid identifier'),
-    'password': rzv.string().required().min(PASSWORD_MIN_LENGTH).max(PASSWORD_MAX_LENGTH).consistOf(PASSSWORD_SYMBOLS)
-        .containsOneOf(PASSWORD_CONTAINS_NUMBER).containsOneOf(PASSWORD_CONTAINS_LETTER)
+    'password': rzv.string().required().min(PAS_MIL).max(PAS_MAL).consistOf(PASS_SYMB)
+        .containsOneOf(PAS_NUM).containsOneOf(PAS_LET)
 });
 
 export const REGISTRATION_FORM_VALIDATOR = new rzv.Validator({
-    'username': rzv.string().required().min(USERNAME_MIN_LENGTH).max(USERNAME_MAX_LENGTH).consistOf(USERNAME_SYMBOLS),
+    'username': rzv.string().required().min(USER_MIL).max(USER_MAL).consistOf(USER_SYM),
     'email': rzv.string().required().email(),
-    'password': rzv.string().required().min(PASSWORD_MIN_LENGTH).max(PASSWORD_MAX_LENGTH).consistOf(PASSSWORD_SYMBOLS)
-        .containsOneOf(PASSWORD_CONTAINS_NUMBER).containsOneOf(PASSWORD_CONTAINS_LETTER),
+    'password': rzv.string().required().min(PAS_MIL).max(PAS_MAL).consistOf(PASS_SYMB)
+        .containsOneOf(PAS_NUM).containsOneOf(PAS_LET),
     'repeatPassword': rzv.string().required().oneof([rzv.ref('password')], 'Пароли не совпадают')
 });
+
+export function getSettingsFormValidator(user: AppTypes.User) {
+    return new rzv.Validator({
+        'new_username': rzv.string().optional().min(USER_MIL).max(USER_MAL).consistOf(USER_SYM),
+        'new_email': rzv.string().optional().email(),
+
+        'password': rzv.string().ifThen(
+            rzv.isOr(rzv.isNotEmpty(rzv.ref('new_password')), rzv.isRefOneOf(rzv.ref('submit'), ['delete'])), 
+            (d) => d.required()
+        ).optional().min(PAS_MIL).max(PAS_MAL).consistOf(PASS_SYMB).containsOneOf(PAS_NUM).containsOneOf(PAS_LET),
+        'new_password': rzv.string().optional().min(PAS_MIL).max(PAS_MAL).consistOf(PASS_SYMB)
+            .containsOneOf(PAS_NUM).containsOneOf(PAS_LET),
+
+        "is_public_playlists": rzv.string().required().oneof(['true', 'false']),
+        "is_public_favorite_tracks": rzv.string().required().oneof(['true', 'false']),
+        "is_public_favorite_artists": rzv.string().required().oneof(['true', 'false']),
+        "is_public_minutes_listened": rzv.string().required().oneof(['true', 'false']),
+        "is_public_tracks_listened": rzv.string().required().oneof(['true', 'false']),
+        "is_public_artists_listened": rzv.string().required().oneof(['true', 'false']),
+    }, {
+        "is_public_playlists": user.privacy.is_public_playlists.toString(),
+        "is_public_favorite_tracks": user.privacy.is_public_favorite_tracks.toString(),
+        "is_public_favorite_artists": user.privacy.is_public_favorite_artists.toString(),
+        "is_public_minutes_listened": user.privacy.is_public_minutes_listened.toString(),
+        "is_public_tracks_listened": user.privacy.is_public_tracks_listened.toString(),
+        "is_public_artists_listened": user.privacy.is_public_artists_listened.toString()
+    });
+}

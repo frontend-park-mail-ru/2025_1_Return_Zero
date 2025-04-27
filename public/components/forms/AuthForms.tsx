@@ -41,7 +41,12 @@ export class LoginForm extends Component {
     async onSubmit(e: MouseEvent) {
         e.preventDefault();
 
-        if (!LOGIN_FORM_VALIDATOR.ok()) return;
+        if (!LOGIN_FORM_VALIDATOR.validateAll()) {
+            this.setState({
+                'error': 'Перепроверьте введенные данные'
+            })
+            return;
+        };
 
         try {
             const vr = LOGIN_FORM_VALIDATOR.result;
@@ -70,17 +75,17 @@ export class LoginForm extends Component {
                     <h2 className="form__title">Авторизация</h2>
                     <div className="form-input-container">
                         <label className="form-input-container__label">Введите логин/email</label>
-                        <input className="form-input-container__input" onInput={this.onInput.bind(this)} value={vr.identifier.uprocessed} type="text" name="identifier" placeholder="логин" />
+                        <input className="form-input-container__input" onInput={this.onInput.bind(this)} value={vr.identifier.unprocessed} type="text" name="identifier" placeholder="логин" />
                     </div>
                     <div className="form-input-container">
                         <label className="form-input-container__label">Введите пароль</label>
                         <div className="form-input-container__password">
-                            <input className="form-input-container__input" onInput={this.onInput.bind(this)} value={vr.password.uprocessed} type={this.state.pas_hidden ? "password" : "text"} name="password" placeholder="пароль" />
+                            <input className="form-input-container__input" onInput={this.onInput.bind(this)} value={vr.password.unprocessed} type={this.state.pas_hidden ? "password" : "text"} name="password" placeholder="пароль" />
                             <img className="form-input-container__password__show" src={this.state.pas_hidden ? "/static/img/hidden.svg" : "/static/img/shown.svg"} alt={this.state.pas_hidden ? "+" : "-"} onClick={() => this.setState({ pas_hidden: !this.state.pas_hidden })} />
                         </div>
                     </div>
-                    <Button className="form__apply">Войти</Button>
                     {this.state.error && <p className="form-input-container__error">{this.state.error}</p>}
+                    <Button className="form__apply">Войти</Button>
                     <Link to='#register' className="form__link">Нет аккаунта? Зарегистрироваться</Link>
                 </form>
             </Popup>
@@ -115,7 +120,13 @@ export class SignupForm extends Component {
     async onSubmit(e: SubmitEvent) {
         e.preventDefault();
 
-        if (!REGISTRATION_FORM_VALIDATOR.ok()) return;
+        if (!REGISTRATION_FORM_VALIDATOR.validateAll()) {
+            console.log(REGISTRATION_FORM_VALIDATOR)
+            this.setState({
+                'error': 'Перепроверьте введенные данные'
+            })
+            return;
+        };
 
         try {
             const payload: any = {
@@ -143,18 +154,18 @@ export class SignupForm extends Component {
                     <h2 className="form__title">Регистрация</h2>
                     <div className="form-input-container">
                         <label className="form-input-container__label">Введите логин</label>
-                        <input className="form-input-container__input" onInput={this.onInput.bind(this)} value={vr.username.uprocessed} type="text" name="username" placeholder="логин" />
+                        <input className="form-input-container__input" onInput={this.onInput.bind(this)} value={vr.username.unprocessed} type="text" name="username" placeholder="логин" />
                         {vr.username?.error && <p className="form-input-container__error">{vr.username.error}</p>}
                     </div>
                     <div className="form-input-container">
                         <label className="form-input-container__label">Введите email</label>
-                        <input className="form-input-container__input" onInput={this.onInput.bind(this)} value={vr.email.uprocessed} type="email" name="email" placeholder="email" />
+                        <input className="form-input-container__input" onInput={this.onInput.bind(this)} value={vr.email.unprocessed} type="email" name="email" placeholder="email" />
                         {vr.email?.error && <p className="form-input-container__error">{vr.email.error}</p>}
                     </div>
                     <div className="form-input-container">
                         <label className="form-input-container__label">Введите пароль</label>
                         <div className="form-input-container__password">
-                            <input className="form-input-container__input" onInput={this.onInput.bind(this)} value={vr.password.uprocessed} type={this.state.pas_hidden ? "password" : "text"} name="password" placeholder="пароль" />
+                            <input className="form-input-container__input" onInput={this.onInput.bind(this)} value={vr.password.unprocessed} type={this.state.pas_hidden ? "password" : "text"} name="password" placeholder="пароль" />
                             <img className="form-input-container__password__show" src={this.state.pas_hidden ? "/static/img/hidden.svg" : "/static/img/shown.svg"} alt={this.state.pas_hidden ? "+" : "-"} onClick={() => this.setState({ pas_hidden: !this.state.pas_hidden })} />
                         </div>
                         {vr.password?.error && <p className="form-input-container__error">{vr.password.error}</p>}
@@ -162,13 +173,13 @@ export class SignupForm extends Component {
                     <div className="form-input-container">
                         <label className="form-input-container__label">Повторите пароль</label>
                         <div className="form-input-container__password">
-                            <input className="form-input-container__input" onInput={this.onInput.bind(this)} value={vr.repeatPassword.uprocessed} type={this.state.repas_hidden ? "password" : "text"} name="repeatPassword" placeholder="пароль" />
+                            <input className="form-input-container__input" onInput={this.onInput.bind(this)} value={vr.repeatPassword.unprocessed} type={this.state.repas_hidden ? "password" : "text"} name="repeatPassword" placeholder="пароль" />
                             <img className="form-input-container__password__show" src={this.state.repas_hidden ? "/static/img/hidden.svg" : "/static/img/shown.svg"} alt={this.state.repas_hidden ? "+" : "-"} onClick={() => this.setState({ repas_hidden: !this.state.repas_hidden })} />
                         </div>
                         {vr.repeatPassword?.error && <p className="form-input-container__error">{vr.repeatPassword.error}</p>}
                     </div>
-                    <Button className="form__apply">Зарегистрироваться</Button>
                     {this.state.error && <p className="form-input-container__error">{this.state.error}</p>}
+                    <Button className="form__apply">Зарегистрироваться</Button>
                     <Link to='#login' className="form__link">Уже есть аккаунт? Войти</Link>
                 </form>
             </Popup>

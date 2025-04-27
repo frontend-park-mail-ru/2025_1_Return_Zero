@@ -1,5 +1,11 @@
 import { string } from "./StringDescriber";
-import { ref } from "./Describer";
 import { Validator } from "./Validator";
 
-export { string, ref, Validator }
+import { ref, isAnd, isOr, isRefOneOf, isNotEmpty, alwaysTrue } from "./Utils";
+
+export { 
+    string,
+    Validator,
+
+    ref, isAnd, isOr, isRefOneOf, isNotEmpty, alwaysTrue
+}

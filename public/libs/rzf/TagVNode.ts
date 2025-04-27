@@ -131,7 +131,7 @@ export function updateTag(vnode: TagVNode, newVNode: TagVNode) {
     })
     // add new attributes
     Object.entries(newAttrs).forEach(([key, value]) => {
-        vnode.firstDom!.setAttribute(key, value);
+        (vnode.firstDom! as any)[key] = value;
     })
 
     VDomHelpers.updateChildren(vnode, newVNode);
