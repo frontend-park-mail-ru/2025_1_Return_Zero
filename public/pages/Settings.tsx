@@ -20,8 +20,12 @@ export class SettingsPage extends Component {
         user?: AppTypes.User,
         error?: string,
 
+        avatar_url?: string,
+        avatar_file?: File,
+        avatar_error?: string,
+        
         show_password: boolean,
-        show_new_password: boolean
+        show_new_password: boolean,
     } = {
         show_password: false,
         show_new_password: false
@@ -39,27 +43,28 @@ export class SettingsPage extends Component {
         if (USER_STORAGE.getUser()) {
             API.getUserSettings(USER_STORAGE.getUser().username).then((res) => {
                 this.validator = getSettingsFormValidator(res.body);
-                this.setState({ user: res.body })
+                this.setState({ user: res.body, avatar_url: res.body.avatar_url })
             }).catch((reason: Error) => console.error(reason.message));
         }
     }
     
     componentWillUnmount(): void {
         USER_STORAGE.unSubscribe(this.onAction);
+        URL.revokeObjectURL(this.state.avatar_url);
     }
     
     onAction = async (action: any) => {
+        URL.revokeObjectURL(this.state.avatar_url);
         switch (true) {
             case action instanceof ACTIONS.USER_LOGIN:
                 API.getUserSettings(USER_STORAGE.getUser().username).then((res) => {
                     this.validator = getSettingsFormValidator(res.body);
-                    this.setState({ user: res.body })
+                    this.setState({ user: res.body, avatar_url: res.body.avatar_url })
                 }).catch((reason: Error) => console.error(reason.message));
                 break;
             case action instanceof ACTIONS.USER_CHANGE:
                 this.validator = getSettingsFormValidator(action.payload);
-                console.log(this.validator)
-                this.setState({ user: action.payload });
+                this.setState({ user: action.payload, avatar_url: action.payload.avatar_url });
                 break;
             case action instanceof ACTIONS.USER_LOGOUT:
                 this.setState({ user: undefined });
@@ -78,10 +83,45 @@ export class SettingsPage extends Component {
         })
     };
 
+    onChangeAvatar = (event: Event) => {
+        const file = (event.target as HTMLInputElement).files![0];
+        if (file.size > 5 * 1024 * 1024) {
+            this.setState({
+                error: 'Файл слишком большой'
+            })
+            return
+        }
+        URL.revokeObjectURL(this.state.avatar_url);
+        this.setState({
+            avatar_url: URL.createObjectURL((event.target as HTMLInputElement).files![0]),
+            avatar_file: (event.target as HTMLInputElement).files![0],
+            avatar_error: undefined
+        })
+    }
+
     onSubmit = async (event: SubmitEvent) => {event.preventDefault();}
 
     onSave = async (event: MouseEvent) => {
-        if (!this.validator.validateAll({'submit': 'save'})) {
+        const validator = this.validator;
+        if (this.state.avatar_file) {
+            try {
+                const formData = new FormData();
+                formData.append('avatar', this.state.avatar_file);
+                const result = (await API.postAvatar(formData)).body;
+                Dispatcher.dispatch(new ACTIONS.USER_CHANGE({
+                    ...USER_STORAGE.getUser(),
+                    avatar_url: result.avatar_url
+                }));
+            } catch (e) {
+                this.setState({
+                    error: e.message
+                })
+                console.error(e.message);
+                return ;
+            } 
+        }
+
+        if (!validator.validateAll({'submit': 'save'})) {
             this.setState({
                 error: 'Заполните все поля'
             })
@@ -89,14 +129,13 @@ export class SettingsPage extends Component {
         }
 
         try {
-            const data: ParamTypes.PutUser = Object.entries(this.validator.result).reduce((acc, [key, value]) => {
+            const data: ParamTypes.PutUser = Object.entries(validator.result).reduce((acc, [key, value]) => {
                 if (!value.value) return acc;
                 if (key.startsWith('is_')) acc.privacy[key] = value.value === 'true';
                 else acc[key] = value.value;
                 return acc;
             }, { privacy: {} } as any);
             const result = (await API.putUser(data)).body;
-            Dispatcher.dispatch(new ACTIONS.USER_CHANGE(result));
         } catch (e) {
             this.setState({
                 error: e.message
@@ -123,11 +162,11 @@ export class SettingsPage extends Component {
                 <div className="page--settings__info">
                     <div className="page--settings__info__avatar">
                         <div className="form-input-container--image">
-                            <img className="form-input-container--image__image" src={user.avatar_url} />
+                            <img className="form-input-container--image__image" src={this.state.avatar_url} />
                             <label className="form-input-container--image__button" for="avatar">
                                 <img src="/static/img/pencil.svg" />
                             </label>
-                            <input className="form-input-container--image__input" type="file" id="avatar" accept="image/*" />
+                            <input className="form-input-container--image__input" type="file" id="avatar" accept="image/*" onChange={this.onChangeAvatar} />
                             <p className="form-input-container--image__error"></p>
                         </div>
                     </div>
