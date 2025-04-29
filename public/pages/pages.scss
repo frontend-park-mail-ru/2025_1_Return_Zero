@@ -83,11 +83,6 @@
 }
 
 .page--artist.page {
-    align-self: flex-start;
-
-    display: flex;
-    gap: 3.125rem;
-
     .page__info {
         &__img {
             border-radius: 50%;
@@ -97,6 +92,23 @@
             font-size: v.$font-size-small;
         }
     
+        &__actions {
+            img {
+                width: 2.375rem;
+                height: 2.375rem;
+            }
+        }
+    }
+}
+
+.page--playlist.page {
+    .page__info {
+        &__user {
+            a {
+                font-weight: v.$font-weight-bold;
+            }
+        }
+
         &__actions {
             img {
                 width: 2.375rem;

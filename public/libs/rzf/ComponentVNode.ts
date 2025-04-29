@@ -47,7 +47,7 @@ export function updateComponent(vnode: ComponentVNode, newVNode: ComponentVNode)
         return;
     }
 
-    if (vnode.instance!.componentShouldUpdate(newVNode.props, vnode.instance!.state)) {
+    if (vnode.instance!.componentShouldUpdate(newVNode.props, {})) {
         vnode.props = vnode.instance!.props = newVNode.props;
         newVNode.children = vnode.instance!.render();
         // @ts-ignore

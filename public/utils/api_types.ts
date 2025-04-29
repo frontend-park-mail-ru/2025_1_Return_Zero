@@ -37,15 +37,15 @@ export type AuthSendingData = {
 export namespace TemplateAPI {
     export type TrackResponse = ApiResponse<AppTypes.Track>;
     export type TracksResponse = ApiResponse<AppTypes.Track[]>;
+    
+    export type AlbumResponse = ApiResponse<AppTypes.Album>;
+    export type AlbumsResponse = ApiResponse<AppTypes.Album[]>;
 
     export type ArtistResponse = ApiResponse<AppTypes.Artist>;
     export type ArtistsResponse = ApiResponse<AppTypes.Artist[]>;
 
-    export type AlbumResponse = ApiResponse<AppTypes.Album>;
-    export type AlbumsResponse = ApiResponse<AppTypes.Album[]>;
-
-
-    export type PlaylistsResponse = ApiResponse<AppTypes.Album[]>;
+    export type PlaylistResponse = ApiResponse<AppTypes.Playlist>;
+    export type PlaylistsResponse = ApiResponse<AppTypes.Playlist[]>;
 
     export type LikeResponse = ApiResponse<AppTypes.Like>;
 

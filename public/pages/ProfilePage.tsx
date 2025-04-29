@@ -3,34 +3,45 @@ import { Component } from "libs/rzf/Component";
 import { Section } from "components/Section";
 import { TrackLine } from "components/Track";
 import { ArtistCard } from "components/Artist";
+import { PlaylistCard } from "components/PlaylistCard";
 
 import { API } from "utils/api";
 
 import './pages.scss';
 
 export class ProfilePage extends Component {
+    username: '';
     state = {
-        // playlists: [] as AppTypes.Playlist[],
+        username: '',
         user: {} as AppTypes.User,
+        playlists: [] as AppTypes.Playlist[],
         tracks: [] as AppTypes.Track[],
         artists: [] as AppTypes.Artist[],
         actions_opened: false
     }
 
-    componentDidMount(): void {
-        API.getUserSettings(this.props.username).then(user => {
+    componentDidMount() { this.fetchData(); }
+
+    async fetchData() {
+        this.username = this.props.username;
+        API.getUserSettings(this.username).then(user => {
             this.setState({user: user.body});
-        }).catch((reason: Error) => console.error(reason.message));
-        API.getFavoriteTracks(this.props.username).then(tracks => {
-            this.setState({tracks: tracks.body});
-        }).catch((reason: Error) => console.error(reason.message))
-        API.getFavoriteArtists(this.props.username).then(artists => {
-            this.setState({artists: artists.body});
-        }).catch((reason: Error) => console.error(reason.message));
+            API.getUserPlaylists(this.username).then(playlists => {
+                this.setState({playlists: playlists.body})
+            }).catch((reason: Error) => this.setState({playlists: []}));
+            API.getFavoriteTracks(this.username).then(tracks => {
+                this.setState({tracks: tracks.body});
+            }).catch((reason: Error) => this.setState({tracks: []}))
+            API.getFavoriteArtists(this.username).then(artists => {
+                this.setState({artists: artists.body});
+            }).catch((reason: Error) => this.setState({artists: []}));
+        }).catch((reason: Error) => this.setState({user: {}}));
     }
 
     render() {
-        const {user, tracks, artists} = this.state;
+        if (this.props.username !== this.username) this.fetchData();
+
+        const {user, playlists, tracks, artists} = this.state;
         if (!user.username) {
             return [<div className="page page--404">Пользователь не найден{'('}</div>]
         }
@@ -53,19 +64,21 @@ export class ProfilePage extends Component {
                         </div>
                     </div>
                 </div>
-                <Section title="Плейлисты" horizontal>
-                    
-                </Section>
-                <Section title="Любимые треки">
+                { playlists.length > 0 && <Section title="Плейлисты" horizontal>
+                    {playlists.map((playlist, index) => (
+                        <PlaylistCard key={playlist.id} ind={index} playlist={playlist} />
+                    ))}
+                </Section>}
+                { tracks.length > 0 && <Section title="Любимые треки">
                     {tracks.map((track, index) => (
                         <TrackLine key={track.id} ind={index} track={track}/>
                     ))}
-                </Section>
-                <Section title="Любимые исполнители" horizontal>
+                </Section>}
+                { artists.length > 0 && <Section title="Любимые исполнители" horizontal>
                     {artists.map((artist, index) => (
                         <ArtistCard key={artist.id} artist={artist}/>
                     ))}
-                </Section>
+                </Section>}
             </div>
         ]
     }

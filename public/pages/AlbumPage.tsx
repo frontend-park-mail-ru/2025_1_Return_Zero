@@ -37,7 +37,6 @@ export class AlbumPage extends Component {
             return [<div className="page page--404">Альбом не найден{'('}</div>]
         }
         const album = this.state.album;
-        console.log(album)
         return [
             <div className="page page--album">
                 <div className="page__info">
@@ -53,7 +52,7 @@ export class AlbumPage extends Component {
                         </div>
                         <div className="page__info__actions">
                             <img src="/static/img/play.svg" alt="play"/>
-                            <Like active={false} />
+                            <Like active={album.liked} />
                         </div>
                     </div>
                 </div>

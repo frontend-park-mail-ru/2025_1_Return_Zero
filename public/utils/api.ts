@@ -118,8 +118,20 @@ export class API {
         return tracks_resp;
     }
 
+    static async getPlaylistTracks(
+        id: number,
+        limit?: number,
+        offset?: number,
+    ): Promise<TemplateAPI.TracksResponse> {
+        const tracks_resp = await API.get(API.addParams(`/playlist/${id}/tracks`, {limit, offset}));
+        tracks_resp.body = tracks_resp.body.map((track: AppTypes.Track) =>
+            API.extendTrack(track)
+        );
+        return tracks_resp;
+    }
+
     static async getFavoriteTracks(username: string, limit?: number, offset?: number): Promise<TemplateAPI.TracksResponse> {
-        const tracks_resp = await API.get(API.addParams(`/user/${username}/favorite`, {limit, offset}));
+        const tracks_resp = await API.get(API.addParams(`/user/${username}/tracks`, {limit, offset}));
         tracks_resp.body = tracks_resp.body.map((track: AppTypes.Track) =>
             API.extendTrack(track)
         );
@@ -166,7 +178,7 @@ export class API {
     }
 
     static async getFavoriteAlbums(username: string, limit?: number, offset?: number): Promise<TemplateAPI.AlbumsResponse> {
-        const albums_resp = await API.get(API.addParams(`/user/${username}/favorite`, {limit, offset}));
+        const albums_resp = await API.get(API.addParams(`/user/${username}/albums`, {limit, offset}));
         albums_resp.body = albums_resp.body.map((album: AppTypes.Album) =>
             API.extendAlbum(album)
         );
@@ -189,16 +201,24 @@ export class API {
     }
 
     static async getFavoriteArtists(username: string, limit?: number, offset?: number): Promise<TemplateAPI.ArtistsResponse> {
-        const artists_resp = await API.get(API.addParams(`/user/${username}/favorite`, {limit, offset}));
+        const artists_resp = await API.get(API.addParams(`/user/${username}/artists`, {limit, offset}));
         artists_resp.body = artists_resp.body.map((artist: AppTypes.Artist) =>
             API.extendArtist(artist)
         );
         return artists_resp;
     }
 
+    
+    static async getPlaylist(id: number): Promise<TemplateAPI.PlaylistResponse> {
+        const playlist_resp = await API.get(`/playlists/${id}`);
+        playlist_resp.body = API.extendPlaylist(playlist_resp.body);
+        return playlist_resp;
+    }
 
     static async getUserPlaylists(username: string, limit?: number, offset?: number): Promise<TemplateAPI.PlaylistsResponse> {
-        return await API.get(API.addParams(`/user/${username}/playlists`, {limit, offset}));
+        const playlists_resp = await API.get(API.addParams(`/user/${username}/playlists`, {limit, offset}));
+        playlists_resp.body = playlists_resp.body.map((playlist: any) => API.extendPlaylist(playlist));
+        return playlists_resp;
     }
 
 
@@ -292,6 +312,18 @@ export class API {
         return {
             ...artist,
             artist_page: routes.artistsRoute.build({ artist_id: artist.id }),
+        };
+    }
+
+    static extendPlaylist(playlist: any): AppTypes.Playlist {
+        return {
+            ...playlist,
+            user: {
+                ...playlist.user,
+                user_page: `/profile/${playlist.user.username}`,
+            },
+            playlist_page: `/playlists/${playlist.id}`,
+            created_at: new Date(playlist.created_at)
         };
     }
 }

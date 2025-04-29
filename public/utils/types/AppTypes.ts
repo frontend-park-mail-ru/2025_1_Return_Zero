@@ -31,6 +31,7 @@ declare global {
                 title: string;
                 artist_page: string; // extended
             }[];
+            liked: boolean,
             type: string;
             release_date: Date;
         };
@@ -46,6 +47,20 @@ declare global {
             // added fields
             artist_page: string;
         };
+
+        type Playlist = {
+            id: number;
+            title: string;
+            thumbnail_url: string,
+            playlist_page: string, // extended
+            user: {
+                id: number,
+                username: string,
+                user_page: string, // extended
+            },
+            liked: boolean,
+            created_at: Date,
+        }
     
         type User = {
             id: number;
