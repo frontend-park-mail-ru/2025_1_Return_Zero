@@ -167,6 +167,7 @@ export function updateChildren(vnode: TagVNode | ComponentVNode, newVNode: TagVN
         }
         return acc;
     }, {} as Record<string, VNode>);
+    console.log('1', vnode.props.classes, vnode.children, newVNode.children);
     
     let j = 0;
     let to = vnode.children.length;
@@ -194,9 +195,10 @@ export function updateChildren(vnode: TagVNode | ComponentVNode, newVNode: TagVN
             render(child, parent, before);
         }
     })
+    console.log('2', vnode.props.classes, j, to, vnode.children);
     while (j < to) {
         // @ts-ignore  cause ts is stupid autistic peace of shit
-        if (!vnode.children[j].key) {
+        if (!vnode.children[j].key || !newKeyed[vnode.children[j].key]) {
             destroy(vnode.children[j])
             to--;
         } else {

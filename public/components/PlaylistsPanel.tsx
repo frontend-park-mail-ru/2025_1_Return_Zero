@@ -34,6 +34,7 @@ export class PlaylistsPanel extends Component {
                 break;
             case action instanceof ACTIONS.USER_LOGOUT:
                 this.setState({ playlists: [] })
+                console.log(this.vnode)
         }
     }
 
