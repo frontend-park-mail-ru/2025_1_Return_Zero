@@ -1,0 +1,34 @@
+@use "root/variables.scss" as v;
+@use "root/dark.scss" as d;
+@use "sass:color";
+
+.actions {
+    position: relative;
+    
+    &__img {
+        width: 2rem;
+        height: 2rem;
+
+        cursor: pointer;
+    }
+
+    &__popup {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+
+        background-color: d.$color-elements;
+        border: 1px solid d.$color-border;
+
+        > * {
+            padding: 0 5px;
+            background-color: d.$color-elements;
+
+            cursor: pointer;
+
+            &:hover {
+                background-color: color.adjust(d.$color-elements, $lightness: 10%);
+            }
+        }
+    }
+}

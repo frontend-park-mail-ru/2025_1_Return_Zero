@@ -9,6 +9,8 @@ import { API } from "utils/api";
 import { Like } from "./elements/Like";
 
 import "./Track.scss";
+import { NearPopup } from "./elements/NearPopup";
+import { Actions } from "./elements/Actions";
 
 function durationToString(duration: number): string {
     const minutes = Math.floor(duration / 60);
@@ -20,11 +22,11 @@ abstract class TrackBase extends Component {
     state: {
         playing: 'play' | 'pause' | null,
         liked: boolean,
-        hover: boolean
+        hover: boolean,
     } = {
         playing: null,
         liked: false,
-        hover: false
+        hover: false,
     }
 
     constructor(props: Record<string, any>) {
@@ -121,7 +123,12 @@ export class TrackLine extends TrackBase {
                         <span className="track-line__controls__duration">{durationToString(track.duration)}</span>
                     </div>
                     <Like active={this.state.liked} onClick={this.onLike}/>
-                    <img src="/static/img/dots.svg" alt="more"/>
+                    <Actions>
+                        <span onClick={() => console.log("click add to playlist")}>Добавить в плейлист</span>
+                        <span>Добавить в очередь</span>
+                        <span>Перейти к исполнителю</span>
+                        <span>Перейти к альбому</span>
+                    </Actions>
                 </div>
             </div>
         ]

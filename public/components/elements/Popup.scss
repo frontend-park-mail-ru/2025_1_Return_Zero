@@ -1,5 +1,5 @@
 .popup {
-    z-index: infinity;
+    z-index: 10;
     position: absolute;
     overflow: auto;
 }
@@ -8,4 +8,14 @@
     top: 50%;
     left: 50%;
     translate: -50% -50%;
+}
+
+.popup--above {
+    bottom: 100%;
+    right: 0;
+}
+
+.popup--under {
+    top: 100%;
+    right: 0;
 }

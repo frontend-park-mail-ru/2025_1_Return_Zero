@@ -23,6 +23,7 @@
         align-items: center;
 
         width: 4.625rem;
+        height: 4.625rem;
 
         > img {
             width: 2.25rem;
@@ -31,18 +32,18 @@
     }
 
     &__item {
-        width: 4.625rem;
-        height: 4.625rem;
+        > img {
+            width: 4.625rem;
+            height: 4.625rem;
+    
+            border-radius: 15px;
+            box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25);
 
-        border-radius: 15px;
-        box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    }
+            transition: scale 0.2s ease-in-out;
 
-    > * {
-        transition: scale 0.2s ease-in-out;
-
-        &:hover {
-            scale: 1.1;
+            &:hover {
+                scale: 1.1;
+            }
         }
     }
 }

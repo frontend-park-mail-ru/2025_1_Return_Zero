@@ -1,7 +1,7 @@
 import * as VDomHelpers from './VDomHelpers'
 import { Component, ComponentConstructor } from "./Component";
-import { destroyTag, hTag, renderTag, updateTag } from "./TagVNode";
-import { destroyComponent, hComponent, renderComponent, updateComponent } from "./ComponentVNode";
+import { destroyTag, cleanUpTag, hTag, renderTag, updateTag } from "./TagVNode";
+import { destroyComponent, cleanUpComponent, hComponent, renderComponent, updateComponent } from "./ComponentVNode";
 
 export enum VNodeType {
     TEXT,
@@ -117,6 +117,21 @@ export function destroy(vnode: VNode): number {
 
     !destroyed && console.error("Can`t destroy", vnode);
     return VDomHelpers.remove(vnode);
+}
+
+export function cleanUp(vnode: VNode) {
+    if (vnode.type === VNodeType.TEXT) {
+        return;
+    } 
+    if (vnode.type === VNodeType.COMPONENT) {
+        cleanUpComponent(vnode);
+        return;
+    }
+    if (vnode.type === VNodeType.TAG) {
+        cleanUpTag(vnode);
+        return;
+    } 
+    console.error("Can`t clean up", vnode);
 }
 
 export function update(vnode: VNode, newVNode: VNode) {

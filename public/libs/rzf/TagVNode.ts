@@ -1,4 +1,4 @@
-import { VNodeType, VNode, TextVNode, TagProps, TagVNode, ComponentVNode } from "./VDom";
+import { VNodeType, VNode, TextVNode, TagProps, TagVNode, ComponentVNode, cleanUp } from "./VDom";
 import * as VDomHelpers from './VDomHelpers'
 import { render, destroy } from "./VDom";
 
@@ -91,15 +91,17 @@ export function renderTag(vnode: TagVNode, dom: HTMLElement, before: HTMLElement
 }
 
 export function destroyTag(vnode: TagVNode) {
-    vnode.clickOutside?.drop();
     vnode.firstDom!.remove();
+    cleanUpTag(vnode);
+    return;
+}
+
+export function cleanUpTag(vnode: TagVNode) {
+    vnode.clickOutside?.drop();
     Object.entries(vnode.props.on).forEach(([key, value]) => {
         vnode.firstDom!.removeEventListener(key, value);
     })
-    while (vnode.children.length) {
-        destroy(vnode.children[0]);
-    }
-    return;
+    vnode.children.forEach(cleanUp)
 }
 
 export function updateTag(vnode: TagVNode, newVNode: TagVNode) {

@@ -1,4 +1,4 @@
-import { VNodeType, VNode, ComponentVNode } from "./VDom";
+import { VNodeType, VNode, ComponentVNode, cleanUp } from "./VDom";
 import * as VDomHelpers from './VDomHelpers'
 import { ComponentConstructor } from "./Component";
 import { render, destroy } from "./VDom";
@@ -18,7 +18,6 @@ export function hComponent(type: ComponentConstructor, key: string|null, props: 
 
 export function renderComponent(vnode: ComponentVNode, dom: HTMLElement, before: HTMLElement|Text|null=null) {
     vnode.instance = new vnode.component(vnode.props);
-    //@ts-ignore
     vnode.instance.vnode = vnode;
 
     vnode.children = vnode.instance.render();
@@ -36,8 +35,13 @@ export function renderComponent(vnode: ComponentVNode, dom: HTMLElement, before:
 export function destroyComponent(vnode: ComponentVNode) {
     vnode.instance!.componentWillUnmount();
     while (vnode.children.length) {
-        destroy(vnode.children[0]);
+        destroy(vnode.children.shift()!);
     }
+}
+
+export function cleanUpComponent(vnode: ComponentVNode) {
+    vnode.instance!.componentWillUnmount();
+    vnode.children.forEach(cleanUp);
 }
 
 export function updateComponent(vnode: ComponentVNode, newVNode: ComponentVNode) {
