@@ -6,9 +6,6 @@ import DragProgressBar from "./DragProgressBar";
 import "./PlayerSmall.scss";
 import tracksQueue from "common/tracksQueue";
 
-import { TRACKS_STORAGE } from 'utils/flux/storages';
-import { ACTIONS } from 'utils/flux/actions';
-
 export class PlayerSmall extends Component {
     private unsubscribe: () => void;
     private playDragging: DragProgressBar;
@@ -102,7 +99,7 @@ export class PlayerSmall extends Component {
                                 onClick={() => player.togglePlay()}
                             />
                             <img src="/static/img/player-next.svg" className="icon" id="next" alt="Next"
-                                onClick={() => tracksQueue.nextTrack()}
+                                onClick={() => tracksQueue.nextTrack('next')}
                             />
                             <img 
                                 src={ tracksQueue.repeated 

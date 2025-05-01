@@ -9,6 +9,7 @@ export class TracksQueue {
 
     private queue: string[];
     private savedQueue: string[];
+    private addedQueue: string[];
     private idx: number;
     private currentTrack: AppTypes.Track;
     shuffled: boolean;
@@ -19,11 +20,22 @@ export class TracksQueue {
             return TracksQueue.instance;
         }
         TracksQueue.instance = this;
-        player.audio.addEventListener('ended', () => this.nextTrack());
+        player.audio.addEventListener('ended', () => {
+            if (this.repeated) {
+                player.audio.currentTime = 0;
+                if (player.audio.paused) {
+                    player.togglePlay();
+                }
+                return;
+            }
+            this.nextTrack();
+        });
         TRACKS_STORAGE.subscribe(this.onAction);
 
         this.queue = [];
         this.savedQueue = [];
+        this.addedQueue = [];
+        
         this.idx = -1;
         this.shuffled = false;
         this.repeated = false;
@@ -58,12 +70,13 @@ export class TracksQueue {
                 const currentTrack = TRACKS_STORAGE.getPlaying();
 
                 if (!this.getCurrentTrack() || currentTrack.id != this.getCurrentTrack().id) {
-                    currentTrack.retriever_func().then((res: any) => {
+                    const args = Object.keys(currentTrack.retriever_args).map(
+                        key => key === 'limit' ? 1000 : currentTrack.retriever_args[key]
+                    );
+                    
+                    currentTrack.retriever_func(...args).then((res: any) => {
                         const tracks = res.body;
                         this.clearQueue();
-                        
-                        // currentTrack.retriever_func - функция которой получили трек
-                        // currentTrack.retriever_args - параметры которые передали при вызове функции
                         
                         const tracksIds = [];
                         let trackIdx = 0;
@@ -116,6 +129,11 @@ export class TracksQueue {
         }
     }
 
+    public manualAddTrack(trackId: string) {
+        this.addedQueue.push(trackId);
+        this.saveAddedQueue();
+    }
+
     private async saveQueue() {
         try {
             localStorage.setItem('queue', JSON.stringify(this.queue));
@@ -130,6 +148,14 @@ export class TracksQueue {
         }
     }
 
+    private async saveAddedQueue() {
+        try {
+            localStorage.setItem('added-queue', JSON.stringify(this.addedQueue));
+        } catch (error) {
+            console.error('Failed to save added queue:', error);
+        }
+    }
+
     private async saveRepated() {
         try {
             localStorage.setItem('queue-repeated', String(this.repeated));
@@ -138,11 +164,17 @@ export class TracksQueue {
         }
     }
 
-    private async setTrack(play: boolean = true) {
-        const response = (await API.getTrack(Number(this.queue[this.idx])))
+    private async setTrack(play: boolean = true, isNext?: boolean) {
+        let response;
+        if (isNext && this.addedQueue.length) {
+            response = (await API.getTrack(Number(this.addedQueue[0])))
             .body;
+            this.addedQueue.splice(0, 1);
+        } else {
+            response = (await API.getTrack(Number(this.queue[this.idx])))
+            .body;
+        }
 
-        console.log(`Playing: ${response.title}`);
         player.setTrack(response.file_url);
         player.setDuration(response.duration);
 
@@ -164,11 +196,11 @@ export class TracksQueue {
     public async nextTrack(source?: string) {
         if (source || !this.repeated) {
             this.idx = (this.idx + 1) % this.queue.length;
-            this.setTrack();
+            await this.setTrack(true, true);
             return;
         }
 
-        await this.setTrack();
+        await this.setTrack(true, true);
     }
 
     public previousTrack() {

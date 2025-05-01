@@ -1,6 +1,8 @@
 import { Component } from "libs/rzf/Component";
 import { Link } from "libs/rzf/Router";
 
+import tracksQueue from "common/tracksQueue";
+
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
 import { TRACKS_STORAGE } from "utils/flux/storages";
@@ -18,6 +20,12 @@ function durationToString(duration: number): string {
 }
 
 abstract class TrackBase extends Component {
+    props: {
+        track: AppTypes.Track,
+        ind?: number,
+        [key: string]: any
+    }
+
     state: {
         playing: boolean | null,
         liked: boolean,
@@ -118,9 +126,9 @@ export class TrackLine extends TrackBase {
                     <Like active={this.state.liked} onClick={this.onLike}/>
                     <Actions>
                         <span onClick={() => console.log("click add to playlist")}>Добавить в плейлист</span>
-                        <span>Добавить в очередь</span>
-                        <span>Перейти к исполнителю</span>
-                        <span>Перейти к альбому</span>
+                        <span onClick={() => tracksQueue.manualAddTrack(this.props.track.id.toString())}>Добавить в очередь</span>
+                        <Link to={this.props.track.artists[0]?.artist_page}>Перейти к исполнителю</Link>
+                        <Link to={this.props.track.album_page}>Перейти к альбому</Link>
                     </Actions>
                 </div>
             </div>

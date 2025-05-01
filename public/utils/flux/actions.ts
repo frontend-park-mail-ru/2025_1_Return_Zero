@@ -6,5 +6,5 @@ export namespace ACTIONS {
     export class USER_LOGOUT extends Action<null> {}
 
     export class TRACK_PLAY extends Action<AppTypes.Track> {}  // Переключает играющий трек
-    export class TRACK_STATE_CHANGE extends Action<{playing: boolean}> {}  // Приостанавливает играющий трек
+    export class TRACK_STATE_CHANGE extends Action<{playing: boolean}> {}  // Приостанавливает или воспроизводит играющий трек
 }

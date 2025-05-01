@@ -70,9 +70,14 @@ class DragProgressBar {
 
     private handleDrag = (e: MouseEvent) => {
         if (!this.isDragging) return;
-
+    
         const rect = this.fullProgress.getBoundingClientRect();
         const pos = (e.clientX - rect.left) / rect.width;
+        
+        if (this.type === 'volume') {
+            player.audio.volume = Math.max(0, Math.min(1, pos));
+        }
+
         this.setVisualPosition(pos);
     };
 
