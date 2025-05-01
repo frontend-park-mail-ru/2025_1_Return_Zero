@@ -1,3 +1,7 @@
+import Dispatcher from "libs/flux/Dispatcher";
+import { ACTIONS } from "utils/flux/actions";
+import { TRACKS_STORAGE } from "utils/flux/storages";
+
 export class Player {
     static instance: Player;
     audio: HTMLAudioElement;
@@ -61,6 +65,16 @@ export class Player {
         this.duration = 0;
     }
 
+    changeTrackState() {
+        const currentTrack = TRACKS_STORAGE.getPlaying();
+    
+        if (this.audio.paused) {
+            Dispatcher.dispatch(new ACTIONS.TRACK_PAUSE(currentTrack));
+        } else {
+            Dispatcher.dispatch(new ACTIONS.TRACK_PLAY(currentTrack));
+        }
+    }
+    
     async togglePlay(): Promise<void> {
         try {
             if (this.audio.paused) {
@@ -68,6 +82,8 @@ export class Player {
             } else {
                 this.pause();
             }
+
+            this.changeTrackState();
             this.notify();
         } catch (error) {
             // console.error('Playback error:', error);

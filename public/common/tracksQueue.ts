@@ -1,14 +1,7 @@
 import player from './player';
 import { API } from 'utils/api';
-
-export type MusicUnit = {
-    name: string;
-    artist: string;
-    duration: number;
-    image: string;
-    src: string;
-    id: number;
-};
+import Dispatcher from 'libs/flux/Dispatcher';
+import { ACTIONS } from 'utils/flux/actions';
 
 export class TracksQueue {
     static instance: TracksQueue;
@@ -16,7 +9,7 @@ export class TracksQueue {
     private queue: string[];
     private savedQueue: string[];
     private idx: number;
-    private currentTrack: MusicUnit;
+    private currentTrack: AppTypes.Track;
     shuffled: boolean;
     repeated: boolean;
 
@@ -110,15 +103,10 @@ export class TracksQueue {
         player.setTrack(response.file_url);
         player.setDuration(response.duration);
 
-        const track: MusicUnit = {
-            name: response.title,
-            artist: response.artists[0].title,
-            duration: response.duration,
-            image: response.thumbnail_url,
-            src: response.file_url,
-            id: response.id,
-        };
+        const track: AppTypes.Track = response;
         this.currentTrack = track;
+        
+        Dispatcher.dispatch(new ACTIONS.TRACK_PLAY(track));
 
         this.saveQueue();
     }
@@ -189,20 +177,20 @@ export class TracksQueue {
         return this.queue[this.idx];
     }
 
-    public getCurrentTrack(): MusicUnit | null {
+    public getCurrentTrack(): AppTypes.Track | null {
         return this.currentTrack;
     }
 
     public getCurrentTrackName(): string {
-        return this.currentTrack?.name || 'none';
+        return this.currentTrack?.title || 'none';
     }
 
     public getCurrentTrackArtist(): string {
-        return this.currentTrack?.artist || 'none';
+        return this.currentTrack?.artists[0].title || 'none';
     }
 
     public getCurrentTrackImage(): string {
-        return this.currentTrack?.image || 'none';
+        return this.currentTrack?.thumbnail_url || 'none';
     }
 
     public clearQueue() {

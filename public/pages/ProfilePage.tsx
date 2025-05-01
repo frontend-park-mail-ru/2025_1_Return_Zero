@@ -20,9 +20,7 @@ export class ProfilePage extends Component {
         actions_opened: false
     }
 
-    componentDidMount() { this.fetchData(); }
-
-    async fetchData() {
+    fetchData() {
         this.username = this.props.username;
         API.getUserSettings(this.username).then(user => {
             this.setState({user: user.body});

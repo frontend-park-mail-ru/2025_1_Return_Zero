@@ -7,10 +7,9 @@ import { TRACKS_STORAGE } from "utils/flux/storages";
 import { API } from "utils/api";
 
 import { Like } from "./elements/Like";
+import { Actions } from "./elements/Actions";
 
 import "./Track.scss";
-import { NearPopup } from "./elements/NearPopup";
-import { Actions } from "./elements/Actions";
 
 function durationToString(duration: number): string {
     const minutes = Math.floor(duration / 60);
@@ -56,12 +55,6 @@ abstract class TrackBase extends Component {
             case action instanceof ACTIONS.TRACK_PAUSE:
                 this.setState({playing: this.props.track.id === action.payload.id ? 'pause' : null});
                 break;
-            case action instanceof ACTIONS.TRACK_LIKE:
-                this.props.track.id === action.payload.id && this.setState({liked: true});
-                break;
-            case action instanceof ACTIONS.TRACK_UNLIKE:
-                this.props.track.id === action.payload.id && this.setState({liked: false});
-                break;
         }
     }
 
@@ -76,8 +69,7 @@ abstract class TrackBase extends Component {
     onLike = async () => {
         try {
             const res = (await API.postTrackLike(this.props.track.id, !this.state.liked)).body;
-            if (res.value) Dispatcher.dispatch(new ACTIONS.TRACK_LIKE(this.props.track));
-            else Dispatcher.dispatch(new ACTIONS.TRACK_UNLIKE(this.props.track));
+            this.setState({liked: res.value});
         } catch (e) {
             console.error(e);
             return;
@@ -97,7 +89,7 @@ export class TrackLine extends TrackBase {
                     <div className="track-line__info__img" onClick={this.onPlay} onMouseEnter={() => this.setState({hover: true})} onMouseLeave={() => this.setState({hover: false})}>
                         <img className="content" src={track.thumbnail_url} alt="error"/>
                         {
-                            this.state.playing ? <img className="state" src={`/static/img/${this.state.playing}.svg`} />
+                            this.state.playing ? <img className="state" src={`/static/img/${this.state.playing === 'play' ? 'pause' : 'play'}.svg`} />
                             : this.state.hover && <img className="state" src="/static/img/play.svg" />
                         }
                     </div>

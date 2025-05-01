@@ -137,6 +137,7 @@ export class SettingsPage extends Component {
                 return acc;
             }, { privacy: {} } as any);
             const result = (await API.putUser(data)).body;
+            Dispatcher.dispatch(new ACTIONS.USER_CHANGE(result));
         } catch (e) {
             this.setState({
                 error: e.message

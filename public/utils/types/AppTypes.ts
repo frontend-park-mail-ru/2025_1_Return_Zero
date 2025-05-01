@@ -19,6 +19,7 @@ declare global {
                 artist_page: string; // extended
             }[];
             
+            retrieved_url?: string;
         };
     
         type Album = {

@@ -4,7 +4,7 @@ import { convertDuration } from "utils/durationConverter";
 import DragProgressBar from "./DragProgressBar";
 
 import "./PlayerSmall.scss";
-import tracksQueue, { MusicUnit } from "common/tracksQueue";
+import tracksQueue from "common/tracksQueue";
 
 export class PlayerSmall extends Component {
     private unsubscribe: () => void;

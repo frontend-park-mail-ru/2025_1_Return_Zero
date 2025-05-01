@@ -6,7 +6,7 @@ import { ACTIONS } from "./actions";
 
 type TracksStorageStor = {
     playing: AppTypes.Track,
-    playingState: PlayingState
+    playingState: PlayingState,
 }
 
 enum PlayingState {
@@ -33,10 +33,6 @@ class TracksStorage extends Storage<TracksStorageStor> {
             case action instanceof ACTIONS.TRACK_PAUSE:
                 this.stor.playing = action.payload;
                 this.stor.playingState = PlayingState.PAUSE;
-                this.callSubs(action);
-                break;
-            case action instanceof ACTIONS.TRACK_LIKE:
-            case action instanceof ACTIONS.TRACK_UNLIKE:
                 this.callSubs(action);
                 break;
         }
