@@ -113,6 +113,7 @@ module.exports = {
       layouts: path.join(publicPath, 'layouts'),
       img: path.join(publicPath, 'img'),
       fonts: path.join(publicPath, 'fonts'),
+      common: path.join(publicPath, 'common'),
       root: publicPath,
     },
   },
