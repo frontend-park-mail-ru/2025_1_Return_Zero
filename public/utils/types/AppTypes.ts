@@ -19,7 +19,8 @@ declare global {
                 artist_page: string; // extended
             }[];
             
-            retrieved_url?: string;
+            retriever_func: Function;
+            retriever_args: Record<string, any>;
         };
     
         type Album = {

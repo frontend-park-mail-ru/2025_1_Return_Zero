@@ -9,10 +9,7 @@ export class Player extends Component {
         super(props);
         this.state = {
             size: 'small'
-        }        
-
-        tracksQueue.clearQueue();
-        tracksQueue.addTrack(['17', '18', '19', '20']);
+        }       
     }
 
     render() {

@@ -6,12 +6,7 @@ import { ACTIONS } from "./actions";
 
 type TracksStorageStor = {
     playing: AppTypes.Track,
-    playingState: PlayingState,
-}
-
-enum PlayingState {
-    PLAY = 'play',
-    PAUSE = 'pause'
+    playingState: boolean,
 }
 
 class TracksStorage extends Storage<TracksStorageStor> {
@@ -19,7 +14,7 @@ class TracksStorage extends Storage<TracksStorageStor> {
         super();
         
         this.stor.playing = null;
-        this.stor.playingState = PlayingState.PAUSE;
+        this.stor.playingState = false;
         Dispatcher.register(this.handleAction.bind(this));
     }
 
@@ -27,12 +22,11 @@ class TracksStorage extends Storage<TracksStorageStor> {
         switch (true) {
             case action instanceof ACTIONS.TRACK_PLAY:
                 this.stor.playing = action.payload;
-                this.stor.playingState = PlayingState.PLAY;
+                this.stor.playingState = true;
                 this.callSubs(action);
                 break;
-            case action instanceof ACTIONS.TRACK_PAUSE:
-                this.stor.playing = action.payload;
-                this.stor.playingState = PlayingState.PAUSE;
+            case action instanceof ACTIONS.TRACK_STATE_CHANGE:
+                this.stor.playingState = action.payload.playing;
                 this.callSubs(action);
                 break;
         }
@@ -42,7 +36,7 @@ class TracksStorage extends Storage<TracksStorageStor> {
         return this.stor.playing;
     }
 
-    getPlayingState(): Readonly<PlayingState> {
+    getPlayingState(): boolean {
         return this.stor.playingState;
     }
 }

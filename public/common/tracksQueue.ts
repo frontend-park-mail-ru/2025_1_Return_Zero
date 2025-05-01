@@ -2,6 +2,7 @@ import player from './player';
 import { API } from 'utils/api';
 import Dispatcher from 'libs/flux/Dispatcher';
 import { ACTIONS } from 'utils/flux/actions';
+import { TRACKS_STORAGE } from 'utils/flux/storages';
 
 export class TracksQueue {
     static instance: TracksQueue;
@@ -19,6 +20,7 @@ export class TracksQueue {
         }
         TracksQueue.instance = this;
         player.audio.addEventListener('ended', () => this.nextTrack());
+        TRACKS_STORAGE.subscribe(this.onAction);
 
         this.queue = [];
         this.savedQueue = [];
@@ -47,6 +49,47 @@ export class TracksQueue {
             }
         } catch (error) {
             console.error('Failed to get queue:', error);
+        }
+    }
+
+    onAction = (action: any): void => {
+        switch (true) {
+            case action instanceof ACTIONS.TRACK_PLAY:
+                const currentTrack = TRACKS_STORAGE.getPlaying();
+
+                if (!this.getCurrentTrack() || currentTrack.id != this.getCurrentTrack().id) {
+                    currentTrack.retriever_func().then((res: any) => {
+                        const tracks = res.body;
+                        this.clearQueue();
+                        
+                        // currentTrack.retriever_func - функция которой получили трек
+                        // currentTrack.retriever_args - параметры которые передали при вызове функции
+                        
+                        const tracksIds = [];
+                        let trackIdx = 0;
+                        for (let i = 0; i < tracks.length; i++) {
+                            const track = tracks[i];
+                            if (track.id === currentTrack.id) {
+                                trackIdx = i;
+                            }
+                            tracksIds.push(track.id.toString());
+                        }
+
+                        this.addTrack(tracksIds, trackIdx);
+                    });
+                }
+                break;
+            case action instanceof ACTIONS.TRACK_STATE_CHANGE:
+                const state = TRACKS_STORAGE.getPlayingState();
+                if (state && player.audio.paused) {
+                    player.togglePlay();
+                    return;
+                }
+                if (!state && !player.audio.paused) {
+                    player.togglePlay();
+                    return;
+                }
+                break;
         }
     }
 
@@ -106,7 +149,14 @@ export class TracksQueue {
         const track: AppTypes.Track = response;
         this.currentTrack = track;
         
-        Dispatcher.dispatch(new ACTIONS.TRACK_PLAY(track));
+        const currentTrack = TRACKS_STORAGE.getPlaying();
+        if (currentTrack && this.getCurrentTrack().id != currentTrack.id) {
+            Dispatcher.dispatch(new ACTIONS.TRACK_PLAY(track));
+        }
+        if (!currentTrack) {
+            Dispatcher.dispatch(new ACTIONS.TRACK_PLAY(track));
+            Dispatcher.dispatch(new ACTIONS.TRACK_STATE_CHANGE({playing: false}));
+        }
 
         this.saveQueue();
     }
