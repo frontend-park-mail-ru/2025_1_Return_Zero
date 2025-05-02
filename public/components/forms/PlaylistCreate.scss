@@ -41,6 +41,10 @@
     
     .form-input-container--image__image {
         border-radius: 15px;
+
+        &::before {
+            background-color: cornflowerblue;
+        }
     }
 
     .form-input-container {

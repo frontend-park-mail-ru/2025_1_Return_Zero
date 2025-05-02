@@ -60,9 +60,12 @@ export class PlaylistPage extends Component {
                     </div>
                 </div>
                 <Section title="Треки в плейлисте">
-                    {this.state.tracks.map((track, index) => (
-                        <TrackLine key={track.id} ind={index} track={track}/>
-                    ))}
+                    {this.state.tracks.length ? 
+                        this.state.tracks.map((track, index) => (
+                            <TrackLine key={track.id} ind={index} track={track}/>
+                        )) :
+                        <span>В этом плейлисте пока-что пусто{'('}</span>
+                    }
                 </Section>
             </div>
         ]
