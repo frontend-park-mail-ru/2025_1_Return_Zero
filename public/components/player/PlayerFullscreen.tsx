@@ -5,6 +5,8 @@ import DragProgressBar from "./DragProgressBar";
 import "./PlayerFullscreen.scss";
 import tracksQueue from "common/tracksQueue";
 
+import Router from "libs/rzf/Router";
+
 export class PlayerFullscreen extends Component {
     private unsubscribe: () => void;
     private playDragging: DragProgressBar;
@@ -66,7 +68,9 @@ export class PlayerFullscreen extends Component {
                             <span id="song-name" className="song-name">
                                 {tracksQueue.getCurrentTrackName()}
                             </span>
-                            <span id="artist-name" className="artist-name">
+                            <span id="artist-name" className="artist-name" 
+                                onClick={() => {Router.push(tracksQueue.getAristURL(), {}); onResize()}}
+                            >
                                 {tracksQueue.getCurrentTrackArtist()}
                             </span>
                         </div>

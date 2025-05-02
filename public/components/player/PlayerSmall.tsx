@@ -6,6 +6,8 @@ import DragProgressBar from "./DragProgressBar";
 import "./PlayerSmall.scss";
 import tracksQueue from "common/tracksQueue";
 
+import { Link } from "libs/rzf/Router";
+
 export class PlayerSmall extends Component {
     private unsubscribe: () => void;
     private playDragging: DragProgressBar;
@@ -64,9 +66,9 @@ export class PlayerSmall extends Component {
                             />
                             <div className="small-player__song-text">
                                 <span id="song-name" className="song-name">{tracksQueue.getCurrentTrackName()}</span>
-                                <span id="artist-name" className="artist-name">
+                                <Link id="artist-name" className="artist-name" to={tracksQueue.getAristURL()}>
                                     {tracksQueue.getCurrentTrackArtist()}
-                                </span>
+                                </Link>
                             </div>
                         </div>
                         <img draggable={false} src='/static/img/like-default.svg' className='icon' alt='Like' />

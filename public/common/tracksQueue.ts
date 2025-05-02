@@ -251,6 +251,11 @@ export class TracksQueue {
     public getCurrentTrackImage(): string {
         return this.currentTrack?.thumbnail_url || 'none';
     }
+
+    public getAristURL(): string {
+        console.warn(this.currentTrack);
+        return this.currentTrack?.artists[0]?.artist_page;
+    }
 }
 
 export default new TracksQueue();

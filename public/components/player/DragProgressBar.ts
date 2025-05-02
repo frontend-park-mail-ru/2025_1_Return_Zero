@@ -44,7 +44,14 @@ class DragProgressBar {
     }
 
     private updateVisuals() {
-        if (this.isDragging) return;
+        if (this.isDragging) {
+            this.circle.style.transform = 'scale(1.25)';
+            this.circle.style.transition = 'transition: transform 0.3s ease';
+            return;
+        }
+
+        this.circle.style.transform = '';
+        this.circle.style.transition = '';
 
         let position = 0;
         if (this.type === 'play') {
