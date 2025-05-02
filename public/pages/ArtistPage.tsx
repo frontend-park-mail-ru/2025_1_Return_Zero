@@ -10,6 +10,7 @@ import { API } from "utils/api";
 import './pages.scss';
 
 export class ArtistPage extends Component {
+    artist_id: number
     state: {
         tracks: AppTypes.Track[],
         albums: AppTypes.Album[],
@@ -24,7 +25,8 @@ export class ArtistPage extends Component {
         artist_id: number
     }
 
-    componentDidMount() {
+    fetchData() {
+        this.artist_id = this.props.artist_id;
         API.getArtist(this.props.artist_id)
             .then(artist => {this.setState({artist: artist.body})})
             .catch(e => console.error(e.message));
@@ -37,9 +39,12 @@ export class ArtistPage extends Component {
     }
 
     render() {
+        if (this.artist_id !== this.props.artist_id) this.fetchData();
+
         if (!this.state.artist) {
             return [<div className="page page--404">Артист не найден{'('}</div>]
         }
+
         return [
             <div className="page page--artist">
                 <div className="page__info">

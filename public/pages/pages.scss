@@ -10,9 +10,8 @@
     gap: 2.5rem;
 
     padding: 1.875rem;
-    padding-bottom: calc(v.$bottomPlayer-height + 1rem);
 
-    border-radius: 1.25rem;
+    border-radius: 1.25rem 1.25rem 0 0;
 
     background-color: d.$color-background;
 

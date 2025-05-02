@@ -1,5 +1,5 @@
 import { Component } from "libs/rzf/Component";
-import { Link } from "libs/rzf/Router";
+import router, { Link } from "libs/rzf/Router";
 
 import { Button } from "./elements/Button";
 import { PlaylistCreate } from "./forms/PlaylistCreate";
@@ -47,9 +47,14 @@ export class PlaylistsPanel extends Component {
     render() {
         return [
             <div className="playlists-panel">
-                {USER_STORAGE.getUser() && <Button className="playlists-panel__create" onClick={() => this.setState({ createPopup: true })}>
-                    <img src="/static/img/plus.svg" alt="error"/>
-                </Button>}
+                {USER_STORAGE.getUser() ? 
+                    <Button className="playlists-panel__create" onClick={() => this.setState({ createPopup: true })}>
+                        <img src="/static/img/plus.svg" alt="error"/>
+                    </Button> :
+                    <Button className="playlists-panel__create" onClick={() => router.push('#login', {})}>
+                        <img src="/static/img/plus.svg" alt="error"/>
+                    </Button>
+                }
                 {this.state.playlists.map((playlist, index) => (
                     <Link key={playlist.id} to={playlist.playlist_page} className="playlists-panel__item">
                         <img src={playlist.thumbnail_url} alt="error"/>
