@@ -7,256 +7,233 @@ import { TRACKS_STORAGE } from 'utils/flux/storages';
 export class TracksQueue {
     static instance: TracksQueue;
 
-    private queue: string[];
-    private savedQueue: string[];
-    private addedQueue: string[];
-    private idx: number;
-    private currentTrack: AppTypes.Track;
-    shuffled: boolean;
-    repeated: boolean;
+    private queue: string[] = [];
+    private savedQueue: string[] = [];
+    private addedQueue: string[] = [];
+    private idx: number = -1;
+    private currentTrack: AppTypes.Track | null = null;
+    
+    shuffled: boolean = false;
+    repeated: boolean = false;
 
     constructor() {
         if (TracksQueue.instance) {
             return TracksQueue.instance;
         }
         TracksQueue.instance = this;
-        player.audio.addEventListener('ended', () => {
-            if (this.repeated) {
-                player.audio.currentTime = 0;
-                if (player.audio.paused) {
-                    player.togglePlay();
-                }
-                return;
-            }
-            this.nextTrack();
-        });
-        TRACKS_STORAGE.subscribe(this.onAction);
+        this.init();
+    }
 
-        this.queue = [];
-        this.savedQueue = [];
-        this.addedQueue = [];
-        
-        this.idx = -1;
-        this.shuffled = false;
-        this.repeated = false;
+    private init(): void {
+        player.audio.addEventListener('ended', this.handleTrackEnd);
+        TRACKS_STORAGE.subscribe(this.handleStorageAction);
+        this.loadInitialState();
+    }
 
+    private loadInitialState(): void {
         try {
-            if (localStorage.getItem('queue')) {
-                this.queue = JSON.parse(localStorage.getItem('queue'));
-                this.savedQueue = JSON.parse(
-                    localStorage.getItem('saved-queue')
-                );
-                this.idx = Number(localStorage.getItem('queue-idx'));
-                this.shuffled = JSON.parse(
-                    localStorage.getItem('queue-shuffled')
-                );
-                this.repeated = JSON.parse(
-                    localStorage.getItem('queue-repeated')
-                );
+            const savedQueue = localStorage.getItem('queue');
+            if (savedQueue) {
+                this.queue = JSON.parse(savedQueue);
+                this.savedQueue = JSON.parse(localStorage.getItem('saved-queue') || '[]');
+                this.idx = Number(localStorage.getItem('queue-idx')) || -1;
+                this.shuffled = JSON.parse(localStorage.getItem('queue-shuffled') || 'false');
+                this.repeated = JSON.parse(localStorage.getItem('queue-repeated') || 'false');
+                this.currentTrack = JSON.parse(localStorage.getItem('current-track') || 'undefined');
+                this.addedQueue = JSON.parse(localStorage.getItem('added-queue') || '[]');
 
-                this.setTrack(false);
-            } else {
-                this.saveQueue();
-                this.saveRepated();
+                if (this.queue.length) {
+                    this.setTrack(false);
+                }
             }
         } catch (error) {
-            console.error('Failed to get queue:', error);
+            console.error('Error loading queue state:', error);
         }
     }
 
-    onAction = (action: any): void => {
-        switch (true) {
-            case action instanceof ACTIONS.TRACK_PLAY:
-                const currentTrack = TRACKS_STORAGE.getPlaying();
+    private handleTrackEnd = (): void => {
+        if (this.repeated) {
+            player.audio.currentTime = 0;
+            player.audio.paused && player.togglePlay();
+            return;
+        }
+        this.nextTrack();
+    };
 
-                if (!this.getCurrentTrack() || currentTrack.id != this.getCurrentTrack().id) {
-                    const args = Object.keys(currentTrack.retriever_args).map(
-                        key => key === 'limit' ? 1000 : currentTrack.retriever_args[key]
-                    );
-                    
-                    currentTrack.retriever_func(...args).then((res: any) => {
-                        const tracks = res.body;
-                        this.clearQueue();
-                        
-                        const tracksIds = [];
-                        let trackIdx = 0;
-                        for (let i = 0; i < tracks.length; i++) {
-                            const track = tracks[i];
-                            if (track.id === currentTrack.id) {
-                                trackIdx = i;
-                            }
-                            tracksIds.push(track.id.toString());
-                        }
+    private handleStorageAction = (action: any): void => {
+        if (action instanceof ACTIONS.TRACK_PLAY) {
+            this.handleTrackPlayAction();
+        }
+        
+        if (action instanceof ACTIONS.TRACK_STATE_CHANGE) {
+            this.handlePlayerStateChange();
+        }
+    };
 
-                        this.addTrack(tracksIds, trackIdx);
-                    });
-                }
-                break;
-            case action instanceof ACTIONS.TRACK_STATE_CHANGE:
-                const state = TRACKS_STORAGE.getPlayingState();
-                if (state && player.audio.paused) {
-                    player.togglePlay();
-                    return;
-                }
-                if (!state && !player.audio.paused) {
-                    player.togglePlay();
-                    return;
-                }
-                break;
+    private handleTrackPlayAction(): void {
+        const currentTrack = TRACKS_STORAGE.getPlaying();
+        if (!currentTrack || currentTrack.id === this.currentTrack?.id) return;
+
+        const args = Object.keys(currentTrack.retriever_args).map(key => 
+            key === 'limit' ? 1000 : currentTrack.retriever_args[key]
+        );
+
+        currentTrack.retriever_func(...args)
+            .then((res: any) => {
+                this.processNewTracks(currentTrack, res.body);
+            });
+    }
+
+    private processNewTracks(currentTrack: AppTypes.Track, tracks: AppTypes.Track[]): void {
+        const tracksIds = tracks.map(t => t.id.toString());
+        const trackIdx = tracks.findIndex(t => t.id === currentTrack.id);
+        
+        this.clearQueue();
+        this.addTrack(tracksIds, trackIdx);
+    }
+
+    private handlePlayerStateChange(): void {
+        const state = TRACKS_STORAGE.getPlayingState();
+        if (state !== !player.audio.paused) {
+            player.togglePlay();
         }
     }
 
-    public addTrack(tracksId: string | string[], startIdx?: number) {
+    private saveQueue(): void {
+        try {
+            localStorage.setItem('queue', JSON.stringify(this.queue));
+            localStorage.setItem('saved-queue', JSON.stringify(this.savedQueue));
+            localStorage.setItem('queue-idx', String(this.idx));
+            localStorage.setItem('queue-shuffled', String(this.shuffled));
+        } catch (error) {
+            console.error('Error saving queue:', error);
+        }
+    }
+
+    private saveCurrentTrack(): void {
+        try {
+            localStorage.setItem('current-track', JSON.stringify(this.currentTrack));
+        } catch (error) {
+            console.error('Error saving current track:', error);
+        }
+    }
+
+    private saveAddedQueue(): void {
+        try {
+            localStorage.setItem('added-queue', JSON.stringify(this.addedQueue));
+        } catch (error) {
+            console.error('Error saving added queue:', error);
+        }
+    }
+
+    private saveRepated(): void {
+        try {
+            localStorage.setItem('queue-repeated', String(this.repeated));
+        } catch (error) {
+            console.error('Error saving repeat state:', error);
+        }
+    }
+
+    public addTrack(tracksId: string | string[], startIdx?: number): void {
         if (Array.isArray(tracksId)) {
-            for (const track of tracksId) {
-                this.queue.push(track);
-            }
+            this.queue.push(...tracksId);
         } else {
             this.queue.push(tracksId);
         }
 
         if (this.idx === -1) {
-            if (startIdx) {
-                this.idx = startIdx - 1;
-            }
-
-            if (this.repeated) {
-                this.nextTrack('start');
-                return;
-            }
-
+            this.idx = startIdx ? startIdx - 1 : -1;
             this.nextTrack();
         }
     }
 
-    public manualAddTrack(trackId: string) {
+    public manualAddTrack(trackId: string): void {
         this.addedQueue.push(trackId);
         this.saveAddedQueue();
     }
 
-    private async saveQueue() {
-        try {
-            localStorage.setItem('queue', JSON.stringify(this.queue));
-            localStorage.setItem(
-                'saved-queue',
-                JSON.stringify(this.savedQueue)
-            );
-            localStorage.setItem('queue-idx', String(this.idx));
-            localStorage.setItem('queue-shuffled', String(this.shuffled));
-        } catch (error) {
-            console.error('Failed to save queue:', error);
-        }
-    }
-
-    private async saveAddedQueue() {
-        try {
-            localStorage.setItem('added-queue', JSON.stringify(this.addedQueue));
-        } catch (error) {
-            console.error('Failed to save added queue:', error);
-        }
-    }
-
-    private async saveRepated() {
-        try {
-            localStorage.setItem('queue-repeated', String(this.repeated));
-        } catch (error) {
-            console.error('Failed to save queue:', error);
-        }
-    }
-
-    private async setTrack(play: boolean = true, isNext?: boolean) {
-        let response;
-        if (isNext && this.addedQueue.length) {
-            response = (await API.getTrack(Number(this.addedQueue[0])))
-            .body;
-            this.addedQueue.splice(0, 1);
-        } else {
-            response = (await API.getTrack(Number(this.queue[this.idx])))
-            .body;
-        }
-
-        player.setTrack(response.file_url);
-        player.setDuration(response.duration);
-
-        const track: AppTypes.Track = response;
-        this.currentTrack = track;
-        
-        const currentTrack = TRACKS_STORAGE.getPlaying();
-        if (currentTrack && this.getCurrentTrack().id != currentTrack.id) {
-            Dispatcher.dispatch(new ACTIONS.TRACK_PLAY(track));
-        }
-        if (!currentTrack) {
-            Dispatcher.dispatch(new ACTIONS.TRACK_PLAY(track));
-            Dispatcher.dispatch(new ACTIONS.TRACK_STATE_CHANGE({playing: false}));
-        }
-
-        this.saveQueue();
-    }
-
-    public async nextTrack(source?: string) {
-        if (source || !this.repeated) {
-            this.idx = (this.idx + 1) % this.queue.length;
-            await this.setTrack(true, true);
-            return;
-        }
-
+    public async nextTrack(): Promise<void> {
+        this.idx = (this.idx + 1) % this.queue.length;
         await this.setTrack(true, true);
     }
 
-    public previousTrack() {
+    public previousTrack(): void {
         this.idx = Math.max(this.idx - 1, 0);
         this.setTrack();
     }
 
-    public repeat() {
+    public repeat(): void {
         this.repeated = true;
         this.saveRepated();
     }
 
-    public unrepeat() {
+    public unrepeat(): void {
         this.repeated = false;
         this.saveRepated();
     }
 
-    public shuffle() {
+    public shuffle(): void {
         if (this.shuffled) return;
 
-        const currentTrack = this.queue[this.idx];
-        for (let i = 0; i < this.queue.length; i++) {
-            this.savedQueue[i] = this.queue[i];
-        }
-
-        for (let i = 0; i < this.queue.length; i++) {
+        const currentId = this.queue[this.idx];
+        this.savedQueue = [...this.queue];
+        
+        for (let i = this.queue.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [this.queue[i], this.queue[j]] = [this.queue[j], this.queue[i]];
         }
-
-        this.idx = this.queue.indexOf(currentTrack);
+        
+        this.idx = this.queue.indexOf(currentId);
         this.shuffled = true;
-
         this.saveQueue();
     }
 
-    public unshuffle() {
+    public unshuffle(): void {
         if (!this.shuffled) return;
 
-        const currentTrack = this.queue[this.idx];
-        for (let i = 0; i < this.queue.length; i++) {
-            this.queue[i] = this.savedQueue[i];
+        const currentId = this.queue[this.idx];
+        this.queue = [...this.savedQueue];
+        this.idx = this.queue.indexOf(currentId);
+        this.shuffled = false;
+        this.saveQueue();
+    }
+
+    public clearQueue(): void {
+        this.queue = [];
+        this.savedQueue = [];
+        this.idx = -1;
+        this.shuffled = false;
+    }
+
+    private async setTrack(play: boolean = true, isNext?: boolean): Promise<void> {
+        let trackId: string | null = null;
+        
+        if (isNext && this.addedQueue.length) {
+            trackId = this.addedQueue.shift()!;
+            this.saveAddedQueue();
+        } else {
+            trackId = this.queue[this.idx];
         }
 
-        this.idx = this.queue.indexOf(currentTrack);
-        this.shuffled = false;
+        if (!trackId) return;
+
+        const response = await API.getTrack(Number(trackId));
+        const track = response.body;
+        
+        player.setTrack(track.file_url);
+        player.setDuration(track.duration);
+        this.currentTrack = track;
+        this.saveCurrentTrack();
+
+        if (TRACKS_STORAGE.getPlaying()?.id !== track.id) {
+            Dispatcher.dispatch(new ACTIONS.TRACK_PLAY(track));
+        }
 
         this.saveQueue();
     }
 
     public getCurrentTrackId(): string | null {
-        if (this.idx == -1) {
-            return null;
-        }
-
-        return this.queue[this.idx];
+        return this.idx === -1 ? null : this.queue[this.idx];
     }
 
     public getCurrentTrack(): AppTypes.Track | null {
@@ -268,19 +245,11 @@ export class TracksQueue {
     }
 
     public getCurrentTrackArtist(): string {
-        return this.currentTrack?.artists[0].title || 'none';
+        return this.currentTrack?.artists[0]?.title || 'none';
     }
 
     public getCurrentTrackImage(): string {
         return this.currentTrack?.thumbnail_url || 'none';
-    }
-
-    public clearQueue() {
-        this.queue = [];
-        this.savedQueue = [];
-        this.idx = -1;
-        this.shuffled = false;
-        // this.repeated = false;
     }
 }
 
