@@ -165,7 +165,7 @@ export function updateTag(vnode: TagVNode, newVNode: TagVNode) {
         vnode.firstDom!.removeAttribute(key);
     })
     // add new attributes
-    Object.entries(newAttrs).forEach(([key, value]) => {
+    Object.entries(newAttrs).filter(([key, value]) => attrs[key] !== value).forEach(([key, value]) => {
         (vnode.firstDom! as any)[key] = value;
     })
 

@@ -24,8 +24,6 @@ export class PlaylistPage extends Component {
         playlist_id: number
     }
 
-    componentDidMount() { this.fetchData() };
-
     async fetchData() {
         this.playlist_id = this.props.playlist_id;
         API.getPlaylist(this.playlist_id)
@@ -50,10 +48,10 @@ export class PlaylistPage extends Component {
                 <div className="page__info">
                     <img className="page__info__img" src={playlist.thumbnail_url} alt="error" />
                     <div>
-                        <span className="page__info__type" style={{textTransform: 'capitalize'}}>Плейлист {playlist.created_at.getFullYear()}</span> {/* добавить кол-во треков */}
+                        <span className="page__info__type" style={{textTransform: 'capitalize'}}>Плейлист</span> {/* добавить кол-во треков */}
                         <h2 className="page__info__title">{playlist.title}</h2>
                         <div className="page__info__user">
-                            <Link key={playlist.user.id} to={playlist.user.user_page}>{playlist.user.username}</Link>
+                            <Link key={playlist.username} to={playlist.user_page}>{playlist.username}</Link>
                         </div>
                         <div className="page__info__actions">
                             <img src="/static/img/play.svg" alt="play"/>

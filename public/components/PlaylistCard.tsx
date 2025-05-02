@@ -18,7 +18,7 @@ export class PlaylistCard extends Component {
                 <div className="playlist-card__info">
                     <span className="playlist-card__info__title">{playlist.title}</span>
                     <span className="playlist-card__info__user">
-                        <Link to={playlist.user.user_page}>{playlist.user.username}</Link>
+                        <Link to={playlist.user_page}>{playlist.username}</Link>
                     </span>
                 </div>
             </div>

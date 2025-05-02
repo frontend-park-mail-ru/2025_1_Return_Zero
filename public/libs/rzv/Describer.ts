@@ -11,11 +11,14 @@ export type DescriberResult = {
     value?: any,
     error?: string,
     check?: string,
+    [key: string]: any
 }
 
 export type DescriberFunc<T> = (context: DescriberContext, result: DescriberResult) => void
 
 export class Describer<T = any> {
+    default: any = "Describer default";
+
     start: Describer;
     protected next: Describer | undefined;
     protected func: DescriberFunc<T>;

@@ -1,6 +1,8 @@
 import { Describer, DescriberContext, DescriberResult } from "./Describer";
 
 export class StringDescriber extends Describer<string> {
+    default: string = "";
+
     required(message: string = 'Required'): StringDescriber {
         return this.push(new StringDescriber((context: DescriberContext, result: DescriberResult) => {
             if (result.value === '') {

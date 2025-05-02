@@ -57,15 +57,6 @@ export class TracksPage extends Component {
             .catch(e => console.error(e.message));
     }
 
-    private async getTracks() {
-        try {
-            return (await API.getTracks(20)).body;
-        } catch (e) {
-            console.error(e.message);
-            return [];
-        }
-    }
-
     render() {
         return [
             <div className="page">

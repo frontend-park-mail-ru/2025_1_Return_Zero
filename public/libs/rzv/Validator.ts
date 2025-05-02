@@ -8,14 +8,12 @@ export class Validator {
     protected description: Record<string, Describer>
     result: Record<string, ValidatorResult>
 
-    constructor(description: Record<string, any>, initialValue: Record<string, string> = {}) {
+    constructor(description: Record<string, Describer>, initialValue: Record<string, string> = {}) {
         this.result = {}
         this.description = description;
         for (const key in description) {
             this.description[key] = this.description[key].start;
-            this.result[key] = {
-                unprocessed: initialValue[key] || ''
-            }
+            this.result[key] = { unprocessed: initialValue[key] || description[key].default };
         }
     }
 
@@ -24,7 +22,7 @@ export class Validator {
         return !Boolean(this.result[key].error);
     }
 
-    validate(key: string, value?: string, context: Record<string, any> = {}): boolean {
+    validate(key: string, value?: any, context: Record<string, any> = {}): boolean {
         this.result[key] = {
             unprocessed: value === undefined ? this.result[key].unprocessed : value,
             value: value === undefined ? this.result[key].unprocessed : value

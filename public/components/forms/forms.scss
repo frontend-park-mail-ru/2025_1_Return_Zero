@@ -107,6 +107,10 @@
 .form-input-container--image {
     position: relative;
 
+    display: flex;
+    flex-direction: column;
+    gap: 0.438rem;
+
     &__button {
         position: absolute;
         cursor: pointer;
@@ -123,9 +127,10 @@
         border-radius: 50%;
 
         > img {
-            cursor: pointer;
             width: 1.25rem;
             height: 1.25rem;
+            
+            cursor: pointer;
         }
 
         &:hover {
@@ -135,9 +140,28 @@
     }
 
     &__image {
+        position: relative;
+        display: block;
+        text-align: center;
+        line-height: 13.625rem;
+
         width: 13.625rem;
         height: 13.625rem;
         border-radius: 50%;
+
+        &::before {
+            content: '';
+            position: absolute;
+            display: block;
+
+            inset: 0;
+            width: 100%;
+            height: 100%;
+
+            background-color: d.$color-elements;
+            border: 1px solid d.$color-border;
+            border-radius: inherit;
+        }
     }
 
     &__input {
@@ -145,6 +169,17 @@
         position: absolute;
 
         pointer-events: none;
+    }
+
+    &__error {
+        width: 100%;
+        min-height: calc(1em * v.$font-line-height);
+        line-height: v.$font-line-height;
+
+        font-size: v.$font-size-small;
+        color: d.$color-highlight;
+
+        text-align: center;
     }
 }
 

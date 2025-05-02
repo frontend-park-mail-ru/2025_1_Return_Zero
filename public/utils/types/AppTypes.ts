@@ -55,13 +55,9 @@ declare global {
             title: string;
             thumbnail_url: string,
             playlist_page: string, // extended
-            user: {
-                id: number,
-                username: string,
-                user_page: string, // extended
-            },
-            liked: boolean,
-            created_at: Date,
+            username: string,
+            user_page: string, // extended
+            liked: boolean
         }
     
         type User = {

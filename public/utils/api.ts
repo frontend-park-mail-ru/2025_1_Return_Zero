@@ -126,7 +126,7 @@ export class API {
         limit?: number,
         offset?: number,
     ): Promise<TemplateAPI.TracksResponse> {
-        const url = API.addParams(`/playlist/${id}/tracks`, {limit, offset});
+        const url = API.addParams(`/playlists/${id}/tracks`, {limit, offset});
         const tracks_resp = await API.get(url);
         tracks_resp.body = tracks_resp.body.map((track: AppTypes.Track) =>
             API.extendTrack(track, API.getPlaylistTracks, { id, limit, offset })
@@ -221,10 +221,25 @@ export class API {
         return playlist_resp;
     }
 
+    static async getPlaylists(limit?: number, offset?: number): Promise<TemplateAPI.PlaylistsResponse> {
+        const playlists_resp = await API.get(API.addParams('/playlists/me', {limit, offset}));
+        playlists_resp.body = playlists_resp.body.map((playlist: any) => API.extendPlaylist(playlist));
+        return playlists_resp;
+    }
+
     static async getUserPlaylists(username: string, limit?: number, offset?: number): Promise<TemplateAPI.PlaylistsResponse> {
         const playlists_resp = await API.get(API.addParams(`/user/${username}/playlists`, {limit, offset}));
         playlists_resp.body = playlists_resp.body.map((playlist: any) => API.extendPlaylist(playlist));
         return playlists_resp;
+    }
+
+    static async postPlaylist(title: string, thumbnail: File): Promise<TemplateAPI.PlaylistResponse> {
+        const data = new FormData();
+        data.append('title', title);
+        data.append('thumbnail', thumbnail);
+        const playlist_resp = await API.postMultipart('/playlists', data);
+        playlist_resp.body = API.extendPlaylist(playlist_resp.body);
+        return playlist_resp;
     }
 
 
@@ -327,12 +342,8 @@ export class API {
     static extendPlaylist(playlist: any): AppTypes.Playlist {
         return {
             ...playlist,
-            user: {
-                ...playlist.user,
-                user_page: `/profile/${playlist.user.username}`,
-            },
-            playlist_page: `/playlists/${playlist.id}`,
-            created_at: new Date(playlist.created_at)
+            user_page: `/profile/${playlist.username}`,
+            playlist_page: `/playlists/${playlist.id}`
         };
     }
 }
