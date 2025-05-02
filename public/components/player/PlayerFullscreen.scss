@@ -1,0 +1,212 @@
+@use '../../dark.scss' as d;
+@use '../../variables.scss' as v;
+
+.fullscreen-player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+
+    gap: calc(7vw / 2 + 7vh / 2);
+
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+
+    background-color: d.$color-background-root;
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: calc(4vw / 2 + 4vh / 2);
+    }
+
+    &__song {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        gap: calc(2vw / 2 + 2vh / 2);
+
+        img {
+            height: calc(25vw / 2 + 25vh / 2);
+            width: calc(25vw / 2 + 25vh / 2);
+            border-radius: 15%;
+        }
+    }
+
+    &__song-text {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        gap: calc(1.5vw / 2 + 1.5vh / 2);
+
+        .song-name {
+            font-size: calc(3vw / 2 + 3vh / 2);
+            font-family: v.$font-family-main;
+            font-weight: v.$font-weight-bold;
+            user-select: none;
+            color: d.$color-text;
+        }
+
+        .artist-name {
+            font-size: calc(2vw / 2 + 2vh / 2);
+            font-family: v.$font-family-main;
+            font-weight: v.$font-weight-light;
+            user-select: none;
+            color: d.$color-text;
+
+            &:hover {
+                cursor: pointer;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    &__controls {
+        display: flex;
+
+        .icon {
+            cursor: pointer;
+            user-select: none;
+            height: 1.75rem;
+            width: 1.75rem;
+
+            &:hover {
+                transform: translateY(-1px);
+            }
+        }
+
+        gap: calc(3vw / 2 + 3vh / 2);
+    }
+
+    &__progress-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+
+        span {
+            width: 2.2rem;
+            color: d.$color-text;
+            user-select: none;
+        }
+
+        .rectangle {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: calc(40vw / 2 + 40vh / 2);
+            height: v.$bottomPlayer-height-progress;
+            border-radius: v.$bottomPlayer-border-radius-progress;
+            background-color: d.$color-text;
+
+            &:hover {
+                cursor: pointer;
+            }
+            &:hover .circle,
+            &.dragging .circle {
+                display: block;
+            }
+
+            .rectangle-prev {
+                position: absolute;
+                width: 0px;
+                left: 0;
+                height: v.$bottomPlayer-height-progress;
+                border-radius: v.$bottomPlayer-border-radius-progress;
+                background-color: d.$color-button-active;
+            }
+
+            .circle {
+                display: none;
+                position: absolute;
+                left: 0;
+                height: v.$bottomPlayer-width-circle;
+                width: v.$bottomPlayer-width-circle;
+                border-radius: 50%;
+                background-color: d.$color-button-active;
+            }
+        }
+    }
+
+    &__bottom-content {
+        display: grid;
+        grid-template-rows: auto auto;
+
+        gap: 1.25rem;
+    }
+
+    &__tools {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .icon {
+            cursor: pointer;
+            user-select: none;
+            height: 1.75rem;
+            width: 1.75rem;
+        }
+
+        .resize:hover {
+            scale: 1.12;
+        }
+
+        .icons {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1.45rem;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1.45rem;
+
+            .rectangle-volume {
+                position: relative;
+                display: flex;
+                align-items: center;
+                background-color: d.$color-text;
+                height: v.$bottomPlayer-height-progress;
+                border-radius: v.$bottomPlayer-border-radius-progress;
+                width: clamp(3rem, 8vw, 7.5rem);
+
+                &:hover {
+                    cursor: pointer;
+                }
+                &:hover .circle,
+                &.dragging .circle {
+                    display: block;
+                }
+
+                .rectangle-prev {
+                    position: absolute;
+                    left: 0;
+                    width: 0px;
+                    height: v.$bottomPlayer-height-progress;
+                    border-radius: v.$bottomPlayer-border-radius-progress;
+                    background-color: d.$color-button-active;
+                }
+
+                .circle {
+                    display: none;
+                    position: absolute;
+                    left: 0;
+                    height: v.$bottomPlayer-width-circle;
+                    width: v.$bottomPlayer-width-circle;
+                    border-radius: 50%;
+                    background-color: d.$color-button-active;
+                }
+            }
+        }
+    }
+}
+

@@ -76,7 +76,6 @@ export class API {
         return data;
     }
 
-
     static addParams(url: string, params: {[key: string]: any}): string {
         const search = new URLSearchParams();
         for (const [key, value] of Object.entries(params)) {
@@ -96,7 +95,9 @@ export class API {
     }
 
     static async getTrack(id: number): Promise<TemplateAPI.TrackResponse> {
-        return await API.get(`/tracks/${id}`);
+        const tracks_resp = await API.get(`/tracks/${id}`);
+        tracks_resp.body = API.extendTrack(tracks_resp.body, API.getTrack, {id})
+        return tracks_resp;
     }
 
     static async getAlbumTracks(id: number): Promise<TemplateAPI.TracksResponse> {
