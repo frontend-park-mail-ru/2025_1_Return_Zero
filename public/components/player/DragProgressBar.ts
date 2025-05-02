@@ -20,6 +20,15 @@ class DragProgressBar {
         this.circle = circle;
         this.type = type;
 
+        switch (this.type) {
+            case 'play':
+                this.setVisualPosition(player.audio.currentTime / player.audio.duration);
+                break;
+            case 'volume':
+                this.setVisualPosition(player.audio.volume);
+                break;
+        }
+
         this.unsubscribe = player.subscribe(() => {
             requestAnimationFrame(() => this.updateVisuals());
         });
@@ -52,7 +61,15 @@ class DragProgressBar {
     private setVisualPosition(pos: number) {
         const safePos = Math.max(0, Math.min(1, pos));
         this.progress.style.width = `${safePos * 100}%`;
-        this.circle.style.left = `${safePos * 100 - 1}%`;
+
+        switch (this.type) {
+            case 'play':
+                this.circle.style.left = `${safePos * 100 - 1}%`;
+                break;
+            case 'volume':
+                this.circle.style.left = `${safePos * 100 - 3}%`;
+                break;
+        }
     }
 
     private handleClick = (e: MouseEvent) => {
@@ -75,7 +92,7 @@ class DragProgressBar {
         const pos = (e.clientX - rect.left) / rect.width;
         
         if (this.type === 'volume') {
-            player.audio.volume = Math.max(0, Math.min(1, pos));
+            player.setVolume(Math.max(0, Math.min(1, pos)));
         }
 
         this.setVisualPosition(pos);

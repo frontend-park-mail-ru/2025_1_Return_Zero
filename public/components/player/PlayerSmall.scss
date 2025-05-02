@@ -36,8 +36,8 @@
         .icon {
             cursor: pointer;
             user-select: none;
-            width: 1.563rem;
-            height: 1.563rem;
+            width: 1.7rem;
+            height: 1.7rem;
         }
 
         padding-left: 0.625rem;
@@ -92,8 +92,8 @@
         .icon {
             cursor: pointer;
             user-select: none;
-            height: 1.25rem;
-            width: 1.25rem;
+            height: 1.4rem;
+            width: 1.4rem;
             
             &:hover {
                 transform: translateY(-1px);
@@ -163,8 +163,8 @@
         .icon {
             cursor: pointer;
             user-select: none;
-            height: 1.25rem;
-            width: 1.25rem;
+            height: 1.5rem;
+            width: 1.5rem;
         }
 
         .resize:hover {
@@ -178,7 +178,7 @@
             background-color: d.$color-text;
             height: v.$bottomPlayer-height-progress;
             border-radius: v.$bottomPlayer-border-radius-progress;
-            width: clamp(0.625rem, 5vw, 6.25rem);
+            width: clamp(0.625rem, 8vw, 7rem);
 
             &:hover {
                 cursor: pointer;

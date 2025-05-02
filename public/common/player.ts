@@ -42,6 +42,7 @@ export class Player {
 
         this.audio.ontimeupdate = () => {
             this.setCurrentTime(this.audio.currentTime); // notify
+            this.changeTrackState();
         };
     }
 
@@ -85,7 +86,6 @@ export class Player {
                 this.pause();
             }
 
-            this.changeTrackState();
             this.notify();
         } catch (error) {
             // console.error('Playback error:', error);

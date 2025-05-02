@@ -1,14 +1,15 @@
 import { Component } from "libs/rzf/Component";
 
 import PlayerSmall from "./PlayerSmall";
+import PlayerFullscreen from "./PlayerFullscreen";
 
-import tracksQueue from "common/tracksQueue";
+type SizeType = 'small' | 'fullscreen';
 
 export class Player extends Component {
     constructor(props: Record<string, any>) {
         super(props);
         this.state = {
-            size: 'small'
+            size: 'small' as SizeType
         }       
     }
 
@@ -16,11 +17,15 @@ export class Player extends Component {
         switch (this.state.size) {
             case 'small':
                 return [
-                    <PlayerSmall />
+                    <PlayerSmall
+                        onResize={this.toggleSize} 
+                    />
                 ];
             case 'fullscreen':
                 return [
-                    <div className="fullscreen-player">Плеер в полном режиме</div>,
+                    <PlayerFullscreen 
+                        onResize={this.toggleSize} 
+                    />
                 ];
         }
     }
@@ -28,7 +33,7 @@ export class Player extends Component {
     
     toggleSize = () => {
         this.setState({
-            size: this.state.size === 'small' ? 'big' : 'small'
+            size: this.state.size as SizeType === 'small' ? 'fullscreen' : 'small'
         });
     };
 }

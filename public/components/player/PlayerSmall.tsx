@@ -52,6 +52,8 @@ export class PlayerSmall extends Component {
     }
 
     render() {
+        const onResize = this.props.onResize;
+
         return [
             <div id="player" class="small-player">
                 <div className="small-player__container">
@@ -65,13 +67,14 @@ export class PlayerSmall extends Component {
                                 <span id="artist-name" className="artist-name">{tracksQueue.getCurrentTrackArtist()}</span>
                             </div>
                         </div>
-                        <img src='/static/img/like-default.svg' className='icon' alt='Like' />
-                        <img src='/static/img/dots.svg' className='icon' alt='Menu' />
+                        <img draggable={false} src='/static/img/like-default.svg' className='icon' alt='Like' />
+                        <img draggable={false} src='/static/img/dots.svg' className='icon' alt='Menu' />
                     </div>
 
                     <div className="small-player__widgets">
                         <div className="small-player__controls">
                             <img 
+                                draggable={false}
                                 src={ tracksQueue.shuffled 
                                     ? "/static/img/player-shuffle-active.svg"
                                     : "/static/img/player-shuffle.svg"
@@ -87,9 +90,11 @@ export class PlayerSmall extends Component {
                                 }}
                             />
                             <img src="/static/img/player-prev.svg" className="icon" id="prev" alt="Prev"
+                                draggable={false}
                                 onClick={() => tracksQueue.previousTrack()}
                             />
                             <img 
+                                draggable={false}
                                 src={player.audio.paused 
                                     ? "/static/img/player-play.svg" 
                                     : "/static/img/player-pause.svg"} 
@@ -99,9 +104,11 @@ export class PlayerSmall extends Component {
                                 onClick={() => player.togglePlay()}
                             />
                             <img src="/static/img/player-next.svg" className="icon" id="next" alt="Next"
+                                draggable={false}
                                 onClick={() => tracksQueue.nextTrack('next')}
                             />
                             <img 
+                                draggable={false}
                                 src={ tracksQueue.repeated 
                                     ? "/static/img/player-repeat-active.svg"
                                     : "/static/img/player-repeat.svg"
@@ -129,6 +136,7 @@ export class PlayerSmall extends Component {
 
                     <div className="small-player__tools">
                         <img 
+                            draggable={false}
                             className="icon" 
                             src={player.audioLevel > 0 
                                 ? "/static/img/volume.svg" 
@@ -140,7 +148,9 @@ export class PlayerSmall extends Component {
                             <div className="rectangle-prev"></div>
                             <div className="circle"></div>
                         </div>
-                        <img className="icon resize" src="/static/img/maximize.svg" id="resize" alt="Small" />
+                        <img draggable={false} className="icon resize" src="/static/img/maximize.svg" id="resize" alt="Small" 
+                            onClick={onResize}
+                        />
                     </div>
                 </div>
             </div>
