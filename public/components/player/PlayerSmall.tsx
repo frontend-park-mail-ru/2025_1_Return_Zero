@@ -64,7 +64,9 @@ export class PlayerSmall extends Component {
                             />
                             <div className="small-player__song-text">
                                 <span id="song-name" className="song-name">{tracksQueue.getCurrentTrackName()}</span>
-                                <span id="artist-name" className="artist-name">{tracksQueue.getCurrentTrackArtist()}</span>
+                                <span id="artist-name" className="artist-name">
+                                    {tracksQueue.getCurrentTrackArtist()}
+                                </span>
                             </div>
                         </div>
                         <img draggable={false} src='/static/img/like-default.svg' className='icon' alt='Like' />
@@ -105,7 +107,7 @@ export class PlayerSmall extends Component {
                             />
                             <img src="/static/img/player-next.svg" className="icon" id="next" alt="Next"
                                 draggable={false}
-                                onClick={() => tracksQueue.nextTrack('next')}
+                                onClick={() => tracksQueue.nextTrack()}
                             />
                             <img 
                                 draggable={false}

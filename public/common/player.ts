@@ -11,6 +11,7 @@ export class Player {
     prevAudioLevel: number;
     currentTime: number;
     duration: number;
+    playedOnce: boolean;
     private playPromise: Promise<void> | null = null;
 
     // Observable
@@ -37,8 +38,6 @@ export class Player {
 
         this.audio = document.createElement('audio');
         this.initStates();
-        this.setVolume(this.audioLevel);
-        this.setCurrentTime(this.currentTime);
 
         this.audio.ontimeupdate = () => {
             this.setCurrentTime(this.audio.currentTime); // notify
@@ -46,7 +45,7 @@ export class Player {
         };
     }
 
-    private initStates() {
+    async initStates() {
         try {
             this.audioLevel = Number(localStorage.getItem('audio-level'));
             this.prevAudioLevel = this.audioLevel;
@@ -64,7 +63,9 @@ export class Player {
             }
         }
 
-        this.duration = 0;
+        this.setVolume(this.audioLevel);
+        this.setCurrentTime(this.currentTime);
+        this.playedOnce = false;
     }
 
     changeTrackState() {
@@ -86,6 +87,7 @@ export class Player {
                 this.pause();
             }
 
+            this.playedOnce = true;
             this.notify();
         } catch (error) {
             // console.error('Playback error:', error);
@@ -110,6 +112,8 @@ export class Player {
         } 
         if (this.prevAudioLevel) {
             this.setVolume(this.prevAudioLevel);
+        } else {
+            this.setVolume(0.1);
         }
     }
 
@@ -156,7 +160,9 @@ export class Player {
 
         this.notify(); 
 
-        this.SaveCurrentTime();
+        if (this.playedOnce) {
+            this.SaveCurrentTime();
+        }
     }
 
     getCurrentTime() {

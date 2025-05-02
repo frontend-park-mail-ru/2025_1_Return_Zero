@@ -52,7 +52,7 @@ export class PlayerFullscreen extends Component {
 
     render() {
         const onResize = this.props.onResize;
-
+        
         return [
             <div id="player" class="fullscreen-player">
                 <div className="fullscreen-player__container">
@@ -110,7 +110,7 @@ export class PlayerFullscreen extends Component {
                                 id="next" 
                                 alt="Next"
                                 draggable={false}
-                                onClick={() => tracksQueue.nextTrack('next')}
+                                onClick={() => tracksQueue.nextTrack()}
                             />
                             <img 
                                 src={tracksQueue.repeated 

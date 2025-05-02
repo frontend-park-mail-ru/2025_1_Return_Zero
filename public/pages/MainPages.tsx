@@ -3,6 +3,7 @@ import { Component } from "libs/rzf/Component";
 import { TrackCard, TrackLine } from "components/Track";
 import { AlbumCard, AlbumLine } from "components/Album";
 import { ArtistCard } from "components/Artist";
+import { Special } from "components/special/Special";
 import { Section } from "components/Section";
 
 import { API } from "utils/api";
@@ -27,6 +28,9 @@ export class MainPage extends Component {
     render() {
         return [
             <div className="page">
+                <Section title="Только для тебя" horizontal>
+                    <Special />
+                </Section>
                 <Section title="История прослушиваний" horizontal>
                     {this.state.tracks.map((track, index) => (
                         <TrackCard key={track.id} ind={index} track={track}/>
@@ -69,6 +73,9 @@ export class TracksPage extends Component {
     render() {
         return [
             <div className="page">
+                <Section title="Только для тебя" horizontal>
+                    <Special />
+                </Section>
                 <Section title="История прослушиваний" horizontal>
                     {this.state.tracks.map((track, index) => (
                         <TrackCard key={track.id} track={track}/>
@@ -100,6 +107,9 @@ export class AlbumsPage extends Component {
     render() {
         return [
             <div className="page">
+                <Section title="Только для тебя" horizontal>
+                    <Special />
+                </Section>
                 <Section title="Любимые альбомы" horizontal>
                     {this.state.albums.map((album, index) => (
                         <AlbumCard key={album.id} album={album}/>
@@ -131,6 +141,9 @@ export class ArtistsPage extends Component {
     render() {
         return [
             <div className="page">
+                <Section title="Только для тебя" horizontal>
+                    <Special />
+                </Section>
                 <Section title="Любимые исполнители" horizontal>
                     {this.state.artists.map((artist, index) => (
                         <ArtistCard key={artist.id} artist={artist}/>

@@ -20,8 +20,8 @@
         align-items: center;
 
         img {
-            height: 3.5rem;
-            width: 3.5rem;
+            height: 3.7rem;
+            width: 3.7rem;
             border-radius: 15%;
         }
     }
@@ -63,6 +63,11 @@
             font-weight: v.$font-weight-light;
             user-select: none;
             color: d.$color-text;
+
+            &:hover {
+                cursor: pointer;
+                text-decoration: underline;
+            }
         }
     }
 

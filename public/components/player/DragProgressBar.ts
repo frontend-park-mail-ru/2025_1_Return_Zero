@@ -114,7 +114,7 @@ class DragProgressBar {
 
         if (this.type === 'play') {
             const newTime = Math.floor(safePos * player.audio.duration);
-            if (!isNaN(newTime)) {
+            if (!isNaN(newTime) && player.playedOnce) {
                 player.setCurrentTime(newTime);
                 player.audio.currentTime = newTime
             }

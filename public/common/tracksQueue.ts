@@ -143,7 +143,7 @@ export class TracksQueue {
 
         if (this.idx === -1) {
             this.idx = startIdx ? startIdx - 1 : -1;
-            this.repeated ? this.nextTrack('start') : this.nextTrack();
+            this.nextTrack();
         }
     }
 
@@ -152,10 +152,8 @@ export class TracksQueue {
         this.saveAddedQueue();
     }
 
-    public async nextTrack(source?: string): Promise<void> {
-        if (source || !this.repeated) {
-            this.idx = (this.idx + 1) % this.queue.length;
-        }
+    public async nextTrack(): Promise<void> {
+        this.idx = (this.idx + 1) % this.queue.length;
         await this.setTrack(true, true);
     }
 

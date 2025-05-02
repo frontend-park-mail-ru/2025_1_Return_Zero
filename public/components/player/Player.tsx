@@ -2,38 +2,68 @@ import { Component } from "libs/rzf/Component";
 
 import PlayerSmall from "./PlayerSmall";
 import PlayerFullscreen from "./PlayerFullscreen";
+import player from "common/player";
 
-type SizeType = 'small' | 'fullscreen';
+type DisplayType = 'small' | 'fullscreen' | 'none';
 
 export class Player extends Component {
+    private unsubscribe: () => void;
+
     constructor(props: Record<string, any>) {
         super(props);
+        const getDisplayType = () => {
+            let display: DisplayType;
+            try {
+                const currentTrack = JSON.parse(localStorage.getItem('current-track') || 'undefined');
+                display = currentTrack ? 'small' : 'none';
+            } catch (error) {
+                display ='none';
+            }
+
+            return display;
+        };
+
         this.state = {
-            size: 'small' as SizeType
-        }       
+            displayedOption: getDisplayType()
+        }
+
+        this.configureNoneDisplay();
+    }
+
+    configureNoneDisplay() {
+        if (this.state.displayedOption === 'none') {
+            this.unsubscribe = player.subscribe(() => {
+                this.toggleDisplayedOption();
+                this.unsubscribe();
+            });
+        }
     }
 
     render() {
-        switch (this.state.size) {
+        switch (this.state.displayedOption as DisplayType) {
             case 'small':
                 return [
                     <PlayerSmall
-                        onResize={this.toggleSize} 
+                        onResize={this.toggleDisplayedOption} 
                     />
                 ];
             case 'fullscreen':
                 return [
                     <PlayerFullscreen 
-                        onResize={this.toggleSize} 
+                        onResize={this.toggleDisplayedOption} 
                     />
                 ];
+            case 'none':
+                return [];
         }
     }
 
     
-    toggleSize = () => {
+    toggleDisplayedOption = () => {
         this.setState({
-            size: this.state.size as SizeType === 'small' ? 'fullscreen' : 'small'
+            displayedOption: (this.state.displayedOption === 'fullscreen' || this.state.displayedOption === 'none') 
+                ? 'small' 
+                : 'fullscreen',
         });
     };
 }
