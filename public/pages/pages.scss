@@ -70,6 +70,25 @@
 
 .page.page--album {
     .page__info {
+        @media (max-width: 600px) {
+            gap: 2rem;
+        }
+
+        &__img {
+            width: 15rem;
+            height: auto;
+            @media (max-width: 600px) {
+                width: 10rem;
+            }
+        }
+
+        &__title {
+            @media (max-width: 800px) {
+                font-size: v.$font-size-h1;
+                padding: 4px 0;
+            }
+        }
+
         &__artists {
             a:first-child {
                 font-weight: v.$font-weight-bold;
@@ -87,8 +106,24 @@
 
 .page--artist.page {
     .page__info {
+        @media (max-width: 600px) {
+            gap: 2rem;
+        }
+
         &__img {
             border-radius: 50%;
+            width: 15rem;
+            height: auto;
+            @media (max-width: 600px) {
+                width: 10rem;
+            }
+        }
+
+        &__title {
+            @media (max-width: 800px) {
+                font-size: v.$font-size-h1;
+                padding: 4px 0;
+            }
         }
     
         &__stats {
@@ -99,6 +134,10 @@
             img {
                 width: 2.375rem;
                 height: 2.375rem;
+                @media (max-width: 600px) {
+                    width: 2rem;
+                    height: 2rem;
+                }
             }
         }
     }
@@ -138,10 +177,20 @@
     display: flex;
     align-items: center;
     gap: 3.125rem;
+    @media (max-width: 600px) {
+        gap: 2rem;
+        &__action {
+            width: 2.5rem;
+        }
+    }
 
     &__avatar {
         width: 13.625rem;
         height: 13.625rem;
+        @media (max-width: 600px) {
+            width: 10rem;
+            height: 10rem;
+        }
         border-radius: 50%;
     }
 
@@ -149,6 +198,9 @@
         display: flex;
         flex-direction: column;
         gap: 1.719rem;
+        @media (max-width: 600px) {
+            gap: 1rem;
+        }
     }
 
     &__header {
@@ -168,10 +220,14 @@
 
     &__stats {
         font-size: v.$font-size-h4;
+        gap: 1.25rem;
+        @media (max-width: 600px) {
+            font-size: v.$font-size-main;
+            gap: 1rem;
+        }
 
         display: flex;
         flex-direction: column;
-        gap: 1.25rem;
     }
 }
 

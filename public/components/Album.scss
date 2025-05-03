@@ -4,18 +4,19 @@
 .album-line {
     display: flex;
     align-items: center;
-
-    &>* {
-        flex-basis: 0;
-        flex-grow: 1;
-    }
+    justify-content: space-between;
 
     &__info {
         display: flex;
         align-items: center;
         gap: 1rem;
+        width: 40%;
+        @media (max-width: 600px) {
+            width: 80%;
+        }
 
         &__index {
+            display: none;
             font-size: v.$font-size-h4;
             font-weight: v.$font-weight-bold;
         }
@@ -23,6 +24,10 @@
         &__img {
             width: 8.75rem;
             height: 8.75rem;
+            @media (max-width: 600px) {
+                width: 6rem;
+                height: 6rem;
+            }
 
             border-radius: 15px;
         }
@@ -53,6 +58,9 @@
 
     &__description {
         display: flex;
+        @media (max-width: 1200px) {
+            display: none;
+        }
         justify-content: center;
 
         font-weight: v.$font-weight-light;
@@ -75,6 +83,10 @@
     &__img {
         width: 8.75rem;
         height: 8.75rem;
+        @media (max-width: 600px) {
+            width: 7.7rem;
+            height: 7.7rem;
+        }
 
         border-radius: 15px;
         

@@ -126,7 +126,8 @@ export class TrackLine extends TrackBase {
                         <span className="track-line__controls__duration">{durationToString(track.duration)}</span>
                     </div>
                     <Like className="track-line__controls__like" active={this.state.liked} onClick={this.onLike}/>
-                    <Actions>
+                    
+                    <Actions className="track-line__controls__actions">
                         <span onClick={() => this.setState({ addTrack: true })}>Добавить в плейлист</span>
                         <span onClick={() => tracksQueue.manualAddTrack(this.props.track.id.toString())}>Добавить в очередь</span>
                         <Link to={this.props.track.artists[0]?.artist_page}>Перейти к исполнителю</Link>

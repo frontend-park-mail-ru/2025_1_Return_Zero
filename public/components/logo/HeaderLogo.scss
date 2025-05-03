@@ -1,13 +1,13 @@
-.logo {
+.header-logo {
     grid-area: logo;
 
     cursor: pointer;
 
     // width: 6.25rem;
     // height: 2.5rem;
-    display: flex;
+    display: none;
     @media (max-width: 600px) {
-        display: none;
+        display: flex;
     }
     justify-content: center;
     align-items: center;

@@ -9,6 +9,9 @@
     gap: 1.688rem;
 
     padding: 1.4rem calc(1.875rem + v.$width-scroll) 1.4rem 1.875rem;
+    @media (max-width: 600px) {
+        padding: 1.4rem 1.875rem 1.4rem 1.875rem;
+    }
 
     &__search {
         height: 2.5rem;
@@ -17,6 +20,9 @@
         padding: 12px;
 
         display: flex;
+        @media (max-width: 600px) {
+            display: none;
+        }
         align-items: center;
         text-align: center;
         gap: 1rem;
@@ -39,6 +45,9 @@
 
     &__nav {
         display: flex;
+        @media (max-width: 1100px) {
+            display: none;
+        }
         align-items: center;
         gap: 1.5rem;
 

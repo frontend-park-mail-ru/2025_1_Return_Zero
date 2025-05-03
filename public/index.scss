@@ -5,6 +5,10 @@ html {
     @media (max-width: 1200px) {
         font-size: 14px;
     }
+    
+    @media (max-width: 600px) {
+        font-size: 12px;
+    }
 }
 
 * {
@@ -69,6 +73,9 @@ h4 {
 
 ::-webkit-scrollbar {
     width: v.$width-scroll;
+    @media (max-width: 600px) {
+        width: 0;
+    }
     height: v.$height-scroll;
 }
 
