@@ -23,10 +23,9 @@
         gap: 1rem;
         width: 10%;
 
-        min-width: 200px; 
-
         &__index {
-            display: inline-block;
+            display: none;
+            // display: inline-block;
             text-align: right;
 
             font-size: v.$font-size-h4;
@@ -120,6 +119,13 @@
                 display: none;
             }
         }
+        
+        .actions {
+            display: block;
+            @media (max-width: 800px) {
+                display: none;
+            }
+        }
 
         &__duration {
             font-size: v.$font-size-h4;
@@ -145,6 +151,10 @@
         .content {
             width: 8.75rem;
             height: 8.75rem;
+            @media (max-width: 600px) {
+                width: 7.7rem;
+                height: 7.7rem;
+            }
     
             border-radius: 15px;
             

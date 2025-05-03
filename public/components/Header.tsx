@@ -2,6 +2,8 @@ import { Component } from "libs/rzf/Component";
 import router, { Route, Link } from "libs/rzf/Router";
 
 import { Button } from "components/elements/Button";
+import { Logo } from "components/logo/Logo";
+import { HeaderLogo } from "components/logo/HeaderLogo";
 
 import { USER_STORAGE } from "utils/flux/storages";
 
@@ -11,6 +13,7 @@ export class Header extends Component {
     render() {
         return [
             <header className="header">
+                <HeaderLogo />
                 <form className="header__search">
                     <img className="header__search__icon" src="/static/img/icon-search.svg" />
                     <input className="header__search__input" type="text" placeholder="поиск..." />
