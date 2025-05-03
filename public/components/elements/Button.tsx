@@ -17,7 +17,7 @@ export class ButtonDanger extends Component {
     render() {
         const className = this.props.className ? `${this.props.className} button button--danger` : "button button--danger";
         return [
-            <button {...this.props} className="button button--danger">
+            <button {...this.props} className={className}>
                 {this.props.children}
             </button>
         ];
@@ -28,7 +28,7 @@ export class ButtonSuccess extends Component {
     render() {
         const className = this.props.className ? `${this.props.className} button button--success` : "button button--success";
         return [
-            <button {...this.props} className="button button--success">
+            <button {...this.props} className={className}>
                 {this.props.children}
             </button>
         ];

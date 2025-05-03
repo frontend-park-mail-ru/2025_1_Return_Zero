@@ -1,13 +1,7 @@
 .popup {
-    z-index: 10;
+    z-index: 9;
     position: absolute;
     overflow: auto;
-}
-
-.popup--centered {
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
 }
 
 .popup--above {

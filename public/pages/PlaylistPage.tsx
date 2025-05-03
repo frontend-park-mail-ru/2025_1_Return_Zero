@@ -1,11 +1,14 @@
 import { Component } from "libs/rzf/Component";
-import { Link } from "libs/rzf/Router";
+import router, { Link } from "libs/rzf/Router";
 
 import { TrackLine } from "components/Track";
 import { Section } from "components/Section";
 
+import { ButtonDanger } from "components/elements/Button";
 import { Like } from "components/elements/Like";
 
+import Dispatcher from "libs/flux/Dispatcher";
+import { ACTIONS } from "utils/flux/actions";
 import { API } from "utils/api";
 
 import './pages.scss';
@@ -36,6 +39,12 @@ export class PlaylistPage extends Component {
             .catch(e => this.setState({ playlist: null }));
     }
 
+    onDelete = () => {
+        API.deletePlaylist(this.state.playlist.id)
+            .then(() => { Dispatcher.dispatch(new ACTIONS.DELETE_PLAYLIST(this.state.playlist)); router.replace('/', {}) })
+            .catch(e => console.error(e.message));
+    }
+
     render() {
         if (this.props.playlist_id !== this.playlist_id) this.fetchData();
         
@@ -60,10 +69,14 @@ export class PlaylistPage extends Component {
                     </div>
                 </div>
                 <Section title="Треки в плейлисте">
-                    {this.state.tracks.map((track, index) => (
-                        <TrackLine key={track.id} ind={index} track={track}/>
-                    ))}
+                    {this.state.tracks.length ? 
+                        this.state.tracks.map((track, index) => (
+                            <TrackLine key={track.id} ind={index} track={track}/>
+                        )) :
+                        <span>В этом плейлисте пока-что пусто{'('}</span>
+                    }
                 </Section>
+                <ButtonDanger className="page--playlist__delete" onClick={this.onDelete}>Удалить плейлист</ButtonDanger>
             </div>
         ]
     }

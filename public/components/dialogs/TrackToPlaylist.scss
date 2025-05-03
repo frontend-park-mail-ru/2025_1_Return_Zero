@@ -1,0 +1,42 @@
+@use "root/variables.scss" as v;
+@use "root/dark.scss" as d;
+
+.track-to-playlist {
+    display: flex;
+    gap: 1.3rem;
+
+    min-width: 30vw;
+    padding: 1.3rem;
+
+    background-color: d.$color-elements;
+    border: 1px solid d.$color-border;
+    border-radius: 15px;
+
+    &__options {
+        width: 100%;
+        
+        display: flex;
+        flex-direction: column;
+        gap: 1.3rem;
+    }
+
+    &__line {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        gap: 1.875rem;
+
+        &__img {
+            width: 4.375rem;
+            height: 4.375rem;
+
+            border-radius: 15px;
+        }
+
+        &__title {
+            font-size: v.$font-size-h4;
+            font-weight: v.$font-weight-bold;
+        }
+    }
+}

@@ -20,19 +20,12 @@
     flex-direction: column;
     align-items: center;
 
-    padding: 2rem;
-
     width: 26.25rem;
-    max-height: 80%;
+    padding: 2rem;
     
     background-color: d.$color-elements;
     border: 1px solid d.$color-border;
     border-radius: 15px;
-
-    overflow-x: hidden;
-    overflow-y: auto;
-
-    > * { flex-shrink: 0; }
     
     .form__title {
         align-self: stretch;
@@ -41,6 +34,10 @@
     
     .form-input-container--image__image {
         border-radius: 15px;
+
+        &::before {
+            background-color: cornflowerblue;
+        }
     }
 
     .form-input-container {

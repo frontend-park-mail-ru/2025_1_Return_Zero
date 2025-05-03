@@ -10,6 +10,7 @@ import { API } from "utils/api";
 
 import { Like } from "./elements/Like";
 import { Actions } from "./elements/Actions";
+import { TrackToPlaylist } from "./dialogs/TrackToPlaylist";
 
 import "./Track.scss";
 
@@ -30,6 +31,7 @@ abstract class TrackBase extends Component {
         playing: boolean | null,
         liked: boolean,
         hover: boolean,
+        [key: string]: any
     } = {
         playing: null,
         liked: false,
@@ -125,12 +127,14 @@ export class TrackLine extends TrackBase {
                     </div>
                     <Like className="track-line__controls__like" active={this.state.liked} onClick={this.onLike}/>
                     <Actions>
-                        <span onClick={() => console.log("click add to playlist")}>Добавить в плейлист</span>
+                        <span onClick={() => this.setState({ addTrack: true })}>Добавить в плейлист</span>
                         <span onClick={() => tracksQueue.manualAddTrack(this.props.track.id.toString())}>Добавить в очередь</span>
                         <Link to={this.props.track.artists[0]?.artist_page}>Перейти к исполнителю</Link>
                         <Link to={this.props.track.album_page}>Перейти к альбому</Link>
                     </Actions>
                 </div>
+
+                {this.state.addTrack && <TrackToPlaylist onClose={() => this.setState({addTrack: false})} track={this.props.track}/>}
             </div>
         ]
     }
