@@ -9,7 +9,7 @@
 .layout--main {
     display: grid;
     grid-template-areas:
-        'header header'
+        'logo header'
         'playlists-panel page'
         'playlists-panel player';
     grid-template-rows: min-content 1fr min-content;

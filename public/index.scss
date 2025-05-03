@@ -1,6 +1,12 @@
 @use './variables.scss' as v;
 @use './dark.scss' as d;
 
+html {
+    @media (max-width: 1200px) {
+        font-size: 14px;
+    }
+}
+
 * {
     padding: 0;
     margin: 0;

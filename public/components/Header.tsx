@@ -11,9 +11,6 @@ export class Header extends Component {
     render() {
         return [
             <header className="header">
-                <div className="header__logo">
-                    <Link to='/'><img src="/static/img/logo.svg" alt="Return Zero" /></Link>
-                </div>
                 <form className="header__search">
                     <img className="header__search__icon" src="/static/img/icon-search.svg" />
                     <input className="header__search__input" type="text" placeholder="поиск..." />
@@ -77,6 +74,7 @@ class HeaderProfile extends Component {
             <div className="header__auth">
                 <Button onClick={() => router.push(location.pathname+'#login', {})} className="header__auth__login">Войти</Button>
                 <Button onClick={() => router.push(location.pathname+'#register', {})} className="header__auth__register">Регистрация</Button>
+                <Button onClick={() => router.push(location.pathname+'#login', {})} className="header__auth__icon"></Button>
             </div> 
         ]
     }

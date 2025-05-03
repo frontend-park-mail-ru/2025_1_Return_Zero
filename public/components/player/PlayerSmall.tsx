@@ -57,7 +57,7 @@ export class PlayerSmall extends Component {
         const onResize = this.props.onResize;
 
         return [
-            <div id="player" class="small-player">
+            <div id="player" className="small-player">
                 <div className="small-player__container">
                     <div className="small-player__song-container">
                         <div className="small-player__song" id="song-container">

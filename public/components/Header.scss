@@ -8,33 +8,17 @@
     align-items: center;
     gap: 1.688rem;
 
-    padding: 1.4rem 0;
-    padding-right: 2.675rem;
-
-    &__logo {
-        cursor: pointer;
-
-        width: 6.25rem;
-        height: 2.5rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        img {
-            width: 2.3rem;
-            height: auto;
-        }
-    }
+    padding: 1.4rem calc(1.875rem + v.$width-scroll) 1.4rem 1.875rem;
 
     &__search {
         height: 2.5rem;
         width: 20rem;
 
-        padding: 0.625rem;
-        margin-left: 0.5rem;
+        padding: 12px;
 
         display: flex;
         align-items: center;
+        text-align: center;
         gap: 1rem;
 
         background-color: d.$color-elements;
@@ -95,6 +79,35 @@
         display: flex;
         align-items: center;
         gap: 1.5rem;
+
+        &__icon {
+            display: none;
+            @media (max-width: 1200px) {
+                display: flex;
+            }
+
+            width: 2.7rem;
+            height: 2.7rem;
+            border-radius: 50%;
+
+            background-image: url('/public/img/auth__icon.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        &__login {
+            display: flex;
+            @media (max-width: 1200px) {
+                display: none;
+            }
+        }
+
+        &__register {
+            display: flex;
+            @media (max-width: 1200px) {
+                display: none;
+            }
+        }
     }
 
     &__profile {

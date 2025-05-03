@@ -43,7 +43,7 @@ export class AlbumPage extends Component {
                     <img className="page__info__img" src={album.thumbnail_url} alt="error" />
                     <div>
                         <span className="page__info__type" style={{textTransform: 'capitalize'}}>{album.type} {album.release_date.getFullYear()}</span>
-                        <h2 className="page__info__title">{album.title}</h2>
+                        <h3 className="page__info__title">{album.title}</h3>
                         <div className="page__info__artists">
                             {album.artists.map((artist, index) => [
                                 <Link key={artist.id} to={artist.artist_page}>{artist.title}</Link>,

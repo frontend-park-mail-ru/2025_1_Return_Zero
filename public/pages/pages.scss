@@ -52,6 +52,9 @@
     
         &__title {
             font-size: v.$font-size-large;
+            @media (max-width: 1200px) {
+                font-size: v.$font-size-big;
+            }
             font-family: v.$font-family-header;
         }
     

@@ -52,10 +52,14 @@ export class Player {
             this.audio.currentTime = Number(
                 localStorage.getItem('audio-current-time')
             );
+
+            if (!('audio-level' in localStorage)) {
+                this.audioLevel = 0.5;
+                this.prevAudioLevel = 0.5;
+            }
+
         } catch (error) {
-            // console.error('Failed to get states for audio:', error);
-            this.audioLevel = 0.5;
-            this.prevAudioLevel = 0.5;
+            console.error('Failed to get states for audio:', error);
             try {
                 localStorage.setItem('audio-level', String(this.audioLevel));
             } catch (error) {

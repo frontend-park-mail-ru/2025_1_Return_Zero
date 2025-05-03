@@ -23,10 +23,17 @@
         gap: 1rem;
         width: 10%;
 
+        min-width: 200px; 
+
         &__index {
+            display: inline-block;
+            text-align: right;
+
             font-size: v.$font-size-h4;
             font-weight: v.$font-weight-bold;
-            width: 1.5rem;
+           
+            flex: 0 0 30px; 
+            margin-right: 2px; 
         }
 
         &__img {
@@ -84,6 +91,10 @@
     }
 
     &__album {
+        @media (max-width: 1200px) {
+            display: none;
+        }
+
         display: flex;
         justify-content: flex-start;
         padding-left: 20%;
@@ -101,6 +112,13 @@
         img {
             width: 2rem;
             height: 2rem;
+        }
+
+        &__like {
+            display: block;
+            @media (max-width: 1200px) {
+                display: none;
+            }
         }
 
         &__duration {

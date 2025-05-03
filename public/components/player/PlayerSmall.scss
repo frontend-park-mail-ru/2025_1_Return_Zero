@@ -8,12 +8,7 @@
     align-items: center;
     z-index: 900;
 
-    // position: fixed;
     height: v.$bottomPlayer-height;
-
-    // bottom: 0;
-    // left: calc(6.25rem + 0.5rem + 1px);
-    // width: calc(100% - v.$width-scroll - 0.5rem - 6.25rem);
 
     background-color: d.$color-background-root;
 
@@ -163,6 +158,7 @@
     &__tools {
         width: 15vw;
         display: flex;
+        
         align-items: center;
         justify-content: flex-end;
         gap: 1vw;
@@ -181,6 +177,7 @@
         .rectangle-volume {
             position: relative;
             display: flex;
+
             align-items: center;
             background-color: d.$color-text;
             height: v.$bottomPlayer-height-progress;

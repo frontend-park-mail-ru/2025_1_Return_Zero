@@ -253,7 +253,6 @@ export class TracksQueue {
     }
 
     public getAristURL(): string {
-        console.warn(this.currentTrack);
         return this.currentTrack?.artists[0]?.artist_page;
     }
 }

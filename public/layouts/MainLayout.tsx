@@ -4,6 +4,7 @@ import { Route } from "libs/rzf/Router";
 import { Header } from "components/Header";
 import { PlaylistsPanel } from "components/PlaylistsPanel";
 import { Player } from "components/player/Player";
+import { Logo } from "components/logo/Logo";
 
 import { LoginForm, LogoutForm, SignupForm } from "components/forms/AuthForms";
 
@@ -20,6 +21,7 @@ export default class MainLayout extends Component {
     render() {
         return [
             <div className="layout layout--main">
+                <Logo />
                 <Header />
                 <PlaylistsPanel />
 
