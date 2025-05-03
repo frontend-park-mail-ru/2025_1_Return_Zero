@@ -228,6 +228,12 @@ export class API {
         return playlists_resp;
     }
 
+    static async getTrackPlaylists(track_id: number): Promise<ApiResponse<AppTypes.TrackPlaylist[]>> {
+        const playlists_resp = await API.get(API.addParams(`/playlists/to-add`, {track_id}));
+        playlists_resp.body = playlists_resp.body.map((playlist: any) => API.extendPlaylist(playlist));
+        return playlists_resp;
+    }
+
     static async getUserPlaylists(username: string, limit?: number, offset?: number): Promise<TemplateAPI.PlaylistsResponse> {
         const playlists_resp = await API.get(API.addParams(`/user/${username}/playlists`, {limit, offset}));
         playlists_resp.body = playlists_resp.body.map((playlist: any) => API.extendPlaylist(playlist));
@@ -241,6 +247,18 @@ export class API {
         const playlist_resp = await API.postMultipart('/playlists', data);
         playlist_resp.body = API.extendPlaylist(playlist_resp.body);
         return playlist_resp;
+    }
+
+    static async deletePlaylist(id: number) {
+        return await API.delete(`/playlists/${id}`, {});
+    }
+
+    static async addTrackPlaylist(track_id: number, playlist_id: number) {
+        return await API.post(`/playlists/${playlist_id}/tracks`, { track_id });
+    }
+
+    static async deleteTrackPlaylist(track_id: number, playlist_id: number) {
+        return await API.delete(`/playlists/${playlist_id}/tracks/${track_id}`, {});
     }
 
 

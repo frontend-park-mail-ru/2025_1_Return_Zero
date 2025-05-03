@@ -4,7 +4,7 @@ import router, { Link } from "libs/rzf/Router";
 import { LOGIN_FORM_VALIDATOR, REGISTRATION_FORM_VALIDATOR } from "utils/validators";
 
 import { Button, ButtonDanger } from "components/elements/Button";
-import { Popup } from "components/elements/Popup";
+import { Dialog } from "components/elements/Dialog";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
@@ -22,12 +22,6 @@ export class LoginForm extends Component {
         this.state = {
             pas_hidden: true,
             error: null
-        }
-    }
-
-    onClose(e: MouseEvent) {
-        if (e.target instanceof HTMLElement && e.target.classList.contains("popup")) {
-            router.replace(location.pathname, {});
         }
     }
 
@@ -70,7 +64,7 @@ export class LoginForm extends Component {
     render() {
         const vr = LOGIN_FORM_VALIDATOR.result;
         return [
-            <Popup className="popup--auth" onClick={this.onClose.bind(this)}>
+            <Dialog onClose={() => router.push(location.pathname, {})}>
                 <form className="form form--auth" onSubmit={this.onSubmit.bind(this)}>
                     <h2 className="form__title">Авторизация</h2>
                     <div className="form-input-container">
@@ -91,7 +85,7 @@ export class LoginForm extends Component {
                         <Link to='#register' className="form__link">Нет аккаунта? Зарегистрироваться</Link>
                     </div>
                 </form>
-            </Popup>
+            </Dialog>
         ];
     }
 }
@@ -105,12 +99,6 @@ export class SignupForm extends Component {
             repas_hidden: true,
             error: null
         };
-    }
-
-    onClose(e: MouseEvent) {
-        if (e.target instanceof HTMLElement && e.target.classList.contains("popup")) {
-            router.replace(location.pathname, {});
-        }
     }
 
     onInput(e: Event) {
@@ -152,7 +140,7 @@ export class SignupForm extends Component {
     render() {
         const vr = REGISTRATION_FORM_VALIDATOR.result;
         return [
-            <Popup className="popup--auth" onClick={this.onClose.bind(this)}>
+            <Dialog onClose={() => router.push(location.pathname, {})}>
                 <form className="form form--auth" onSubmit={this.onSubmit.bind(this)}>
                     <h2 className="form__title">Регистрация</h2>
                     <div className="form-input-container">
@@ -188,17 +176,12 @@ export class SignupForm extends Component {
                         <Link to='#login' className="form__link">Уже есть аккаунт? Войти</Link>
                     </div>
                 </form>
-            </Popup>
+            </Dialog>
         ];
     }
 }
 
 export class LogoutForm extends Component {
-    onClose(e: MouseEvent) {
-        if (e.target instanceof HTMLElement && e.target.classList.contains("popup")) {
-            router.replace(location.pathname, {});
-        }
-    }
     onSubmit() {
         try {
             API.postLogout();
@@ -211,12 +194,12 @@ export class LogoutForm extends Component {
 
     render() {
         return [
-            <Popup className="popup--auth" onClick={this.onClose.bind(this)}>
+            <Dialog onClose={() => router.push(location.pathname, {})}>
                 <form className="form form--auth" onSubmit={this.onSubmit.bind(this)}>
                     <h2 className="form__title">Вы уверены, что хотите выйти?</h2>
                     <ButtonDanger className="form__apply">Выйти</ButtonDanger>
                 </form>
-            </Popup>
+            </Dialog>
         ];
     }
 }

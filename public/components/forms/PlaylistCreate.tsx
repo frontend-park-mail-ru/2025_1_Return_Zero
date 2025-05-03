@@ -1,8 +1,11 @@
 import { Component } from "libs/rzf/Component";
 import { Button } from "../elements/Button";
-import { Popup } from "../elements/Popup";
+import { Dialog } from "../elements/Dialog";
 
 import { PLAYLIST_FORM_VALIDATOR } from "utils/validators";
+
+import Dispatcher from "libs/flux/Dispatcher";
+import { ACTIONS } from "utils/flux/actions";
 import { API } from "utils/api";
 
 import './PlaylistCreate.scss';
@@ -15,12 +18,6 @@ export class PlaylistCreate extends Component {
     }
     state = {
         error: null as string | null
-    }
-
-    onClose = (e: MouseEvent) => {
-        if (e.target instanceof HTMLElement && e.target.classList.contains("popup")) {
-            this.props.onClose();
-        }
     }
 
     onSubmit = async (e: SubmitEvent) => {
@@ -40,6 +37,7 @@ export class PlaylistCreate extends Component {
                 vr.thumbnail.value
             )).body;
             this.props.onCreate(playlist);
+            Dispatcher.dispatch(new ACTIONS.CREATE_PLAYLIST(playlist));
         } catch (error) {
             console.error(error)
             this.setState({error: error.message})
@@ -64,9 +62,8 @@ export class PlaylistCreate extends Component {
 
     render() {
         const vr = PLAYLIST_FORM_VALIDATOR.result;
-        console.log(vr);
         return [
-            <Popup className="popup--playlist-create" onClick={this.onClose}>
+            <Dialog onClose={this.props.onClose}>
                 <form className="form form--playlist-create" onSubmit={this.onSubmit}>
                     <h2 className="form__title">Создание плейлиста</h2>
                     <div className="form-input-container--image">
@@ -87,7 +84,7 @@ export class PlaylistCreate extends Component {
                         <Button className="form__apply">Создать</Button>
                     </div>
                 </form>
-            </Popup>
+            </Dialog>
         ]
     }
 }

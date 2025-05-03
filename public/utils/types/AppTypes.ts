@@ -59,6 +59,10 @@ declare global {
             user_page: string, // extended
             liked: boolean
         }
+
+        type TrackPlaylist = Playlist & {
+            is_included: boolean;
+        }
     
         type User = {
             id: number;

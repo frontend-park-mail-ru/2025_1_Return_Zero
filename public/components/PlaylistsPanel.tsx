@@ -5,8 +5,7 @@ import { Button } from "./elements/Button";
 import { PlaylistCreate } from "./forms/PlaylistCreate";
 
 import { ACTIONS } from "utils/flux/actions";
-import { USER_STORAGE } from "utils/flux/storages";
-import { API } from "utils/api";
+import { USER_STORAGE, CONTENT_STORAGE } from "utils/flux/storages";
 
 import "./PlaylistsPanel.scss";
 
@@ -17,29 +16,17 @@ export class PlaylistsPanel extends Component {
     }
 
     componentDidMount(): void {
-        USER_STORAGE.subscribe(this.onAction);
-        USER_STORAGE.getUser() && this.fetchData();
-    }
-
-    fetchData() {
-        API.getPlaylists()
-            .then((playlists) => this.setState({playlists: playlists.body}))
-            .catch((reason) => { this.setState({}); console.error(reason.message)});
+        CONTENT_STORAGE.subscribe(this.onAction);
     }
     
     componentWillUnmount(): void {
-        USER_STORAGE.unSubscribe(this.onAction);
+        CONTENT_STORAGE.unSubscribe(this.onAction);
     }
 
     onAction = (action: any) => {
-        console.log(action)
         switch (true) {
-            case action instanceof ACTIONS.USER_LOGIN:
-            case action instanceof ACTIONS.USER_CHANGE:
-                this.fetchData();
-                break;
-            case action instanceof ACTIONS.USER_LOGOUT:
-                this.setState({ playlists: [] });
+            case action instanceof ACTIONS.CONTENT_PLAYLISTS_CHANGED:
+                this.setState({playlists: CONTENT_STORAGE.playlists});
                 break;
         }
     }
@@ -61,8 +48,8 @@ export class PlaylistsPanel extends Component {
                     </Link>
                 ))} 
                 {this.state.createPopup && <PlaylistCreate 
-                    onClose={() => { this.setState({ createPopup: false }) }} 
-                    onCreate={() => { this.setState({ createPopup: false }); this.fetchData(); }}
+                    onClose={() => this.setState({ createPopup: false }) } 
+                    onCreate={() => this.setState({ createPopup: false }) }
                 />}
             </div>
         ]
