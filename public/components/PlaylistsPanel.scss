@@ -13,9 +13,12 @@
     background-color: d.$color-background;
     border-radius: 0 1.25rem 1.25rem 0;
 
-    overflow-x: hidden;
     overflow-y: scroll;
     scrollbar-width: none;
+
+    > * {
+        flex-shrink: 0;
+    }
     
     &__create {
         display: flex;

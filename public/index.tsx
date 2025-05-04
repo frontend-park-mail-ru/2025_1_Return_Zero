@@ -1,5 +1,5 @@
 import { initAt } from "libs/rzf/VDom";
-import router from "libs/rzf/Router";
+import "libs/rzf/Router";
 
 import App from "./App";
 
@@ -7,10 +7,8 @@ import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
 import { API } from "utils/api";
 
-import "./index.scss";
 
-// mocks
-import 'utils/api_mocks';
+import "./index.scss";
 
 
 async function registerServiceWorker() {

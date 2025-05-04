@@ -3,22 +3,20 @@ import { Component } from "libs/rzf/Component";
 import { TrackLine } from "components/Track";
 import { AlbumCard } from "components/Album";
 import { Section } from "components/Section";
-import { Button } from "components/elements/Button";
+import { Button, ButtonDanger } from "components/elements/Button";
 
+import { one_alive_async } from "utils/funcs";
 import { API } from "utils/api";
 
 import './pages.scss';
 
 export class ArtistPage extends Component {
     artist_id: number
-    state: {
-        tracks: AppTypes.Track[],
-        albums: AppTypes.Album[],
-        artist: AppTypes.Artist
-    } = {
-        tracks: [],
-        albums: [],
-        artist: null
+    state = {
+        tracks: [] as AppTypes.Track[],
+        albums: [] as AppTypes.Album[],
+        artist: null as AppTypes.Artist | null,
+        is_liked: false,
     }
 
     props: {
@@ -28,7 +26,7 @@ export class ArtistPage extends Component {
     fetchData() {
         this.artist_id = this.props.artist_id;
         API.getArtist(this.props.artist_id)
-            .then(artist => {this.setState({artist: artist.body})})
+            .then(artist => {this.setState({artist: artist.body, is_liked: artist.body.is_liked})})
             .catch(e => console.error(e.message));
         API.getArtistAlbums(this.props.artist_id)
             .then(albums => {this.setState({albums: albums.body})})
@@ -37,6 +35,15 @@ export class ArtistPage extends Component {
             .then(tracks => {this.setState({tracks: tracks.body})})
             .catch(e => console.error(e.message));
     }
+
+    onLike = one_alive_async(async () => {
+        try {
+            const resp = await API.postArtistLike(this.props.artist_id, !this.state.is_liked);
+            this.setState({is_liked: resp.body.value});
+        } catch (e) {
+            console.error(e.message);
+        }
+    });
 
     render() {
         if (this.artist_id !== this.props.artist_id) this.fetchData();
@@ -55,7 +62,9 @@ export class ArtistPage extends Component {
                         <span className="page__info__stats">{this.state.artist.listeners_count} слушателей за месяц</span>
                         <div className="page__info__actions">
                             <img src="/static/img/play.svg" alt="play"/>
-                            <Button>Подписаться</Button>
+                            {!this.state.is_liked ? 
+                                <Button onClick={this.onLike}>Подписаться</Button> :
+                                <ButtonDanger onClick={this.onLike}>Отписаться</ButtonDanger>}
                         </div>
                     </div>
                 </div>

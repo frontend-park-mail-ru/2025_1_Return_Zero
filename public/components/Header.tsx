@@ -2,7 +2,6 @@ import { Component } from "libs/rzf/Component";
 import router, { Route, Link } from "libs/rzf/Router";
 
 import { Button } from "components/elements/Button";
-import { Logo } from "components/logo/Logo";
 import { HeaderLogo } from "components/logo/HeaderLogo";
 
 import { USER_STORAGE } from "utils/flux/storages";
@@ -58,7 +57,7 @@ class HeaderProfile extends Component {
         USER_STORAGE.subscribe(this.createdUserCallback);
     }
     componentWillUnmount(): void {
-        USER_STORAGE.unSubscribe(this.createdUserCallback);
+        USER_STORAGE.unsubscribe(this.createdUserCallback);
         this.createdUserCallback = undefined;
     }
 

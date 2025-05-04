@@ -7,12 +7,11 @@ export class AlbumLine extends Component {
     render() {
         const ind: number = this.props.ind;
         const album: AppTypes.Album = this.props.album;
-
         return [
             <div className="album-line">
                 <div className="album-line__info">
                     {ind !== undefined && <span className="album-line__info__index">{ind + 1}</span>}
-                    <Link to={`/album/${album.id}`}>
+                    <Link to={album.album_page}>
                         <img className="album-line__info__img" src={album.thumbnail_url} alt="error"/>
                     </Link>
                     <div className="album-line__info__text">

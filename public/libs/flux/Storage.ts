@@ -25,7 +25,7 @@ export class Storage<T extends StorageStor = StorageStor> {
         this.subs.push(sub);
     }
 
-    unSubscribe(sub: ActionCallback): void {
+    unsubscribe(sub: ActionCallback): void {
         const index = this.subs.indexOf(sub);
         if (index !== -1) {
             this.subs.splice(index, 1);

@@ -136,7 +136,7 @@ export class API {
     }
 
     static async getFavoriteTracks(username: string, limit?: number, offset?: number): Promise<TemplateAPI.TracksResponse> {
-        const url = API.addParams(`/user/${username}/favorite_tracks`, {limit, offset});
+        const url = API.addParams(`/user/${username}/tracks`, {limit, offset});
         const tracks_resp = await API.get(url);
         tracks_resp.body = tracks_resp.body.map((track: AppTypes.Track) =>
             API.extendTrack(track, API.getFavoriteTracks, { username, limit, offset })
@@ -229,7 +229,7 @@ export class API {
     }
 
     static async getTrackPlaylists(track_id: number): Promise<ApiResponse<AppTypes.TrackPlaylist[]>> {
-        const playlists_resp = await API.get(API.addParams(`/playlists/to-add`, {track_id}));
+        const playlists_resp = await API.get(API.addParams(`/playlists/to-add`, { trackId: track_id}));
         playlists_resp.body = playlists_resp.body.map((playlist: any) => API.extendPlaylist(playlist));
         return playlists_resp;
     }
@@ -271,15 +271,15 @@ export class API {
     }
 
     
-    static async postTrackLike(id: number, value: boolean = true): Promise<TemplateAPI.LikeResponse> {
+    static async postTrackLike(id: number, value: boolean): Promise<TemplateAPI.LikeResponse> {
         return await API.post(`/tracks/${id}/like`, { value });
     }
 
-    static async postAlbumLike(id: number, value: boolean = true): Promise<TemplateAPI.LikeResponse> {
+    static async postAlbumLike(id: number, value: boolean): Promise<TemplateAPI.LikeResponse> {
         return await API.post(`/albums/${id}/like`, { value });
     }
 
-    static async postArtistLike(id: number, value: boolean = true): Promise<TemplateAPI.LikeResponse> {
+    static async postArtistLike(id: number, value: boolean): Promise<TemplateAPI.LikeResponse> {
         return await API.post(`/artists/${id}/like`, { value });
     }
 

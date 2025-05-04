@@ -49,7 +49,7 @@ export class SettingsPage extends Component {
     }
     
     componentWillUnmount(): void {
-        USER_STORAGE.unSubscribe(this.onAction);
+        USER_STORAGE.unsubscribe(this.onAction);
         URL.revokeObjectURL(this.state.avatar_url);
     }
     

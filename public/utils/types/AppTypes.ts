@@ -4,7 +4,7 @@ declare global {
             id: number;
             title: string;
             thumbnail_url: string;
-            liked: boolean;
+            is_liked: boolean;
             duration: number;
             file_url?: string;
 
@@ -33,19 +33,19 @@ declare global {
                 title: string;
                 artist_page: string; // extended
             }[];
-            liked: boolean,
             type: string;
             release_date: Date;
+            is_liked: boolean,
         };
     
         type Artist = {
             id: number;
             title: string;
             description: string;
-            liked: boolean;
             thumbnail_url: string;
             listeners_count: number;
             favorites_count: number;
+            is_liked: boolean;
             // added fields
             artist_page: string;
         };
@@ -57,7 +57,7 @@ declare global {
             playlist_page: string, // extended
             username: string,
             user_page: string, // extended
-            liked: boolean
+            is_liked: boolean
         }
 
         type TrackPlaylist = Playlist & {

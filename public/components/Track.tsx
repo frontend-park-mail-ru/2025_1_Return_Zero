@@ -29,19 +29,19 @@ abstract class TrackBase extends Component {
 
     state: {
         playing: boolean | null,
-        liked: boolean,
+        is_liked: boolean,
         hover: boolean,
         [key: string]: any
     } = {
         playing: null,
-        liked: false,
+        is_liked: false,
         hover: false,
     }
 
     constructor(props: Record<string, any>) {
         super(props);
 
-        this.state.liked = props.track.liked;
+        this.state.is_liked = props.track.is_liked;
     }
 
     componentDidMount(): void {
@@ -54,7 +54,7 @@ abstract class TrackBase extends Component {
     }
 
     componentWillUnmount(): void {
-        TRACKS_STORAGE.unSubscribe(this.onAction);
+        TRACKS_STORAGE.unsubscribe(this.onAction);
     }
 
     onAction = (action: any): void => {
@@ -78,8 +78,7 @@ abstract class TrackBase extends Component {
 
     onLike = async () => {
         try {
-            const res = (await API.postTrackLike(this.props.track.id, !this.state.liked)).body;
-            console.log(res)
+            const res = (await API.postTrackLike(this.props.track.id, !this.state.is_liked)).body;
             this.setState({liked: res.value});
         } catch (e) {
             console.error(e);
@@ -125,7 +124,7 @@ export class TrackLine extends TrackBase {
                     <div className="track-line__controls__duration-container">
                         <span className="track-line__controls__duration">{durationToString(track.duration)}</span>
                     </div>
-                    <Like className="track-line__controls__like" active={this.state.liked} onClick={this.onLike}/>
+                    <Like className="track-line__controls__like" active={this.state.is_liked} onClick={this.onLike}/>
                     
                     <Actions className="track-line__controls__actions">
                         <span onClick={() => this.setState({ addTrack: true })}>Добавить в плейлист</span>

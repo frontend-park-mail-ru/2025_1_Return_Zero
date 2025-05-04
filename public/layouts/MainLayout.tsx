@@ -9,7 +9,10 @@ import { BottomHeader } from "components/bottomHeader/BottomHeader";
 
 import { LoginForm, LogoutForm, SignupForm } from "components/forms/AuthForms";
 
-import { MainPage, TracksPage, AlbumsPage, ArtistsPage } from "pages/MainPages";
+import { MainPage } from "pages/MainPage";
+import { TracksPage } from "pages/TracksPage";
+import { AlbumsPage } from "pages/AlbumsPage";
+import { ArtistsPage } from "pages/ArtistsPage";
 import { AlbumPage } from "pages/AlbumPage";
 import { ArtistPage } from "pages/ArtistPage";
 import { PlaylistPage } from "pages/PlaylistPage";

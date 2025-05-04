@@ -20,7 +20,7 @@ export class PlaylistsPanel extends Component {
     }
     
     componentWillUnmount(): void {
-        CONTENT_STORAGE.unSubscribe(this.onAction);
+        CONTENT_STORAGE.unsubscribe(this.onAction);
     }
 
     onAction = (action: any) => {

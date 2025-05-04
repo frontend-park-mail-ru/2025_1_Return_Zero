@@ -5,7 +5,7 @@ import { Dialog, Button, ButtonDanger, ButtonSuccess } from "components/elements
 import { TrackCard } from "components/Track";
 import { PlaylistCreate } from "components/forms/PlaylistCreate";
 
-import { debounce } from "utils/funcs";
+import { one_alive_async } from "utils/funcs";
 import { API } from "utils/api";
 
 import "./TrackToPlaylist.scss";
@@ -62,13 +62,13 @@ class PlaylistLine extends Component {
         is_included: this.props.playlist.is_included
     }
 
-    onAdd = debounce(
+    onAdd = one_alive_async(
         () => API.addTrackPlaylist(this.props.track.id, this.props.playlist.id)
             .then(() => this.setState({ is_included: true }))
             .catch((reason) => console.error(reason.message))
     )
 
-    onRemove = debounce(
+    onRemove = one_alive_async(
         () => API.deleteTrackPlaylist(this.props.track.id, this.props.playlist.id)
             .then(() => this.setState({ is_included: false }))
             .catch((reason) => console.error(reason.message))

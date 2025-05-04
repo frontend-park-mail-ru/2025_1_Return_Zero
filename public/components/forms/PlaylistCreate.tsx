@@ -8,6 +8,8 @@ import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
 import { API } from "utils/api";
 
+import { one_alive_async } from "utils/funcs";
+
 import './PlaylistCreate.scss';
 import './forms.scss'
 
@@ -20,9 +22,12 @@ export class PlaylistCreate extends Component {
         error: null as string | null
     }
 
-    onSubmit = async (e: SubmitEvent) => {
+    onSubmit = (e: SubmitEvent) => {
         e.preventDefault();
-        
+        this._onSubmit();
+    };
+
+    _onSubmit = one_alive_async(async () => {
         if (!PLAYLIST_FORM_VALIDATOR.validateAll()) {
             this.setState({
                 error: 'Заполните все поля'
@@ -42,7 +47,7 @@ export class PlaylistCreate extends Component {
             console.error(error)
             this.setState({error: error.message})
         }
-    }
+    })
 
     onInput = (event: Event) => {
         const element = event.target as HTMLInputElement;

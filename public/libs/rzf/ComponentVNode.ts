@@ -35,7 +35,7 @@ export function renderComponent(vnode: ComponentVNode, dom: HTMLElement, before:
 export function destroyComponent(vnode: ComponentVNode) {
     vnode.instance!.componentWillUnmount();
     while (vnode.children.length) {
-        destroy(vnode.children.shift()!);
+        destroy(vnode.children.at(-1));
     }
 }
 
@@ -54,7 +54,6 @@ export function updateComponent(vnode: ComponentVNode, newVNode: ComponentVNode)
     if (vnode.instance!.componentShouldUpdate(newVNode.props, {})) {
         vnode.props = vnode.instance!.props = newVNode.props;
         newVNode.children = vnode.instance!.render();
-        // @ts-ignore
         VDomHelpers.updateChildren(vnode, newVNode);
     } else {
         vnode.props = vnode.instance!.props = newVNode.props;

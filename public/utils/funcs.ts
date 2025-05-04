@@ -5,3 +5,18 @@ export function debounce(fn: Function, delay: number = 200) {
         timer = window.setTimeout(fn, delay, ...args);
     }
 }
+
+export function one_alive_async<T extends (...args: any) => any>(fn: T, ret: any=null) {
+    let isAlive = false;
+    return async (...args: Parameters<T>) => {
+        if (isAlive) return ret;
+        isAlive = true;
+        try {
+            return await fn(...args);
+        } catch(e) {
+            throw e
+        } finally {
+            isAlive = false
+        }
+    }
+}

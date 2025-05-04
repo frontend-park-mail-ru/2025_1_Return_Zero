@@ -45,6 +45,10 @@ export class PlaylistPage extends Component {
             .catch(e => console.error(e.message));
     }
 
+    onLike = () => {
+
+    }
+
     render() {
         if (this.props.playlist_id !== this.playlist_id) this.fetchData();
         
@@ -64,7 +68,7 @@ export class PlaylistPage extends Component {
                         </div>
                         <div className="page__info__actions">
                             <img src="/static/img/play.svg" alt="play"/>
-                            <Like active={playlist.liked} />
+                            <Like active={playlist.is_liked} onClick={this.onLike} />
                         </div>
                     </div>
                 </div>
