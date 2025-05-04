@@ -79,7 +79,7 @@ abstract class TrackBase extends Component {
     onLike = async () => {
         try {
             const res = (await API.postTrackLike(this.props.track.id, !this.state.is_liked)).body;
-            this.setState({liked: res.value});
+            this.setState({is_liked: !this.state.is_liked});
         } catch (e) {
             console.error(e);
             return;

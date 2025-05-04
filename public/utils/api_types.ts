@@ -47,7 +47,5 @@ export namespace TemplateAPI {
     export type PlaylistResponse = ApiResponse<AppTypes.Playlist>;
     export type PlaylistsResponse = ApiResponse<AppTypes.Playlist[]>;
 
-    export type LikeResponse = ApiResponse<AppTypes.Like>;
-
     export type UserResponse = ApiResponse<AppTypes.User>;
 }

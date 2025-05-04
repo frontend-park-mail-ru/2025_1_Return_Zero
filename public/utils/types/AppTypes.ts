@@ -84,11 +84,6 @@ declare global {
                 artists_listened?: number;
             };
         };
-
-        type Like = {
-            id: number;
-            value: boolean;
-        }
     }
 } 
 

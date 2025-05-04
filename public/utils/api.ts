@@ -271,15 +271,15 @@ export class API {
     }
 
     
-    static async postTrackLike(id: number, value: boolean): Promise<TemplateAPI.LikeResponse> {
+    static async postTrackLike(id: number, value: boolean) {
         return await API.post(`/tracks/${id}/like`, { value });
     }
 
-    static async postAlbumLike(id: number, value: boolean): Promise<TemplateAPI.LikeResponse> {
+    static async postAlbumLike(id: number, value: boolean) {
         return await API.post(`/albums/${id}/like`, { value });
     }
 
-    static async postArtistLike(id: number, value: boolean): Promise<TemplateAPI.LikeResponse> {
+    static async postArtistLike(id: number, value: boolean) {
         return await API.post(`/artists/${id}/like`, { value });
     }
 

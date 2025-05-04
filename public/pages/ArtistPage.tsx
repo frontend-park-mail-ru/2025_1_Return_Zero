@@ -39,7 +39,7 @@ export class ArtistPage extends Component {
     onLike = one_alive_async(async () => {
         try {
             const resp = await API.postArtistLike(this.props.artist_id, !this.state.is_liked);
-            this.setState({is_liked: resp.body.value});
+            this.setState({is_liked: !this.state.is_liked});
         } catch (e) {
             console.error(e.message);
         }
