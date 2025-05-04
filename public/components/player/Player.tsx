@@ -3,6 +3,8 @@ import { Component } from "libs/rzf/Component";
 import PlayerSmall from "./PlayerSmall";
 import PlayerFullscreen from "./PlayerFullscreen";
 import PlayerMobile from "./PlayerMobile";
+import PlayerMobileFullscreen from "./PlayerMobileFullscreen";
+
 import player from "common/player";
 
 type DisplayType = 'small' | 'fullscreen' | 'none';
@@ -70,12 +72,20 @@ export class Player extends Component {
                         onResize={this.toggleDisplayedOption} 
                     />
                 ];
+
             case 'fullscreen':
+                if (this.state.size === 'mobile') 
+                    return [
+                        <PlayerMobileFullscreen 
+                            onResize={this.toggleDisplayedOption} 
+                        />
+                    ];
                 return [
                     <PlayerFullscreen 
                         onResize={this.toggleDisplayedOption} 
                     />
                 ];
+                
             case 'none':
                 return [];
         }

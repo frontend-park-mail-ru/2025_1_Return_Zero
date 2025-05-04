@@ -19,10 +19,24 @@ export class PlayerMobile extends Component {
         }
     }
 
+    clickHandler = (onResize: () => void) => (e: MouseEvent) => {
+        e.preventDefault();
+    
+        const notAllowedClick = ['play', 'next', 'prev', 'song-name', 'song-img', 'artist-name'];
+        if (e.target instanceof HTMLElement) {
+            if (notAllowedClick.includes(e.target.id)) {
+                return;
+            }
+    
+            onResize();
+        }
+    }
 
     render() {
         return [
-            <div id='player' className='mobile-player'>
+            <div id='player' className='mobile-player'
+                onClick={this.clickHandler(this.props.onResize)}
+            >
                 <div className="mobile-player__container">
                     <div className="mobile-player__song" id="song-container">
                         <img id="song-img"

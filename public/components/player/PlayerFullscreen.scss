@@ -6,13 +6,17 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 11;
+    
+    z-index: 1001;
+    left: 0;
+    bottom: 0;
 
     gap: calc(7vw / 2 + 7vh / 2);
 
     position: fixed;
     height: 100vh;
     width: 100vw;
+
 
     background-color: d.$color-background-root;
 

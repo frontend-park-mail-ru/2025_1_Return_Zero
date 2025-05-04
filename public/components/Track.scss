@@ -115,9 +115,6 @@
 
         &__like {
             display: block;
-            @media (max-width: 1200px) {
-                display: none;
-            }
         }
         
         .actions {
@@ -130,6 +127,9 @@
         &__duration {
             font-size: v.$font-size-h4;
             font-weight: v.$font-weight-light;
+            @media (max-width: 1200px) {
+                display: none;
+            }
         }
 
         &__duration-container {
