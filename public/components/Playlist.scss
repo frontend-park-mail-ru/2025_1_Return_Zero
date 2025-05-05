@@ -14,7 +14,6 @@
         .content {
             width: 8.75rem;
             height: 8.75rem;
-    
             border-radius: 15px;
             
             box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.25);
@@ -37,6 +36,8 @@
         flex-direction: column;
         align-items: center;
         gap: 0.313rem;
+
+        font-size: v.$font-size-h4;
 
         &__title {
             text-align: center;

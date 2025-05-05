@@ -50,7 +50,7 @@ export class ProfilePage extends Component {
                     <div>
                         <div className="page--profile__info__header">
                             <h2 className="page--profile__info__username">{user.username}</h2>
-                            <img src="/static/img/dots.svg" className="page--profile__info__action" alt="edit" onClick={() => this.setState({actions_opened: !this.state.actions_opened})} />
+                            {/* <img src="/static/img/dots.svg" className="page--profile__info__action" alt="edit" onClick={() => this.setState({actions_opened: !this.state.actions_opened})} /> */}
                             {/* {this.state.actions_opened && <div className="profile__info__action-items">
                                 <span className="item" onClick={() => navigator.clipboard.writeText(window.location.origin + '/profile/' + user.username)}>Скопировать ссылку</span>
                             </div>} */}

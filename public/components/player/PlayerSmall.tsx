@@ -87,8 +87,9 @@ export class PlayerSmall extends Component {
             <div id="player" className="small-player">
                 <div className="small-player__container">
                     <div className="small-player__song-container">
-                        <div className="small-player__song" id="song-container">
-                            <img id="song-img"
+                        <div className="small-player__song" id="song-container" style={{ order: 1 }}>
+                            <img
+                                id="song-img"
                                 src={tracksQueue.getCurrentTrackImage()}
                             />
                             <div className="small-player__song-text">
@@ -98,12 +99,22 @@ export class PlayerSmall extends Component {
                                 </Link>
                             </div>
                         </div>
-                        {tracksQueue.getCurrentTrack() &&
-                            [
-                                <ActionsTrack className="icon" track={tracksQueue.getCurrentTrack()}/>,
-                                <Like className="icon" active={tracksQueue.getCurrentTrack().is_liked} onClick={this.onLike}/>,
-                            ]
-                        }
+
+                        {tracksQueue.getCurrentTrack() && [
+                            <ActionsTrack
+                                key="actions"
+                                className="icon"
+                                style={{ order: 10 }}
+                                track={tracksQueue.getCurrentTrack()}
+                            />,
+                            <Like
+                                key="like"
+                                className="icon"
+                                style={{ order: 3 }}
+                                active={tracksQueue.getCurrentTrack().is_liked}
+                                onClick={this.onLike}
+                            />,
+                        ]}
                     </div>
 
                     <div className="small-player__widgets">

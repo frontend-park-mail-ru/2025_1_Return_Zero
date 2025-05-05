@@ -104,6 +104,11 @@
         align-items: center;
         gap: 0.313rem;
 
+        width: 10rem;
+        @media (max-width: 600px) {
+            width: 8rem;
+        }
+
         &__title {
             text-align: center;
             font-weight: v.$font-weight-bold;

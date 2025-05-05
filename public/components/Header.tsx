@@ -28,6 +28,32 @@ export class Header extends Component {
 }
 
 class HeaderSearch extends Component {
+    componentDidMount(): void {
+        setInterval(() => {
+            const input = document.querySelector('.header__search') as HTMLInputElement | null;
+            const logo = document.querySelector('.header-logo') as HTMLElement | null;
+            if (window.innerWidth <= 600) {
+                const locations = ['/search/all', '/search/tracks/', '/search/artists', '/search/albums'];
+                if (locations.includes(location.pathname)) {
+                    if (logo && input) {
+                        input.style.display = 'flex';
+                        logo.style.display = 'none';
+                    }
+                } else {
+                    if (logo && input) {
+                        input.style.display = 'none';
+                        logo.style.display = 'flex';
+                    }
+                }
+            } else {
+                if (logo && input) {
+                    input.style.display = 'flex';
+                    logo.style.display = 'none';
+                }
+            }
+        }, 300);
+    }
+
     state = {
         query: "",
     }

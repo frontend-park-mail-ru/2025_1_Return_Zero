@@ -11,7 +11,7 @@ export class Actions extends Component {
 
     render() {
         return [
-            <div {...this.props} className={this.props.className || "actions"}>
+            <div style={{ order: 10 }} {...this.props} className={this.props.className || "actions"}>
                 <img className="actions__img" src="/static/img/dots.svg"/>
                 {this.props.opened && <NearPopup className="actions__popup">
                     {this.props.children}

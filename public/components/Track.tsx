@@ -123,12 +123,12 @@ export class TrackLine extends TrackBase {
                     <Link to={track.album_page}>{track.album}</Link>
                 </div>
 
-                <div className="track-line__controls">
-                    <div className="track-line__controls__duration-container">
+                <div style={{ display: 'flex' }} className="track-line__controls">
+                    <div style={{ order: 1 }} className="track-line__controls__duration-container">
                         <span className="track-line__controls__duration">{durationToString(track.duration)}</span>
                     </div>
-                    <Like active={this.state.is_liked} onClick={this.onLike}/>
-                    <ActionsTrack track={track}/>
+                    <Like style={{ order: 2 }} active={this.state.is_liked} onClick={this.onLike} />
+                    <ActionsTrack style={{ order: 3 }} track={track} />
                 </div>
             </div>
         ]

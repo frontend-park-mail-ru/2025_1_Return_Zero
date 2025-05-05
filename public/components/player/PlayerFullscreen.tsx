@@ -173,9 +173,18 @@ export class PlayerFullscreen extends Component {
                             <span id="end-span">{convertDuration(player.getDuration())}</span>
                         </div>
                         <div className="fullscreen-player__tools">
-                            <div className="icons">
-                                <Like className="icon" active={tracksQueue.getCurrentTrack().is_liked} onClick={this.onLike}/>
-                                <ActionsTrack className="icon" track={tracksQueue.getCurrentTrack()}/>
+                            <div className="icons" style={{ display: 'flex' }}>
+                                <Like
+                                    className="icon"
+                                    style={{ order: 1 }}
+                                    active={tracksQueue.getCurrentTrack().is_liked}
+                                    onClick={this.onLike}
+                                />
+                                <ActionsTrack
+                                    className="icon"
+                                    style={{ order: 2 }}
+                                    track={tracksQueue.getCurrentTrack()}
+                                />
                             </div>
                             <div className="controls">
                                 <img 

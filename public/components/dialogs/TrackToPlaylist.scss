@@ -20,6 +20,13 @@
         gap: 1.3rem;
     }
 
+    .track-card {
+        display: flex;
+        @media (max-width: 600px) {
+            display: none;
+        }
+    }
+
     &__line {
         display: flex;
         justify-content: space-between;

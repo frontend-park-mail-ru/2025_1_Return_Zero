@@ -145,6 +145,11 @@
 
 .page--playlist.page {
     .page__info {
+        gap: 3.125rem;
+        @media (max-width: 600px) {
+            gap: 2rem;
+        }
+
         &__user {
             a {
                 font-weight: v.$font-weight-bold;
@@ -155,6 +160,19 @@
             img {
                 width: 2.375rem;
                 height: 2.375rem;
+            }
+        }
+
+        &__img {
+            @media (max-width: 600px) {
+                width: 10rem;
+                height: 10rem;
+            }
+        }
+
+        &__title {
+            @media (max-width: 600px) {
+                font-size: v.$font-size-h1;
             }
         }
     }
@@ -188,12 +206,18 @@
         width: 13.625rem;
         height: 13.625rem;
         @media (max-width: 600px) {
-            width: 10rem;
-            height: 10rem;
+            width: 8rem;
+            height: 8rem;
         }
         border-radius: 50%;
     }
 
+    @media (max-width: 600px) {
+        &__username {
+            font-size: v.$font-size-h4;
+        }       
+    }
+    
     > div {
         display: flex;
         flex-direction: column;
@@ -222,7 +246,7 @@
         font-size: v.$font-size-h4;
         gap: 1.25rem;
         @media (max-width: 600px) {
-            font-size: v.$font-size-main;
+            font-size: v.$font-size-small;
             gap: 1rem;
         }
 

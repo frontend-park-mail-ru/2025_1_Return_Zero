@@ -121,9 +121,6 @@
         
         .actions--track {
             display: block;
-            @media (max-width: 800px) {
-                display: none;
-            }
         }
 
         &__duration {
