@@ -1,18 +1,16 @@
 import { Component } from "libs/rzf/Component";
 import { Link } from "libs/rzf/Router";
 
-import tracksQueue from "common/tracksQueue";
-
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
 import { TRACKS_STORAGE, USER_STORAGE } from "utils/flux/storages";
 import { API } from "utils/api";
 
 import { Like } from "./elements/Like";
-import { ActionsTrack } from "./elements/ActionsTrack";
-import { TrackToPlaylist } from "./dialogs/TrackToPlaylist";
+import { ActionsAddToPlaylist, ActionsAddToQueue } from "./elements/ActionsTrack";
 
 import "./Track.scss";  
+import { Actions } from "./elements/Actions";
 
 function durationToString(duration: number): string {
     const minutes = Math.floor(duration / 60);
@@ -127,8 +125,13 @@ export class TrackLine extends TrackBase {
                     <div style={{ order: 1 }} className="track-line__controls__duration-container">
                         <span className="track-line__controls__duration">{durationToString(track.duration)}</span>
                     </div>
-                    <Like style={{ order: 2 }} active={this.state.is_liked} onClick={this.onLike} />
-                    <ActionsTrack style={{ order: 3 }} track={track} />
+                    <Like active={this.state.is_liked} onClick={this.onLike}/>
+                    <Actions>
+                        <ActionsAddToPlaylist track={track} />
+                        <ActionsAddToQueue track={track} />
+                        <Link to={track.album_page}>К альбому</Link>
+                        <Link to={track.artists[0].artist_page}>К исполнителю</Link>
+                    </Actions>
                 </div>
             </div>
         ]

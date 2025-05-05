@@ -10,16 +10,21 @@ import Router from "libs/rzf/Router";
 import { Like } from "components/elements/Like";
 import { Link } from "libs/rzf/Router";
 import { ACTIONS } from "utils/flux/actions";
-import { ActionsTrack } from "components/elements/ActionsTrack";
+import { ActionsAddToPlaylist, ActionsAddToQueue } from "components/elements/ActionsTrack";
 import { API } from "utils/api";
 import Dispatcher from "libs/flux/Dispatcher";
 import { TRACKS_STORAGE } from "utils/flux/storages";
+import { Actions } from "components/elements/Actions";
 
 export class PlayerFullscreen extends Component {
     private unsubscribe: () => void;
     private storageUnsubscribe: any;
     private playDragging: DragProgressBar;
     private volumeDragging: DragProgressBar;
+
+    state = {
+        actions_opened: false,
+    }
 
     componentDidMount() {
         // подписки
@@ -173,19 +178,25 @@ export class PlayerFullscreen extends Component {
                             <span id="end-span">{convertDuration(player.getDuration())}</span>
                         </div>
                         <div className="fullscreen-player__tools">
-                            <div className="icons" style={{ display: 'flex' }}>
-                                <Like
-                                    className="icon"
-                                    style={{ order: 1 }}
-                                    active={tracksQueue.getCurrentTrack().is_liked}
-                                    onClick={this.onLike}
-                                />
-                                <ActionsTrack
-                                    className="icon"
-                                    style={{ order: 2 }}
-                                    track={tracksQueue.getCurrentTrack()}
-                                />
-                            </div>
+                        <div className="icons" style={{ display: 'flex' }}>
+                        <Actions
+                                className="icon"
+                                style={{ order: 1 }}
+                                opened={this.state.actions_opened}
+                                onClick={() => this.setState({ actions_opened: !this.state.actions_opened })}
+                            >
+                                <ActionsAddToPlaylist track={tracksQueue.getCurrentTrack()} />
+                                <ActionsAddToQueue track={tracksQueue.getCurrentTrack()} />
+                                <Link to={tracksQueue.getCurrentTrack().album_page}>К альбому</Link>
+                                <Link to={tracksQueue.getCurrentTrack().artists[0].artist_page}>К исполнителю</Link>
+                            </Actions>
+                            <Like
+                                className="icon"
+                                style={{ order: 2 }}
+                                active={tracksQueue.getCurrentTrack().is_liked}
+                                onClick={this.onLike}
+                            />
+                        </div>
                             <div className="controls">
                                 <img 
                                     className="icon" 

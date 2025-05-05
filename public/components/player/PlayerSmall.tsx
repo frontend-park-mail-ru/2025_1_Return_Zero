@@ -9,7 +9,8 @@ import tracksQueue from "common/tracksQueue";
 import { Like } from "components/elements/Like";
 import { Link } from "libs/rzf/Router";
 import { ACTIONS } from "utils/flux/actions";
-import { ActionsTrack } from "components/elements/ActionsTrack";
+import { Actions } from "components/elements/Actions";
+import { ActionsAddToPlaylist, ActionsAddToQueue } from "components/elements/ActionsTrack";
 import { API } from "utils/api";
 import Dispatcher from "libs/flux/Dispatcher";
 import { TRACKS_STORAGE } from "utils/flux/storages";
@@ -19,6 +20,10 @@ export class PlayerSmall extends Component {
     private storageUnsubscribe: any
     private playDragging: DragProgressBar;
     private volumeDragging: DragProgressBar;
+
+    state = {
+        actions_opened: false,
+    }
     
     componentDidMount() {
         // подписки
@@ -99,22 +104,17 @@ export class PlayerSmall extends Component {
                                 </Link>
                             </div>
                         </div>
-
-                        {tracksQueue.getCurrentTrack() && [
-                            <ActionsTrack
-                                key="actions"
-                                className="icon"
-                                style={{ order: 10 }}
-                                track={tracksQueue.getCurrentTrack()}
-                            />,
-                            <Like
-                                key="like"
-                                className="icon"
-                                style={{ order: 3 }}
-                                active={tracksQueue.getCurrentTrack().is_liked}
-                                onClick={this.onLike}
-                            />,
-                        ]}
+                        {tracksQueue.getCurrentTrack() &&
+                            [
+                                <Actions className="icon" opened={this.state.actions_opened} onClick={() => this.setState({actions_opened: !this.state.actions_opened})}>
+                                    <ActionsAddToPlaylist track={tracksQueue.getCurrentTrack()}/>
+                                    <ActionsAddToQueue track={tracksQueue.getCurrentTrack()}/>
+                                    <Link to={tracksQueue.getCurrentTrack().album_page}>К альбому</Link>
+                                    <Link to={tracksQueue.getCurrentTrack().artists[0].artist_page}>К исполнителю</Link>
+                                </Actions>,
+                                <Like className="icon" active={tracksQueue.getCurrentTrack().is_liked} onClick={this.onLike}/>,
+                            ]
+                        }
                     </div>
 
                     <div className="small-player__widgets">
