@@ -10,6 +10,8 @@ import { TRACKS_STORAGE } from "utils/flux/storages";
 import tracksQueue from "common/tracksQueue";
 import { Route } from "libs/rzf/Router";
 
+import { updateMarquee } from "common/marquee";
+
 type DisplayType = 'small' | 'fullscreen' | 'none';
 type size = 'mobile' | 'desktop';
 
@@ -63,7 +65,6 @@ export class Player extends Component {
     }
 
     render() {
-        console.warn(this.url, location.pathname);
         if (this.url !== location.pathname) {
             if (this.state.displayedOption as DisplayType === 'fullscreen') {
                 this.toggleDisplayedOption();

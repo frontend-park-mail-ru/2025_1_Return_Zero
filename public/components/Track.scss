@@ -13,8 +13,12 @@
     align-items: center;
 
     &>* {
-        flex-basis: 0;
-        flex-grow: 1;
+        flex: 1 1 0;
+
+        @media (max-width: 600px) {
+            /* grow:1, shrink:1, basis:100% */
+            flex: 1 1 100%;
+          }
     }
 
     &__info {
@@ -22,6 +26,9 @@
         align-items: center;
         gap: 1rem;
         width: 10%;
+        @media (max-width: 600px) {
+            width: 90%;
+        }
 
         &__index {
             display: none;
@@ -107,6 +114,10 @@
         justify-content: flex-end;
         align-items: center;
         gap: 1rem;
+
+        @media (max-width: 600px) {
+            width: 10%;
+        }
         
         .actions--track {
             display: block;
@@ -175,6 +186,11 @@
         flex-direction: column;
         align-items: center;
         gap: 0.313rem;
+
+        width: 10rem;
+        @media (max-width: 600px) {
+            width: 8rem;
+        }
 
         &__title {
             text-align: center;

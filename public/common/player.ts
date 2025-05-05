@@ -1,7 +1,6 @@
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
 import { TRACKS_STORAGE } from "utils/flux/storages";
-import tracksQueue from "./tracksQueue";
 
 export class Player {
     static instance: Player;
@@ -36,8 +35,9 @@ export class Player {
         }
         Player.instance = this;
 
+
         this.audio = document.createElement('audio');
-        this.initStates();
+        this.initStates();  
 
         this.audio.ontimeupdate = () => {
             this.setCurrentTime(this.audio.currentTime); // notify

@@ -15,6 +15,7 @@ import { ActionsTrack } from "components/elements/ActionsTrack";
 import { API } from "utils/api";
 import Dispatcher from "libs/flux/Dispatcher";
 import { TRACKS_STORAGE } from "utils/flux/storages";
+import { updateMarquee } from "common/marquee";
 
 export class PlayerMobileFullscreen extends Component {
     private unsubscribe: () => void;
@@ -24,11 +25,13 @@ export class PlayerMobileFullscreen extends Component {
     componentDidMount() {
         // подписки
         this.unsubscribe = player.subscribe(() => {
-            this.setState({});     
+            this.setState({});    
         });
         this.storageUnsubscribe = TRACKS_STORAGE.subscribe(this.onAction);
 
         this.configurePlayProgressBar();
+
+        queueMicrotask(() => updateMarquee());
     }
 
     onAction = () => {
@@ -89,12 +92,13 @@ export class PlayerMobileFullscreen extends Component {
 
     render() {
         const onResize = this.props.onResize;
-        
+        console.warn(tracksQueue.getCurrentTrack());
+
         return [
             <div id="player" class="fullscreen-mobile-player" style={{ overscrollBehavior: 'contain' }}>
                 <div className="fullscreen-mobile-player__container">
                     <div class="fullscreen-mobile-player__container__top">
-                        <div class="album-href">Перейти к альбому</div>
+                        <div onClick={() => Router.push(tracksQueue.getCurrentTrack().album_page, {})} class="album-href">Перейти к альбому</div>
                         <img onClick={this.props.onResize} class="cross" src="/static/img/cross.svg" />
                     </div>
 

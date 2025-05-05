@@ -20,6 +20,22 @@ export class BottomHeader extends Component {
 
 class NavItem extends Component {
     render() {
+        const input = document.querySelector('.header__search') as HTMLInputElement | null;
+        const logo = document.querySelector('.header-logo') as HTMLElement | null;
+
+        const locations = ['/search/all', '/search/tracks/', '/search/artists', '/search/albums'];
+        if (locations.includes(location.pathname)) {
+            if (logo && input) {
+                input.style.display = 'flex';
+                logo.style.display = 'none';
+            }
+        } else {
+            if (logo && input) {
+                input.style.display = 'none';
+                logo.style.display = 'flex';
+            }
+        }
+
         return [
             <div className={"bottom_header_icon" + (location.pathname === this.props.link ? " active" : "")}>
                 <Link to={this.props.link}>

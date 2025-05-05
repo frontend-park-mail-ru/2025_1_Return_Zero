@@ -3,9 +3,11 @@ import { API } from 'utils/api';
 import Dispatcher from 'libs/flux/Dispatcher';
 import { ACTIONS } from 'utils/flux/actions';
 import { TRACKS_STORAGE } from 'utils/flux/storages';
+import { Stream } from './stream';
 
 export class TracksQueue {
     static instance: TracksQueue;
+    stream: Stream;
 
     private queue: string[] = [];
     private savedQueue: string[] = [];
@@ -22,6 +24,7 @@ export class TracksQueue {
         }
         TracksQueue.instance = this;
         this.init();
+        this.stream = new Stream(player, this);
     }
 
     private init(): void {
@@ -221,6 +224,9 @@ export class TracksQueue {
         if (isNext && this.addedQueue.length) {
             trackId = this.addedQueue.shift()!;
             this.saveAddedQueue();
+
+            await this.stream.updateStream();
+            await this.stream.createStream();
         } else {
             trackId = this.queue[this.idx];
         }
@@ -240,6 +246,9 @@ export class TracksQueue {
         }
 
         this.saveQueue();
+
+        await this.stream.updateStream();
+        await this.stream.createStream();
     }
 
     public getCurrentTrackId(): string | null {
