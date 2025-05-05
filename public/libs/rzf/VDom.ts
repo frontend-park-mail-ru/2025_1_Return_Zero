@@ -137,7 +137,7 @@ export function cleanUp(vnode: VNode) {
 export function update(vnode: VNode, newVNode: VNode) {
     if (vnode.type !== newVNode.type) {
         VDomHelpers.insert(newVNode, destroy(vnode), vnode.parent!);
-        render(newVNode, VDomHelpers.getParentTag(vnode)!.firstDom!, VDomHelpers.getNextDom(vnode));
+        render(newVNode, VDomHelpers.getParentTag(vnode)!.firstDom!, VDomHelpers.getNextDom(newVNode));
         return;
     }
 
@@ -160,7 +160,7 @@ export function putInDom(vnode: VNode, parent: HTMLElement, before: HTMLElement|
     if (vnode.type === VNodeType.TEXT || vnode.type === VNodeType.TAG) {
         parent.insertBefore(vnode.firstDom!, before);
     } else if (vnode.type === VNodeType.COMPONENT) {
-        vnode.children.forEach(child => putInDom(child, parent, null));
+        vnode.children.forEach(child => putInDom(child, parent, before));
     } else {
         console.error("Can`t put in dom", vnode);
     }
@@ -178,3 +178,4 @@ export function initAt(vnode: VNode, element: HTMLElement) {
     render(vnode, element, null);
     return v;
 }
+

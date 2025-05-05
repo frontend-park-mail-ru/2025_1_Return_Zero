@@ -8,6 +8,7 @@ import PlayerMobileFullscreen from "./PlayerMobileFullscreen";
 import player from "common/player";
 import { TRACKS_STORAGE } from "utils/flux/storages";
 import tracksQueue from "common/tracksQueue";
+import { Route } from "libs/rzf/Router";
 
 type DisplayType = 'small' | 'fullscreen' | 'none';
 type size = 'mobile' | 'desktop';
@@ -16,6 +17,7 @@ const mobileBreakpoint = 1100;
 
 export class Player extends Component {
     private unsubscribe: () => void;
+    private url: string;
 
     constructor(props: Record<string, any>) {
         super(props);
@@ -61,6 +63,14 @@ export class Player extends Component {
     }
 
     render() {
+        console.warn(this.url, location.pathname);
+        if (this.url !== location.pathname) {
+            if (this.state.displayedOption as DisplayType === 'fullscreen') {
+                this.toggleDisplayedOption();
+            }
+            this.url = location.pathname;
+        }
+
         switch (this.state.displayedOption as DisplayType) {
             case 'small':
                 if (this.state.size === 'mobile') 
@@ -74,18 +84,14 @@ export class Player extends Component {
                         onResize={this.toggleDisplayedOption} 
                     />
                 ];
-
+                
             case 'fullscreen':
                 if (this.state.size === 'mobile') 
                     return [
-                        <PlayerMobileFullscreen 
-                            onResize={this.toggleDisplayedOption} 
-                        />
+                        <PlayerMobileFullscreen onResize={this.toggleDisplayedOption} />
                     ];
                 return [
-                    <PlayerFullscreen 
-                        onResize={this.toggleDisplayedOption} 
-                    />
+                    <PlayerFullscreen onResize={this.toggleDisplayedOption} />
                 ];
                 
             case 'none':

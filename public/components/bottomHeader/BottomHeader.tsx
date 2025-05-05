@@ -8,6 +8,7 @@ export class BottomHeader extends Component {
     render() {
         return [
             <div className="bottom-header">
+                <Route path="^/search/" exact component={NavItem} elseComponent={NavItem} link="/search/all" icon="icon-search" />
                 <Route path="^/" exact component={NavItem} elseComponent={NavItem} link="/" icon="icon-home" />
                 <Route path="^/tracks/"  exact component={NavItem} elseComponent={NavItem} link="/tracks" icon="icon-tracks" />
                 <Route path="^/albums/" exact component={NavItem} elseComponent={NavItem} link="/albums" icon="icon-albums"  />

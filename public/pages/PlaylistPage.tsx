@@ -12,15 +12,18 @@ import { ACTIONS } from "utils/flux/actions";
 import { API } from "utils/api";
 
 import './pages.scss';
+import { one_alive_async } from "utils/funcs";
 
 export class PlaylistPage extends Component {
     playlist_id: number;
     state: {
         playlist: AppTypes.Playlist,
         tracks: AppTypes.Track[],
+        is_liked: boolean,
     } = {
         playlist: null,
         tracks: [],
+        is_liked: false,
     }
 
     props: {
@@ -31,7 +34,7 @@ export class PlaylistPage extends Component {
         this.playlist_id = this.props.playlist_id;
         API.getPlaylist(this.playlist_id)
             .then(playlist => {
-                this.setState({playlist: playlist.body})
+                this.setState({playlist: playlist.body, is_liked: playlist.body.is_liked})
                 API.getPlaylistTracks(this.playlist_id)
                     .then(tracks => {this.setState({tracks: tracks.body})})
                     .catch(e => console.error(e.message));
@@ -45,9 +48,14 @@ export class PlaylistPage extends Component {
             .catch(e => console.error(e.message));
     }
 
-    onLike = () => {
-
-    }
+    onLike = one_alive_async(async () => {
+        try {
+            const resp = await API.postPlaylistLike(this.props.playlist_id, !this.state.is_liked)
+            this.setState({is_liked: !this.state.is_liked})
+        } catch (err) {
+            console.error(err.message);
+        }
+    })
 
     render() {
         if (this.props.playlist_id !== this.playlist_id) this.fetchData();
@@ -68,7 +76,7 @@ export class PlaylistPage extends Component {
                         </div>
                         <div className="page__info__actions">
                             <img src="/static/img/play.svg" alt="play"/>
-                            <Like active={playlist.is_liked} onClick={this.onLike} />
+                            <Like active={this.state.is_liked} onClick={this.onLike} />
                         </div>
                     </div>
                 </div>

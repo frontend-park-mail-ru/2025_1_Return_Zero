@@ -314,6 +314,10 @@ export class API {
         return await API.post(`/artists/${id}/like`, { value });
     }
 
+    static async postPlaylistLike(id: number, value: boolean) {
+        return await API.post(`/playlists/${id}/like`, { value });
+    }
+
 
     static async postSignup(
         data: AuthSendingData

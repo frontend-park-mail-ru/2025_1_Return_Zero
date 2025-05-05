@@ -22,28 +22,24 @@ export class PlayerMobileFullscreen extends Component {
     private playDragging: MobileDragProgressBar;
 
     componentDidMount() {
-        this.setState({
-            is_liked: tracksQueue.getCurrentTrack()?.is_liked ?? false,
-        });
-        
         // подписки
         this.unsubscribe = player.subscribe(() => {
             this.setState({});     
         });
-        this.storageUnsubscribe = TRACKS_STORAGE.subscribe(() => {
-            this.setState({})
-        });
+        this.storageUnsubscribe = TRACKS_STORAGE.subscribe(this.onAction);
 
         this.configurePlayProgressBar();
+    }
+
+    onAction = () => {
+        this.setState({});
     }
 
     componentWillUnmount() {
         if (this.unsubscribe) {
             this.unsubscribe();
         }
-        if (this.storageUnsubscribe) {
-            this.storageUnsubscribe();
-        }
+        TRACKS_STORAGE.unsubscribe(this.onAction);
     }
 
     configurePlayProgressBar() {
@@ -82,7 +78,7 @@ export class PlayerMobileFullscreen extends Component {
 
     onLike = async () => {
         try {
-            const res = (await API.postTrackLike(tracksQueue.getCurrentTrack().id, tracksQueue.getCurrentTrack().is_liked)).body;
+            const res = (await API.postTrackLike(tracksQueue.getCurrentTrack().id, !tracksQueue.getCurrentTrack().is_liked)).body;
             Dispatcher.dispatch(new ACTIONS.TRACK_LIKE({...tracksQueue.getCurrentTrack(), is_liked: !tracksQueue.getCurrentTrack().is_liked}));
             this.setState({});
         } catch (e) {

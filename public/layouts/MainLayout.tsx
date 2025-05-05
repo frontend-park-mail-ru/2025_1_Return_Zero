@@ -52,7 +52,7 @@ export default class MainLayout extends Component {
                 <Route path="#logout$" component={LogoutForm} />
             
                 <div className="layout--main__bottom-panel"> 
-                    <Player />
+                    <Route path=".*" component={Player} />
                     <BottomHeader />
                 </div>
             </div>

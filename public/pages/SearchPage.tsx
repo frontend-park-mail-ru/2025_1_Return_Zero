@@ -87,7 +87,6 @@ class SearchLink extends Component {
 
     render() {
         const active = this.props.to === location.pathname;
-        console.log(this.props.to, location.pathname, active);
         return [
             <Link to={this.props.to + location.search}>
                 <Button active={active}>{this.props.text}</Button>

@@ -22,30 +22,27 @@ export class PlayerFullscreen extends Component {
     private volumeDragging: DragProgressBar;
 
     componentDidMount() {
-        this.setState({
-            is_liked: tracksQueue.getCurrentTrack()?.is_liked ?? false,
-        });
-        
         // подписки
         this.unsubscribe = player.subscribe(() => {
             this.setState({});     
         });
-        this.storageUnsubscribe = TRACKS_STORAGE.subscribe(() => {
-            this.setState({})
-        });
+        this.storageUnsubscribe = TRACKS_STORAGE.subscribe(this.onAction);
 
         this.configurePlayProgressBar();
         this.configureVolumeProgressBar();
+    }
+
+    onAction = () => {
+        this.setState({});
     }
 
     componentWillUnmount() {
         if (this.unsubscribe) {
             this.unsubscribe();
         }
-        if (this.storageUnsubscribe) {
-            this.storageUnsubscribe();
-        }
+        TRACKS_STORAGE.unsubscribe(this.onAction);
     }
+
 
     configurePlayProgressBar() {
         const fullProgress = document.getElementById("play-progress");
@@ -75,7 +72,7 @@ export class PlayerFullscreen extends Component {
 
     onLike = async () => {
         try {
-            const res = (await API.postTrackLike(tracksQueue.getCurrentTrack().id, tracksQueue.getCurrentTrack().is_liked)).body;
+            const res = (await API.postTrackLike(tracksQueue.getCurrentTrack().id, !tracksQueue.getCurrentTrack().is_liked)).body;
             Dispatcher.dispatch(new ACTIONS.TRACK_LIKE({...tracksQueue.getCurrentTrack(), is_liked: !tracksQueue.getCurrentTrack().is_liked}));
             this.setState({});
         } catch (e) {
@@ -86,7 +83,7 @@ export class PlayerFullscreen extends Component {
 
     render() {
         const onResize = this.props.onResize;
-        
+        console.log("Render fullscreen") // срабатывает
         return [
             <div id="player" class="fullscreen-player">
                 <div className="fullscreen-player__container">

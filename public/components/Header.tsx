@@ -39,6 +39,9 @@ class HeaderSearch extends Component {
 
     onInput = (e: Event) => {
         const target = (e.target as HTMLInputElement).value;
+        if (!this.state.query && target) {
+            router.push('/search/all', {});
+        }
         this.setState({ query: target });
         this._onSubmit();
     }
@@ -48,14 +51,18 @@ class HeaderSearch extends Component {
             router.push('/', {});
             return;
         }
-        router.push(`?query=${this.state.query}`, {})
+        router.replace(`?query=${this.state.query}`, {})
     })
+
+    onFocus = () => {
+        router.push(`/search/all?query=${this.state.query}`, {});
+    }
 
     render() {
         return [
             <form className="header__search" onSubmit={this.onSubmit}>
                 <img className="header__search__icon" src="/static/img/icon-search.svg" />
-                <input className="header__search__input" value={this.state.query} onInput={this.onInput} type="text" placeholder="поиск..." />
+                <input className="header__search__input" onFocus={this.onFocus} value={this.state.query} onInput={this.onInput} type="text" placeholder="поиск..." />
             </form>
         ]
     }
