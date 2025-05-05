@@ -10,7 +10,7 @@ import Router from "libs/rzf/Router";
 import { Like } from "components/elements/Like";
 import { Link } from "libs/rzf/Router";
 import { ACTIONS } from "utils/flux/actions";
-import { ActionsAddToPlaylist, ActionsAddToQueue } from "components/elements/ActionsTrack";
+import { ActionsAddToPlaylist, ActionsAddToQueue, ActionsToAlbum, ActionsToArtist } from "components/elements/ActionsTrack";
 import { API } from "utils/api";
 import Dispatcher from "libs/flux/Dispatcher";
 import { TRACKS_STORAGE } from "utils/flux/storages";
@@ -179,13 +179,13 @@ export class PlayerFullscreen extends Component {
                         </div>
                         <div className="fullscreen-player__tools">
                             <div className="icons">
-                                <Actions className="icon" opened={this.state.actions_opened} onClick={() => this.setState({actions_opened: !this.state.actions_opened})}>
-                                    <ActionsAddToPlaylist track={tracksQueue.getCurrentTrack()}/>
-                                    <ActionsAddToQueue track={tracksQueue.getCurrentTrack()}/>
-                                    <Link to={tracksQueue.getCurrentTrack().album_page}>К альбому</Link>
-                                    <Link to={tracksQueue.getCurrentTrack().artists[0].artist_page}>К исполнителю</Link>
-                                </Actions>,
-                                <Like className="icon" active={tracksQueue.getCurrentTrack().is_liked} onClick={this.onLike}/>,
+                                <Actions className="icon">
+                                    <ActionsAddToPlaylist track={tracksQueue.getCurrentTrack()} />
+                                    <ActionsAddToQueue track={tracksQueue.getCurrentTrack()} />
+                                    <ActionsToAlbum track={tracksQueue.getCurrentTrack()} />
+                                    <ActionsToArtist track={tracksQueue.getCurrentTrack()} />
+                                </Actions>
+                                <Like className="icon" active={tracksQueue.getCurrentTrack().is_liked} onClick={this.onLike}/>
                             </div>
                             <div className="controls">
                                 <img 

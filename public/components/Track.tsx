@@ -7,7 +7,7 @@ import { TRACKS_STORAGE, USER_STORAGE } from "utils/flux/storages";
 import { API } from "utils/api";
 
 import { Like } from "./elements/Like";
-import { ActionsAddToPlaylist, ActionsAddToQueue } from "./elements/ActionsTrack";
+import { ActionsAddToPlaylist, ActionsAddToQueue, ActionsToAlbum, ActionsToArtist } from "./elements/ActionsTrack";
 
 import "./Track.scss";  
 import { Actions } from "./elements/Actions";
@@ -129,8 +129,8 @@ export class TrackLine extends TrackBase {
                     <Actions>
                         <ActionsAddToPlaylist track={track} />
                         <ActionsAddToQueue track={track} />
-                        <Link to={track.album_page}>К альбому</Link>
-                        <Link to={track.artists[0].artist_page}>К исполнителю</Link>
+                        <ActionsToAlbum track={track} />
+                        <ActionsToArtist track={track} />
                     </Actions>
                 </div>
             </div>
