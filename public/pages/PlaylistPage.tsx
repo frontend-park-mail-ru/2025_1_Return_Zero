@@ -9,6 +9,7 @@ import { Like } from "components/elements/Like";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
+import { USER_STORAGE } from "utils/flux/storages";
 import { API } from "utils/api";
 
 import './pages.scss';
@@ -76,7 +77,7 @@ export class PlaylistPage extends Component {
                         </div>
                         <div className="page__info__actions">
                             <img src="/static/img/play.svg" alt="play"/>
-                            <Like active={this.state.is_liked} onClick={this.onLike} />
+                            {(!USER_STORAGE.getUser() || USER_STORAGE.getUser().username !== playlist.username) && <Like active={this.state.is_liked} onClick={this.onLike} />}
                         </div>
                     </div>
                 </div>
@@ -88,7 +89,7 @@ export class PlaylistPage extends Component {
                         <span>В этом плейлисте пока-что пусто{'('}</span>
                     }
                 </Section>
-                <ButtonDanger className="page--playlist__delete" onClick={this.onDelete}>Удалить плейлист</ButtonDanger>
+                {USER_STORAGE.getUser() && USER_STORAGE.getUser().username === playlist.username && <ButtonDanger className="page--playlist__delete" onClick={this.onDelete}>Удалить плейлист</ButtonDanger>}
             </div>
         ]
     }
