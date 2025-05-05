@@ -1,8 +1,8 @@
 import { Component } from "libs/rzf/Component";
 
-import { AlbumCard, AlbumLine } from "components/Album";
+import { AlbumCard, AlbumLine } from "components/album/Album";
 import { Special } from "components/special/Special";
-import { Section } from "components/Section";
+import { Section } from "components/elements/Section";
 
 import { USER_STORAGE } from "utils/flux/storages";
 import { ACTIONS } from "utils/flux/actions";

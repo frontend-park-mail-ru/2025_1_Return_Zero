@@ -1,8 +1,8 @@
 import { Component } from "libs/rzf/Component";
 
-import { TrackCard, TrackLine } from "components/Track";
+import { TrackCard, TrackLine } from "components/track/Track";
 import { Special } from "components/special/Special";
-import { Section } from "components/Section";
+import { Section } from "components/elements/Section";
 
 import { USER_STORAGE } from "utils/flux/storages";
 import { ACTIONS } from "utils/flux/actions";

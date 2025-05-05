@@ -1,8 +1,8 @@
 import { Component } from "libs/rzf/Component";
 import { Route } from "libs/rzf/Router";
 
-import { Header } from "components/Header";
-import { PlaylistsPanel } from "components/PlaylistsPanel";
+import { Header } from "components/header/Header";
+import { PlaylistsPanel } from "components/playlist/PlaylistsPanel";
 import { Player } from "components/player/Player";
 import { Logo } from "components/logo/Logo";
 import { BottomHeader } from "components/bottomHeader/BottomHeader";

@@ -1,9 +1,9 @@
 import { Component } from "libs/rzf/Component";
 
-import { Section } from "components/Section";
-import { TrackLine } from "components/Track";
-import { ArtistCard } from "components/Artist";
-import { PlaylistCard } from "components/PlaylistCard";
+import { Section } from "components/elements/Section";
+import { TrackLine } from "components/track/Track";
+import { ArtistCard } from "components/artist/Artist";
+import { PlaylistCard } from "components/playlist/PlaylistCard";
 
 import { API } from "utils/api";
 

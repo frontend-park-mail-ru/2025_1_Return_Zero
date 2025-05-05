@@ -2,12 +2,12 @@ import { Component } from "libs/rzf/Component"
 import { Link, Route } from "libs/rzf/Router"
 
 import { Button } from "components/elements/Button"
-import { Section } from "components/Section"
+import { Section } from "components/elements/Section"
 
-import { TrackCard, TrackLine } from "components/Track"
-import { AlbumCard, AlbumLine } from "components/Album"
-import { ArtistCard } from "components/Artist"
-import { PlaylistCard } from "components/PlaylistCard"
+import { TrackCard, TrackLine } from "components/track/Track"
+import { AlbumCard, AlbumLine } from "components/album/Album"
+import { ArtistCard } from "components/artist/Artist"
+import { PlaylistCard } from "components/playlist/PlaylistCard"
 
 import { API } from "utils/api"
 import { one_alive_async } from "utils/funcs"

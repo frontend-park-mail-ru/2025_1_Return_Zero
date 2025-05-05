@@ -1,15 +1,15 @@
 import { Component } from "libs/rzf/Component";
 
-import { TrackCard, TrackLine } from "components/Track";
+import { TrackCard, TrackLine } from "components/track/Track";
 import { Special } from "components/special/Special";
-import { Section } from "components/Section";
+import { Section } from "components/elements/Section";
 
 import { USER_STORAGE } from "utils/flux/storages";
 import { ACTIONS } from "utils/flux/actions";
 import { API } from "utils/api";
 
 import './pages.scss';
-import { PlaylistCard } from "components/PlaylistCard";
+import { PlaylistCard } from "components/playlist/PlaylistCard";
 
 export class TracksPage extends Component {
     state = {
@@ -58,7 +58,7 @@ export class TracksPage extends Component {
                 <Section title="Только для тебя" horizontal>
                     <Special />
                 </Section>
-                {this.state.playlists.length ? <Section title="Лайкнутые плейлисты" horizontal>
+                {this.state.playlists.length ? <Section title="Плейлисты" horizontal>
                     {this.state.playlists.map((playlist, index) => <PlaylistCard key={playlist.id} playlist={playlist} />)}
                 </Section> : undefined}
                 {this.state.history.length ? <Section title="История прослушивания" horizontal>

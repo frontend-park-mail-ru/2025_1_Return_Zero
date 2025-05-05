@@ -1,8 +1,8 @@
 import { Component } from "libs/rzf/Component";
 
-import { TrackLine } from "components/Track";
-import { AlbumCard } from "components/Album";
-import { Section } from "components/Section";
+import { TrackLine } from "components/track/Track";
+import { AlbumCard } from "components/album/Album";
+import { Section } from "components/elements/Section";
 import { Button, ButtonDanger } from "components/elements/Button";
 
 import { one_alive_async } from "utils/funcs";

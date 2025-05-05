@@ -1,9 +1,9 @@
 import { Component } from "libs/rzf/Component";
 import router, { Link } from "libs/rzf/Router";
 
-import { Button } from "./elements/Button";
-import { NearPopup } from "./elements/NearPopup";
-import { PlaylistCreate } from "./forms/PlaylistCreate";
+import { Button } from "../elements/Button";
+import { NearPopup } from "../elements/NearPopup";
+import { PlaylistCreate } from "../forms/PlaylistCreate";
 
 import { ACTIONS } from "utils/flux/actions";
 import { USER_STORAGE, CONTENT_STORAGE } from "utils/flux/storages";

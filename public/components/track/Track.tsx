@@ -6,9 +6,9 @@ import { ACTIONS } from "utils/flux/actions";
 import { TRACKS_STORAGE, USER_STORAGE } from "utils/flux/storages";
 import { API } from "utils/api";
 
-import { Like } from "./elements/Like";
-import { Actions } from "./elements/Actions";
-import { ActionsAddToPlaylist, ActionsAddToQueue, ActionsRemoveFromPlaylist, ActionsToAlbum, ActionsToArtist } from "./elements/ActionsTrack";
+import { Like } from "../elements/Like";
+import { Actions } from "../elements/Actions";
+import { ActionsAddToPlaylist, ActionsAddToQueue, ActionsRemoveFromPlaylist, ActionsToAlbum, ActionsToArtist } from "../elements/ActionsTrack";
 
 import "./Track.scss";  
 

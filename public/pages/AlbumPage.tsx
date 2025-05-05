@@ -1,8 +1,8 @@
 import { Component } from "libs/rzf/Component";
 import { Link } from "libs/rzf/Router";
 
-import { TrackLine } from "components/Track";
-import { Section } from "components/Section";
+import { TrackLine } from "components/track/Track";
+import { Section } from "components/elements/Section";
 import { Like } from "components/elements/Like";
 
 import { API } from "utils/api";

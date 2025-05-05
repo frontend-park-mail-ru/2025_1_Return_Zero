@@ -2,7 +2,7 @@ import { Component } from "libs/rzf/Component";
 import { Link } from "libs/rzf/Router";
 
 import { Dialog, Button, ButtonDanger, ButtonSuccess } from "components/elements/index";
-import { TrackCard } from "components/Track";
+import { TrackCard } from "components/track/Track";
 import { PlaylistCreate } from "components/forms/PlaylistCreate";
 
 import { one_alive_async } from "utils/funcs";
