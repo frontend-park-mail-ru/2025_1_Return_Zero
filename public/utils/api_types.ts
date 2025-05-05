@@ -1,10 +1,10 @@
 export namespace ParamTypes {
-    export type UserUpdate = {
-        password: string;
+    export type PutUser = {
+        password?: string;
         new_email?: string;
         new_username?: string;
         new_password?: string;
-        privacy?: {
+        privacy: {
             is_public_playlists: boolean;
             is_public_favorite_tracks: boolean;
             is_public_favorite_artists: boolean;
@@ -18,71 +18,6 @@ export namespace ParamTypes {
         username: string;
         email: string;
         password: string;
-    };
-}
-
-export namespace DataTypes {
-    export type Track = {
-        id: number;
-        title: string;
-        thumbnail_url: string;
-        duration: number;
-        album_id: number;
-        album: string;
-        artists: {
-            id: number;
-            title: string;
-            role: string;
-            // added fields
-            artist_page: string;
-        }[];
-        file_url?: string;
-    };
-
-    export type Album = {
-        id: number;
-        title: string;
-        thumbnail_url: string;
-        artists: {
-            id: number;
-            title: string;
-            // added fields
-            artist_page: string;
-        };
-        type: string;
-        reelase_date: string;
-    };
-
-    export type Artist = {
-        id: number;
-        title: string;
-        description: string;
-        thumbnail_url: string;
-        listeners_count: number;
-        favorites_count: number;
-        // added fields
-        artist_page: string;
-    };
-
-    export type User = {
-        id: number;
-        username: string;
-        email: string;
-        avatar_url: string;
-        // not included in /auth/check
-        privacy?: {
-            is_public_minutes_listened: boolean;
-            is_public_tracks_listened: boolean;
-            is_public_artists_listened: boolean;
-            is_public_playlists: boolean;
-            is_public_favorite_tracks: boolean;
-            is_public_favorite_artists: boolean;
-        };
-        statistics?: {
-            minutes_listened?: number;
-            tracks_listened?: number;
-            artists_listened?: number;
-        };
     };
 }
 
@@ -100,11 +35,17 @@ export type AuthSendingData = {
 };
 
 export namespace TemplateAPI {
-    export type TracksResponse = ApiResponse<DataTypes.Track[]>;
-    export type TrackResponse = ApiResponse<DataTypes.Track>;
-    export type ArtistsResponse = ApiResponse<DataTypes.Artist[]>;
-    export type ArtistResponse = ApiResponse<DataTypes.Artist>;
-    export type AlbumsResponse = ApiResponse<DataTypes.Album[]>;
-    export type PlaylistsResponse = ApiResponse<DataTypes.Album[]>;
-    export type UserResponse = ApiResponse<DataTypes.User>;
+    export type TrackResponse = ApiResponse<AppTypes.Track>;
+    export type TracksResponse = ApiResponse<AppTypes.Track[]>;
+    
+    export type AlbumResponse = ApiResponse<AppTypes.Album>;
+    export type AlbumsResponse = ApiResponse<AppTypes.Album[]>;
+
+    export type ArtistResponse = ApiResponse<AppTypes.Artist>;
+    export type ArtistsResponse = ApiResponse<AppTypes.Artist[]>;
+
+    export type PlaylistResponse = ApiResponse<AppTypes.Playlist>;
+    export type PlaylistsResponse = ApiResponse<AppTypes.Playlist[]>;
+
+    export type UserResponse = ApiResponse<AppTypes.User>;
 }

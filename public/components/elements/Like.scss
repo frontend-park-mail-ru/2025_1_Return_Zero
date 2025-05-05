@@ -1,0 +1,20 @@
+.like {
+    cursor: pointer;
+    
+    img {
+        width: 2rem;
+        height: 2rem;
+    }
+
+    &.active {
+        animation: liked 1.2s linear;
+    }
+}
+
+@keyframes liked {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.2); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}

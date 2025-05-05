@@ -1,0 +1,51 @@
+@use "root/variables.scss" as v;
+@use "root/dark.scss" as d;
+
+.form--auth {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 26.25rem;
+    padding: 2rem;
+    
+    background-color: d.$color-elements;
+    border: 1px solid d.$color-border;
+    border-radius: 15px;
+    
+    .form__title {
+        align-self: stretch;
+        font-family: v.$font-family-main;
+    }
+
+    .form-input-container {
+        align-self: stretch;
+
+        display: flex;
+        flex-direction: column;
+
+        padding: 0 2rem;
+        
+        gap: 1.25rem;
+
+        input {
+            font-size: v.$font-size-small;
+        }
+
+        &__error {
+            font-size: 0.9rem;
+            display: block;
+            height: 2rem;
+        }
+    }
+
+    .form-bottom-container {
+        margin-top: 2rem;
+        text-align: center;
+    }
+
+    .form__link {
+        color: d.$color-text-transparent;
+        font-size: v.$font-size-small;
+    }
+}

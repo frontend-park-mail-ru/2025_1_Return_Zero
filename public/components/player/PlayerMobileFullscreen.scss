@@ -1,0 +1,193 @@
+@use '../../dark.scss' as d;
+@use '../../variables.scss' as v;
+
+.fullscreen-mobile-player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    z-index: 1001;
+    left: 0;
+    bottom: 0;
+
+    position: fixed;
+    height: 100%;
+    width: 100vw;
+
+    background-color: d.$color-background-root;
+
+    padding: 0 3rem;
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+
+        gap: 5vh; 
+        width: 100%;
+        max-width: 500px;
+
+        img.song-img {
+            width: 100%;
+            height: auto;
+            border-radius: 5%;
+        }
+
+        &__top {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+
+            .cross {
+                cursor: pointer;
+                width: 1.15rem;
+                height: auto;
+            }
+    
+            .album-href {
+                cursor: pointer;
+                user-select: none;
+                font-size: v.$font-size-h4;
+            }
+        }
+
+        &__widgets {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+
+            .icon, .actions {
+                height: 2.5rem;
+                width: auto;
+            }   
+            
+            .song-text {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+
+                .song-name {
+                    cursor: default;
+                    font-size: v.$font-size-h2;
+                }
+                
+                .artist-name {
+                    cursor: pointer;
+                    font-size: v.$font-size-h4;
+                    font-weight: v.$font-weight-light;
+                }
+                
+                .song-name, .artist-name {
+                    display: inline-block;      
+                    max-width: 15rem;
+                    overflow: hidden;         
+                    white-space: nowrap;    
+                    line-height: 1.2;      
+                }
+                
+                .song-name .marquee,
+                .artist-name .marquee {
+                    display: inline-block;  
+                }
+
+                .song-name.is-overflowing .marquee,
+                .artist-name.is-overflowing .marquee {
+                    animation: marquee 8s linear infinite;
+                }
+                
+                @keyframes marquee {
+                    0%   { 
+                        -webkit-transform: translateX(100%);
+                        transform: translateX(100%); 
+                    }   
+                    100% { 
+                        -webkit-transform: translateX(-100%);
+                        transform: translateX(-100%); 
+                    }
+                }
+            }
+        }
+
+
+        &__line {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        &__progress-container {
+            height: v.$mobileFullscreenPlayer-height-progress;
+            width: 100%;
+    
+            .rectangle {
+                position: relative;
+                display: flex;
+                align-items: center;
+                width: 100%;
+                height: v.$mobileFullscreenPlayer-height-progress;
+                border-radius: v.$mobileFullscreenPlayer-border-radius-progress;
+                background-color: d.$color-text;
+                
+                &:hover {
+                    cursor: pointer;
+                }
+                &:hover .circle,
+                &.dragging .circle {
+                    display: block;
+                }    
+
+                .rectangle-prev {
+                    position: absolute;
+                    width: 0px;
+                    left: 0;
+                    height: v.$mobileFullscreenPlayer-height-progress;
+                    border-radius: v.$mobileFullscreenPlayer-border-radius-progress;
+                    background-color: d.$color-button-active;
+                }
+
+                .circle {
+                    display: none;
+                    position: absolute;
+                    left: 0;
+                    height: v.$mobileFullscreenPlayer-width-circle;
+                    width: v.$mobileFullscreenPlayer-width-circle;
+                    border-radius: 50%;
+                    background-color: d.$color-button-active;
+                }
+            }
+        }   
+
+        &__duration {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+
+            span {
+                font-size: v.$font-size-h4;
+                color: d.$color-text;
+                user-select: none;
+            }
+        }
+
+        &__controls {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+    
+            .icon {
+                cursor: pointer;
+                user-select: none;
+                height: 7vw;
+                max-height: 43px;
+                width: auto;
+    
+                &:hover {
+                    transform: translateY(-1px);
+                }
+            }
+        }
+    }
+}
+

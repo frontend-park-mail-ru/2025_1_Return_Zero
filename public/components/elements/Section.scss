@@ -1,0 +1,33 @@
+.section {
+    position: relative;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    &__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    &--horizontal &__content {
+        flex-direction: row;
+        gap: 2rem;
+    }
+}
+
+.section--horizontal {
+    .section__content {
+        overflow-x: scroll;
+        overflow-y: hidden;
+        scrollbar-width: none;
+    }
+}

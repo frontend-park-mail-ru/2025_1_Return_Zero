@@ -11,6 +11,7 @@ $font-family-main: 'Inter';
 
 $font-size-small: 1rem;
 $font-size-large: 4rem;
+$font-size-big: 3rem;
 $font-size-main: 1.2rem;
 $font-size-additional: 1.188rem;
 $font-size-h1: 2rem;
@@ -22,6 +23,7 @@ $font-size-collections: 1.375rem;
 $font-line-height: 1.25;
 
 $font-weight-bold: 600;
+$font-weight-regular: 400;
 $font-weight-light: 300;
 
 // Spacing & UI Variables
@@ -29,7 +31,19 @@ $width-scroll: 0.8rem;
 $height-scroll: 0.5rem;
 $main-padding: 1.875rem;
 
-$bottomPlayer-height: 4.5rem;
-$bottomPlayer-height-progress: 0.25rem;
-$bottomPlayer-border-radius-progress: 1.25rem;
-$bottomPlayer-width-circle: 0.75rem;
+$bottomPlayer-height: 5.25rem;
+$bottomPlayer-height-progress: 5px;
+$bottomPlayer-border-radius-progress: 50px;
+$bottomPlayer-width-circle: 12px;
+
+$mobilePlayer-height: 5rem;
+$mobilePlayer-height-progress: 2px;
+$mobilePlayer-border-radius-progress: 50px;
+$mobilePlayer-width-circle: 12px;
+
+$mobileFullscreenPlayer-height: 7rem;
+$mobileFullscreenPlayer-height-progress: 5px;
+$mobileFullscreenPlayer-border-radius-progress: 50px;
+$mobileFullscreenPlayer-width-circle: 14px;
+
+$bottomHeader-height: 3.75rem;

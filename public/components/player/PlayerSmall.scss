@@ -1,0 +1,215 @@
+@use '../../dark.scss' as d;
+@use '../../variables.scss' as v;
+
+.small-player {
+    grid-area: 'player';
+
+    display: flex;
+    align-items: center;
+
+    height: v.$bottomPlayer-height;
+
+    background-color: d.$color-background-root;
+
+    &__song {
+        display: flex;
+        align-items: center;
+
+        img {
+            height: 3.7rem;
+            width: 3.7rem;
+            border-radius: 15%;
+        }
+    }
+
+    &__song-container {
+        width: 20vw;
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 1vw;
+
+        .icon {
+            cursor: pointer;
+            user-select: none;
+            width: auto;
+            height: 1.7rem;
+        }
+
+        padding-left: 0.625rem;
+    }
+
+    &__song-text {
+        display: flex;
+        flex-direction: column;
+        padding-left: 1vw;
+        gap: 0.2vw;
+
+        .song-name {
+            font-size: 14px;
+            font-family: v.$font-family-main;
+            font-weight: v.$font-weight-bold;
+            user-select: none;
+            color: d.$color-text;
+        }
+
+        .artist-name {
+            font-size: 12px;
+            font-family: v.$font-family-main;
+            font-weight: v.$font-weight-light;
+            user-select: none;
+            color: d.$color-text;
+
+            &:hover {
+                cursor: pointer;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    &__container {
+        bottom: 0;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: v.$bottomPlayer-height;
+
+        padding-right: 1.25rem;
+    }
+
+    &__widgets {
+        height: 80%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    &__controls {
+        display: flex;
+
+        .icon {
+            cursor: pointer;
+            user-select: none;
+            height: 1.4rem;
+            width: 1.4rem;
+            
+            &:hover {
+                transform: translateY(-1px);
+            }
+        }
+
+        gap: clamp(0.625rem, 2vw, 2.438rem);
+    }
+
+    &__progress-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+
+        span {
+            width: 2.2rem;
+            color: d.$color-text;
+            user-select: none;
+        }
+
+        .rectangle {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: clamp(12.5rem, 30vw, 31.25rem);
+            height: v.$bottomPlayer-height-progress;
+            border-radius: v.$bottomPlayer-border-radius-progress;
+            background-color: d.$color-text;
+
+            &:hover {
+                cursor: pointer;
+            }
+            &:hover .circle,
+            &.dragging .circle {
+                display: block;
+            }
+
+            .rectangle-prev {
+                position: absolute;
+                width: 0px;
+                left: 0;
+                height: v.$bottomPlayer-height-progress;
+                border-radius: v.$bottomPlayer-border-radius-progress;
+                background-color: d.$color-button-active;
+            }
+
+            .circle {
+                display: none;
+                position: absolute;
+                left: 0;
+                height: v.$bottomPlayer-width-circle;
+                width: v.$bottomPlayer-width-circle;
+                border-radius: 50%;
+                background-color: d.$color-button-active;
+            }
+        }
+    }
+
+    &__tools {
+        width: 15vw;
+        display: flex;
+        
+        align-items: center;
+        justify-content: flex-end;
+        gap: 1vw;
+
+        .icon {
+            cursor: pointer;
+            user-select: none;
+            height: 1.5rem;
+            width: 1.5rem;
+        }
+
+        .resize:hover {
+            scale: 1.12;
+        }
+
+        .rectangle-volume {
+            position: relative;
+            display: flex;
+
+            align-items: center;
+            background-color: d.$color-text;
+            height: v.$bottomPlayer-height-progress;
+            border-radius: v.$bottomPlayer-border-radius-progress;
+            width: clamp(0.625rem, 8vw, 7rem);
+
+            &:hover {
+                cursor: pointer;
+            }
+            &:hover .circle,
+            &.dragging .circle {
+                display: block;
+            }
+
+            .rectangle-prev {
+                position: absolute;
+                left: 0;
+                width: 0px;
+                height: v.$bottomPlayer-height-progress;
+                border-radius: v.$bottomPlayer-border-radius-progress;
+                background-color: d.$color-button-active;
+            }
+
+            .circle {
+                display: none;
+                position: absolute;
+                left: 0;
+                height: v.$bottomPlayer-width-circle;
+                width: v.$bottomPlayer-width-circle;
+                border-radius: 50%;
+                background-color: d.$color-button-active;
+            }
+        }
+    }
+}
+

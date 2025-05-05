@@ -1,0 +1,212 @@
+@use '../../dark.scss' as d;
+@use '../../variables.scss' as v;
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+
+    &__title {
+        padding-bottom: 1.25rem;
+        border-bottom: 1px solid d.$color-border;
+
+        text-align: center;
+    }
+}
+
+.form-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.438rem;
+
+    &__label {
+        font-size: v.$font-size-h4;
+        font-weight: v.$font-weight-bold;
+        @media (max-width: 600px) {
+            font-size: v.$font-size-main;
+        }
+    }
+
+    &__password {  // to cover input of password for eye icon
+        position: relative;
+
+        display: flex;
+        align-items: center;
+
+        input {
+            width: 100%;
+        };
+
+        &__show {
+            position: absolute;
+            cursor: pointer;
+
+            width: 1.75rem;
+            height: 1.75rem;
+            
+            right: 0.625rem;
+        }
+    }
+
+    &__input {
+        padding: 0.6rem;
+
+        background-color: d.$color-form-element;
+        border: 1px solid d.$color-border;
+        border-radius: 0.625rem;
+
+        &::placeholder {
+            text-align: center;
+            color: d.$color-text-transparent;
+        }
+    }
+
+    &__error {
+        width: 100%;
+        min-height: calc(1em * v.$font-line-height);
+        line-height: v.$font-line-height;
+
+        font-size: v.$font-size-small;
+        color: d.$color-highlight;
+
+        text-align: center;
+    }
+
+    &__radio {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.625rem;
+
+        padding: 1.25rem;
+        background-color: d.$color-form-element;
+        border: 1px solid d.$color-border;
+        border-radius: 10px;
+
+        &__label {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        &__input {
+            appearance: none;
+            cursor: pointer;
+
+            width: 1.188rem;
+            height: 1.188rem;
+
+            background-color: d.$color-background;
+            border: 1px solid d.$color-border;
+            border-radius: 5px;
+
+            &:checked {
+                background-color: d.$color-highlight;
+            }
+        }
+    }
+}
+
+.form-input-container--image {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.438rem;
+
+    &__button {
+        position: absolute;
+        cursor: pointer;
+
+        display: flex;
+        align-items: center;
+
+        padding: 0.625rem;
+        right: 15%;
+        bottom: 15%;
+
+        background-color: d.$color-elements;
+        border: 1px solid d.$color-border;
+        border-radius: 50%;
+
+        > img {
+            width: 1.25rem;
+            height: 1.25rem;
+            
+            cursor: pointer;
+        }
+
+        &:hover {
+            cursor: pointer;
+            background-color: d.$color-highlight;
+        }
+    }
+
+    &__image {
+        position: relative;
+        display: block;
+        text-align: center;
+        line-height: 13.625rem;
+
+        width: 13.625rem;
+        height: 13.625rem;
+        @media (max-width: 600px) {
+            width: 10rem;
+            height: 10rem;
+        }
+        border-radius: 50%;
+
+        &::before {
+            content: '';
+            position: absolute;
+            display: block;
+
+            inset: 0;
+            width: 100%;
+            height: 100%;
+
+            background-color: d.$color-elements;
+            border: 1px solid d.$color-border;
+            border-radius: inherit;
+        }
+    }
+
+    &__input {
+        opacity: 0;
+        position: absolute;
+
+        pointer-events: none;
+    }
+
+    &__error {
+        width: 100%;
+        min-height: calc(1em * v.$font-line-height);
+        line-height: v.$font-line-height;
+
+        font-size: v.$font-size-small;
+        color: d.$color-highlight;
+
+        text-align: center;
+    }
+}
+
+@mixin form-button {
+    padding: 0.625rem 1rem;
+    border: 1px solid d.$color-border;
+    border-radius: 10px;
+
+    font-size: v.$font-size-h4;
+    color: d.$color-text;
+
+    cursor: pointer;
+}
+
+.form-apply-button {
+    @include form-button;
+    background-color: #1f68f2;
+}
+
+.form-reject-button {
+    @include form-button;
+    background-color: #c83126;
+}

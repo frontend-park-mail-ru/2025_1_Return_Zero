@@ -3,15 +3,15 @@
 
 .page {
     grid-area: page;
+    position: relative;
 
     display: flex;
     flex-direction: column;
     gap: 2.5rem;
 
     padding: 1.875rem;
-    padding-bottom: calc(1.875rem + v.$bottomPlayer-height - 1rem);
 
-    border-radius: 1.25rem;
+    border-radius: 1.25rem 1.25rem 0 0;
 
     background-color: d.$color-background;
 
@@ -21,4 +21,396 @@
     > * {
         flex-shrink: 0;
     }
+
+    &__info {
+        align-self: flex-start;
+    
+        display: flex;
+        align-items: center;
+        gap: 3.125rem;
+    
+        &__img {
+            width: 13.625rem;
+            height: 13.625rem;
+            border-radius: 15px;
+    
+            box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.25);
+        }
+    
+        > div {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    
+        &__type {
+            font-size: v.$font-size-small;
+            color: d.$color-text-transparent;
+    
+            margin-bottom: -0.5rem;
+        }
+    
+        &__title {
+            font-size: v.$font-size-large;
+            @media (max-width: 1200px) {
+                font-size: v.$font-size-big;
+            }
+            font-family: v.$font-family-header;
+        }
+    
+        &__actions {
+            margin-top: 1.75rem;
+    
+            display: flex;
+            align-items: center;
+            gap: 1.125rem;
+        }
+    }
 }
+
+.page.page--album {
+    .page__info {
+        @media (max-width: 600px) {
+            gap: 2rem;
+        }
+
+        &__img {
+            width: 15rem;
+            height: auto;
+            @media (max-width: 600px) {
+                width: 10rem;
+            }
+        }
+
+        &__title {
+            @media (max-width: 800px) {
+                font-size: v.$font-size-h3;
+                padding: 4px 0;
+            }
+        }
+
+        &__artists {
+            a:first-child {
+                font-weight: v.$font-weight-bold;
+            }
+        }
+
+        &__actions {
+            * {
+                width: 2.375rem;
+                height: 2.375rem;
+            }
+        }
+    }
+}
+
+.page--artist.page {
+    .page__info {
+        @media (max-width: 600px) {
+            gap: 2rem;
+        }
+
+        &__img {
+            border-radius: 50%;
+            width: 15rem;
+            height: auto;
+            @media (max-width: 600px) {
+                width: 10rem;
+            }
+        }
+
+        &__title {
+            @media (max-width: 800px) {
+                font-size: v.$font-size-h1;
+                padding: 4px 0;
+            }
+        }
+    
+        &__stats {
+            font-size: v.$font-size-small;
+        }
+    
+        &__actions {
+            img {
+                width: 2.375rem;
+                height: 2.375rem;
+                @media (max-width: 600px) {
+                    width: 2rem;
+                    height: 2rem;
+                }
+            }
+        }
+    }
+}
+
+.page--playlist.page {
+    .page__info {
+        gap: 3.125rem;
+        @media (max-width: 600px) {
+            gap: 2rem;
+        }
+
+        &__user {
+            a {
+                font-weight: v.$font-weight-bold;
+            }
+        }
+
+        &__actions {
+            img {
+                width: 2.375rem;
+                height: 2.375rem;
+            }
+        }
+
+        &__img {
+            @media (max-width: 600px) {
+                width: 10rem;
+                height: 10rem;
+            }
+        }
+
+        &__title {
+            @media (max-width: 600px) {
+                font-size: v.$font-size-h1;
+            }
+        }
+    }
+
+    .page__buttons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.page--404 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: v.$font-size-large;
+    font-weight: v.$font-size-large;
+}
+
+.page--profile__info {
+    display: flex;
+    align-items: center;
+    gap: 3.125rem;
+    @media (max-width: 600px) {
+        gap: 2rem;
+        &__action {
+            width: 2.5rem;
+        }
+    }
+
+    &__avatar {
+        width: 13.625rem;
+        height: 13.625rem;
+        @media (max-width: 600px) {
+            width: 8rem;
+            height: 8rem;
+        }
+        border-radius: 50%;
+    }
+
+    @media (max-width: 600px) {
+        &__username {
+            font-size: v.$font-size-h4;
+        }       
+    }
+    
+    > div {
+        display: flex;
+        flex-direction: column;
+        gap: 1.719rem;
+        @media (max-width: 600px) {
+            gap: 1rem;
+        }
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+
+        &__action {
+            cursor: pointer;
+            width: 2.375rem;
+        }
+    }
+
+    &__username {
+        font-family: v.$font-family-main;
+    }
+
+    &__stats {
+        font-size: v.$font-size-h4;
+        gap: 1.25rem;
+        @media (max-width: 600px) {
+            font-size: v.$font-size-small;
+            gap: 1rem;
+        }
+
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.page--settings{
+    &__info{
+        display: flex;
+        align-items: center;
+        gap: 3.125rem;
+        @media (max-width: 600px) {
+            gap: 2rem;
+        }
+    
+    
+        &__avatar {
+            position: relative;
+            width: 13.625rem;
+            height: 13.625rem;
+            @media (max-width: 600px) {
+                width: 10rem;
+                height: 10rem;
+            }
+            border-radius: 50%;
+        }
+    
+        &__data {
+            display: flex;
+            flex-direction: column;
+            gap: 1.563rem;
+    
+            font-size: v.$font-size-h4;
+            @media (max-width: 600px) {
+                font-size: v.$font-size-main;
+                gap: 1rem;
+            }
+        }
+    
+        &__help {
+            @media (max-width: 1070px) {
+                display: none;
+            }
+
+            width: 20%;
+            margin-left: auto;
+
+            display: flex;
+            flex-direction: column;
+            gap: 1.563rem;
+
+            color: rgba(d.$color-text-transparent, 0.25);
+
+            p {
+                display: flex;
+                align-items: flex-start;
+                gap: 0.625rem;
+
+                &::before {
+                    content: url(/public/img/tip.svg);
+                    width: 1rem;
+                    height: 1rem;
+                }
+            }
+        }
+    }
+
+    &__main {
+        display: grid;
+        grid-template-areas: 'auth privacy' 'security privacy';
+        grid-template-rows: repeat(2, min-content);
+        grid-template-columns: 1fr 2.2fr;
+        row-gap: 2.5rem;
+        column-gap: 5rem;
+
+        @media (max-width: 1070px) {
+            grid-template-areas:
+                'auth security'
+                'privacy privacy';
+            grid-template-columns: auto auto;
+            grid-template-rows: auto;
+        }
+
+        @media (max-width: 720px) {
+            grid-template-areas:
+                'auth'
+                'security'
+                'privacy';
+            grid-template-columns: 1fr; 
+            grid-template-rows: auto;
+        }
+
+        &__auth {
+            grid-area: auth;
+        }
+
+        &__security {
+            grid-area: security;
+        }
+
+        &__privacy {
+            grid-area: privacy;
+
+            > div {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, min-content);
+                @media (max-width: 500px) {
+                    grid-template-columns: 1fr;
+                    grid-template-rows: repeat(6, min-content);
+                }
+                align-content: space-between;
+                row-gap: 6.15rem;
+                column-gap: 4.25rem;
+            }
+        }
+
+        &__auth,
+        &__security,
+        &__privacy {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+    }
+
+    &__submit {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        @media (max-width: 1000px) {
+            flex-direction: column;
+            align-items: auto;
+            justify-content: auto;
+            gap: 2rem;
+
+            button {
+                width: 100%;
+            }
+
+            button.button--succes {
+                order: 1;
+            }
+
+            button.button--danger {
+                order: 2;
+            }
+        }
+
+        &__error {
+            @media (max-width: 1000px) {
+                order: 0;
+            }
+        }
+
+        > * {
+            flex-shrink: 0;
+        }
+        p {
+            width: fit-content;
+        }
+    }
+} 

@@ -1,0 +1,33 @@
+@use "root/variables.scss" as v;
+@use "root/dark.scss" as d;
+
+.button {
+    cursor: pointer;
+
+    padding: 0.5rem 1rem;
+
+    background-color: d.$color-elements;
+    border: d.$color-border 1px solid;
+    border-radius: 1rem;
+    
+    color: d.$color-text;
+    font-size: v.$font-size-main;
+
+    transition: all 0.2s ease-in-out;
+
+    &.active,&:hover {
+        background-color: d.$color-button-active;
+    }
+}
+
+.button--danger {
+    &.active,&:hover {
+        background-color: d.$color-highlight;
+    }
+}
+
+.button--success {
+    &.active,&:hover {
+        background-color: d.$color-success;
+    }
+}

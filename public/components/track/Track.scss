@@ -1,0 +1,211 @@
+@use "root/variables.scss" as v;
+@use "root/dark.scss" as d;
+
+@mixin trackImgPlaying {
+    .content {
+        filter: brightness(0.5);
+        transition: filter 0.3s ease-in-out;
+    }
+}
+
+.track-line {
+    display: flex;
+    align-items: center;
+
+    &>* {
+        flex: 1 1 0;
+
+        @media (max-width: 600px) {
+            /* grow:1, shrink:1, basis:100% */
+            flex: 1 1 100%;
+          }
+    }
+
+    &__info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        width: 10%;
+        @media (max-width: 600px) {
+            width: 90%;
+        }
+
+        &__index {
+            display: none;
+            // display: inline-block;
+            text-align: right;
+
+            font-size: v.$font-size-h4;
+            font-weight: v.$font-weight-bold;
+           
+            flex: 0 0 30px; 
+            margin-right: 2px; 
+        }
+
+        &__img {
+            position: relative;
+            cursor: pointer;
+
+            .content {
+                width: 4.375rem;
+                height: 4.375rem;
+    
+                border-radius: 15px;
+            }
+
+            .state {
+                position: absolute;
+                display: block;
+                left: 50%;
+                top: 50%;
+                translate: -50% -50%;
+        
+                width: 33%;
+                height: 33%;
+            }
+        }
+
+        &__text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 0.313rem;
+
+            &__title {
+                font-weight: v.$font-weight-bold;
+                font-size: v.$font-size-h4;
+            }
+
+            &__artists {
+                display: flex;
+                gap: 0.313rem;
+
+                font-size: v.$font-size-small;
+                font-weight: v.$font-weight-light;
+
+                &:first-child {
+                    font-weight: v.$font-weight-regular;
+                }
+            }
+        }
+    }
+
+    &.active {
+        .track-line__info__img {
+            @include trackImgPlaying();
+        }
+    }
+
+    &__album {
+        @media (max-width: 1200px) {
+            display: none;
+        }
+
+        display: flex;
+        justify-content: flex-start;
+        padding-left: 20%;
+
+        font-weight: v.$font-weight-light;
+        font-size: v.$font-size-main;
+    }
+
+    &__controls {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 1rem;
+
+        @media (max-width: 600px) {
+            width: 10%;
+        }
+        
+        .actions--track {
+            display: block;
+        }
+
+        &__duration {
+            font-size: v.$font-size-h4;
+            font-weight: v.$font-weight-light;
+            @media (max-width: 1200px) {
+                display: none;
+            }
+        }
+
+        &__duration-container {
+            padding-right: 1.5rem;
+        }
+    }
+}
+
+.track-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    &__img {
+        position: relative;
+        cursor: pointer;
+
+        .content {
+            width: 8.75rem;
+            height: 8.75rem;
+            @media (max-width: 600px) {
+                width: 7.7rem;
+                height: 7.7rem;
+            }
+    
+            border-radius: 15px;
+            
+            box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.25);
+        }
+
+        .state {
+            position: absolute;
+            display: block;
+            left: 50%;
+            top: 50%;
+            translate: -50% -50%;
+        
+            width: 33%;
+            height: 33%;
+        }
+    }
+
+    &.active {
+        .track-card__img {
+            @include trackImgPlaying();
+        }
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.313rem;
+
+        width: 10rem;
+        @media (max-width: 600px) {
+            width: 8rem;
+        }
+
+        &__title {
+            text-align: center;
+            font-size: v.$font-size-h4;
+            font-weight: v.$font-weight-bold;
+        }
+
+        &__artists {
+            display: flex;
+            gap: 0.313rem;
+            
+            text-align: center;
+            font-size: v.$font-size-small;
+            font-weight: v.$font-weight-light;
+
+            &:first-child {
+                font-weight: v.$font-weight-regular;
+            }
+        }
+    }
+}

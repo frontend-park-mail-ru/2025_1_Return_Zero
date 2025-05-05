@@ -1,0 +1,130 @@
+@use "root/variables.scss" as v;
+@use "root/dark.scss" as d;
+
+.album-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    > * {
+        flex-basis: 0;
+        flex-grow: 1;
+    }
+
+    &__info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        width: 40%;
+        @media (max-width: 600px) {
+            width: 80%;
+        }
+
+        &__index {
+            display: none;
+            font-size: v.$font-size-h4;
+            font-weight: v.$font-weight-bold;
+        }
+    
+        &__img {
+            width: 8.75rem;
+            height: 8.75rem;
+            @media (max-width: 600px) {
+                width: 6rem;
+                height: 6rem;
+            }
+
+            border-radius: 15px;
+        }
+    
+        &__text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 0.313rem;
+    
+            &__title {
+                font-weight: v.$font-weight-bold;
+            }
+    
+            &__artists {
+                display: flex;
+                gap: 0.313rem;
+    
+                font-size: v.$font-size-small;
+                font-weight: v.$font-weight-light;
+    
+                &:first-child {
+                    font-weight: v.$font-weight-regular;
+                }
+            }
+        }
+    }
+
+    &__description {
+        display: flex;
+        @media (max-width: 1200px) {
+            display: none;
+        }
+        justify-content: center;
+
+        font-weight: v.$font-weight-light;
+    }
+
+    &__controls {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 1rem;
+    }
+}
+
+.album-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    &__img {
+        width: 8.75rem;
+        height: 8.75rem;
+        @media (max-width: 600px) {
+            width: 7.7rem;
+            height: 7.7rem;
+        }
+
+        border-radius: 15px;
+        
+        box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.25);
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.313rem;
+
+        width: 10rem;
+        @media (max-width: 600px) {
+            width: 8rem;
+        }
+
+        &__title {
+            text-align: center;
+            font-weight: v.$font-weight-bold;
+        }
+
+        &__artists {
+            display: flex;
+            gap: 0.313rem;
+            
+            text-align: center;
+            font-size: v.$font-size-small;
+            font-weight: v.$font-weight-light;
+
+            &:first-child {
+                font-weight: v.$font-weight-regular;
+            }
+        }
+    }
+}
