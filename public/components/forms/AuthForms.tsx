@@ -184,7 +184,8 @@ export class SignupForm extends Component {
 }
 
 export class LogoutForm extends Component {
-    onSubmit() {
+    onSubmit(e: Event) {
+        e.preventDefault();
         try {
             API.postLogout();
             Dispatcher.dispatch(new ACTIONS.USER_LOGOUT(null));

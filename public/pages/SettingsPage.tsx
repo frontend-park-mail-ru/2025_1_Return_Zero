@@ -115,7 +115,7 @@ export class SettingsPage extends Component {
                 }));
             } catch (e) {
                 this.setState({
-                    error: e.message
+                    error: 'Не верный формат изображения'
                 })
                 console.error(e.message);
                 return ;
