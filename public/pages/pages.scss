@@ -177,8 +177,10 @@
         }
     }
 
-    .page--playlist__delete {
-        align-self: flex-start;
+    .page__buttons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 }
 

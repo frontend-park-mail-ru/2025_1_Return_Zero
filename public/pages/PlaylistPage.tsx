@@ -3,8 +3,9 @@ import router, { Link } from "libs/rzf/Router";
 
 import { TrackLine } from "components/Track";
 import { Section } from "components/Section";
+import { PlaylistEdit } from "components/forms/PlaylistEdit";
 
-import { ButtonDanger } from "components/elements/Button";
+import { Button, ButtonDanger } from "components/elements/Button";
 import { Like } from "components/elements/Like";
 
 import Dispatcher from "libs/flux/Dispatcher";
@@ -12,23 +13,31 @@ import { ACTIONS } from "utils/flux/actions";
 import { USER_STORAGE } from "utils/flux/storages";
 import { API } from "utils/api";
 
-import './pages.scss';
 import { one_alive_async } from "utils/funcs";
+
+import './pages.scss';
 
 export class PlaylistPage extends Component {
     playlist_id: number;
-    state: {
-        playlist: AppTypes.Playlist,
-        tracks: AppTypes.Track[],
-        is_liked: boolean,
-    } = {
-        playlist: null,
-        tracks: [],
+    state = {
+        playlist: null as AppTypes.Playlist | null,
+        tracks: [] as AppTypes.Track[],
         is_liked: false,
+        editing: false,
     }
 
     props: {
         playlist_id: number
+    }
+
+    onAction(action: any) {
+        switch (true) {
+            case action instanceof ACTIONS.USER_LOGIN:
+            case action instanceof ACTIONS.USER_LOGOUT:
+            case action instanceof ACTIONS.USER_CHANGE:
+                this.fetchData();
+                break;
+        }
     }
 
     async fetchData() {
@@ -42,6 +51,8 @@ export class PlaylistPage extends Component {
             })
             .catch(e => this.setState({ playlist: null }));
     }
+
+    onSave = (playlist: AppTypes.Playlist) => { this.setState({editing: false, playlist: playlist}); }
 
     onDelete = () => {
         API.deletePlaylist(this.state.playlist.id)
@@ -84,12 +95,18 @@ export class PlaylistPage extends Component {
                 <Section title="Треки в плейлисте">
                     {this.state.tracks.length ? 
                         this.state.tracks.map((track, index) => (
-                            <TrackLine key={track.id} ind={index} track={track}/>
+                            <TrackLine key={track.id} ind={index} track={track} inPlaylist={playlist} removeFromPlaylist={
+                                () => this.setState({ tracks: this.state.tracks.filter(t => t.id !== track.id)})}
+                            />
                         )) :
                         <span>В этом плейлисте пока-что пусто{'('}</span>
                     }
                 </Section>
-                {USER_STORAGE.getUser() && USER_STORAGE.getUser().username === playlist.username && <ButtonDanger className="page--playlist__delete" onClick={this.onDelete}>Удалить плейлист</ButtonDanger>}
+                {this.state.editing && <PlaylistEdit playlist={playlist} onClose={() => this.setState({editing: false})} onSave={this.onSave}/>}
+                <div className="page__buttons">
+                    {USER_STORAGE.getUser() && USER_STORAGE.getUser().username === playlist.username && <Button className="page--playlist__delete" onClick={() => this.setState({ editing: true })}>Изменить плейлист</Button>}
+                    {USER_STORAGE.getUser() && USER_STORAGE.getUser().username === playlist.username && <ButtonDanger className="page--playlist__delete" onClick={this.onDelete}>Удалить плейлист</ButtonDanger>}
+                </div>
             </div>
         ]
     }

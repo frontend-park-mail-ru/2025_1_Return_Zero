@@ -2,7 +2,7 @@ import { Component } from "libs/rzf/Component";
 import { Button } from "../elements/Button";
 import { Dialog } from "../elements/Dialog";
 
-import { PLAYLIST_CREATE_VALIDATOR } from "utils/validators";
+import { getPlaylistEditValidator } from "utils/validators";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
@@ -13,10 +13,13 @@ import { one_alive_async } from "utils/funcs";
 import './PlaylistCreate.scss';
 import './forms.scss'
 
-export class PlaylistCreate extends Component {
+export class PlaylistEdit extends Component {
+    validator = getPlaylistEditValidator(this.props.playlist);
+
     props: {
+        playlist: AppTypes.Playlist,
         onClose: () => void,
-        onCreate: (playlist: AppTypes.Playlist) => void
+        onSave: (playlist: AppTypes.Playlist) => void
     }
     state = {
         error: null as string | null
@@ -28,7 +31,7 @@ export class PlaylistCreate extends Component {
     };
 
     _onSubmit = one_alive_async(async () => {
-        if (!PLAYLIST_CREATE_VALIDATOR.validateAll()) {
+        if (!this.validator.validateAll()) {
             this.setState({
                 error: 'Заполните все поля'
             })
@@ -36,13 +39,14 @@ export class PlaylistCreate extends Component {
         }
 
         try {
-            const vr = PLAYLIST_CREATE_VALIDATOR.result
-            const playlist = (await API.postPlaylist(
+            const vr = this.validator.result
+            const playlist = (await API.putPlaylist(
+                this.props.playlist.id,
                 vr.title.value,
                 vr.thumbnail.value
             )).body;
-            this.props.onCreate(playlist);
-            Dispatcher.dispatch(new ACTIONS.CREATE_PLAYLIST(playlist));
+            this.props.onSave(playlist);
+            Dispatcher.dispatch(new ACTIONS.EDIT_PLAYLIST(playlist));
         } catch (error) {
             console.error(error)
             this.setState({error: error.message})
@@ -51,7 +55,7 @@ export class PlaylistCreate extends Component {
 
     onInput = (event: Event) => {
         const element = event.target as HTMLInputElement;
-        PLAYLIST_CREATE_VALIDATOR.validate(element.name, element.value);
+        this.validator.validate(element.name, element.value);
         this.setState({
             error: null
         });
@@ -59,20 +63,21 @@ export class PlaylistCreate extends Component {
 
     onChangeImage = (event: Event) => {
         const file = (event.target as HTMLInputElement).files![0];
-        PLAYLIST_CREATE_VALIDATOR.validate((event.target as HTMLInputElement).name, file || null);
+        this.validator.validate((event.target as HTMLInputElement).name, file || null);
         this.setState({
             error: null
         });
     }
 
     render() {
-        const vr = PLAYLIST_CREATE_VALIDATOR.result;
+        const vr = this.validator.result;
+        const playlist = this.props.playlist;
         return [
             <Dialog onClose={this.props.onClose}>
                 <form className="form form--playlist-create" onSubmit={this.onSubmit}>
-                    <h2 className="form__title">Создание плейлиста</h2>
+                    <h2 className="form__title">Изменение плейлиста</h2>
                     <div className="form-input-container--image">
-                        <img className="form-input-container--image__image" src={vr.thumbnail.url} alt="200x200" />
+                        <img className="form-input-container--image__image" src={vr.thumbnail.url || playlist.thumbnail_url} alt="200x200" />
                         <label className="form-input-container--image__button" for="thumbnail">
                             <img src="/static/img/pencil.svg" />
                         </label>
@@ -86,7 +91,7 @@ export class PlaylistCreate extends Component {
                     </div>
                     <div className="form-input-container form-bottom-container">
                         {this.state.error && <p className="form-input-container__error">{this.state.error}</p>}
-                        <Button className="form__apply">Создать</Button>
+                        <Button className="form__apply">Изменить</Button>
                     </div>
                 </form>
             </Dialog>

@@ -51,6 +51,7 @@ export class LoginForm extends Component {
             else payload.username = vr.identifier.value;
 
             const reply = (await API.postLogin(payload)).body;
+            LOGIN_FORM_VALIDATOR.clear();
             Dispatcher.dispatch(new ACTIONS.USER_LOGIN(reply));
             router.push(location.pathname, {});
         } catch (e) {
@@ -127,6 +128,7 @@ export class SignupForm extends Component {
             };
 
             const reply = (await API.postSignup(payload)).body;
+            REGISTRATION_FORM_VALIDATOR.clear();
             Dispatcher.dispatch(new ACTIONS.USER_LOGIN(reply));
             router.push(location.pathname, {});
         } catch (e) {

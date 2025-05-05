@@ -43,10 +43,19 @@ export const REGISTRATION_FORM_VALIDATOR = new rzv.Validator({
     'repeatPassword': rzv.string().required(REQ_MES).oneof([rzv.ref('password')], 'Пароли не совпадают')
 });
 
-export const PLAYLIST_FORM_VALIDATOR = new rzv.Validator({
+export const PLAYLIST_CREATE_VALIDATOR = new rzv.Validator({
     'title': rzv.string().required(REQ_MES).min(PLAYLIST_MIL, PLAYLIST_MIL_MES).max(PLAYLIST_MAL, PLAYLIST_MAL_MES).consistOf(PLAYLIST_SYM, PLAYLIST_SYM_MES),
     'thumbnail': rzv.file().required(REQ_MES).img(PLAYLIST_IMG_MES).max(PLAYLIST_MAS, PLAYLIST_MAS_MES).addUrl(),
 })
+
+export function getPlaylistEditValidator(playlist: AppTypes.Playlist) {
+    return new rzv.Validator({
+        'title': rzv.string().required(REQ_MES).min(PLAYLIST_MIL, PLAYLIST_MIL_MES).max(PLAYLIST_MAL, PLAYLIST_MAL_MES).consistOf(PLAYLIST_SYM, PLAYLIST_SYM_MES),
+        'thumbnail': rzv.file().optional().img(PLAYLIST_IMG_MES).max(PLAYLIST_MAS, PLAYLIST_MAS_MES).addUrl(),
+    }, {
+        'title': playlist.title,
+    })
+}
 
 export function getSettingsFormValidator(user: AppTypes.User) {
     return new rzv.Validator({

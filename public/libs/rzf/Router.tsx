@@ -108,8 +108,6 @@ export class Route extends Component {
             acc[this.names[index]] = this.types[index] === ParamType.Number ? +value : value;
             return acc;
         }, {} as Record<string, string|number>);
-
-        console.log(pattern, match_with, result)
         
         return result || null;
     }

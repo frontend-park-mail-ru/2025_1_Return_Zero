@@ -9,11 +9,14 @@ import { ACTIONS } from "utils/flux/actions";
 import { API } from "utils/api";
 
 import './pages.scss';
+import { PlaylistCard } from "components/PlaylistCard";
 
 export class TracksPage extends Component {
     state = {
+        history: [] as AppTypes.Track[],
+        playlists: [] as AppTypes.Playlist[],
+        
         tracks: [] as AppTypes.Track[],
-        favorites: [] as AppTypes.Track[],
     }
 
     componentDidMount() {
@@ -27,9 +30,12 @@ export class TracksPage extends Component {
 
     fetchData() {
         if (USER_STORAGE.getUser()) {
-            API.getFavoriteTracks(USER_STORAGE.getUser().username).then(res => {
-                this.setState({ favorites: res.body });
-            }).catch(() => this.setState({ favorites: [] }))
+            API.getHistoryTracks().then(res => {
+                this.setState({ history: res.body });
+            }).catch(() => this.setState({ history: [] }));
+            API.getPlaylists().then(res => {
+                this.setState({ playlists: res.body });
+            }).catch(() => this.setState({ playlists: [] }));
         }
         API.getTracks().then(res => {
             this.setState({ tracks: res.body });
@@ -52,10 +58,11 @@ export class TracksPage extends Component {
                 <Section title="Только для тебя" horizontal>
                     <Special />
                 </Section>
-                {this.state.favorites.length ? <Section title="Любимые треки" horizontal>
-                    {this.state.favorites.map((track, index) => (
-                        <TrackCard key={track.id} track={track}/>
-                    ))}
+                {this.state.playlists.length ? <Section title="Лайкнутые плейлисты" horizontal>
+                    {this.state.playlists.map((playlist, index) => <PlaylistCard key={playlist.id} playlist={playlist} />)}
+                </Section> : undefined}
+                {this.state.history.length ? <Section title="История прослушивания" horizontal>
+                    {this.state.history.map((track, index) => <TrackCard key={track.id} track={track} />)}
                 </Section> : undefined}
                 <Section title="Рекомендации">
                     {this.state.tracks.map((track, index) => (

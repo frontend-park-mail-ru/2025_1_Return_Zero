@@ -41,6 +41,10 @@ class ContentStorage extends Storage<ContentStorageStore> {
                 this.stor.playlists.unshift(action.payload);
                 this.callSubs(new ACTIONS.CONTENT_PLAYLISTS_CHANGED(null));
                 break;
+            case action instanceof ACTIONS.EDIT_PLAYLIST:
+                this.stor.playlists = this.stor.playlists.map(pl => action.payload.id === pl.id ? action.payload : pl);
+                this.callSubs(new ACTIONS.CONTENT_PLAYLISTS_CHANGED(null));
+                break;
             case action instanceof ACTIONS.DELETE_PLAYLIST:
                 this.stor.playlists = this.stor.playlists.filter(pl => pl.id !== action.payload.id);
                 this.callSubs(new ACTIONS.CONTENT_PLAYLISTS_CHANGED(null));

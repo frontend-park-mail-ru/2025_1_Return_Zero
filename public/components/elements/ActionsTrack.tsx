@@ -75,3 +75,25 @@ export class ActionsToArtist extends Component {
     }
 }
 
+export class ActionsRemoveFromPlaylist extends Component {
+    props: {
+        track: AppTypes.Track;
+        playlist: AppTypes.Playlist;
+        onRemove?: () => void;
+        [key: string]: any;
+    }
+
+    onClick = (e: Event) => {
+        console.log("Removing", this.props.track, this.props.playlist)
+        API.deleteTrackPlaylist(this.props.track.id, this.props.playlist.id)
+            .then((res) => {
+                this.props.onRemove && this.props.onRemove();
+            }).catch((err) => { console.error(err.message) })
+    }
+
+    render() {
+        return [
+            USER_STORAGE.getUser() && <span className="actions-item" onClick={this.onClick}>Удалить из плейлиста</span>
+        ].filter(Boolean)
+    }
+}

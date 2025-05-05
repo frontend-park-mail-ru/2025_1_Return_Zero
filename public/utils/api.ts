@@ -57,6 +57,17 @@ export class API {
         return await API.processResponse(resp);
     }
 
+    private static async putMultipart(endpoint: string, data: FormData) {
+        const resp = await fetch(this.baseUrl + endpoint, {
+            method: 'PUT',
+            headers: {
+                'X-Csrf-Token': csrf,
+            },
+            body: data,
+        })
+        return await API.processResponse(resp);
+    }
+
     private static async delete(endpoint: string, data: any) {
         const resp = await fetch(this.baseUrl + endpoint, {
             method: 'DELETE',
@@ -154,14 +165,13 @@ export class API {
     }
 
     static async getHistoryTracks(
-        username: string,
         limit?: number,
         offset?: number
     ): Promise<TemplateAPI.TracksResponse> {
-        const url = API.addParams(`/user/${username}/history`, {limit, offset});
+        const url = API.addParams(`/user/me/history`, {limit, offset});
         const tracks_resp = await API.get(url);
         tracks_resp.body = tracks_resp.body.map((track: AppTypes.Track) =>
-            API.extendTrack(track, API.getHistoryTracks, { username, limit, offset })
+            API.extendTrack(track, API.getHistoryTracks, { limit, offset })
         );
         return tracks_resp;
     }
@@ -276,6 +286,17 @@ export class API {
         data.append('title', title);
         data.append('thumbnail', thumbnail);
         const playlist_resp = await API.postMultipart('/playlists', data);
+        playlist_resp.body = API.extendPlaylist(playlist_resp.body);
+        return playlist_resp;
+    }
+
+    static async putPlaylist(id: number, title: string, thumbnail: File): Promise<TemplateAPI.PlaylistResponse> {
+        const data = new FormData();
+        data.append('title', title);
+        if (thumbnail) {
+            data.append('thumbnail', thumbnail);
+        }
+        const playlist_resp = await API.putMultipart(`/playlists/${id}`, data);
         playlist_resp.body = API.extendPlaylist(playlist_resp.body);
         return playlist_resp;
     }

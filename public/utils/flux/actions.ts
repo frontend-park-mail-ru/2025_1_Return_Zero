@@ -12,5 +12,6 @@ export namespace ACTIONS {
     export class CONTENT_PLAYLISTS_CHANGED extends Action<null> {}
     export class LOAD_PLAYLISTS extends Action<null> {}
     export class CREATE_PLAYLIST extends Action<AppTypes.Playlist> {}
+    export class EDIT_PLAYLIST extends Action<AppTypes.Playlist> {}
     export class DELETE_PLAYLIST extends Action<AppTypes.Playlist> {}
 }

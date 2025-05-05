@@ -7,10 +7,10 @@ import { TRACKS_STORAGE, USER_STORAGE } from "utils/flux/storages";
 import { API } from "utils/api";
 
 import { Like } from "./elements/Like";
-import { ActionsAddToPlaylist, ActionsAddToQueue, ActionsToAlbum, ActionsToArtist } from "./elements/ActionsTrack";
+import { Actions } from "./elements/Actions";
+import { ActionsAddToPlaylist, ActionsAddToQueue, ActionsRemoveFromPlaylist, ActionsToAlbum, ActionsToArtist } from "./elements/ActionsTrack";
 
 import "./Track.scss";  
-import { Actions } from "./elements/Actions";
 
 function durationToString(duration: number): string {
     const minutes = Math.floor(duration / 60);
@@ -22,6 +22,9 @@ abstract class TrackBase extends Component {
     props: {
         track: AppTypes.Track,
         ind?: number,
+
+        inPlaylist?: AppTypes.Playlist,
+        removeFromPlaylist?: () => void,
         [key: string]: any
     }
 
@@ -125,13 +128,10 @@ export class TrackLine extends TrackBase {
                     <div style={{ order: 1 }} className="track-line__controls__duration-container">
                         <span className="track-line__controls__duration">{durationToString(track.duration)}</span>
                     </div>
-                    <Like 
-                        active={this.state.is_liked} 
-                        onClick={this.onLike} 
-                        style={{ order: 2 }}
-                    />
+                    <Like style={{ order: 2 }} active={this.state.is_liked} onClick={this.onLike}/>
                     <Actions style={{ order: 3 }}>
-                        <ActionsAddToPlaylist track={track} />
+                        {!this.props.inPlaylist && <ActionsAddToPlaylist track={track} />}
+                        {this.props.inPlaylist && <ActionsRemoveFromPlaylist track={track} playlist={this.props.inPlaylist} onRemove={this.props.removeFromPlaylist} />}
                         <ActionsAddToQueue track={track} />
                         <ActionsToAlbum track={track} />
                         <ActionsToArtist track={track} />

@@ -33,7 +33,7 @@ class HeaderSearch extends Component {
             const input = document.querySelector('.header__search') as HTMLInputElement | null;
             const logo = document.querySelector('.header-logo') as HTMLElement | null;
             if (window.innerWidth <= 600) {
-                const locations = ['/search/all', '/search/tracks/', '/search/artists', '/search/albums'];
+                const locations = ['/search/all', '/search/tracks/', '/search/artists', '/search/albums', '/search/playlists'];
                 if (locations.includes(location.pathname)) {
                     if (logo && input) {
                         input.style.display = 'flex';
