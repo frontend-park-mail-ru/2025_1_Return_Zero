@@ -163,10 +163,10 @@ export class SettingsPage extends Component {
             const result = (await API.deleteUser(data)).body;
             Dispatcher.dispatch(new ACTIONS.USER_LOGOUT(null));
         } catch (e) {
-            this.setState({
-                error: e.message
-            })
             console.error(e.message);
+            this.setState({
+                error: 'Что-то пошло не так'
+            })
         }
     }
 

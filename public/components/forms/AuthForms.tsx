@@ -56,7 +56,7 @@ export class LoginForm extends Component {
             router.push(location.pathname, {});
         } catch (e) {
             this.setState({
-                'error': e.message
+                'error': 'Перепроверьте данные'
             })
             console.error(e)
         }
@@ -133,7 +133,7 @@ export class SignupForm extends Component {
             router.push(location.pathname, {});
         } catch (e) {
             this.setState({
-                'error': e.message
+                'error': 'Перепроверьте введенные данные'
             })
             console.error(e)
         }

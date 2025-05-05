@@ -45,7 +45,7 @@ export class PlaylistCreate extends Component {
             Dispatcher.dispatch(new ACTIONS.CREATE_PLAYLIST(playlist));
         } catch (error) {
             console.error(error)
-            this.setState({error: error.message})
+            this.setState({error: 'У вас уже есть плейлист с таким названием'})
         }
     })
 

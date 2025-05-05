@@ -49,7 +49,7 @@ export class PlaylistEdit extends Component {
             Dispatcher.dispatch(new ACTIONS.EDIT_PLAYLIST(playlist));
         } catch (error) {
             console.error(error)
-            this.setState({error: error.message})
+            this.setState({error: 'Что-то пошло не так'})
         }
     })
 
