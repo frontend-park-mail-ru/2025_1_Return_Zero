@@ -13,7 +13,7 @@ import "./TrackToPlaylist.scss";
 export class TrackToPlaylist extends Component {
     props: {
         track: AppTypes.Track;
-        onClose: () => void
+        onClose: (e: Event) => void
     }
     state = {
         playlists: [] as AppTypes.TrackPlaylist[],
@@ -35,7 +35,6 @@ export class TrackToPlaylist extends Component {
     }
 
     render() {
-        console.log(this.state)
         if (this.state.create) return [ <PlaylistCreate onCreate={ this.onCreated } onClose={() => this.setState({ create: false })} /> ]
         return [
             <Dialog onClose={this.props.onClose}>

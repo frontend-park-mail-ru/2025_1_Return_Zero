@@ -4,11 +4,11 @@ import './Dialog.scss'
 
 export class Dialog extends Component {
     props: {
-        onClose?: () => void;
+        onClose?: (e: Event) => void;
         [key: string]: any
     }
     
-    onClose = () => { this.props.onClose && this.props.onClose() }
+    onClose = (e: Event) => { this.props.onClose && this.props.onClose(e) }
     onInner = (e: Event) => e.stopPropagation()
 
     render() {
