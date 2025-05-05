@@ -29,6 +29,9 @@ class TracksStorage extends Storage<TracksStorageStor> {
                 this.stor.playingState = action.payload.playing;
                 this.callSubs(action);
                 break;
+            case action instanceof ACTIONS.TRACK_LIKE:
+                this.callSubs(action);
+                break;
         }
     }
     

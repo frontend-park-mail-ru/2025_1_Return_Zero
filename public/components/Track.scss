@@ -107,17 +107,8 @@
         justify-content: flex-end;
         align-items: center;
         gap: 1rem;
-
-        img {
-            width: 2rem;
-            height: 2rem;
-        }
-
-        &__like {
-            display: block;
-        }
         
-        .actions {
+        .actions--track {
             display: block;
             @media (max-width: 800px) {
                 display: none;

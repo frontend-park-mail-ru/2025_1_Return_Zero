@@ -14,7 +14,7 @@
     backdrop-filter: blur(5px);
 
     &__container {
-        overflow-y: scroll;
+        overflow-y: auto;
         overflow-x: hidden;
     }
 }

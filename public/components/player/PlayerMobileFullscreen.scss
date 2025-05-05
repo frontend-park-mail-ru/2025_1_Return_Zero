@@ -12,7 +12,7 @@
     bottom: 0;
 
     position: fixed;
-    height: 100vh;
+    height: 100%;
     width: 100vw;
 
     background-color: d.$color-background-root;
@@ -58,7 +58,7 @@
             width: 100%;
 
             img {
-                height: 3rem;
+                height: 2.5rem;
                 width: auto;
             }   
             
@@ -69,12 +69,43 @@
                 gap: 0.5rem;
 
                 .song-name {
+                    cursor: default;
                     font-size: v.$font-size-h2;
                 }
-
+                
                 .artist-name {
+                    cursor: pointer;
                     font-size: v.$font-size-h4;
                     font-weight: v.$font-weight-light;
+                }
+                
+                .song-name, .artist-name {
+                    display: inline-block;      
+                    max-width: 15rem;
+                    overflow: hidden;         
+                    white-space: nowrap;    
+                    line-height: 1.2;      
+                }
+                
+                .song-name .marquee,
+                .artist-name .marquee {
+                    display: inline-block;  
+                }
+
+                .song-name.is-overflowing .marquee,
+                .artist-name.is-overflowing .marquee {
+                    animation: marquee 8s linear infinite;
+                }
+                
+                @keyframes marquee {
+                    0%   { 
+                        -webkit-transform: translateX(100%);
+                        transform: translateX(100%); 
+                    }   
+                    100% { 
+                        -webkit-transform: translateX(-100%);
+                        transform: translateX(-100%); 
+                    }
                 }
             }
         }
@@ -156,8 +187,6 @@
                     transform: translateY(-1px);
                 }
             }
-    
-            gap: calc(3vw / 2 + 3vh / 2);
         }
     }
 }

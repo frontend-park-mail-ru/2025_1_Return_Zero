@@ -66,7 +66,7 @@ export function linkChildren(vnode: TagVNode | ComponentVNode) {
     vnode.children.forEach(child => child.type !== VNodeType.TEXT && linkChildren(child));
 }
 
-export function insert(newVNode: VNode, index: number, parent?: TagVNode | ComponentVNode) {
+export function insert(newVNode: VNode, index: number, parent: TagVNode | ComponentVNode) {
     if (index < 0 || !parent) return;
     if (index >= parent.children.length) {
         push(newVNode, parent);
@@ -145,7 +145,6 @@ export function remove(vnode: VNode): number {
 
 export function updateChildren(vnode: TagVNode | ComponentVNode, newVNode: TagVNode | ComponentVNode) {
     const parent = (vnode.type === VNodeType.TAG ? vnode : getParentTag(vnode)!).firstDom!;
-    const before = vnode.type === VNodeType.TAG ? null : getNextDom(vnode);
     
     const newKeyed = newVNode.children.reduce((acc, child) => {
         if (child.type !== VNodeType.TEXT && child.key) {
@@ -167,7 +166,6 @@ export function updateChildren(vnode: TagVNode | ComponentVNode, newVNode: TagVN
     }, {} as Record<string, VNode>);
 
     let j = 0;
-    let to = vnode.children.length;
     newVNode.children.forEach((child, index) => {
         // @ts-ignore
         const key = child.key;
@@ -176,29 +174,23 @@ export function updateChildren(vnode: TagVNode | ComponentVNode, newVNode: TagVN
             oldChild = oldKeyed[key];
         } else {
             // @ts-ignore
-            while (j < to && vnode.children[j].key) j++;
-            j < to && (oldChild = vnode.children[j]);
+            while (vnode.children[j]?.key) j++;
+            oldChild = vnode.children[j];
         }
         if (oldChild) {
             if (vnode.children[index] !== oldChild) {
-                remove(oldChild);
-                insert(oldChild, Infinity, vnode); // move to end
-                to--;
-                putInDom(oldChild, parent, before);
-            } else j++;
+                remove(oldChild)
+                insert(oldChild, index, vnode);
+                putInDom(oldChild, parent, getNextDom(oldChild));
+            }
             update(oldChild, child);
         } else {
-            insert(child, Infinity, vnode);
-            render(child, parent, before);
+            insert(child, index, vnode);
+            render(child, parent, getNextDom(child));
         }
+        j = Math.max(index + 1, j)
     })
-    while (j < to) {
-        // @ts-ignore  cause ts is stupid autistic peace of shit
-        if (!vnode.children[j].key || !newKeyed[vnode.children[j].key]) {
-            destroy(vnode.children[j])
-            to--;
-        } else {
-            j++;
-        }
+    while (vnode.children.length > newVNode.children.length) {
+        destroy(vnode.children.at(-1)!);
     }
 }

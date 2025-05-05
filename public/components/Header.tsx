@@ -5,6 +5,7 @@ import { Button } from "components/elements/Button";
 import { HeaderLogo } from "components/logo/HeaderLogo";
 
 import { USER_STORAGE } from "utils/flux/storages";
+import { debounce } from "utils/funcs";
 
 import "./Header.scss";
 
@@ -13,10 +14,7 @@ export class Header extends Component {
         return [
             <header className="header">
                 <HeaderLogo />
-                <form className="header__search">
-                    <img className="header__search__icon" src="/static/img/icon-search.svg" />
-                    <input className="header__search__input" type="text" placeholder="поиск..." />
-                </form>
+                <HeaderSearch />
                 <nav className="header__nav">
                     <Route path="^/" exact component={NavItem} elseComponent={NavItem} link="/" icon="/static/img/icon-home.svg" text="Главная" />
                     <Route path="^/tracks/" exact component={NavItem} elseComponent={NavItem} link="/tracks" icon="/static/img/icon-tracks.svg" text="Треки" />
@@ -29,11 +27,45 @@ export class Header extends Component {
     }
 }
 
+class HeaderSearch extends Component {
+    state = {
+        query: "",
+    }
+
+    onSubmit = (e: Event) => {
+        e.preventDefault();
+        this._onSubmit();
+    }
+
+    onInput = (e: Event) => {
+        const target = (e.target as HTMLInputElement).value;
+        this.setState({ query: target });
+        this._onSubmit();
+    }
+
+    _onSubmit = debounce(() => {
+        if (!this.state.query) { 
+            router.push('/', {});
+            return;
+        }
+        router.push(`?query=${this.state.query}`, {})
+    })
+
+    render() {
+        return [
+            <form className="header__search" onSubmit={this.onSubmit}>
+                <img className="header__search__icon" src="/static/img/icon-search.svg" />
+                <input className="header__search__input" value={this.state.query} onInput={this.onInput} type="text" placeholder="поиск..." />
+            </form>
+        ]
+    }
+}
+
 class NavItem extends Component {
     render() {
         return [
             <div className={"header__nav__item" + (location.pathname === this.props.link ? " active" : "")}>
-                <Link to={this.props.link}>
+                <Link class="header__nav__item__link" to={this.props.link}>
                     <img src={this.props.icon} />
                     <span>{this.props.text}</span>
                 </Link>

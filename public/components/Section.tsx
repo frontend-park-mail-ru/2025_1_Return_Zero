@@ -5,9 +5,9 @@ import './Section.scss'
 
 export class Section extends Component {
     render() {
-        const sectionClassName = this.props.horizontal ? ["section", "section--horizontal"].join(' ') : "section";
+        const sectionClassName = this.props.horizontal ? "section section--horizontal" : "section";
         return [
-            <section className={sectionClassName}>
+            <section {...this.props} className={sectionClassName}>
                 <div className="section__top">
                     <h1 className="section__top__title">{this.props.title}</h1>
                     {this.props.all_link && <Link className="section__top__link" to={this.props.all_link}>Показать все</Link>}

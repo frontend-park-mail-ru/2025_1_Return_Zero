@@ -5,14 +5,14 @@ import tracksQueue from "common/tracksQueue";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
-import { TRACKS_STORAGE } from "utils/flux/storages";
+import { TRACKS_STORAGE, USER_STORAGE } from "utils/flux/storages";
 import { API } from "utils/api";
 
 import { Like } from "./elements/Like";
-import { Actions } from "./elements/Actions";
+import { ActionsTrack } from "./elements/ActionsTrack";
 import { TrackToPlaylist } from "./dialogs/TrackToPlaylist";
 
-import "./Track.scss";
+import "./Track.scss";  
 
 function durationToString(duration: number): string {
     const minutes = Math.floor(duration / 60);
@@ -45,7 +45,7 @@ abstract class TrackBase extends Component {
     }
 
     componentDidMount(): void {
-        TRACKS_STORAGE.subscribe(this.onAction)
+        TRACKS_STORAGE.subscribe(this.onAction);
         if (TRACKS_STORAGE.getPlaying() && TRACKS_STORAGE.getPlaying().id === this.props.track.id) {
             this.setState({
                 playing: TRACKS_STORAGE.getPlayingState()
@@ -65,6 +65,9 @@ abstract class TrackBase extends Component {
             case action instanceof ACTIONS.TRACK_STATE_CHANGE:
                 this.setState({playing: this.props.track.id === TRACKS_STORAGE.getPlaying().id ? TRACKS_STORAGE.getPlayingState() : null});
                 break;
+            case action instanceof ACTIONS.TRACK_LIKE:
+                this.props.track.id === action.payload.id && this.setState({is_liked: action.payload.is_liked});
+                break;
         }
     }
 
@@ -79,7 +82,7 @@ abstract class TrackBase extends Component {
     onLike = async () => {
         try {
             const res = (await API.postTrackLike(this.props.track.id, !this.state.is_liked)).body;
-            this.setState({is_liked: !this.state.is_liked});
+            Dispatcher.dispatch(new ACTIONS.TRACK_LIKE({...this.props.track, is_liked: !this.state.is_liked}));
         } catch (e) {
             console.error(e);
             return;
@@ -124,17 +127,9 @@ export class TrackLine extends TrackBase {
                     <div className="track-line__controls__duration-container">
                         <span className="track-line__controls__duration">{durationToString(track.duration)}</span>
                     </div>
-                    <Like className="track-line__controls__like" active={this.state.is_liked} onClick={this.onLike}/>
-                    
-                    <Actions className="track-line__controls__actions">
-                        <span onClick={() => this.setState({ addTrack: true })}>Добавить в плейлист</span>
-                        <span onClick={() => tracksQueue.manualAddTrack(this.props.track.id.toString())}>Добавить в очередь</span>
-                        <Link to={this.props.track.artists[0]?.artist_page}>Перейти к исполнителю</Link>
-                        <Link to={this.props.track.album_page}>Перейти к альбому</Link>
-                    </Actions>
+                    <Like active={this.state.is_liked} onClick={this.onLike}/>
+                    <ActionsTrack track={track}/>
                 </div>
-
-                {this.state.addTrack && <TrackToPlaylist onClose={() => this.setState({addTrack: false})} track={this.props.track}/>}
             </div>
         ]
     }

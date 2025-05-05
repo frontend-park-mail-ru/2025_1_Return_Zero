@@ -22,7 +22,7 @@ export class PlayerMobile extends Component {
     clickHandler = (onResize: () => void) => (e: MouseEvent) => {
         e.preventDefault();
     
-        const notAllowedClick = ['play', 'next', 'prev', 'song-name', 'song-img', 'artist-name'];
+        const notAllowedClick = ['play', 'next', 'prev', 'song-img'];
         if (e.target instanceof HTMLElement) {
             if (notAllowedClick.includes(e.target.id)) {
                 return;

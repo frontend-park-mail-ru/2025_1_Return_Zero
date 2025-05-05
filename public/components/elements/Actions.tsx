@@ -1,25 +1,19 @@
 import { Component } from "libs/rzf/Component";
-import { NearPopup } from "./NearPopup";
+import { NearPopup } from "components/elements/NearPopup";
 
 import './Actions.scss'
 
 export class Actions extends Component {
-    state = {
-        opened: false,
+    props: {
+        opened: boolean
+        [key: string]: any
     }
-
-    close = () => {
-        this.setState({ opened: false })
-    };
-    switch = () => {
-        this.setState({ opened: !this.state.opened })
-    };
 
     render() {
         return [
-            <div className="actions" onClickOutside={this.close}>
-                <img className="actions__img" src="/static/img/dots.svg" onClick={this.switch} />
-                {this.state.opened && <NearPopup className="actions__popup">
+            <div {...this.props} className={this.props.className || "actions"}>
+                <img className="actions__img" src="/static/img/dots.svg"/>
+                {this.props.opened && <NearPopup className="actions__popup">
                     {this.props.children}
                 </NearPopup>}
             </div>

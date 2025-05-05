@@ -85,6 +85,12 @@ export class API {
         return url;
     }
 
+    static async getTrack(id: number): Promise<TemplateAPI.TrackResponse> {
+        const tracks_resp = await API.get(`/tracks/${id}`);
+        tracks_resp.body = API.extendTrack(tracks_resp.body, API.getTrack, {id})
+        return tracks_resp;
+    }
+
     static async getTracks(limit?: number, offset?: number): Promise<TemplateAPI.TracksResponse> {
         const url = API.addParams('/tracks', {limit, offset});
         const tracks_resp = await API.get(url);
@@ -94,9 +100,12 @@ export class API {
         return tracks_resp;
     }
 
-    static async getTrack(id: number): Promise<TemplateAPI.TrackResponse> {
-        const tracks_resp = await API.get(`/tracks/${id}`);
-        tracks_resp.body = API.extendTrack(tracks_resp.body, API.getTrack, {id})
+    static async searchTracks(query: string): Promise<TemplateAPI.TracksResponse> {
+        const url = API.addParams('/tracks/search', {query});
+        const tracks_resp = await API.get(url);
+        tracks_resp.body = tracks_resp.body.map((track: AppTypes.Track) =>
+            API.extendTrack(track, API.searchTracks, {query})
+        );
         return tracks_resp;
     }
 
@@ -157,6 +166,12 @@ export class API {
         return tracks_resp;
     }
 
+    
+    static async getAlbum(id: number): Promise<TemplateAPI.AlbumResponse> {
+        const album_resp = (await API.get(`/albums/${id}`));
+        album_resp.body = this.extendAlbum(album_resp.body);
+        return album_resp;
+    }
 
     static async getAlbums(limit?: number, offset?: number): Promise<TemplateAPI.AlbumsResponse> {
         const albums_resp = await API.get(API.addParams('/albums', {limit, offset}));
@@ -166,10 +181,12 @@ export class API {
         return albums_resp;
     }
 
-    static async getAlbum(id: number): Promise<TemplateAPI.AlbumResponse> {
-        const album_resp = (await API.get(`/albums/${id}`));
-        album_resp.body = this.extendAlbum(album_resp.body);
-        return album_resp;
+    static async searchAlbums(query: string): Promise<TemplateAPI.AlbumsResponse> {
+        const albums_resp = await API.get(API.addParams('/albums/search', {query}));
+        albums_resp.body = albums_resp.body.map((album: AppTypes.Album) =>
+            API.extendAlbum(album)
+        );
+        return albums_resp;
     }
 
     static async getArtistAlbums(
@@ -193,6 +210,12 @@ export class API {
     }
 
 
+    static async getArtist(id: number): Promise<TemplateAPI.ArtistResponse> {
+        const artist_resp = await API.get(`/artists/${id}`);
+        artist_resp.body = API.extendArtist(artist_resp.body);
+        return artist_resp;
+    }
+
     static async getArtists(limit?: number, offset?: number): Promise<TemplateAPI.ArtistsResponse> {
         const artists_resp = await API.get(API.addParams('/artists', {limit, offset}));
         artists_resp.body = artists_resp.body.map((artist: AppTypes.Artist) =>
@@ -201,10 +224,12 @@ export class API {
         return artists_resp;
     }
 
-    static async getArtist(id: number): Promise<TemplateAPI.ArtistResponse> {
-        const artist_resp = await API.get(`/artists/${id}`);
-        artist_resp.body = API.extendArtist(artist_resp.body);
-        return artist_resp;
+    static async searchArtists(query: string): Promise<TemplateAPI.ArtistsResponse> {
+        const artists_resp = await API.get(API.addParams('/artists/search', {query}));
+        artists_resp.body = artists_resp.body.map((artist: AppTypes.Artist) =>
+            API.extendArtist(artist)
+        );
+        return artists_resp;
     }
 
     static async getFavoriteArtists(username: string, limit?: number, offset?: number): Promise<TemplateAPI.ArtistsResponse> {
@@ -224,6 +249,12 @@ export class API {
 
     static async getPlaylists(limit?: number, offset?: number): Promise<TemplateAPI.PlaylistsResponse> {
         const playlists_resp = await API.get(API.addParams('/playlists/me', {limit, offset}));
+        playlists_resp.body = playlists_resp.body.map((playlist: any) => API.extendPlaylist(playlist));
+        return playlists_resp;
+    }
+
+    static async searchPlaylists(query: string): Promise<TemplateAPI.PlaylistsResponse> {
+        const playlists_resp = await API.get(API.addParams('/playlists/search', {query}));
         playlists_resp.body = playlists_resp.body.map((playlist: any) => API.extendPlaylist(playlist));
         return playlists_resp;
     }

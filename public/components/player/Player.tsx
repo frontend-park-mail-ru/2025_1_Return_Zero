@@ -6,6 +6,8 @@ import PlayerMobile from "./PlayerMobile";
 import PlayerMobileFullscreen from "./PlayerMobileFullscreen";
 
 import player from "common/player";
+import { TRACKS_STORAGE } from "utils/flux/storages";
+import tracksQueue from "common/tracksQueue";
 
 type DisplayType = 'small' | 'fullscreen' | 'none';
 type size = 'mobile' | 'desktop';

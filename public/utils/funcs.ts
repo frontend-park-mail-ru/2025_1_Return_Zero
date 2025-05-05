@@ -1,6 +1,6 @@
-export function debounce(fn: Function, delay: number = 200) {
+export function debounce<T extends (...args: any) => any>(fn: T, delay: number = 200) {
     let timer = -1;
-    return (...args: any[]) => {
+    return (...args: Parameters<T>) => {
         clearTimeout(timer);
         timer = window.setTimeout(fn, delay, ...args);
     }

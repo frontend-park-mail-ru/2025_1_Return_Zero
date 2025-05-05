@@ -3,8 +3,14 @@ import { Component } from "libs/rzf/Component";
 import "./Button.scss";
 
 export class Button extends Component {
+    props: {
+        active?: boolean,
+        [key: string]: any
+    }
+
     render() {
-        const className = this.props.className ? `${this.props.className} button` : "button";
+        let className = this.props.className ? `${this.props.className} button` : "button";
+        if (this.props.active) className += ' active';
         return [
             <button {...this.props} className={className}>
                 {this.props.children}
@@ -14,8 +20,14 @@ export class Button extends Component {
 }
 
 export class ButtonDanger extends Component {
+    props: {
+        active?: boolean,
+        [key: string]: any
+    }
+
     render() {
-        const className = this.props.className ? `${this.props.className} button button--danger` : "button button--danger";
+        let className = this.props.className ? `${this.props.className} button button--danger` : "button button--danger";
+        if (this.props.active) className += ' active';
         return [
             <button {...this.props} className={className}>
                 {this.props.children}
@@ -25,8 +37,14 @@ export class ButtonDanger extends Component {
 }
 
 export class ButtonSuccess extends Component {
+    props: {
+        active?: boolean,
+        [key: string]: any
+    }
+
     render() {
-        const className = this.props.className ? `${this.props.className} button button--success` : "button button--success";
+        let className = this.props.className ? `${this.props.className} button button--success` : "button button--success";
+        if (this.props.active) className += ' active';
         return [
             <button {...this.props} className={className}>
                 {this.props.children}

@@ -6,17 +6,29 @@ import DragProgressBar from "./DragProgressBar";
 import "./PlayerSmall.scss";
 import tracksQueue from "common/tracksQueue";
 
+import { Like } from "components/elements/Like";
 import { Link } from "libs/rzf/Router";
+import { ACTIONS } from "utils/flux/actions";
+import { ActionsTrack } from "components/elements/ActionsTrack";
+import { API } from "utils/api";
+import Dispatcher from "libs/flux/Dispatcher";
+import { TRACKS_STORAGE } from "utils/flux/storages";
 
 export class PlayerSmall extends Component {
     private unsubscribe: () => void;
+    private storageUnsubscribe: any
     private playDragging: DragProgressBar;
     private volumeDragging: DragProgressBar;
-
+    
     componentDidMount() {
+        // подписки
         this.unsubscribe = player.subscribe(() => {
-            this.setState({});
+            this.setState({});     
         });
+        this.storageUnsubscribe = TRACKS_STORAGE.subscribe(() => {
+            this.setState({})
+        });
+
         this.configurePlayProgressBar();
         this.configureVolumeProgressBar();
     }
@@ -24,6 +36,9 @@ export class PlayerSmall extends Component {
     componentWillUnmount() {
         if (this.unsubscribe) {
             this.unsubscribe();
+        }
+        if (this.storageUnsubscribe) {
+            this.storageUnsubscribe();
         }
     }
 
@@ -53,6 +68,17 @@ export class PlayerSmall extends Component {
         );
     }
 
+    onLike = async () => {
+        try {
+            const res = (await API.postTrackLike(tracksQueue.getCurrentTrack().id, tracksQueue.getCurrentTrack().is_liked)).body;
+            Dispatcher.dispatch(new ACTIONS.TRACK_LIKE({...tracksQueue.getCurrentTrack(), is_liked: !tracksQueue.getCurrentTrack().is_liked}));
+            this.setState({});
+        } catch (e) {
+            console.error(e);
+            return;
+        }
+    }
+
     render() {
         const onResize = this.props.onResize;
 
@@ -71,8 +97,12 @@ export class PlayerSmall extends Component {
                                 </Link>
                             </div>
                         </div>
-                        <img draggable={false} src='/static/img/like-default.svg' className='icon' alt='Like' />
-                        <img draggable={false} src='/static/img/dots.svg' className='icon' alt='Menu' />
+                        {tracksQueue.getCurrentTrack() &&
+                            [
+                                <ActionsTrack className="icon" track={tracksQueue.getCurrentTrack()}/>,
+                                <Like className="icon" active={tracksQueue.getCurrentTrack().is_liked} onClick={this.onLike}/>,
+                            ]
+                        }
                     </div>
 
                     <div className="small-player__widgets">

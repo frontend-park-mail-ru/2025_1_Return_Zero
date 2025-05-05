@@ -31,6 +31,12 @@
         input {
             font-size: v.$font-size-small;
         }
+
+        &__error {
+            font-size: 0.9rem;
+            display: block;
+            height: 2rem;
+        }
     }
 
     .form-bottom-container {

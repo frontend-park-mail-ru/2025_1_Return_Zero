@@ -16,6 +16,8 @@ import { ArtistsPage } from "pages/ArtistsPage";
 import { AlbumPage } from "pages/AlbumPage";
 import { ArtistPage } from "pages/ArtistPage";
 import { PlaylistPage } from "pages/PlaylistPage";
+import { SearchPage } from "pages/SearchPage";
+
 import { ProfilePage } from "pages/ProfilePage";
 import { SettingsPage } from "pages/SettingsPage";
 
@@ -42,6 +44,8 @@ export default class MainLayout extends Component {
 
                 <Route path="^/profile/:username/" exact component={ProfilePage} />
                 <Route path="^/settings/" exact component={SettingsPage} />
+
+                <Route path="^/search/" component={SearchPage} />
 
                 <Route path="#login$" component={LoginForm} />
                 <Route path="#register$" component={SignupForm} />

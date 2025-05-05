@@ -22,6 +22,9 @@
     &__label {
         font-size: v.$font-size-h4;
         font-weight: v.$font-weight-bold;
+        @media (max-width: 600px) {
+            font-size: v.$font-size-main;
+        }
     }
 
     &__password {  // to cover input of password for eye icon
@@ -147,6 +150,10 @@
 
         width: 13.625rem;
         height: 13.625rem;
+        @media (max-width: 600px) {
+            width: 10rem;
+            height: 10rem;
+        }
         border-radius: 50%;
 
         &::before {

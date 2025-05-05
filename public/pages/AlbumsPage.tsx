@@ -27,7 +27,7 @@ export class AlbumsPage extends Component {
 
     fetchData() {
         if (USER_STORAGE.getUser()) {
-            API.getFavoriteAlbums(USER_STORAGE.getUser().username).then(res => {
+            API.getFavoriteAlbums('me').then(res => {
                 this.setState({ favorites: res.body });
             }).catch(() => this.setState({ favorites: [] }))
         }

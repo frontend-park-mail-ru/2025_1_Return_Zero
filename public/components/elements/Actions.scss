@@ -17,17 +17,20 @@
         flex-direction: column;
         gap: 5px;
 
+        padding: 0.625rem;
+
         background-color: d.$color-elements;
         border: 1px solid d.$color-border;
+        border-radius: 10px;
 
         > * {
             padding: 0 5px;
-            background-color: d.$color-elements;
+            background-color: transparent;
 
             cursor: pointer;
 
             &:hover {
-                background-color: color.adjust(d.$color-elements, $lightness: 10%);
+                text-decoration: underline;
             }
         }
     }

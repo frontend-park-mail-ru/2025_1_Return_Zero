@@ -8,20 +8,41 @@ import Router from "libs/rzf/Router";
 
 import "./PlayerMobileFullscreen.scss";
 
+import { Like } from "components/elements/Like";
+import { Link } from "libs/rzf/Router";
+import { ACTIONS } from "utils/flux/actions";
+import { ActionsTrack } from "components/elements/ActionsTrack";
+import { API } from "utils/api";
+import Dispatcher from "libs/flux/Dispatcher";
+import { TRACKS_STORAGE } from "utils/flux/storages";
+
 export class PlayerMobileFullscreen extends Component {
     private unsubscribe: () => void;
+    private storageUnsubscribe: any;
     private playDragging: MobileDragProgressBar;
 
     componentDidMount() {
-        this.unsubscribe = player.subscribe(() => {
-            this.setState({});
+        this.setState({
+            is_liked: tracksQueue.getCurrentTrack()?.is_liked ?? false,
         });
+        
+        // подписки
+        this.unsubscribe = player.subscribe(() => {
+            this.setState({});     
+        });
+        this.storageUnsubscribe = TRACKS_STORAGE.subscribe(() => {
+            this.setState({})
+        });
+
         this.configurePlayProgressBar();
     }
 
     componentWillUnmount() {
         if (this.unsubscribe) {
             this.unsubscribe();
+        }
+        if (this.storageUnsubscribe) {
+            this.storageUnsubscribe();
         }
     }
 
@@ -38,36 +59,72 @@ export class PlayerMobileFullscreen extends Component {
         );
     }
 
+    private touchStartY: number = 0;
+
+    handleTouchStart = (e: TouchEvent) => {
+        this.touchStartY = e.touches[0].clientY;
+    };
+
+    handleTouchEnd = (e: TouchEvent) => {
+        const touchEndY = e.changedTouches[0].clientY;
+        const deltaY = touchEndY - this.touchStartY;
+
+        if (deltaY > 50) {
+            this.props.onResize();
+        }
+    };
+
+    handleTouchMove = (e: TouchEvent) => {
+        if (this.touchStartY !== null) {
+            e.preventDefault();
+        }
+    };
+
+    onLike = async () => {
+        try {
+            const res = (await API.postTrackLike(tracksQueue.getCurrentTrack().id, tracksQueue.getCurrentTrack().is_liked)).body;
+            Dispatcher.dispatch(new ACTIONS.TRACK_LIKE({...tracksQueue.getCurrentTrack(), is_liked: !tracksQueue.getCurrentTrack().is_liked}));
+            this.setState({});
+        } catch (e) {
+            console.error(e);
+            return;
+        }
+    }
+
     render() {
         const onResize = this.props.onResize;
         
         return [
-            <div id="player" class="fullscreen-mobile-player">
+            <div id="player" class="fullscreen-mobile-player" style={{ overscrollBehavior: 'contain' }}>
                 <div className="fullscreen-mobile-player__container">
                     <div class="fullscreen-mobile-player__container__top">
                         <div class="album-href">Перейти к альбому</div>
                         <img onClick={this.props.onResize} class="cross" src="/static/img/cross.svg" />
                     </div>
+
                     <img 
                         id="song-img"
                         class="song-img" 
+                        onTouchMove={this.handleTouchMove}
                         src={tracksQueue.getCurrentTrackImage()}
                         draggable={false}
+                        onTouchStart={this.handleTouchStart}
+                        onTouchEnd={this.handleTouchEnd}
                     />
 
                     <div  class="fullscreen-mobile-player__container__widgets">
-                        <img src="/static/img/dots.svg" />
+                        <Like className="icon" active={tracksQueue.getCurrentTrack().is_liked} onClick={this.onLike}/>
                         <div className="song-text">
-                            <span id="song-name" className="song-name">
-                                {tracksQueue.getCurrentTrackName()}
-                            </span>
-                            <span id="artist-name" className="artist-name" 
+                            <div id="song-name" className="song-name">
+                                <span className="marquee">{tracksQueue.getCurrentTrackName()}</span>
+                            </div>
+                            <div id="artist-name" className="artist-name" 
                                 onClick={() => {Router.push(tracksQueue.getAristURL(), {}); onResize()}}
                             >
-                                {tracksQueue.getCurrentTrackArtist()}
-                            </span>
+                                <span className="marquee">{tracksQueue.getCurrentTrackArtist()}</span>
+                            </div>
                         </div>
-                        <img src="/static/img/like-default.svg" />
+                        <ActionsTrack className="icon" track={tracksQueue.getCurrentTrack()}/>
                     </div> 
 
                     <div className="fullscreen-mobile-player__container__line">

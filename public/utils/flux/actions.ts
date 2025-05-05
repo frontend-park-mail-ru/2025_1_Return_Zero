@@ -7,6 +7,7 @@ export namespace ACTIONS {
 
     export class TRACK_PLAY extends Action<AppTypes.Track> {}  // Переключает играющий трек
     export class TRACK_STATE_CHANGE extends Action<{playing: boolean}> {}  // Приостанавливает или воспроизводит играющий трек
+    export class TRACK_LIKE extends Action<AppTypes.Track> {} // Устанавливает лайк или убирает лайк у трека
 
     export class CONTENT_PLAYLISTS_CHANGED extends Action<null> {}
     export class LOAD_PLAYLISTS extends Action<null> {}

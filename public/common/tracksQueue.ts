@@ -68,6 +68,12 @@ export class TracksQueue {
         if (action instanceof ACTIONS.TRACK_STATE_CHANGE) {
             this.handlePlayerStateChange();
         }
+
+        if (action instanceof ACTIONS.TRACK_LIKE) {
+            if (this.getCurrentTrack().id === action.payload.id) {
+                 this.getCurrentTrack().is_liked = !this.getCurrentTrack().is_liked;
+            }
+        }
     };
 
     private handleTrackPlayAction(): void {
@@ -203,6 +209,10 @@ export class TracksQueue {
         this.savedQueue = [];
         this.idx = -1;
         this.shuffled = false;
+    }
+
+    public setLiked(is_liked: boolean) {
+        this.currentTrack.is_liked = is_liked;
     }
 
     private async setTrack(play: boolean = true, isNext?: boolean): Promise<void> {

@@ -236,12 +236,19 @@
         display: flex;
         align-items: center;
         gap: 3.125rem;
+        @media (max-width: 600px) {
+            gap: 2rem;
+        }
     
     
         &__avatar {
             position: relative;
             width: 13.625rem;
             height: 13.625rem;
+            @media (max-width: 600px) {
+                width: 10rem;
+                height: 10rem;
+            }
             border-radius: 50%;
         }
     
@@ -251,9 +258,17 @@
             gap: 1.563rem;
     
             font-size: v.$font-size-h4;
+            @media (max-width: 600px) {
+                font-size: v.$font-size-main;
+                gap: 1rem;
+            }
         }
     
         &__help {
+            @media (max-width: 1070px) {
+                display: none;
+            }
+
             width: 20%;
             margin-left: auto;
 
@@ -283,7 +298,24 @@
         grid-template-rows: repeat(2, min-content);
         grid-template-columns: 1fr 2.2fr;
         row-gap: 2.5rem;
-        column-gap: 9.875rem;
+        column-gap: 5rem;
+
+        @media (max-width: 1070px) {
+            grid-template-areas:
+                'auth security'
+                'privacy privacy';
+            grid-template-columns: auto auto;
+            grid-template-rows: auto;
+        }
+
+        @media (max-width: 720px) {
+            grid-template-areas:
+                'auth'
+                'security'
+                'privacy';
+            grid-template-columns: 1fr; 
+            grid-template-rows: auto;
+        }
 
         &__auth {
             grid-area: auth;
@@ -300,6 +332,10 @@
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
                 grid-template-rows: repeat(3, min-content);
+                @media (max-width: 500px) {
+                    grid-template-columns: 1fr;
+                    grid-template-rows: repeat(6, min-content);
+                }
                 align-content: space-between;
                 row-gap: 6.15rem;
                 column-gap: 4.25rem;
@@ -319,6 +355,30 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        @media (max-width: 1000px) {
+            flex-direction: column;
+            align-items: auto;
+            justify-content: auto;
+            gap: 2rem;
+
+            button {
+                width: 100%;
+            }
+
+            button.button--succes {
+                order: 1;
+            }
+
+            button.button--danger {
+                order: 2;
+            }
+        }
+
+        &__error {
+            @media (max-width: 1000px) {
+                order: 0;
+            }
+        }
 
         > * {
             flex-shrink: 0;

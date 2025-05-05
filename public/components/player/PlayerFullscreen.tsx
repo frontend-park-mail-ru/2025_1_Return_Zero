@@ -7,15 +7,33 @@ import tracksQueue from "common/tracksQueue";
 
 import Router from "libs/rzf/Router";
 
+import { Like } from "components/elements/Like";
+import { Link } from "libs/rzf/Router";
+import { ACTIONS } from "utils/flux/actions";
+import { ActionsTrack } from "components/elements/ActionsTrack";
+import { API } from "utils/api";
+import Dispatcher from "libs/flux/Dispatcher";
+import { TRACKS_STORAGE } from "utils/flux/storages";
+
 export class PlayerFullscreen extends Component {
     private unsubscribe: () => void;
+    private storageUnsubscribe: any;
     private playDragging: DragProgressBar;
     private volumeDragging: DragProgressBar;
 
     componentDidMount() {
-        this.unsubscribe = player.subscribe(() => {
-            this.setState({});
+        this.setState({
+            is_liked: tracksQueue.getCurrentTrack()?.is_liked ?? false,
         });
+        
+        // подписки
+        this.unsubscribe = player.subscribe(() => {
+            this.setState({});     
+        });
+        this.storageUnsubscribe = TRACKS_STORAGE.subscribe(() => {
+            this.setState({})
+        });
+
         this.configurePlayProgressBar();
         this.configureVolumeProgressBar();
     }
@@ -23,6 +41,9 @@ export class PlayerFullscreen extends Component {
     componentWillUnmount() {
         if (this.unsubscribe) {
             this.unsubscribe();
+        }
+        if (this.storageUnsubscribe) {
+            this.storageUnsubscribe();
         }
     }
 
@@ -50,6 +71,17 @@ export class PlayerFullscreen extends Component {
             circle, 
             'volume'
         );
+    }
+
+    onLike = async () => {
+        try {
+            const res = (await API.postTrackLike(tracksQueue.getCurrentTrack().id, tracksQueue.getCurrentTrack().is_liked)).body;
+            Dispatcher.dispatch(new ACTIONS.TRACK_LIKE({...tracksQueue.getCurrentTrack(), is_liked: !tracksQueue.getCurrentTrack().is_liked}));
+            this.setState({});
+        } catch (e) {
+            console.error(e);
+            return;
+        }
     }
 
     render() {
@@ -145,18 +177,8 @@ export class PlayerFullscreen extends Component {
                         </div>
                         <div className="fullscreen-player__tools">
                             <div className="icons">
-                                <img 
-                                    src="/static/img/like-default.svg" 
-                                    className="icon" 
-                                    alt="Like" 
-                                    draggable={false}
-                                />
-                                <img 
-                                    src="/static/img/dots.svg" 
-                                    className="icon" 
-                                    alt="Menu" 
-                                    draggable={false}
-                                />
+                                <Like className="icon" active={tracksQueue.getCurrentTrack().is_liked} onClick={this.onLike}/>
+                                <ActionsTrack className="icon" track={tracksQueue.getCurrentTrack()}/>
                             </div>
                             <div className="controls">
                                 <img 

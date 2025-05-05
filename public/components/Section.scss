@@ -24,8 +24,10 @@
     }
 }
 
-.section--horizontal__content {
-    overflow-x: scroll;
-    overflow-y: hidden;
-    scrollbar-width: none;
+.section--horizontal {
+    .section__content {
+        overflow-x: scroll;
+        overflow-y: hidden;
+        scrollbar-width: none;
+    }
 }
