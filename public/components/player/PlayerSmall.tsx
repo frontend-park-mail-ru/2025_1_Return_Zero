@@ -91,7 +91,7 @@ export class PlayerSmall extends Component {
         return [
             <div id="player" className="small-player">
                 <div className="small-player__container">
-                    <div className="small-player__song-container">
+                    <div className="small-player__song-container" style={{ display: 'flex' }}>
                         <div className="small-player__song" id="song-container" style={{ order: 1 }}>
                             <img
                                 id="song-img"
@@ -104,18 +104,28 @@ export class PlayerSmall extends Component {
                                 </Link>
                             </div>
                         </div>
-                        {tracksQueue.getCurrentTrack() &&
-                            [
-                                <Actions className="icon" opened={this.state.actions_opened} onClick={() => this.setState({actions_opened: !this.state.actions_opened})}>
-                                    <ActionsAddToPlaylist track={tracksQueue.getCurrentTrack()}/>
-                                    <ActionsAddToQueue track={tracksQueue.getCurrentTrack()}/>
-                                    <Link to={tracksQueue.getCurrentTrack().album_page}>К альбому</Link>
-                                    <Link to={tracksQueue.getCurrentTrack().artists[0].artist_page}>К исполнителю</Link>
-                                </Actions>,
-                                <Like className="icon" active={tracksQueue.getCurrentTrack().is_liked} onClick={this.onLike}/>,
-                            ]
-                        }
+
+                        {tracksQueue.getCurrentTrack() && [
+                            <Actions 
+                                className="icon" 
+                                opened={this.state.actions_opened} 
+                                onClick={() => this.setState({ actions_opened: !this.state.actions_opened })} 
+                                style={{ order: 2 }}
+                            >
+                                <ActionsAddToPlaylist track={tracksQueue.getCurrentTrack()} />
+                                <ActionsAddToQueue track={tracksQueue.getCurrentTrack()} />
+                                <Link to={tracksQueue.getCurrentTrack().album_page}>К альбому</Link>
+                                <Link to={tracksQueue.getCurrentTrack().artists[0].artist_page}>К исполнителю</Link>
+                            </Actions>,
+                            <Like 
+                                className="icon" 
+                                active={tracksQueue.getCurrentTrack().is_liked} 
+                                onClick={this.onLike} 
+                                style={{ order: 3 }}
+                            />,
+                        ]}
                     </div>
+
 
                     <div className="small-player__widgets">
                         <div className="small-player__controls">

@@ -11,7 +11,7 @@ import "./PlayerMobileFullscreen.scss";
 import { Like } from "components/elements/Like";
 import { Link } from "libs/rzf/Router";
 import { ACTIONS } from "utils/flux/actions";
-import { ActionsAddToPlaylist, ActionsAddToQueue } from "components/elements/ActionsTrack";
+import { ActionsAddToPlaylist, ActionsAddToQueue, ActionsToAlbum, ActionsToArtist } from "components/elements/ActionsTrack";
 import { API } from "utils/api";
 import Dispatcher from "libs/flux/Dispatcher";
 import { TRACKS_STORAGE } from "utils/flux/storages";
@@ -117,7 +117,7 @@ export class PlayerMobileFullscreen extends Component {
                         onTouchEnd={this.handleTouchEnd}
                     />
 
-                    <div  class="fullscreen-mobile-player__container__widgets">
+                    <div class="fullscreen-mobile-player__container__widgets">
                         <Like className="icon" active={tracksQueue.getCurrentTrack().is_liked} onClick={this.onLike}/>
                         <div className="song-text">
                             <div id="song-name" className="song-name">
@@ -129,13 +129,12 @@ export class PlayerMobileFullscreen extends Component {
                                 <span className="marquee">{tracksQueue.getCurrentTrackArtist()}</span>
                             </div>
                         </div>
-                        <Actions className="icon" opened={this.state.actions_opened} onClick={() => this.setState({actions_opened: !this.state.actions_opened})}>
-                            <ActionsAddToPlaylist track={tracksQueue.getCurrentTrack()}/>
-                            <ActionsAddToQueue track={tracksQueue.getCurrentTrack()}/>
-                            <Link to={tracksQueue.getCurrentTrack().album_page}>К альбому</Link>
-                            <Link to={tracksQueue.getCurrentTrack().artists[0].artist_page}>К исполнителю</Link>
+                        <Actions className="icon">
+                            <ActionsAddToPlaylist track={tracksQueue.getCurrentTrack()} />
+                            <ActionsAddToQueue track={tracksQueue.getCurrentTrack()} />
+                            <ActionsToAlbum track={tracksQueue.getCurrentTrack()} />
+                            <ActionsToArtist track={tracksQueue.getCurrentTrack()} />
                         </Actions>
-                        <Like className="icon" active={tracksQueue.getCurrentTrack().is_liked} onClick={this.onLike}/>,
                     </div> 
 
                     <div className="fullscreen-mobile-player__container__line">

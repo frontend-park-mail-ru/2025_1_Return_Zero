@@ -1,11 +1,14 @@
 import { Component } from "libs/rzf/Component";
+import { Link } from "libs/rzf/Router";
 
 import { TrackToPlaylist } from "components/dialogs/TrackToPlaylist";
 
 import { USER_STORAGE } from "utils/flux/storages";
 import { debounce } from "utils/funcs";
+import { API } from "utils/api";
 
 import tracksQueue from "common/tracksQueue";
+
 
 export class ActionsAddToPlaylist extends Component {
     props: {
@@ -23,7 +26,7 @@ export class ActionsAddToPlaylist extends Component {
 
     render() {
         return [
-            USER_STORAGE.getUser() && <span onClick={this.onClick}>Добавить в плейлист</span>,
+            USER_STORAGE.getUser() && <span className="actions-item" onClick={this.onClick}>Добавить в плейлист</span>,
             this.state.opened && <TrackToPlaylist onClose={this.onClick} track={this.props.track}/>
         ].filter(Boolean)
     }
@@ -41,7 +44,34 @@ export class ActionsAddToQueue extends Component {
 
     render() {
         return [
-            <span onClick={this.onAdd}>Добавить в очередь</span>
+            <span className="actions-item" onClick={this.onAdd}>Добавить в очередь</span>
         ].filter(Boolean)
     }
 }
+
+export class ActionsToAlbum extends Component {
+    props: {
+        track: AppTypes.Track;
+        [key: string]: any;
+    }
+    
+    render() {
+        return [
+            <Link className="actions-item" to={this.props.track.album_page}>Перейти к альбому</Link>
+        ]
+    }
+}
+
+export class ActionsToArtist extends Component {
+    props: {
+        track: AppTypes.Track;
+        [key: string]: any;
+    }
+    
+    render() {
+        return [
+            <Link className="actions-item" to={this.props.track.artists[0].artist_page}>Перейти к исполнителю</Link>
+        ]
+    }
+}
+
