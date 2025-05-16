@@ -11,6 +11,7 @@ import tracksQueue from "common/tracksQueue";
 import { Route } from "libs/rzf/Router";
 
 import { updateMarquee } from "common/marquee";
+import './marquee.scss';
 
 type DisplayType = 'small' | 'fullscreen' | 'none';
 type size = 'mobile' | 'desktop';
@@ -71,6 +72,8 @@ export class Player extends Component {
             }
             this.url = location.pathname;
         }
+
+        queueMicrotask(() => updateMarquee());
 
         switch (this.state.displayedOption as DisplayType) {
             case 'small':

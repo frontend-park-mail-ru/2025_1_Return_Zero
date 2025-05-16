@@ -16,6 +16,9 @@ import Dispatcher from "libs/flux/Dispatcher";
 import { TRACKS_STORAGE } from "utils/flux/storages";
 import { Actions } from "components/elements/Actions";
 
+import { SongName } from "./SongName";
+import { SongArtist } from "./SongArtist";
+
 export class PlayerFullscreen extends Component {
     private unsubscribe: () => void;
     private storageUnsubscribe: any;
@@ -99,14 +102,8 @@ export class PlayerFullscreen extends Component {
                             draggable={false}
                         />
                         <div className="fullscreen-player__song-text">
-                            <span id="song-name" className="song-name">
-                                {tracksQueue.getCurrentTrackName()}
-                            </span>
-                            <span id="artist-name" className="artist-name" 
-                                onClick={() => {Router.push(tracksQueue.getAristURL(), {}); onResize()}}
-                            >
-                                {tracksQueue.getCurrentTrackArtist()}
-                            </span>
+                            <SongName />
+                            <SongArtist onResize={onResize}/>
                         </div>
                         <div className="fullscreen-player__controls">
                             <img 

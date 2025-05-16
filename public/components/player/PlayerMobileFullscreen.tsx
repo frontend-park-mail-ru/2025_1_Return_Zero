@@ -15,8 +15,11 @@ import { ActionsAddToPlaylist, ActionsAddToQueue, ActionsToAlbum, ActionsToArtis
 import { API } from "utils/api";
 import Dispatcher from "libs/flux/Dispatcher";
 import { TRACKS_STORAGE } from "utils/flux/storages";
-import { updateMarquee } from "common/marquee";
 import { Actions } from "components/elements/Actions";
+
+import { SongName } from "./SongName";
+import { SongArtist } from "./SongArtist";
+
 
 export class PlayerMobileFullscreen extends Component {
     private unsubscribe: () => void;
@@ -35,8 +38,6 @@ export class PlayerMobileFullscreen extends Component {
         this.storageUnsubscribe = TRACKS_STORAGE.subscribe(this.onAction);
 
         this.configurePlayProgressBar();
-
-        queueMicrotask(() => updateMarquee());
     }
 
     onAction = () => {
@@ -120,14 +121,8 @@ export class PlayerMobileFullscreen extends Component {
                     <div class="fullscreen-mobile-player__container__widgets">
                         <Like className="icon" active={tracksQueue.getCurrentTrack().is_liked} onClick={this.onLike}/>
                         <div className="song-text">
-                            <div id="song-name" className="song-name">
-                                <span className="marquee">{tracksQueue.getCurrentTrackName()}</span>
-                            </div>
-                            <div id="artist-name" className="artist-name" 
-                                onClick={() => {Router.push(tracksQueue.getAristURL(), {}); onResize()}}
-                            >
-                                <span className="marquee">{tracksQueue.getCurrentTrackArtist()}</span>
-                            </div>
+                            <SongName />
+                            <SongArtist onResize={onResize} />
                         </div>
                         <Actions className="icon">
                             <ActionsAddToPlaylist track={tracksQueue.getCurrentTrack()} />

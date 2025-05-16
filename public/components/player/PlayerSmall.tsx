@@ -15,6 +15,9 @@ import { API } from "utils/api";
 import Dispatcher from "libs/flux/Dispatcher";
 import { TRACKS_STORAGE } from "utils/flux/storages";
 
+import { SongName } from "./SongName";
+import { SongArtist } from "./SongArtist";
+
 export class PlayerSmall extends Component {
     private unsubscribe: () => void;
     private storageUnsubscribe: any
@@ -98,10 +101,8 @@ export class PlayerSmall extends Component {
                                 src={tracksQueue.getCurrentTrackImage()}
                             />
                             <div className="small-player__song-text">
-                                <span id="song-name" className="song-name">{tracksQueue.getCurrentTrackName()}</span>
-                                <Link id="artist-name" className="artist-name" to={tracksQueue.getAristURL()}>
-                                    {tracksQueue.getCurrentTrackArtist()}
-                                </Link>
+                                <SongName />
+                                <SongArtist />
                             </div>
                         </div>
 

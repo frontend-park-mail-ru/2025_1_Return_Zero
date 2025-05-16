@@ -2,7 +2,11 @@ import { Component } from 'libs/rzf/Component';
 
 import tracksQueue from 'common/tracksQueue';
 import player from 'common/player';
+
 import './PlayerMobile.scss';
+
+import { SongName } from './SongName';
+import { SongArtist } from './SongArtist';
 
 export class PlayerMobile extends Component {
     private unsubscribe: () => void;
@@ -43,10 +47,8 @@ export class PlayerMobile extends Component {
                             src={tracksQueue.getCurrentTrackImage()}
                         />
                         <div className="mobile-player__song-text">
-                            <span id="song-name" className="song-name">{tracksQueue.getCurrentTrackName()}</span>
-                            <span id="artist-name" className="artist-name">
-                                {tracksQueue.getCurrentTrackArtist()}
-                            </span>
+                            <SongName />
+                            <SongArtist />
                         </div>
                     </div>
             
