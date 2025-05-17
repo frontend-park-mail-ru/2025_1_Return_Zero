@@ -31,7 +31,7 @@ export class ArtistsPage extends Component {
                 this.setState({ favorites: res.body });
             }).catch(() => this.setState({ favorites: [] }))
         }
-        API.getArtists().then(res => {
+        API.getArtists(20).then(res => {
             this.setState({ artists: res.body });
         }).catch(() => this.setState({ artists: [] }));
     }
@@ -57,7 +57,7 @@ export class ArtistsPage extends Component {
                         <ArtistCard key={artist.id} artist={artist}/>
                     ))}
                 </Section> : undefined}
-                <Section title="Рекомендации" horizontal>
+                <Section title="Рекомендации" horizontal wrap>
                     {this.state.artists.map((artist, index) => (
                         <ArtistCard key={artist.id} artist={artist}/>
                     ))}

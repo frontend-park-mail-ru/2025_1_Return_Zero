@@ -49,7 +49,7 @@ export class SearchPage extends Component {
         if (this.query !== location.search) { this.fetchData(); }
         return [
             <div className="page page--search">
-                <Section horizontal>
+                <Section title="" horizontal>
                     {[{
                         text: 'Все',
                         to: '/search/all',
@@ -157,7 +157,7 @@ class SearchArtists extends Component {
 
     render() {
         return [
-            this.props.artists.length > 0 ? <Section title='Артисты' horizontal style={{ flexWrap: 'wrap' }}>
+            this.props.artists.length > 0 ? <Section title='Артисты' horizontal wrap>
                 {this.props.artists.map(artist => <ArtistCard key={artist.id} artist={artist} />)}
             </Section> : 
                 <div className="page__empty">

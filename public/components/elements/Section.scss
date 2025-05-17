@@ -21,13 +21,14 @@
     &--horizontal &__content {
         flex-direction: row;
         gap: 2rem;
-    }
-}
 
-.section--horizontal {
-    .section__content {
         overflow-x: scroll;
         overflow-y: hidden;
         scrollbar-width: none;
+    }
+
+    &--wrap &__content {
+        overflow: hidden;
+        flex-wrap: wrap;
     }
 }
