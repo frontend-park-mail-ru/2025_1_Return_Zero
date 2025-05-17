@@ -72,13 +72,13 @@ class HeaderSearch extends Component {
         this._onSubmit();
     }
 
-    _onSubmit = debounce(() => {
+    _onSubmit = () => {
         if (!this.state.query) { 
             router.push('/', {});
             return;
         }
         router.replace(`?query=${this.state.query}`, {})
-    })
+    }
 
     onFocus = () => {
         router.push(`/search/all?query=${this.state.query}`, {});

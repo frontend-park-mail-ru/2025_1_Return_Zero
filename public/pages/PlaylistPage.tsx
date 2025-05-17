@@ -73,7 +73,12 @@ export class PlaylistPage extends Component {
         if (this.props.playlist_id !== this.playlist_id) this.fetchData();
         
         if (!this.state.playlist) {
-            return [<div className="page page--404">Плейлист не найден{'('}</div>]
+            return [
+                <div className="page page--404 page__empty">
+                    <img src="/static/img/icon-tracks.svg" alt="" />
+                    <h1>Плейлист не найден</h1>
+                </div>
+            ]
         }
         const playlist = this.state.playlist;
         return [

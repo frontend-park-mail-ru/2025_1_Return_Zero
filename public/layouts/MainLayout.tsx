@@ -8,6 +8,7 @@ import { Logo } from "components/logo/Logo";
 import { BottomHeader } from "components/bottomHeader/BottomHeader";
 
 import { LoginForm, LogoutForm, SignupForm } from "components/forms/AuthForms";
+import { Notifications } from "components/notifications/Notifications";
 
 import { MainPage } from "pages/MainPage";
 import { TracksPage } from "pages/TracksPage";
@@ -50,6 +51,8 @@ export default class MainLayout extends Component {
                 <Route path="#login$" component={LoginForm} />
                 <Route path="#register$" component={SignupForm} />
                 <Route path="#logout$" component={LogoutForm} />
+                
+                <Notifications />
             
                 <div className="layout--main__bottom-panel"> 
                     <Route path=".*" component={Player} />
