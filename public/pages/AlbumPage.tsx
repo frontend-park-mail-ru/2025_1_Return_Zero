@@ -41,7 +41,12 @@ export class AlbumPage extends Component {
 
     render() {
         if (!this.state.album) {
-            return [<div className="page page--404">Альбом не найден{'('}</div>]
+            return [
+                <div className="page page--404 page__empty">
+                    <img src="/static/img/icon-albums.svg" alt="" />
+                    <h1>Альбом не найден</h1>
+                </div>
+            ]
         }
         const album = this.state.album;
         return [

@@ -49,7 +49,12 @@ export class ArtistPage extends Component {
         if (this.artist_id !== this.props.artist_id) this.fetchData();
 
         if (!this.state.artist) {
-            return [<div className="page page--404">Артист не найден{'('}</div>]
+            return [
+                <div className="page page--404 page__empty">
+                    <img src="/static/img/icon-artists.svg" alt="" />
+                    <h1>Артист не найден</h1>
+                </div>
+            ]
         }
 
         return [

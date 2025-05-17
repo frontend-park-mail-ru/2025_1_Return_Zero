@@ -10,7 +10,7 @@ import { ArtistCard } from "components/artist/Artist"
 import { PlaylistCard } from "components/playlist/PlaylistCard"
 
 import { API } from "utils/api"
-import { one_alive_async } from "utils/funcs"
+import { debounce, one_alive_async } from "utils/funcs"
 
 import './pages.scss'
 
@@ -23,7 +23,7 @@ export class SearchPage extends Component {
         playlists: [] as AppTypes.Playlist[],
     }
 
-    fetchData = one_alive_async(() => {
+    fetchData = debounce(() => {
         this.query = location.search;
         console.log(this.query);
         const searchParams = Object.fromEntries(new URLSearchParams(location.search)) as {
@@ -43,7 +43,7 @@ export class SearchPage extends Component {
             .catch(err => this.setState({ albums: [] }));
         API.searchPlaylists(searchParams.query).then(playlists => this.setState({ playlists: playlists.body }))
             .catch(err => this.setState({ playlists: [] }));
-    })
+    }, 500)
 
     render() {
         if (this.query !== location.search) { this.fetchData(); }
@@ -105,6 +105,15 @@ class SearchAll extends Component {
 
     render() {
         const { tracks, artists, albums, playlists } = this.props
+        if (!tracks.length && !artists.length && !albums.length && !playlists.length) {
+            return [
+                <div className="page__empty">
+                    <img src="/static/img/icon-search.svg" />
+                    <h2>НИЧЕГО НЕ НАШЛИ</h2>
+                    <span>попробуйте написать по-другому</span>
+                </div>
+            ]
+        }
         return [
             tracks.length > 0 && <Section title='Треки' horizontal>
                 {tracks.map(track => <TrackCard key={track.id} track={track} />)}
@@ -117,7 +126,7 @@ class SearchAll extends Component {
             </Section>,
             playlists.length > 0 && <Section title='Плейлисты' horizontal>
                 {playlists.map(playlist => <PlaylistCard key={playlist.id} playlist={playlist} />)}
-            </Section>,
+            </Section>
         ].filter(Boolean)
     }
 }
@@ -131,7 +140,12 @@ class SearchTracks extends Component {
         return [
             this.props.tracks.length > 0 ? <Section title='Треки'>
                 {this.props.tracks.map(track => <TrackLine key={track.id} track={track} />)}
-            </Section> : <h1>Треков не найдено</h1>
+            </Section> : 
+                <div className="page__empty">
+                    <img src="/static/img/icon-search.svg" />
+                    <h2>НИЧЕГО НЕ НАШЛИ</h2>
+                    <span>попробуйте написать по-другому</span>
+                </div>
         ]
     }
 }
@@ -145,7 +159,12 @@ class SearchArtists extends Component {
         return [
             this.props.artists.length > 0 ? <Section title='Артисты' horizontal style={{ flexWrap: 'wrap' }}>
                 {this.props.artists.map(artist => <ArtistCard key={artist.id} artist={artist} />)}
-            </Section> : <h1>Артистов не найдено</h1>
+            </Section> : 
+                <div className="page__empty">
+                    <img src="/static/img/icon-search.svg" />
+                    <h2>НИЧЕГО НЕ НАШЛИ</h2>
+                    <span>попробуйте написать по-другому</span>
+                </div>
         ]
     }
 }
@@ -159,7 +178,12 @@ class SearchAlbums extends Component {
         return [
             this.props.albums.length > 0 ? <Section title='Альбомы'>
                 {this.props.albums.map(album => <AlbumLine key={album.id} album={album} />)}
-            </Section> : <h1>Альбомов не найдено</h1>
+            </Section> : 
+                <div className="page__empty">
+                    <img src="/static/img/icon-search.svg" />
+                    <h2>НИЧЕГО НЕ НАШЛИ</h2>
+                    <span>попробуйте написать по-другому</span>
+                </div>
         ]
     }
 }
@@ -173,7 +197,12 @@ class SearchPlaylists extends Component {
         return [
             this.props.playlists.length > 0 ? <Section title='Плейлисты' horizontal style={{ flexWrap: 'wrap' }}>
                 {this.props.playlists.map(playlist => <PlaylistCard key={playlist.id} playlist={playlist} />)}
-            </Section> : <h1>Плейлистов не найдено</h1>
+            </Section> : 
+                <div className="page__empty">
+                    <img src="/static/img/icon-search.svg" />
+                    <h2>НИЧЕГО НЕ НАШЛИ</h2>
+                    <span>попробуйте написать по-другому</span>
+                </div>
         ]
     }
 }

@@ -77,6 +77,12 @@ export class ProfilePage extends Component {
                         <ArtistCard key={artist.id} artist={artist}/>
                     ))}
                 </Section>}
+                { !playlists.length && !tracks.length && !artists.length &&
+                    <div className="page__empty">
+                        <img src="/static/img/45-Smile.svg" alt="" />
+                        <h1>Пользователь не проявлял активности</h1>
+                    </div>
+                }
             </div>
         ]
     }
