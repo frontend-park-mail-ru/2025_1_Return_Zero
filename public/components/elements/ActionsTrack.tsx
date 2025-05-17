@@ -93,7 +93,7 @@ export class ActionsRemoveFromPlaylist extends Component {
 
     render() {
         return [
-            USER_STORAGE.getUser() && <span className="actions-item" onClick={this.onClick}>Удалить из плейлиста</span>
+            USER_STORAGE.getUser()?.username === this.props.playlist.username && <span className="actions-item" onClick={this.onClick}>Удалить из плейлиста</span>
         ].filter(Boolean)
     }
 }
