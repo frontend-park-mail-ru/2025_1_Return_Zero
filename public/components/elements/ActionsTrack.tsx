@@ -3,7 +3,10 @@ import { Link } from "libs/rzf/Router";
 
 import { TrackToPlaylist } from "components/dialogs/TrackToPlaylist";
 
+import Dispatcher from "libs/flux/Dispatcher";
+import { ACTIONS } from "utils/flux/actions";
 import { USER_STORAGE } from "utils/flux/storages";
+
 import { debounce } from "utils/funcs";
 import { API } from "utils/api";
 
@@ -40,6 +43,10 @@ export class ActionsAddToQueue extends Component {
 
     onAdd = debounce((e: Event) => {
         tracksQueue.manualAddTrack(this.props.track.id.toString());
+        Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+            type: "success",
+            message: "Трек добавлен в очередь",
+        }))
     })
 
     render() {
@@ -84,7 +91,6 @@ export class ActionsRemoveFromPlaylist extends Component {
     }
 
     onClick = (e: Event) => {
-        console.log("Removing", this.props.track, this.props.playlist)
         API.deleteTrackPlaylist(this.props.track.id, this.props.playlist.id)
             .then((res) => {
                 this.props.onRemove && this.props.onRemove();

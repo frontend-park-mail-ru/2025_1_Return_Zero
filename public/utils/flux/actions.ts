@@ -1,4 +1,5 @@
 import { Action } from "libs/flux/Action";
+import { NotificationProps } from "components/notifications/Notification";
 
 export namespace ACTIONS {
     export class USER_LOGIN extends Action<AppTypes.User> {}
@@ -14,4 +15,7 @@ export namespace ACTIONS {
     export class CREATE_PLAYLIST extends Action<AppTypes.Playlist> {}
     export class EDIT_PLAYLIST extends Action<AppTypes.Playlist> {}
     export class DELETE_PLAYLIST extends Action<AppTypes.Playlist> {}
+
+    export class CREATE_NOTIFICATION extends Action<NotificationProps> {}
+    export class REMOVE_NOTIFICATION extends Action<string> {}
 }

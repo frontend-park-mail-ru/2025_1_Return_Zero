@@ -1,0 +1,55 @@
+@use 'root/dark.scss' as d;
+@use 'root/variables.scss' as v;
+
+.notification {
+    position: relative;
+    display: flex;
+    justify-content: center;
+
+    padding: 0.312rem 0.625rem;
+    min-width: 33%;
+    max-width: 70%;
+
+    border: 1px solid d.$color-border;
+    border-radius: 15px;
+
+    &--success {
+        background-color: d.$color-success;
+    }
+
+    &--error {
+        background-color: d.$color-error;
+    }
+
+    &__close {
+        position: absolute;
+        top: 0.625rem;
+        bottom: 0.625rem;
+        right: 0.625rem;
+
+        cursor: pointer;
+
+        &:hover {
+            scale: 1.05;
+        }
+
+        width: 0.625rem;
+        background-color: red;
+    }
+}
+
+.notifications-container {
+    position: absolute;
+    grid-area: page;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 0.625rem;
+
+    padding: 0.625rem;
+}

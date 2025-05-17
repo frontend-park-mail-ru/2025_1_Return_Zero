@@ -47,8 +47,11 @@ export class PlaylistEdit extends Component {
             )).body;
             this.props.onSave(playlist);
             Dispatcher.dispatch(new ACTIONS.EDIT_PLAYLIST(playlist));
+            Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+                type: 'success',
+                message: `Плейлист успешно изменён`
+            }));
         } catch (error) {
-            console.error(error)
             this.setState({error: 'Что-то пошло не так'})
         }
     })

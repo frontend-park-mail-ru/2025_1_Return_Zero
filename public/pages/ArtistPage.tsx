@@ -5,6 +5,9 @@ import { AlbumCard } from "components/album/Album";
 import { Section } from "components/elements/Section";
 import { Button, ButtonDanger } from "components/elements/Button";
 
+import Dispatcher from "libs/flux/Dispatcher";
+import { ACTIONS } from "utils/flux/actions";
+
 import { one_alive_async } from "utils/funcs";
 import { API } from "utils/api";
 
@@ -39,9 +42,12 @@ export class ArtistPage extends Component {
     onLike = one_alive_async(async () => {
         try {
             const resp = await API.postArtistLike(this.props.artist_id, !this.state.is_liked);
+            Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+                type: "success",
+                message: !this.state.is_liked ? `Вы подписались на ${this.state.artist.title}` : `Вы отписались от ${this.state.artist.title}`,
+            }))
             this.setState({is_liked: !this.state.is_liked});
         } catch (e) {
-            console.error(e.message);
         }
     });
 
