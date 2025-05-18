@@ -5,7 +5,6 @@ import { TrackToPlaylist } from "components/dialogs/TrackToPlaylist";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
-import { USER_STORAGE } from "utils/flux/storages";
 
 import { debounce } from "utils/funcs";
 import { API } from "utils/api";
@@ -29,9 +28,9 @@ export class ActionsAddToPlaylist extends Component {
 
     render() {
         return [
-            USER_STORAGE.getUser() && <span className="actions-item" onClick={this.onClick}>Добавить в плейлист</span>,
+            <span className="actions-item" onClick={this.onClick}>Добавить в плейлист</span>,
             this.state.opened && <TrackToPlaylist onClose={this.onClick} track={this.props.track}/>
-        ].filter(Boolean)
+        ]
     }
 }
 
@@ -52,7 +51,7 @@ export class ActionsAddToQueue extends Component {
     render() {
         return [
             <span className="actions-item" onClick={this.onAdd}>Добавить в очередь</span>
-        ].filter(Boolean)
+        ]
     }
 }
 
@@ -94,12 +93,16 @@ export class ActionsRemoveFromPlaylist extends Component {
         API.deleteTrackPlaylist(this.props.track.id, this.props.playlist.id)
             .then((res) => {
                 this.props.onRemove && this.props.onRemove();
+                Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+                    type: "success",
+                    message: "Трек убран из плейлиста",
+                }))
             }).catch((err) => { console.error(err.message) })
     }
 
     render() {
         return [
-            USER_STORAGE.getUser()?.username === this.props.playlist.username && <span className="actions-item" onClick={this.onClick}>Удалить из плейлиста</span>
-        ].filter(Boolean)
+            <span className="actions-item" onClick={this.onClick}>Удалить из плейлиста</span>
+        ]
     }
 }
