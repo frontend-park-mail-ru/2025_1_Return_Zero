@@ -9,8 +9,7 @@ import tracksQueue from "common/tracksQueue";
 import { Like } from "components/elements/Like";
 import { Link } from "libs/rzf/Router";
 import { ACTIONS } from "utils/flux/actions";
-import { Actions } from "components/elements/Actions";
-import { ActionsAddToPlaylist, ActionsAddToQueue, ActionsToAlbum, ActionsToArtist } from "components/elements/ActionsTrack";
+import { ActionsTrack } from "components/elements/ActionsTrack";
 import { API } from "utils/api";
 import Dispatcher from "libs/flux/Dispatcher";
 import { TRACKS_STORAGE } from "utils/flux/storages";
@@ -106,17 +105,7 @@ export class PlayerSmall extends Component {
                         </div>
 
                         {tracksQueue.getCurrentTrack() && [
-                            <Actions 
-                                className="icon" 
-                                opened={this.state.actions_opened} 
-                                onClick={() => this.setState({ actions_opened: !this.state.actions_opened })} 
-                                style={{ order: 2 }}
-                            >
-                                <ActionsAddToPlaylist track={tracksQueue.getCurrentTrack()} />
-                                <ActionsAddToQueue track={tracksQueue.getCurrentTrack()} />
-                                <ActionsToAlbum track={tracksQueue.getCurrentTrack()} />
-                                <ActionsToArtist track={tracksQueue.getCurrentTrack()} />
-                            </Actions>,
+                            <ActionsTrack track={tracksQueue.getCurrentTrack()} />,
                             <Like 
                                 className="icon" 
                                 active={tracksQueue.getCurrentTrack().is_liked} 

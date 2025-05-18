@@ -8,13 +8,11 @@ import tracksQueue from "common/tracksQueue";
 import Router from "libs/rzf/Router";
 
 import { Like } from "components/elements/Like";
-import { Link } from "libs/rzf/Router";
 import { ACTIONS } from "utils/flux/actions";
-import { ActionsAddToPlaylist, ActionsAddToQueue, ActionsToAlbum, ActionsToArtist } from "components/elements/ActionsTrack";
 import { API } from "utils/api";
 import Dispatcher from "libs/flux/Dispatcher";
 import { TRACKS_STORAGE } from "utils/flux/storages";
-import { Actions } from "components/elements/Actions";
+import { ActionsTrack } from "components/elements/ActionsTrack";
 
 export class PlayerFullscreen extends Component {
     private unsubscribe: () => void;
@@ -179,12 +177,7 @@ export class PlayerFullscreen extends Component {
                         </div>
                         <div className="fullscreen-player__tools">
                         <div className="icons" style={{ display: 'flex' }}>
-                            <Actions className="icon" style={{ order: 1 }}>
-                                <ActionsAddToPlaylist track={tracksQueue.getCurrentTrack()} />
-                                <ActionsAddToQueue track={tracksQueue.getCurrentTrack()} />
-                                <ActionsToAlbum track={tracksQueue.getCurrentTrack()} />
-                                <ActionsToArtist track={tracksQueue.getCurrentTrack()} />
-                            </Actions>
+                            <ActionsTrack track={tracksQueue.getCurrentTrack()} />
                             <Like 
                                 className="icon" 
                                 style={{ order: 2 }} 

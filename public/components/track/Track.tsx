@@ -3,12 +3,11 @@ import { Link } from "libs/rzf/Router";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
-import { TRACKS_STORAGE, USER_STORAGE } from "utils/flux/storages";
+import { TRACKS_STORAGE, } from "utils/flux/storages";
 import { API } from "utils/api";
 
 import { Like } from "../elements/Like";
-import { Actions } from "../elements/Actions";
-import { ActionsAddToPlaylist, ActionsAddToQueue, ActionsRemoveFromPlaylist, ActionsToAlbum, ActionsToArtist } from "../elements/ActionsTrack";
+import { ActionsTrack } from "../elements/ActionsTrack";
 
 import "./Track.scss";  
 
@@ -129,15 +128,7 @@ export class TrackLine extends TrackBase {
                         <span className="track-line__controls__duration">{durationToString(track.duration)}</span>
                     </div>
                     <Like style={{ order: 2 }} active={this.state.is_liked} onClick={this.onLike}/>
-                    <Actions style={{ order: 3 }}>
-                        {!this.props.inPlaylist && USER_STORAGE.getUser() && 
-                            <ActionsAddToPlaylist track={track} />}
-                        {this.props.inPlaylist && USER_STORAGE.getUser()?.username === this.props.playlist.username && 
-                            <ActionsRemoveFromPlaylist track={track} playlist={this.props.inPlaylist} onRemove={this.props.removeFromPlaylist} />}
-                        <ActionsAddToQueue track={track} />
-                        <ActionsToAlbum track={track} />
-                        <ActionsToArtist track={track} />
-                    </Actions>
+                    <ActionsTrack track={track} playlist={this.props.inPlaylist} removeFromPlaylist={this.props.removeFromPlaylist} />
                 </div>
             </div>
         ]

@@ -1,10 +1,12 @@
 import { Component } from "libs/rzf/Component";
 import { Link } from "libs/rzf/Router";
 
+import { Actions } from "./Actions";
 import { TrackToPlaylist } from "components/dialogs/TrackToPlaylist";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
+import { USER_STORAGE } from "utils/flux/storages";
 
 import { debounce } from "utils/funcs";
 import { API } from "utils/api";
@@ -12,7 +14,32 @@ import { API } from "utils/api";
 import tracksQueue from "common/tracksQueue";
 
 
-export class ActionsAddToPlaylist extends Component {
+export class ActionsTrack extends Component {
+    props: {
+        track: AppTypes.Track;
+        playlist?: AppTypes.Playlist;
+        removeFromPlaylist?: () => void;
+        [key: string]: any;
+    }
+
+    render() {
+        const { track, playlist } = this.props;
+        return [
+            <Actions style={{ order: 3 }}>
+                {!this.props.inPlaylist && USER_STORAGE.getUser() && 
+                    <ActionsAddToPlaylist track={track} />}
+                {this.props.playlist && USER_STORAGE.getUser()?.username === this.props.playlist.username && 
+                    <ActionsRemoveFromPlaylist track={track} playlist={this.props.playlist} onRemove={this.props.removeFromPlaylist} />}
+                <ActionsAddToQueue track={track} />
+                <Link className="actions-item" to={this.props.track.album_page}>Перейти к альбому</Link>
+                <Link className="actions-item" to={this.props.track.artists[0].artist_page}>Перейти к исполнителю</Link>
+            </Actions>
+        ]
+    }
+}
+
+
+class ActionsAddToPlaylist extends Component {
     props: {
         track: AppTypes.Track;
         [key: string]: any;
@@ -30,53 +57,6 @@ export class ActionsAddToPlaylist extends Component {
         return [
             <span className="actions-item" onClick={this.onClick}>Добавить в плейлист</span>,
             this.state.opened && <TrackToPlaylist onClose={this.onClick} track={this.props.track}/>
-        ]
-    }
-}
-
-export class ActionsAddToQueue extends Component {
-    props: {
-        track: AppTypes.Track;
-        [key: string]: any;
-    }
-
-    onAdd = debounce((e: Event) => {
-        tracksQueue.manualAddTrack(this.props.track.id.toString());
-        Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
-            type: "success",
-            message: "Трек добавлен в очередь",
-        }))
-    })
-
-    render() {
-        return [
-            <span className="actions-item" onClick={this.onAdd}>Добавить в очередь</span>
-        ]
-    }
-}
-
-export class ActionsToAlbum extends Component {
-    props: {
-        track: AppTypes.Track;
-        [key: string]: any;
-    }
-    
-    render() {
-        return [
-            <Link className="actions-item" to={this.props.track.album_page}>Перейти к альбому</Link>
-        ]
-    }
-}
-
-export class ActionsToArtist extends Component {
-    props: {
-        track: AppTypes.Track;
-        [key: string]: any;
-    }
-    
-    render() {
-        return [
-            <Link className="actions-item" to={this.props.track.artists[0].artist_page}>Перейти к исполнителю</Link>
         ]
     }
 }
@@ -103,6 +83,27 @@ export class ActionsRemoveFromPlaylist extends Component {
     render() {
         return [
             <span className="actions-item" onClick={this.onClick}>Удалить из плейлиста</span>
+        ]
+    }
+}
+
+class ActionsAddToQueue extends Component {
+    props: {
+        track: AppTypes.Track;
+        [key: string]: any;
+    }
+
+    onClick = debounce((e: Event) => {
+        tracksQueue.manualAddTrack(this.props.track.id.toString());
+        Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+            type: "success",
+            message: "Трек добавлен в очередь",
+        }))
+    })
+
+    render() {
+        return [
+            <span className="actions-item" onClick={this.onClick}>Добавить в очередь</span>
         ]
     }
 }
