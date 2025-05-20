@@ -3,7 +3,6 @@ import { convertDuration } from "utils/durationConverter";
 import DragProgressBar from "./DragHandlers/DragProgressBar";
 import "./PlayerFullscreen.scss";
 
-import { Like } from "components/elements/Like";
 import { ACTIONS } from "utils/flux/actions";
 import { Actions } from "components/elements/Actions";
 import { ActionsAddToPlaylist, ActionsAddToQueue, ActionsToAlbum, ActionsToArtist } from "components/elements/ActionsTrack";
@@ -20,6 +19,7 @@ import { NextBtn } from "./Buttons/nextBtn";
 import { VolumeBtn } from "./Buttons/volumeBtn";
 import { RepeatBtn } from "./Buttons/repeatBtn";
 import { ShuffleBtn } from "./Buttons/shuffleBtn";
+import { LikeBtn } from "./Buttons/likeBtn";
 
 import playerStorage from "utils/flux/PlayerStorage";
 
@@ -74,19 +74,6 @@ export class PlayerFullscreen extends Component {
         );
     }
 
-    onLike = async () => {
-        const currentTrack = playerStorage.currentTrack;
-
-        try {
-            const res = (await API.postTrackLike(currentTrack.id, !currentTrack.is_liked)).body;
-            Dispatcher.dispatch(new ACTIONS.TRACK_LIKE({...currentTrack, is_liked: !currentTrack.is_liked}));
-            this.setState({});
-        } catch (e) {
-            console.error(e);
-            return;
-        }
-    }
-
     render() {
         const onResize = this.props.onResize;
         
@@ -129,12 +116,7 @@ export class PlayerFullscreen extends Component {
                                 <ActionsToAlbum track={playerStorage.currentTrack} />
                                 <ActionsToArtist track={playerStorage.currentTrack} />
                             </Actions>
-                            <Like 
-                                className="icon" 
-                                style={{ order: 2 }} 
-                                active={playerStorage.currentTrack.is_liked} 
-                                onClick={this.onLike} 
-                            />
+                            <LikeBtn />
                         </div>
                             <div className="controls">
                                 <VolumeBtn />

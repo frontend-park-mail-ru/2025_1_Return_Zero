@@ -6,11 +6,7 @@ import Router from "libs/rzf/Router";
 
 import "./PlayerMobileFullscreen.scss";
 
-import { Like } from "components/elements/Like";
-import { ACTIONS } from "utils/flux/actions";
 import { ActionsAddToPlaylist, ActionsAddToQueue, ActionsToAlbum, ActionsToArtist } from "components/elements/ActionsTrack";
-import { API } from "utils/api";
-import Dispatcher from "libs/flux/Dispatcher";
 import { TRACKS_STORAGE } from "utils/flux/storages";
 import { PLAYER_STORAGE } from "utils/flux/storages";
 import { Actions } from "components/elements/Actions";
@@ -22,7 +18,7 @@ import { PrevBtn } from "./Buttons/prevBtn";
 import { NextBtn } from "./Buttons/nextBtn";
 import { RepeatBtn } from "./Buttons/repeatBtn";
 import { ShuffleBtn } from "./Buttons/shuffleBtn";
-
+import { LikeBtn } from "./Buttons/likeBtn";
 import playerStorage from "utils/flux/PlayerStorage";
 
 export class PlayerMobileFullscreen extends Component {
@@ -82,20 +78,6 @@ export class PlayerMobileFullscreen extends Component {
         }
     };
 
-    onLike = async () => {
-        const currentTrack = playerStorage.currentTrack;
-
-        try {
-            const res = (await API.postTrackLike(currentTrack.id, !currentTrack.is_liked)).body;
-            Dispatcher.dispatch(new ACTIONS.TRACK_LIKE({...currentTrack, is_liked: !currentTrack.is_liked}));
-            this.setState({});
-        } catch (e) {
-            console.error(e);
-            return;
-        }
-    }
-
-
     render() {
         const onResize = this.props.onResize;
 
@@ -122,8 +104,8 @@ export class PlayerMobileFullscreen extends Component {
                     />
 
                     <div class="fullscreen-mobile-player__container__widgets">
-                        <Like className="icon" active={playerStorage.currentTrack.is_liked} onClick={this.onLike}/>
-                        <div className="song-text">
+                        <LikeBtn />
+                        <div style={{ order: 2 }} className="song-text">
                             <SongName />
                             <SongArtist onResize={onResize} />
                         </div>

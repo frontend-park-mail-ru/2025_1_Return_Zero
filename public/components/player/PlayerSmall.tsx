@@ -4,12 +4,8 @@ import DragProgressBar from "./DragHandlers/DragProgressBar";
 
 import "./PlayerSmall.scss";
 
-import { Like } from "components/elements/Like";
-import { ACTIONS } from "utils/flux/actions";
 import { Actions } from "components/elements/Actions";
 import { ActionsAddToPlaylist, ActionsAddToQueue, ActionsToAlbum, ActionsToArtist } from "components/elements/ActionsTrack";
-import { API } from "utils/api";
-import Dispatcher from "libs/flux/Dispatcher";
 import { TRACKS_STORAGE } from "utils/flux/storages";
 import { PLAYER_STORAGE } from "utils/flux/storages";
 
@@ -21,6 +17,7 @@ import { NextBtn } from "./Buttons/nextBtn";
 import { VolumeBtn } from "./Buttons/volumeBtn";
 import { RepeatBtn } from "./Buttons/repeatBtn";
 import { ShuffleBtn } from "./Buttons/shuffleBtn";
+import { LikeBtn } from "./Buttons/likeBtn";
 
 import playerStorage from "utils/flux/PlayerStorage";
 
@@ -75,19 +72,6 @@ export class PlayerSmall extends Component {
         );
     }
 
-    onLike = async () => {
-        const currentTrack = playerStorage.currentTrack;
-
-        try {
-            const res = (await API.postTrackLike(currentTrack.id, !currentTrack.is_liked)).body;
-            Dispatcher.dispatch(new ACTIONS.TRACK_LIKE({...currentTrack, is_liked: !currentTrack.is_liked}));
-            this.setState({});
-        } catch (e) {
-            console.error(e);
-            return;
-        }
-    }
-
     render() {
         const onResize = this.props.onResize;
 
@@ -118,12 +102,7 @@ export class PlayerSmall extends Component {
                                 <ActionsToAlbum track={playerStorage.currentTrack} />
                                 <ActionsToArtist track={playerStorage.currentTrack} />
                             </Actions>,
-                            <Like 
-                                className="icon" 
-                                active={playerStorage.currentTrack.is_liked} 
-                                onClick={this.onLike} 
-                                style={{ order: 3 }}
-                            />,
+                            <LikeBtn />,
                         ]}
                     </div>
 

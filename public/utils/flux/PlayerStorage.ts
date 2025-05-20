@@ -4,9 +4,11 @@ import { Action } from "libs/flux/Action";
 
 import { ACTIONS } from "./actions";
 import { API } from "utils/api";
+import { Stream } from "common/stream";
 
 type PlayerStorageStor = {
     audio: HTMLAudioElement;
+    stream: Stream;
 
     audioLevel: number;
     prevAudioLevel: number;
@@ -59,6 +61,7 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         this.stor.duration = 0;
         this.stor.playedOnce = false;
         this.stor.playPromise = null;
+        this.stor.stream = new Stream();
     }
 
     private initQueueVariables() {
@@ -123,6 +126,10 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
                 break;
             case action instanceof ACTIONS.QUEUE_ADD_SECTION:
                 this.addSection(action.payload);
+                this.callSubs(action);
+                break;
+            case action instanceof ACTIONS.QUEUE_ADD_MANUAL:
+                this.manualAddTrack(action.payload);
                 this.callSubs(action);
                 break;
         }
@@ -357,8 +364,8 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         }
     }
 
-    public manualAddTrack(trackId: string): void {
-        this.stor.addedQueue.push(trackId);
+    public manualAddTrack(track: AppTypes.Track): void {
+        this.stor.addedQueue.push(track.id.toString());
         this.saveAddedQueue();
     }
 
@@ -426,8 +433,8 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
             trackId = this.stor.addedQueue.shift()!;
             this.saveAddedQueue();
 
-            // await this.stream.updateStream();
-            // await this.stream.createStream();
+            await this.stor.stream.updateStream();
+            await this.stor.stream.createStream();
         } else {
             trackId = this.stor.queue[this.stor.idx];
         }
@@ -444,8 +451,8 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
 
         this.saveQueue();
 
-        // await this.stream.updateStream();
-        // await this.stream.createStream();
+        await this.stor.stream.updateStream();
+        await this.stor.stream.createStream();
     }
 
     // GETTERS

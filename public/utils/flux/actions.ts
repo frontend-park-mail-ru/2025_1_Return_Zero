@@ -29,5 +29,6 @@ export namespace ACTIONS {
     export class QUEUE_NEXT extends Action<null> {};
     export class QUEUE_PREV extends Action<null> {};
     export class QUEUE_ADD_SECTION extends Action<AppTypes.Track> {};
+    export class QUEUE_ADD_MANUAL extends Action<AppTypes.Track> {};
 }
 

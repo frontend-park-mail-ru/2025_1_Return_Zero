@@ -1,6 +1,5 @@
 import { Component } from "libs/rzf/Component";
 
-import playerStorage from "utils/flux/PlayerStorage";
 import { ACTIONS } from "utils/flux/actions";
 import { PLAYER_STORAGE } from "utils/flux/storages";
 import Dispatcher from "libs/flux/Dispatcher";

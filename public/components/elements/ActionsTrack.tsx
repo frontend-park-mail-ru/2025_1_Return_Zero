@@ -6,8 +6,9 @@ import { TrackToPlaylist } from "components/dialogs/TrackToPlaylist";
 import { USER_STORAGE } from "utils/flux/storages";
 import { debounce } from "utils/funcs";
 import { API } from "utils/api";
-
-import tracksQueue from "common/tracksQueue";
+import { ACTIONS } from "utils/flux/actions";
+import { PLAYER_STORAGE } from "utils/flux/storages";
+import Dispatcher from "libs/flux/Dispatcher";
 
 
 export class ActionsAddToPlaylist extends Component {
@@ -39,7 +40,7 @@ export class ActionsAddToQueue extends Component {
     }
 
     onAdd = debounce((e: Event) => {
-        tracksQueue.manualAddTrack(this.props.track.id.toString());
+        Dispatcher.dispatch(new ACTIONS.QUEUE_ADD_MANUAL(this.props.track));
     })
 
     render() {

@@ -1,31 +1,26 @@
-import { Player } from './player';
-import { TracksQueue } from './tracksQueue';
 import { API } from 'utils/api';
+
+import playerStorage from "utils/flux/PlayerStorage";
 
 export class Stream {
     id: number;
     duration: number;
-    player: Player;
-    tracksQueue: TracksQueue
 
-    constructor(player: Player, tracksQueue: TracksQueue) {
+    constructor() {
         this.duration = 0;
         setInterval(() => {
             this.setDuration();
         }, 1000);
-
-        this.player = player;
-        this.tracksQueue = tracksQueue;
     }
 
     setDuration() {
-        if (!this.player.audio.paused) {
+        if (!playerStorage.audio.paused) {
             this.duration += 1;
         }
     }
 
     async createStream() {
-        const trackIdNumber = Number(this.tracksQueue.getCurrentTrackId());
+        const trackIdNumber = Number(playerStorage.currentTrackId);
         const response = await API.createStream(trackIdNumber);
         this.id = response.body.id;
         this.duration = 0;
