@@ -11,7 +11,7 @@ import tracksQueue from "common/tracksQueue";
 import { Route } from "libs/rzf/Router";
 
 import { updateMarquee } from "common/marquee";
-import './marquee.scss';
+import './SongTitle/marquee.scss';
 
 type DisplayType = 'small' | 'fullscreen' | 'none';
 type size = 'mobile' | 'desktop';

@@ -1,26 +1,32 @@
 import { Component } from 'libs/rzf/Component';
 
-import tracksQueue from 'common/tracksQueue';
-import player from 'common/player';
-
 import './PlayerMobile.scss';
 
-import { SongName } from './SongName';
-import { SongArtist } from './SongArtist';
+import { TRACKS_STORAGE } from "utils/flux/storages";
+import { PLAYER_STORAGE } from "utils/flux/storages";
+
+import { SongName } from './SongTitle/SongName';
+import { SongArtist } from './SongTitle/SongArtist';
+import { NextBtn } from './Buttons/nextBtn';
+import { PrevBtn } from './Buttons/prevBtn';
+import { TogglePlayBtn } from './Buttons/togglePlayBtn';
+
+import playerStorage from "utils/flux/PlayerStorage";
 
 export class PlayerMobile extends Component {
-    private unsubscribe: () => void;
-
     componentDidMount() {
-        this.unsubscribe = player.subscribe(() => {
-            this.setState({});
-        });
+        // подписки
+        TRACKS_STORAGE.subscribe(this.onAction);
+        PLAYER_STORAGE.subscribe(this.onAction);
+    }
+
+    onAction = () => {
+        this.setState({});
     }
 
     componentWillUnmount() {
-        if (this.unsubscribe) {
-            this.unsubscribe();
-        }
+        TRACKS_STORAGE.unsubscribe(this.onAction);
+        PLAYER_STORAGE.unsubscribe(this.onAction);
     }
 
     clickHandler = (onResize: () => void) => (e: MouseEvent) => {
@@ -44,7 +50,7 @@ export class PlayerMobile extends Component {
                 <div className="mobile-player__container">
                     <div className="mobile-player__song" id="song-container">
                         <img id="song-img"
-                            src={tracksQueue.getCurrentTrackImage()}
+                            src={playerStorage.currentTrackImage}
                         />
                         <div className="mobile-player__song-text">
                             <SongName />
@@ -55,31 +61,16 @@ export class PlayerMobile extends Component {
                     <div className="mobile-player__controls"
                         draggable={false}
                     >
-                        <img src="/static/img/player-prev.svg" className="icon" id="prev" alt="Prev"
-                            draggable={false}
-                            onClick={() => tracksQueue.previousTrack()}
-                        />
-                        <img 
-                            draggable={false}
-                            src={player.audio.paused 
-                                ? "/static/img/player-play.svg" 
-                                : "/static/img/player-pause.svg"} 
-                            className="icon" 
-                            id="play" 
-                            alt={player.audio.paused ? "Play" : "Pause"}
-                            onClick={() => player.togglePlay()}
-                        />
-                        <img src="/static/img/player-next.svg" className="icon" id="next" alt="Next"
-                            draggable={false}
-                            onClick={() => tracksQueue.nextTrack()}
-                        />
+                        <PrevBtn />
+                        <TogglePlayBtn />
+                        <NextBtn />
                     </div>
                 </div>
                 <div className="mobile-player__progress-container">
                     <div className="rectangle" id="play-progress">
                         <div className="rectangle-prev"
                             style = {{
-                                width: `${ player.audio.currentTime / player.audio.duration * 100 }%`
+                                width: `${ playerStorage.currentTime / playerStorage.duration * 100 }%`
                             }}
                         ></div>
                     </div>

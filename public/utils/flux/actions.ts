@@ -14,4 +14,20 @@ export namespace ACTIONS {
     export class CREATE_PLAYLIST extends Action<AppTypes.Playlist> {}
     export class EDIT_PLAYLIST extends Action<AppTypes.Playlist> {}
     export class DELETE_PLAYLIST extends Action<AppTypes.Playlist> {}
+
+    export class AUDIO_TOGGLE_PLAY extends Action<null> {};
+    export class AUDIO_SET_TRACK extends Action<null> {};
+    export class AUDIO_SET_DURATION extends Action<null> {};
+    export class AUDIO_SET_VOLUME extends Action<number> {};
+    export class AUDIO_SET_CURRENT_TIME extends Action<number> {};
+    export class AUDIO_TOGGLE_MUTE extends Action<null> {};
+    
+    export class QUEUE_REPEAT extends Action<null> {};
+    export class QUEUE_UNREPEAT extends Action<null> {};
+    export class QUEUE_SHUFFLE extends Action<null> {};
+    export class QUEUE_UNSHUFFLE extends Action<null> {};
+    export class QUEUE_NEXT extends Action<null> {};
+    export class QUEUE_PREV extends Action<null> {};
+    export class QUEUE_ADD_SECTION extends Action<AppTypes.Track> {};
 }
+

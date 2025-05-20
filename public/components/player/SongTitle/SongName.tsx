@@ -1,11 +1,12 @@
 import { Component } from "libs/rzf/Component";
-import tracksQueue from "common/tracksQueue";
+
+import playerStorage from "utils/flux/PlayerStorage";
 
 export class SongName extends Component {
     render() {
         return [
             <div id="song-name" className="song-name">
-                <span className="marquee">{tracksQueue.getCurrentTrackName()}</span>
+                <span className="marquee">{playerStorage.currentTrackName}</span>
             </div>
         ];
     }
