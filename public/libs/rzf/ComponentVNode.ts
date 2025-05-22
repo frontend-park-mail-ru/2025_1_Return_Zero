@@ -48,7 +48,7 @@ export function cleanUpComponent(vnode: ComponentVNode) {
 export function updateComponent(vnode: ComponentVNode, newVNode: ComponentVNode) {
     if (vnode.component !== newVNode.component) {
         VDomHelpers.insert(newVNode, destroy(vnode), vnode.parent);
-        render(newVNode, VDomHelpers.getParentTag(vnode)!.firstDom!, VDomHelpers.getNextDom(vnode));
+        render(newVNode, VDomHelpers.getParentTag(newVNode)!.firstDom!, VDomHelpers.getNextDom(newVNode));
         return;
     }
 

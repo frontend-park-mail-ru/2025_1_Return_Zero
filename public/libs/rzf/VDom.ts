@@ -2,6 +2,7 @@ import * as VDomHelpers from './VDomHelpers'
 import { Component, ComponentConstructor } from "./Component";
 import { destroyTag, cleanUpTag, hTag, renderTag, updateTag } from "./TagVNode";
 import { destroyComponent, cleanUpComponent, hComponent, renderComponent, updateComponent } from "./ComponentVNode";
+import { Like } from 'components/elements/Like';
 
 export enum VNodeType {
     TEXT,
@@ -92,10 +93,10 @@ export function render(vnode: VNode, dom: HTMLElement, before: HTMLElement|Text|
         dom.insertBefore(vnode.firstDom, before);
         return;
     } else if (vnode.type === VNodeType.TAG) {
-        renderTag(vnode, dom);
+        renderTag(vnode, dom, before);
         return;
     } else if (vnode.type === VNodeType.COMPONENT) {
-        renderComponent(vnode, dom);
+        renderComponent(vnode, dom, before);
         return;
     }
 
@@ -136,9 +137,8 @@ export function cleanUp(vnode: VNode) {
 
 export function update(vnode: VNode, newVNode: VNode) {
     if (vnode.type !== newVNode.type) {
-        const before = VDomHelpers.getNextDom(vnode);
         VDomHelpers.insert(newVNode, destroy(vnode), vnode.parent!);
-        render(newVNode, VDomHelpers.getParentTag(vnode)!.firstDom!, before);
+        render(newVNode, VDomHelpers.getParentTag(newVNode)!.firstDom!, VDomHelpers.getNextDom(newVNode));
         return;
     }
 

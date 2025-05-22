@@ -79,7 +79,7 @@ export class PlayerSmall extends Component {
             <div id="player" className="small-player">
                 <div className="small-player__container">
                     <div className="small-player__song-container" style={{ display: 'flex' }}>
-                        <div className="small-player__song" id="song-container" style={{ order: 1 }}>
+                        <div className="small-player__song" id="song-container">
                             <img
                                 id="song-img"
                                 src={playerStorage.currentTrackImage}

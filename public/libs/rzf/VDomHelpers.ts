@@ -180,14 +180,12 @@ export function updateChildren(vnode: TagVNode | ComponentVNode, newVNode: TagVN
         }
         if (oldChild) {
             if (vnode.children[index] !== oldChild) {
-                vnode.props.classes && vnode.props.classes[0] === 'like' && console.error(vnode)
                 remove(oldChild)
                 insert(oldChild, index, vnode);
                 putInDom(oldChild, parent, getNextDom(oldChild));
             }
             update(oldChild, child);
         } else {
-            vnode.props.classes && vnode.props.classes[0] === 'like' && console.error(vnode)
             insert(child, index, vnode);
             render(child, parent, getNextDom(child));
         }
