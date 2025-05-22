@@ -542,7 +542,7 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
     private async setTrack(play: boolean = true, isNext?: boolean): Promise<void> {
         let trackId: string | null = null;
         
-        if (isNext && this.stor.addedQueue.length) {
+        if (isNext && this.stor.addedQueue && this.stor.addedQueue.length) {
             trackId = this.stor.addedQueue.shift()!;
             this.saveAddedQueue();
             this.saveCurrentTrack();
