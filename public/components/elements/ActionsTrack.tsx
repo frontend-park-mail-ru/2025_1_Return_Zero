@@ -6,12 +6,10 @@ import { TrackToPlaylist } from "components/dialogs/TrackToPlaylist";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
-import { USER_STORAGE } from "utils/flux/storages";
+import { USER_STORAGE, PLAYER_STORAGE } from "utils/flux/storages";
 
 import { debounce } from "utils/funcs";
 import { API } from "utils/api";
-
-import tracksQueue from "common/tracksQueue";
 
 
 export class ActionsTrack extends Component {
@@ -25,7 +23,7 @@ export class ActionsTrack extends Component {
     render() {
         const { track, playlist } = this.props;
         return [
-            <Actions style={{ order: 3 }}>
+            <Actions>
                 {!this.props.inPlaylist && USER_STORAGE.getUser() && 
                     <ActionsAddToPlaylist track={track} />}
                 {this.props.playlist && USER_STORAGE.getUser()?.username === this.props.playlist.username && 
@@ -87,14 +85,14 @@ export class ActionsRemoveFromPlaylist extends Component {
     }
 }
 
-class ActionsAddToQueue extends Component {
+export class ActionsAddToQueue extends Component {
     props: {
         track: AppTypes.Track;
         [key: string]: any;
     }
 
-    onClick = debounce((e: Event) => {
-        tracksQueue.manualAddTrack(this.props.track.id.toString());
+    onAdd = debounce((e: Event) => {
+        Dispatcher.dispatch(new ACTIONS.QUEUE_ADD_MANUAL(this.props.track));
         Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
             type: "success",
             message: "Трек добавлен в очередь",
@@ -103,7 +101,7 @@ class ActionsAddToQueue extends Component {
 
     render() {
         return [
-            <span className="actions-item" onClick={this.onClick}>Добавить в очередь</span>
-        ]
+            <span className="actions-item" onClick={this.onAdd}>Добавить в очередь</span>
+        ].filter(Boolean)
     }
 }

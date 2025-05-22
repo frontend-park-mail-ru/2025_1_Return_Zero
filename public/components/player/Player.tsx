@@ -5,12 +5,9 @@ import PlayerFullscreen from "./PlayerFullscreen";
 import PlayerMobile from "./PlayerMobile";
 import PlayerMobileFullscreen from "./PlayerMobileFullscreen";
 
-import player from "common/player";
-import { TRACKS_STORAGE } from "utils/flux/storages";
-import tracksQueue from "common/tracksQueue";
-import { Route } from "libs/rzf/Router";
-
-import { updateMarquee } from "common/marquee";
+import { PLAYER_STORAGE } from "utils/flux/storages";
+import { marqueeHandler } from "common/marquee";
+import './SongTitle/marquee.scss';
 
 type DisplayType = 'small' | 'fullscreen' | 'none';
 type size = 'mobile' | 'desktop';
@@ -43,8 +40,8 @@ export class Player extends Component {
         const mediaQuery = window.matchMedia(`(max-width: ${mobileBreakpoint}px)`);
         mediaQuery.addEventListener('change', this.handleMediaChange.bind(this));
 
-
         this.configureNoneDisplay();
+        marqueeHandler();
     }
 
     handleMediaChange(e: any) {
@@ -57,11 +54,13 @@ export class Player extends Component {
 
     configureNoneDisplay() {
         if (this.state.displayedOption === 'none') {
-            this.unsubscribe = player.subscribe(() => {
-                this.toggleDisplayedOption();
-                this.unsubscribe();
-            });
+            PLAYER_STORAGE.subscribe(this.onAction);
         }
+    }
+
+    onAction = () => {
+        this.toggleDisplayedOption();
+        PLAYER_STORAGE.unsubscribe(this.onAction);
     }
 
     render() {

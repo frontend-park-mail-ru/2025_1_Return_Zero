@@ -26,7 +26,7 @@ export class Actions extends Component {
 
     render() {
         return [
-            <div {...this.props} style={{ order: 10 }} className={this.props.className + " actions" || "actions"} onClickOutside={this.close} >
+            <div {...this.props} className={this.props.className ? this.props.className + " actions" : "actions"} onClickOutside={this.close} >
                 <img onClick={this.switch} className="actions__img" src="/static/img/dots.svg"/>
                 {this.state.opened && <NearPopup className="actions__popup" >
                     {this.props.children}

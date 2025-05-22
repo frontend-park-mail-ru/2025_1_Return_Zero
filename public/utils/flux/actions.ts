@@ -18,4 +18,22 @@ export namespace ACTIONS {
 
     export class CREATE_NOTIFICATION extends Action<NotificationProps> {}
     export class REMOVE_NOTIFICATION extends Action<string> {}
+
+    export class AUDIO_TOGGLE_PLAY extends Action<null> {};
+    export class AUDIO_SET_TRACK extends Action<null> {};
+    export class AUDIO_SET_DURATION extends Action<null> {};
+    export class AUDIO_SET_VOLUME extends Action<number> {};
+    export class AUDIO_SET_CURRENT_TIME extends Action<number> {};
+    export class AUDIO_TOGGLE_MUTE extends Action<null> {};
+    
+    export class QUEUE_REPEAT extends Action<null> {};
+    export class QUEUE_UNREPEAT extends Action<null> {};
+    export class QUEUE_SHUFFLE extends Action<null> {};
+    export class QUEUE_UNSHUFFLE extends Action<null> {};
+    export class QUEUE_NEXT extends Action<null> {};
+    export class QUEUE_PREV extends Action<null> {};
+    export class QUEUE_ADD_SECTION extends Action<AppTypes.Track> {};
+    export class QUEUE_ADD_MANUAL extends Action<AppTypes.Track> {};
+    export class QUEUE_LIKE_CURRENT_TRACK extends Action<null> {};
 }
+

@@ -1,22 +1,27 @@
 import { Component } from "libs/rzf/Component";
-import player from 'common/player';
 import { convertDuration } from "utils/durationConverter";
-import DragProgressBar from "./DragProgressBar";
+import DragProgressBar from "./DragHandlers/DragProgressBar";
 
 import "./PlayerSmall.scss";
-import tracksQueue from "common/tracksQueue";
 
-import { Like } from "components/elements/Like";
-import { Link } from "libs/rzf/Router";
-import { ACTIONS } from "utils/flux/actions";
+
 import { ActionsTrack } from "components/elements/ActionsTrack";
-import { API } from "utils/api";
-import Dispatcher from "libs/flux/Dispatcher";
 import { TRACKS_STORAGE } from "utils/flux/storages";
+import { PLAYER_STORAGE } from "utils/flux/storages";
+
+import { SongName } from "./SongTitle/SongName";
+import { SongArtist } from "./SongTitle/SongArtist";
+import { TogglePlayBtn } from "./Buttons/togglePlayBtn";
+import { PrevBtn } from "./Buttons/prevBtn";
+import { NextBtn } from "./Buttons/nextBtn";
+import { VolumeBtn } from "./Buttons/volumeBtn";
+import { RepeatBtn } from "./Buttons/repeatBtn";
+import { ShuffleBtn } from "./Buttons/shuffleBtn";
+import { LikeBtn } from "./Buttons/likeBtn";
+
+import playerStorage from "utils/flux/PlayerStorage";
 
 export class PlayerSmall extends Component {
-    private unsubscribe: () => void;
-    private storageUnsubscribe: any
     private playDragging: DragProgressBar;
     private volumeDragging: DragProgressBar;
 
@@ -26,25 +31,19 @@ export class PlayerSmall extends Component {
     
     componentDidMount() {
         // подписки
-        this.unsubscribe = player.subscribe(() => {
-            this.setState({});     
-        });
-        this.storageUnsubscribe = TRACKS_STORAGE.subscribe(this.onAction);
-
+        TRACKS_STORAGE.subscribe(this.onAction);
+        PLAYER_STORAGE.subscribe(this.onAction);
         this.configurePlayProgressBar();
         this.configureVolumeProgressBar();
     }
 
     onAction = () => {
-        console.log("Small on action");
         this.setState({});
     }
 
     componentWillUnmount() {
-        if (this.unsubscribe) {
-            this.unsubscribe();
-        }
         TRACKS_STORAGE.unsubscribe(this.onAction);
+        PLAYER_STORAGE.unsubscribe(this.onAction);
     }
 
     configurePlayProgressBar() {
@@ -73,17 +72,6 @@ export class PlayerSmall extends Component {
         );
     }
 
-    onLike = async () => {
-        try {
-            const res = (await API.postTrackLike(tracksQueue.getCurrentTrack().id, !tracksQueue.getCurrentTrack().is_liked)).body;
-            Dispatcher.dispatch(new ACTIONS.TRACK_LIKE({...tracksQueue.getCurrentTrack(), is_liked: !tracksQueue.getCurrentTrack().is_liked}));
-            this.setState({});
-        } catch (e) {
-            console.error(e);
-            return;
-        }
-    }
-
     render() {
         const onResize = this.props.onResize;
 
@@ -94,101 +82,41 @@ export class PlayerSmall extends Component {
                         <div className="small-player__song" id="song-container" style={{ order: 1 }}>
                             <img
                                 id="song-img"
-                                src={tracksQueue.getCurrentTrackImage()}
+                                src={playerStorage.currentTrackImage}
                             />
                             <div className="small-player__song-text">
-                                <span id="song-name" className="song-name">{tracksQueue.getCurrentTrackName()}</span>
-                                <Link id="artist-name" className="artist-name" to={tracksQueue.getAristURL()}>
-                                    {tracksQueue.getCurrentTrackArtist()}
-                                </Link>
+                                <SongName />
+                                <SongArtist />
                             </div>
                         </div>
 
-                        {tracksQueue.getCurrentTrack() && [
-                            <ActionsTrack track={tracksQueue.getCurrentTrack()} />,
-                            <Like 
-                                className="icon" 
-                                active={tracksQueue.getCurrentTrack().is_liked} 
-                                onClick={this.onLike} 
-                                style={{ order: 3 }}
-                            />,
+                        {playerStorage.currentTrack && [
+                            <ActionsTrack track={playerStorage.currentTrack} />,
+                            <LikeBtn track={playerStorage.currentTrack} />,
                         ]}
                     </div>
 
 
                     <div className="small-player__widgets">
                         <div className="small-player__controls">
-                            <img 
-                                draggable={false}
-                                src={ tracksQueue.shuffled 
-                                    ? "/static/img/player-shuffle-active.svg"
-                                    : "/static/img/player-shuffle.svg"
-                                }
-                                className="icon" 
-                                id="shuffle" 
-                                alt="Shuffle" 
-                                onClick={() => {
-                                    tracksQueue.shuffled 
-                                        ? tracksQueue.unshuffle()
-                                        : tracksQueue.shuffle();
-                                    this.setState({});
-                                }}
-                            />
-                            <img src="/static/img/player-prev.svg" className="icon" id="prev" alt="Prev"
-                                draggable={false}
-                                onClick={() => tracksQueue.previousTrack()}
-                            />
-                            <img 
-                                draggable={false}
-                                src={player.audio.paused 
-                                    ? "/static/img/player-play.svg" 
-                                    : "/static/img/player-pause.svg"} 
-                                className="icon" 
-                                id="play" 
-                                alt={player.audio.paused ? "Play" : "Pause"}
-                                onClick={() => player.togglePlay()}
-                            />
-                            <img src="/static/img/player-next.svg" className="icon" id="next" alt="Next"
-                                draggable={false}
-                                onClick={() => tracksQueue.nextTrack()}
-                            />
-                            <img 
-                                draggable={false}
-                                src={ tracksQueue.repeated 
-                                    ? "/static/img/player-repeat-active.svg"
-                                    : "/static/img/player-repeat.svg"
-                                } 
-                                className="icon" 
-                                id="repeat" 
-                                alt="Repeat"
-                                onClick={() => {
-                                    tracksQueue.repeated
-                                        ? tracksQueue.unrepeat()
-                                        : tracksQueue.repeat();
-                                    this.setState({}); 
-                                }}
-                            />
+                            <ShuffleBtn />
+                            <PrevBtn />
+                            <TogglePlayBtn />
+                            <NextBtn />
+                            <RepeatBtn />
                         </div>
                         <div className="small-player__progress-container">
-                            <span id="current-span">{convertDuration(player.getCurrentTime())}</span>
+                            <span id="current-span">{convertDuration(playerStorage.currentTime)}</span>
                             <div className="rectangle" id="play-progress">
                                 <div className="rectangle-prev"></div>
                                 <div className="circle"></div>
                             </div>
-                            <span id='end-span'>{convertDuration(player.getDuration())}</span>
+                            <span id='end-span'>{convertDuration(playerStorage.duration)}</span>
                         </div>
                     </div>
 
                     <div className="small-player__tools">
-                        <img 
-                            draggable={false}
-                            className="icon" 
-                            src={player.audioLevel > 0 
-                                ? "/static/img/volume.svg" 
-                                : "/static/img/volume-mute.svg"} 
-                            onClick={() => player.toggleMute()}
-                            alt="Volume" 
-                        />
+                        <VolumeBtn />
                         <div className="rectangle-volume" id="volume-progress">
                             <div className="rectangle-prev"></div>
                             <div className="circle"></div>

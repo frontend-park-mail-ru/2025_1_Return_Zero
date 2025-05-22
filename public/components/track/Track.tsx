@@ -3,7 +3,8 @@ import { Link } from "libs/rzf/Router";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
-import { TRACKS_STORAGE, } from "utils/flux/storages";
+
+import { TRACKS_STORAGE, USER_STORAGE, PLAYER_STORAGE } from "utils/flux/storages";
 import { API } from "utils/api";
 
 import { Like } from "../elements/Like";
@@ -16,6 +17,8 @@ function durationToString(duration: number): string {
     const seconds = duration % 60;
     return `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
 }
+
+import playerStorage from "utils/flux/PlayerStorage";
 
 abstract class TrackBase extends Component {
     props: {
@@ -42,41 +45,49 @@ abstract class TrackBase extends Component {
         super(props);
 
         this.state.is_liked = props.track.is_liked;
+        this.state.playing = this.checkPlaying();
     }
+
+    checkPlaying() {
+        if (!playerStorage.currentTrack) return null;
+
+        if (playerStorage.currentTrack.id === this.props.track.id) {
+            if (playerStorage.isPlaying) {
+                return true;
+            }
+            return false;
+        }
+        return null;
+    } 
 
     componentDidMount(): void {
         TRACKS_STORAGE.subscribe(this.onAction);
-        if (TRACKS_STORAGE.getPlaying() && TRACKS_STORAGE.getPlaying().id === this.props.track.id) {
-            this.setState({
-                playing: TRACKS_STORAGE.getPlayingState()
-            });
-        }
+        PLAYER_STORAGE.subscribe(this.onPlayerAction);
     }
 
     componentWillUnmount(): void {
         TRACKS_STORAGE.unsubscribe(this.onAction);
+        PLAYER_STORAGE.unsubscribe(this.onPlayerAction);
     }
 
     onAction = (action: any): void => {
         switch (true) {
-            case action instanceof ACTIONS.TRACK_PLAY:
-                this.setState({playing: this.props.track.id === action.payload.id ? true : null});
-                break;
-            case action instanceof ACTIONS.TRACK_STATE_CHANGE:
-                this.setState({playing: this.props.track.id === TRACKS_STORAGE.getPlaying().id ? TRACKS_STORAGE.getPlayingState() : null});
-                break;
             case action instanceof ACTIONS.TRACK_LIKE:
                 this.props.track.id === action.payload.id && this.setState({is_liked: action.payload.is_liked});
                 break;
         }
     }
 
+    onPlayerAction = (action: any): void => {
+        this.setState({playing: this.checkPlaying()});
+    }
+
     onPlay = (): void => {
-        if (typeof this.state.playing === 'boolean') {
-            Dispatcher.dispatch(new ACTIONS.TRACK_STATE_CHANGE({playing: !this.state.playing}));
+        if (this.checkPlaying() !== null) {
+            Dispatcher.dispatch(new ACTIONS.AUDIO_TOGGLE_PLAY(null));
             return;
-        } 
-        Dispatcher.dispatch(new ACTIONS.TRACK_PLAY(this.props.track));
+        }
+        Dispatcher.dispatch(new ACTIONS.QUEUE_ADD_SECTION(this.props.track));
     }
 
     onLike = async () => {
@@ -123,11 +134,11 @@ export class TrackLine extends TrackBase {
                     <Link to={track.album_page}>{track.album}</Link>
                 </div>
 
-                <div style={{ display: 'flex' }} className="track-line__controls">
-                    <div style={{ order: 1 }} className="track-line__controls__duration-container">
+                <div className="track-line__controls">
+                    <div className="track-line__controls__duration-container">
                         <span className="track-line__controls__duration">{durationToString(track.duration)}</span>
                     </div>
-                    <Like style={{ order: 2 }} active={this.state.is_liked} onClick={this.onLike}/>
+                    <Like active={this.state.is_liked} onClick={this.onLike}/>
                     <ActionsTrack track={track} playlist={this.props.inPlaylist} removeFromPlaylist={this.props.removeFromPlaylist} />
                 </div>
             </div>
@@ -162,3 +173,4 @@ export class TrackCard extends TrackBase {
         ]
     }
 }
+

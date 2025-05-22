@@ -136,8 +136,9 @@ export function cleanUp(vnode: VNode) {
 
 export function update(vnode: VNode, newVNode: VNode) {
     if (vnode.type !== newVNode.type) {
+        const before = VDomHelpers.getNextDom(vnode);
         VDomHelpers.insert(newVNode, destroy(vnode), vnode.parent!);
-        render(newVNode, VDomHelpers.getParentTag(vnode)!.firstDom!, VDomHelpers.getNextDom(newVNode));
+        render(newVNode, VDomHelpers.getParentTag(vnode)!.firstDom!, before);
         return;
     }
 

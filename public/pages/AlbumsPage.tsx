@@ -52,11 +52,11 @@ export class AlbumsPage extends Component {
                 <Section title="Только для тебя" horizontal>
                     <Special />
                 </Section>
-                {this.state.favorites.length ? <Section title="Любимые альбомы" horizontal>
+                {!!this.state.favorites.length && <Section title="Любимые альбомы" horizontal>
                     {this.state.favorites.map((album, index) => (
                         <AlbumCard key={album.id} album={album}/>
                     ))}
-                </Section> : undefined}
+                </Section>}
                 <Section title="Рекомендации">
                     {this.state.albums.map((album, index) => (
                         <AlbumLine key={album.id} ind={index} album={album}/>

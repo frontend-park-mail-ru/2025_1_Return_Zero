@@ -1,33 +1,31 @@
-import { Player } from './player';
-import { TracksQueue } from './tracksQueue';
 import { API } from 'utils/api';
+import { USER_STORAGE } from 'utils/flux/storages';
+
+import playerStorage from "utils/flux/PlayerStorage";
 
 export class Stream {
     id: number;
     duration: number;
-    player: Player;
-    tracksQueue: TracksQueue
 
-    constructor(player: Player, tracksQueue: TracksQueue) {
+    constructor() {
         this.duration = 0;
         setInterval(() => {
             this.setDuration();
         }, 1000);
-
-        this.player = player;
-        this.tracksQueue = tracksQueue;
     }
 
     setDuration() {
-        if (!this.player.audio.paused) {
+        if (playerStorage.isPlaying) {
             this.duration += 1;
         }
     }
 
     async createStream() {
-        const trackIdNumber = Number(this.tracksQueue.getCurrentTrackId());
-        const response = await API.createStream(trackIdNumber);
-        this.id = response.body.id;
+        const trackIdNumber = Number(playerStorage.currentTrack.id);
+        if (USER_STORAGE.getUser()) {
+            const response = await API.createStream(trackIdNumber);
+            this.id = response.body.id;
+        }
         this.duration = 0;
     }
 
@@ -36,8 +34,10 @@ export class Stream {
             return;
         }
 
-        const response = await API.updateStream(this.id, this.duration);
-        console.warn(this.id, this.duration);
+        if (USER_STORAGE.getUser()) {
+            const response = await API.updateStream(this.id, this.duration);
+            console.warn(this.id, this.duration);
+        }
     }
 }
 

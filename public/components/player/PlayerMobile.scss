@@ -55,6 +55,10 @@
             user-select: none;
             color: d.$color-text;
         }
+
+        .song-name, .artist-name {   
+            max-width: 20rem;   
+        }
     }
 
     &__controls {

@@ -52,11 +52,11 @@ export class ArtistsPage extends Component {
                 <Section title="Только для тебя" horizontal>
                     <Special />
                 </Section>
-                {this.state.favorites.length ? <Section title="Любимые исполнители" horizontal>
+                {!!this.state.favorites.length && <Section title="Любимые исполнители" horizontal>
                     {this.state.favorites.map((artist, index) => (
                         <ArtistCard key={artist.id} artist={artist}/>
                     ))}
-                </Section> : undefined}
+                </Section>}
                 <Section title="Рекомендации" horizontal wrap>
                     {this.state.artists.map((artist, index) => (
                         <ArtistCard key={artist.id} artist={artist}/>

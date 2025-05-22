@@ -2,6 +2,7 @@ import { VNodeType, VNode, ComponentVNode, cleanUp } from "./VDom";
 import * as VDomHelpers from './VDomHelpers'
 import { ComponentConstructor } from "./Component";
 import { render, destroy } from "./VDom";
+import { Like } from "components/elements/Like";
 
 export function hComponent(type: ComponentConstructor, key: string|null, props: Record<string, any>, ...children: VNode[]) {
     return {
@@ -20,7 +21,7 @@ export function renderComponent(vnode: ComponentVNode, dom: HTMLElement, before:
     vnode.instance = new vnode.component(vnode.props);
     vnode.instance.vnode = vnode;
 
-    vnode.children = vnode.instance.render();
+    vnode.children = vnode.instance.render().filter(Boolean);
     VDomHelpers.linkChildren(vnode);
 
     vnode.children.forEach(child => render(child, dom, before));
@@ -53,7 +54,7 @@ export function updateComponent(vnode: ComponentVNode, newVNode: ComponentVNode)
 
     if (vnode.instance!.componentShouldUpdate(newVNode.props, {})) {
         vnode.props = vnode.instance!.props = newVNode.props;
-        newVNode.children = vnode.instance!.render();
+        newVNode.children = vnode.instance!.render().filter(Boolean);
         VDomHelpers.updateChildren(vnode, newVNode);
     } else {
         vnode.props = vnode.instance!.props = newVNode.props;
