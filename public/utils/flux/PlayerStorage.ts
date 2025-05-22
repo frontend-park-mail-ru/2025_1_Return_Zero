@@ -6,6 +6,8 @@ import { ACTIONS } from "./actions";
 import { API } from "utils/api";
 import { Stream } from "common/stream";
 
+import PlayerSync from "common/playerSync";
+
 type PlayerStorageStor = {
     audio: HTMLAudioElement;
     stream: Stream;
@@ -24,10 +26,13 @@ type PlayerStorageStor = {
     
     shuffled: boolean;
     repeated: boolean;
+    initialized: boolean;
 }
 
 class PlayerStorage extends Storage<PlayerStorageStor> {
     static instance: PlayerStorage;
+
+    playerSync: PlayerSync;
 
     constructor() {
         super();
@@ -37,20 +42,93 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         }
         PlayerStorage.instance = this;
 
+        this.playerSync = new PlayerSync(this.onMasterChange.bind(this));
+        this.stor.initialized = false;
+
+        Dispatcher.register(this.handleAction.bind(this));
+        window.addEventListener('storage', this.onStorageEvent.bind(this));
+    }
+
+    onStorageEvent(event: StorageEvent) {
+        if (event.key === 'player-action') {
+            const action = JSON.parse(event.newValue);
+            
+            console.log('action', action);
+            switch (action.action) {
+                case 'previousTrack':
+                    this.previousTrack();
+                    break;
+                case 'nextTrack':
+                    this.nextTrack();
+                    break;      
+                case 'togglePlay':
+                    this.togglePlay();
+                    break;
+                case 'toggleMute':
+                    this.toggleMute();
+                    break;
+                case 'loadTrack':
+                    this.loadTrack(action.payload);
+                    break;
+                case 'setVolume':
+                    this.setVolume(action.payload);
+                    break;
+                case 'setCurrentTime':
+                    this.setCurrentTime(action.payload);
+                    break;
+                case 'setDuration':
+                    this.setDuration(action.payload);
+                    break;
+                case 'repeat':
+                    this.repeat();
+                    break;
+                case 'unrepeat':
+                    this.unrepeat();
+                    break;
+                case 'shuffle':
+                    this.shuffle();
+                    break;
+                case 'unshuffle':
+                    this.unshuffle();
+                    break;
+                case 'addSection':
+                    this.addSection(action.payload);
+                    break;
+                case 'manualAddTrack':
+                    this.manualAddTrack(action.payload);
+                    break;
+            }
+        }
+
+        // затычка
+        this.callSubs(new ACTIONS.AUDIO_TOGGLE_PLAY(null));
+    }
+
+    onMasterChange() {
+        if (this.stor.initialized) return;
+
+        this.init();
+        this.stor.initialized = true;
+    }
+
+    init() {
         this.initAudioVariables();
         this.initQueueVariables();
 
         this.initAudioStates();  
         this.initQueueStates();
 
-        this.pause();
-
         this.stor.audio.ontimeupdate = () => {
-            this.setCurrentTime(this.stor.audio.currentTime); 
+            this.stor.currentTime = this.stor.audio.currentTime;
+            
+            try {
+                localStorage.setItem('audio-current-time', String(this.stor.currentTime));
+            } catch (error) {
+                console.error('Failed to save audio current time:', error);
+            }
+            
             this.callSubs(new ACTIONS.AUDIO_SET_CURRENT_TIME(null));
         };
-
-        Dispatcher.register(this.handleAction.bind(this));
     }
 
     private initAudioVariables() {
@@ -71,66 +149,70 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         this.stor.idx = -1;
         this.stor.currentTrack = null;
         this.stor.shuffled = false;
-        this.stor.repeated = false;
+        this.stor.repeated = false;    
+    }
+
+    private sendAction(action: string, arg?: any) {
+        try {
+            localStorage.setItem('player-action', JSON.stringify({ action: action, payload: arg, timestamp: Date.now() }));
+        } catch (error) {
+            console.error('Failed to send action:', error);
+        }
+    }
+
+    private doAction(action: Action, funcName: string, callback: (arg?: any) => void, arg?: any) {
+        if (this.playerSync.isMaster) {
+            callback(arg);
+        } else {
+            this.sendAction(funcName, arg);
+        }
+
+        this.callSubs(action);
     }
 
     protected handleAction(action: Action) {
         switch (true) {
             case action instanceof ACTIONS.AUDIO_TOGGLE_PLAY:
-                this.togglePlay();
-                this.callSubs(action);
+                this.doAction(action, 'togglePlay', () => this.togglePlay(), null);
                 break;
             case action instanceof ACTIONS.AUDIO_TOGGLE_MUTE:
-                this.toggleMute();
-                this.callSubs(action);
+                this.doAction(action, 'toggleMute', () => this.toggleMute(), null);
                 break;
             case action instanceof ACTIONS.AUDIO_SET_TRACK:
-                this.loadTrack(action.payload);
-                this.callSubs(action);
+                this.doAction(action, 'loadTrack', () => this.loadTrack(action.payload), action.payload);
                 break;
             case action instanceof ACTIONS.AUDIO_SET_VOLUME:
-                this.setVolume(action.payload);
-                this.callSubs(action);
+                this.doAction(action, 'setVolume', () => this.setVolume(action.payload), action.payload);
                 break;
             case action instanceof ACTIONS.AUDIO_SET_CURRENT_TIME:
-                this.setCurrentTime(action.payload);
-                this.callSubs(action);
+                this.doAction(action, 'setCurrentTime', () => this.setCurrentTime(action.payload), action.payload);
                 break;
             case action instanceof ACTIONS.AUDIO_SET_DURATION:
-                this.setDuration(action.payload);
-                this.callSubs(action);
+                this.doAction(action, 'setDuration', () => this.setDuration(action.payload), action.payload);
                 break;
             case action instanceof ACTIONS.QUEUE_REPEAT:
-                this.repeat();
-                this.callSubs(action);
+                this.doAction(action, 'repeat', () => this.repeat(), null);
                 break;
             case action instanceof ACTIONS.QUEUE_UNREPEAT:
-                this.unrepeat();
-                this.callSubs(action);
+                this.doAction(action, 'unrepeat', () => this.unrepeat(), null);
                 break;
             case action instanceof ACTIONS.QUEUE_SHUFFLE:
-                this.shuffle();
-                this.callSubs(action);
+                this.doAction(action, 'shuffle', () => this.shuffle(), null);
                 break;
             case action instanceof ACTIONS.QUEUE_UNSHUFFLE:
-                this.unshuffle();
-                this.callSubs(action);
+                this.doAction(action, 'unshuffle', () => this.unshuffle(), null);
                 break;
             case action instanceof ACTIONS.QUEUE_NEXT:
-                this.nextTrack();
-                this.callSubs(action);
+                this.doAction(action, 'nextTrack', () => this.nextTrack(), null);
                 break;
             case action instanceof ACTIONS.QUEUE_PREV:
-                this.previousTrack();
-                this.callSubs(action);
+                this.doAction(action, 'previousTrack', () => this.previousTrack(), null);
                 break;
             case action instanceof ACTIONS.QUEUE_ADD_SECTION:
-                this.addSection(action.payload);
-                this.callSubs(action);
+                this.doAction(action, 'addSection', () => this.addSection(action.payload), action.payload);
                 break;
             case action instanceof ACTIONS.QUEUE_ADD_MANUAL:
-                this.manualAddTrack(action.payload);
-                this.callSubs(action);
+                this.doAction(action, 'manualAddTrack', () => this.manualAddTrack(action.payload), action.payload);
                 break;
         }
     }
@@ -160,7 +242,6 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         }
 
         this.setVolume(this.stor.audioLevel);
-        this.setCurrentTime(this.stor.currentTime);
         this.stor.playedOnce = false;
     }
     
@@ -173,6 +254,8 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
             }
 
             this.stor.playedOnce = true;
+            localStorage.setItem('is-playing', String(!this.stor.audio.paused));
+            localStorage.setItem('played-once', String(this.stor.playedOnce));
         } catch (error) {
             // console.error('Playback error:', error);
             // this.pause();
@@ -237,6 +320,7 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
 
     setCurrentTime(time: number) {
         this.stor.currentTime = time;
+        this.stor.audio.currentTime = time;
 
         if (this.stor.playedOnce) {
             this.SaveCurrentTime();
@@ -256,6 +340,12 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
 
     setDuration(duration: number) {
         this.stor.duration = duration;
+
+        try {
+            localStorage.setItem('audio-duration', String(this.stor.duration));
+        } catch (error) {
+            console.error('Failed to save audio duration:', error);
+        }
 
         this.callSubs(new ACTIONS.AUDIO_SET_DURATION(null));
     }
@@ -432,6 +522,7 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         if (isNext && this.stor.addedQueue.length) {
             trackId = this.stor.addedQueue.shift()!;
             this.saveAddedQueue();
+            this.saveCurrentTrack();
 
             await this.stor.stream.updateStream();
             await this.stor.stream.createStream();
@@ -457,59 +548,162 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
 
     // GETTERS
 
-    get audio() {
-        return this.stor.audio;
+    get isPlaying() {
+        try {
+            if (!this.playerSync.isMaster) {
+                return JSON.parse(localStorage.getItem('is-playing') || 'true');
+            }
+        } catch (error) {
+            return true;
+        }
+
+        return !this.stor.audio.paused;
     }
 
     get audioLevel() {
+        try {
+            if (!this.playerSync.isMaster) {
+                return Number(localStorage.getItem('audio-level'));
+            }
+        } catch (error) {
+            return 0.5;
+        }
+
         return this.stor.audioLevel;
     }
 
     get currentTime() {
+        try {
+            if (!this.playerSync.isMaster) {
+                return Number(localStorage.getItem('audio-current-time'));
+            }
+        } catch (error) {
+            return 0;
+        }
+
         return this.stor.currentTime;
     }
 
     get duration() {
+        try {
+            if (!this.playerSync.isMaster) {
+                return Number(localStorage.getItem('audio-duration'));
+            }
+        } catch (error) {
+            return 0;
+        }
+
         return this.stor.duration;
     }
 
     get currentTrack() {
+        try {
+            if (!this.playerSync.isMaster) {
+                return JSON.parse(localStorage.getItem('current-track') || 'undefined');
+            }
+        } catch (error) {
+            return null;
+        }
+
         return this.stor.currentTrack;
     }
 
     get currentTrackId() {
+        try {
+            if (!this.playerSync.isMaster) {
+                return localStorage.getItem('current-track');
+            }
+        } catch (error) {
+            return null;
+        }
+
         return this.stor.idx === -1 ? null : this.stor.queue[this.stor.idx];
     }
 
     get currentTrackName() {
+        try {
+            if (!this.playerSync.isMaster) {
+                return JSON.parse(localStorage.getItem('current-track') || 'undefined')?.title;
+            }
+        } catch (error) {
+            return 'none';
+        }
+
         return this.stor.currentTrack?.title || 'none';
     }
 
     get currentTrackArtist() {
+        try {
+            if (!this.playerSync.isMaster) {
+                return JSON.parse(localStorage.getItem('current-track') || 'undefined')?.artists[0]?.title;
+            }
+        } catch (error) {
+            return 'none';
+        }
+
         return this.stor.currentTrack?.artists[0]?.title || 'none';
     }
 
     get currentTrackImage() {
+        try {
+            if (!this.playerSync.isMaster) {
+                return JSON.parse(localStorage.getItem('current-track') || 'undefined')?.thumbnail_url;
+            }
+        } catch (error) {
+            return 'none';
+        }
+
         return this.stor.currentTrack?.thumbnail_url || 'none';
     }
 
     get currentTrackAristURL() {
+        try {
+            if (!this.playerSync.isMaster) {
+                return JSON.parse(localStorage.getItem('current-track') || 'undefined')?.artists[0]?.artist_page;
+            }
+        } catch (error) {
+            return 'none';
+        }
+
         return this.stor.currentTrack?.artists[0]?.artist_page;
     }
 
     get shuffled() {
+        try {
+            if (!this.playerSync.isMaster) {
+                return JSON.parse(localStorage.getItem('queue-shuffled') || 'false');
+            }
+        } catch (error) {
+            return false;
+        }
+
         return this.stor.shuffled;
     }
 
     get repeated() {
+        try {
+            if (!this.playerSync.isMaster) {
+                return JSON.parse(localStorage.getItem('queue-repeated') || 'false');
+            }
+        } catch (error) {
+            return false;
+        }
+
         return this.stor.repeated;
     }
 
     get playedOnce() {
+        try {
+            if (!this.playerSync.isMaster) {
+                return JSON.parse(localStorage.getItem('played-once') || 'false');
+            }
+        } catch (error) {
+            return false;
+        }
+
         return this.stor.playedOnce;
     }
 }
 
 export default new PlayerStorage();
-
 

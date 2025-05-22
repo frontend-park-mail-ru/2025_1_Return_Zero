@@ -25,7 +25,7 @@ class DragProgressBar {
 
         switch (this.type) {
             case 'play':
-                this.setVisualPosition(playerStorage.audio.currentTime / playerStorage.audio.duration);
+                this.setVisualPosition(playerStorage.currentTime / playerStorage.duration);
                 break;
             case 'volume':
                 this.setVisualPosition(playerStorage.audioLevel);
@@ -68,8 +68,8 @@ class DragProgressBar {
 
         let position = 0;
         if (this.type === 'play') {
-            position = playerStorage.audio.duration > 0 
-                ? playerStorage.audio.currentTime / playerStorage.audio.duration 
+            position = playerStorage.duration > 0 
+                ? playerStorage.currentTime / playerStorage.duration 
                 : 0;
         } else {
             position = playerStorage.audioLevel;
@@ -133,10 +133,9 @@ class DragProgressBar {
         const safePos = Math.max(0, Math.min(1, pos));
 
         if (this.type === 'play') {
-            const newTime = Math.floor(safePos * playerStorage.audio.duration);
+            const newTime = Math.floor(safePos * playerStorage.duration);
             if (!isNaN(newTime) && playerStorage.playedOnce) {
                 this.onSetCurrentTime(newTime);
-                playerStorage.audio.currentTime = newTime;
             }
         } else {
             const newVolume = safePos;

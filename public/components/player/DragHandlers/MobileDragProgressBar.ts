@@ -4,6 +4,7 @@ import { ACTIONS } from "utils/flux/actions";
 import Dispatcher from "libs/flux/Dispatcher";
 import playerStorage from "utils/flux/PlayerStorage";
 
+
 type TouchEventLike = TouchEvent;
 
 class MobileDragProgressBar {
@@ -128,7 +129,6 @@ class MobileDragProgressBar {
             const newTime = Math.floor(safePos * playerStorage.duration);
             if (!isNaN(newTime) && playerStorage.playedOnce) {
                 this.onSetCurrentTime(newTime);
-                playerStorage.audio.currentTime = newTime;
             }
         } else {
             this.onSetVolume(safePos);

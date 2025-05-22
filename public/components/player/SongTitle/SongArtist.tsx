@@ -8,10 +8,11 @@ export class SongArtist extends Component {
         const onResize = this.props.onResize;
 
         return [
-            <div id="artist-name" className="artist-name" 
-                onClick={() => {Router.push(playerStorage.currentTrackAristURL, {}); onResize()}}
-            >
-                <span className="marquee">{playerStorage.currentTrackArtist}</span>
+            <div id="artist-name" className="artist-name" >
+                <span className="marquee"
+                    onClick={() => {Router.push(playerStorage.currentTrackAristURL, {}); onResize ? onResize() : null}}
+                 >
+                    {playerStorage.currentTrackArtist}</span>
             </div>
         ];
     }

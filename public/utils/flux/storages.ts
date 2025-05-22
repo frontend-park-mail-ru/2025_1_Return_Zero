@@ -7,5 +7,5 @@ export {
     UserStorage as USER_STORAGE,
     TrackStorage as TRACKS_STORAGE,
     ContentStorage as CONTENT_STORAGE,
-    playerStorage as PLAYER_STORAGE
+    playerStorage as PLAYER_STORAGE,
 }

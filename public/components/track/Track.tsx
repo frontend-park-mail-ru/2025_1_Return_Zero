@@ -50,7 +50,7 @@ abstract class TrackBase extends Component {
 
     checkPlaying() {
         if (playerStorage.currentTrack.id === this.props.track.id) {
-            if (!playerStorage.audio.paused) {
+            if (playerStorage.isPlaying) {
                 return true;
             }
             return false;

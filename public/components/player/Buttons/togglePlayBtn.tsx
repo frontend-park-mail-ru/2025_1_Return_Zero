@@ -27,12 +27,12 @@ export class TogglePlayBtn extends Component {
         return [
             <img 
                 draggable={false}
-                src={playerStorage.audio.paused 
-                    ? "/static/img/player-play.svg" 
-                    : "/static/img/player-pause.svg"} 
+                src={playerStorage.isPlaying 
+                    ? "/static/img/player-pause.svg" 
+                    : "/static/img/player-play.svg"} 
                 className="icon" 
                 id="play" 
-                alt={playerStorage.audio.paused ? "Play" : "Pause"}
+                alt={playerStorage.isPlaying ? "Play" : "Pause"}
                 onClick={this.onTogglePlayAction}
             />
         ];
