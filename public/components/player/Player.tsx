@@ -6,10 +6,8 @@ import PlayerMobile from "./PlayerMobile";
 import PlayerMobileFullscreen from "./PlayerMobileFullscreen";
 
 import { PLAYER_STORAGE } from "utils/flux/storages";
-import { updateMarquee } from "common/marquee";
+import { marqueeHandler } from "common/marquee";
 import './SongTitle/marquee.scss';
-
-import playerStorage from "utils/flux/PlayerStorage";
 
 type DisplayType = 'small' | 'fullscreen' | 'none';
 type size = 'mobile' | 'desktop';
@@ -42,8 +40,8 @@ export class Player extends Component {
         const mediaQuery = window.matchMedia(`(max-width: ${mobileBreakpoint}px)`);
         mediaQuery.addEventListener('change', this.handleMediaChange.bind(this));
 
-
         this.configureNoneDisplay();
+        marqueeHandler();
     }
 
     handleMediaChange(e: any) {
@@ -72,8 +70,6 @@ export class Player extends Component {
             }
             this.url = location.pathname;
         }
-
-        queueMicrotask(() => updateMarquee());
 
         switch (this.state.displayedOption as DisplayType) {
             case 'small':

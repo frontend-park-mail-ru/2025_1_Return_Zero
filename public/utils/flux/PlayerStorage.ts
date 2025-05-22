@@ -92,7 +92,9 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
                     this.unshuffle();
                     break;
                 case 'addSection':
-                    this.addSection(action.payload);
+                    const msg = action.payload;
+                    console.warn('addSection', action.payload);
+                    this.processNewTracks(msg.currentTrack as AppTypes.Track, msg.tracks as AppTypes.Track[]);
                     break;
                 case 'manualAddTrack':
                     this.manualAddTrack(action.payload);
@@ -164,7 +166,11 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         if (this.playerSync.isMaster) {
             callback(arg);
         } else {
-            this.sendAction(funcName, arg);
+            if (funcName === 'addSection') {
+                this.sendSection(arg);
+            } else {
+                this.sendAction(funcName, arg);
+            }
         }
 
         this.callSubs(action);
@@ -387,6 +393,23 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         this.nextTrack();
     };
 
+    private sendSection(currentTrack: AppTypes.Track): void {
+        const args = Object.keys(currentTrack.retriever_args).map(key => 
+            key === 'limit' ? 1000 : currentTrack.retriever_args[key]
+        );
+
+        currentTrack.retriever_func(...args)
+            .then((res: any) => {
+                this.sendAction(
+                    'addSection',
+                    {
+                        currentTrack,
+                        tracks: res.body
+                    }
+                );
+            });
+    }
+
     private addSection(currentTrack: AppTypes.Track): void {
         const args = Object.keys(currentTrack.retriever_args).map(key => 
             key === 'limit' ? 1000 : currentTrack.retriever_args[key]
@@ -401,7 +424,7 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
     private processNewTracks(currentTrack: AppTypes.Track, tracks: AppTypes.Track[]): void {
         const tracksIds = tracks.map(t => t.id.toString());
         const trackIdx = tracks.findIndex(t => t.id === currentTrack.id);
-        
+
         this.clearQueue();
         this.addTrack(tracksIds, trackIdx);
     }
