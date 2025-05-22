@@ -293,10 +293,10 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         this.stor.audio.pause();
     }
 
-    loadTrack(src: string) {
+    loadTrack(src: string, play: boolean = true) {
         this.stor.audio.src = src;
 
-        if (this.stor.audio.paused) {
+        if (this.stor.audio.paused && play) {
             this.togglePlay();
         }
 
@@ -535,7 +535,7 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         const response = await API.getTrack(Number(trackId));
         const track = response.body;
         
-        this.loadTrack(track.file_url);
+        this.loadTrack(track.file_url, play);
         this.setDuration(track.duration);
         this.stor.currentTrack = track;
         this.saveCurrentTrack();

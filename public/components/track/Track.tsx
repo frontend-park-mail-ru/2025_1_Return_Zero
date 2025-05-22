@@ -49,6 +49,8 @@ abstract class TrackBase extends Component {
     }
 
     checkPlaying() {
+        if (!playerStorage.currentTrack) return null;
+
         if (playerStorage.currentTrack.id === this.props.track.id) {
             if (playerStorage.isPlaying) {
                 return true;

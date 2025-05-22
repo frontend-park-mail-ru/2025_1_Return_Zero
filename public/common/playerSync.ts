@@ -14,7 +14,7 @@ class PlayerSync {
         this.updateMasterFlag();
 
         window.addEventListener('storage', this.onStorageEvent.bind(this));
-        window.addEventListener('beforeunload', this.onBeforeUnload.bind(this));
+        window.addEventListener('pagehide', this.onBeforeUnload.bind(this));
     }
 
     private getQueue(): string[] {
@@ -54,6 +54,13 @@ class PlayerSync {
     }
 
     private onBeforeUnload() {
+        try {
+            if (this.isMaster) {
+                localStorage.setItem('is-playing', 'false');
+            }
+        } catch {
+            // Ignore
+        }
         this.leaveQueue();
     }
 
