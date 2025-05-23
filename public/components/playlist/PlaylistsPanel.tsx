@@ -43,7 +43,7 @@ export class PlaylistsPanel extends Component {
                         <img src="/static/img/plus.svg" alt="error"/>
                     </Button>
                 }
-                {!USER_STORAGE.getUser() && <Link to="/profile/tracks/favorite" className="playlists-panel__favorite">
+                {USER_STORAGE.getUser() && <Link to="/profile/tracks/favorite" className="playlists-panel__favorite">
                     <img src="/static/img/like-active.svg" />
                 </Link>}
                 <section className="playlists-panel__playlists">
