@@ -1,9 +1,14 @@
 class PlayerSync {
     private static readonly QUEUE_KEY = 'playerQueue';
+    private static readonly HEARTBEAT_KEY = 'masterHeartbeat';
+    private static readonly HEARTBEAT_INTERVAL = 1000; 
+    private static readonly HEARTBEAT_TIMEOUT = 2000; 
 
     id: string;
     isMaster: boolean;
     callback: () => void;
+    heartbeatTimer?: number;
+    masterCheckTimer?: number;
 
     constructor(callback: () => void) {
         this.id = crypto.randomUUID();
@@ -14,7 +19,8 @@ class PlayerSync {
         this.updateMasterFlag();
 
         window.addEventListener('storage', this.onStorageEvent.bind(this));
-        window.addEventListener('pagehide', this.onBeforeUnload.bind(this));
+
+        this.masterCheckTimer = window.setInterval(() => this.checkMasterHealth(), 1000);
     }
 
     private getQueue(): string[] {
@@ -45,23 +51,53 @@ class PlayerSync {
 
     private updateMasterFlag() {
         const queue = this.getQueue();
+        const prevMaster = this.isMaster;
         this.isMaster = queue.length > 0 && queue[0] === this.id;
-        console.log(`Player ${this.id} is ${this.isMaster ? 'MASTER' : 'SLAVE'}`);
 
-        if (this.isMaster) {
+        if (this.isMaster && !prevMaster) {
+            console.log(`Player ${this.id} is MASTER`);
             this.callback();
+            this.startHeartbeat();
+        } else if (!this.isMaster && prevMaster) {
+            console.log(`Player ${this.id} is SLAVE`);
+            this.stopHeartbeat();
         }
     }
 
-    private onBeforeUnload() {
-        try {
-            if (this.isMaster) {
-                localStorage.setItem('is-playing', 'false');
-            }
-        } catch {
-            // Ignore
+    private startHeartbeat() {
+        this.heartbeatTimer = window.setInterval(() => {
+            localStorage.setItem(PlayerSync.HEARTBEAT_KEY, Date.now().toString());
+        }, PlayerSync.HEARTBEAT_INTERVAL);
+    }
+
+    private stopHeartbeat() {
+        if (this.heartbeatTimer) {
+            clearInterval(this.heartbeatTimer);
+            this.heartbeatTimer = undefined;
         }
-        this.leaveQueue();
+    }
+
+    private checkMasterHealth() {
+        const queue = this.getQueue();
+        if (queue.length === 0) return;
+
+        const masterId = queue[0];
+
+        if (masterId === this.id) {
+            return;
+        }
+
+        const heartbeatRaw = localStorage.getItem(PlayerSync.HEARTBEAT_KEY);
+        const heartbeat = heartbeatRaw ? parseInt(heartbeatRaw) : 0;
+        const now = Date.now();
+
+        if (now - heartbeat > PlayerSync.HEARTBEAT_TIMEOUT) {
+            console.warn(`Master is dead. Removed ${masterId} from queue.`);
+            const newQueue = queue.filter(id => id !== masterId);
+            this.setQueue(newQueue);
+
+            this.updateMasterFlag();
+        }
     }
 
     private onStorageEvent(e: StorageEvent) {
@@ -72,4 +108,3 @@ class PlayerSync {
 }
 
 export default PlayerSync;
-  
