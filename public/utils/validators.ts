@@ -22,10 +22,10 @@ const PLAYLIST_MAL = 20;
 const PLAYLIST_MAL_MES = 'Название плейлиста должно содержать не более 20 символов'
 const PLAYLIST_SYM = 'a-zA-Zа-яА-Я0-9_ ';
 const PLAYLIST_SYM_MES = 'Запрещённые символы в названии'
-const PLAYLIST_IMG_MES = 'Разрешенные форматы изображений: jpg, jpeg, png, gif'
-const PLAYLIST_MAS = 5;
-const PLAYLIST_MAS_MES = 'Максимальный размер загружаемого файла не более 5 МБ'
 
+const IMG_MES = 'Разрешенные форматы изображений: jpg, jpeg, png, gif'
+const IMG_MAS = 5;
+const IMG_MAS_MES = 'Максимальный размер загружаемого файла не более 5 МБ'
 const REQ_MES = 'Обязательное поле';
 
 export const LOGIN_FORM_VALIDATOR = new rzv.Validator({
@@ -45,13 +45,24 @@ export const REGISTRATION_FORM_VALIDATOR = new rzv.Validator({
 
 export const PLAYLIST_CREATE_VALIDATOR = new rzv.Validator({
     'title': rzv.string().required(REQ_MES).min(PLAYLIST_MIL, PLAYLIST_MIL_MES).max(PLAYLIST_MAL, PLAYLIST_MAL_MES).consistOf(PLAYLIST_SYM, PLAYLIST_SYM_MES),
-    'thumbnail': rzv.file().required(REQ_MES).img(PLAYLIST_IMG_MES).max(PLAYLIST_MAS, PLAYLIST_MAS_MES).addUrl(),
+    'thumbnail': rzv.file().required(REQ_MES).img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
+})
+
+export const ARTIST_CREATE_VALIDATOR = new rzv.Validator({
+    'title': rzv.string().required(REQ_MES).max(20, 'Не более 20 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
+    'thumbnail': rzv.file().required(REQ_MES).img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
+})
+
+export const ALBUM_CREATE_VALIDATOR = new rzv.Validator({
+    'title': rzv.string().required(REQ_MES).max(20, 'Не более 20 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
+    'thumbnail': rzv.file().required(REQ_MES).img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
+    'description': rzv.string().required(REQ_MES).max(200, 'Не более 200 символов'),
 })
 
 export function getPlaylistEditValidator(playlist: AppTypes.Playlist) {
     return new rzv.Validator({
         'title': rzv.string().required(REQ_MES).min(PLAYLIST_MIL, PLAYLIST_MIL_MES).max(PLAYLIST_MAL, PLAYLIST_MAL_MES).consistOf(PLAYLIST_SYM, PLAYLIST_SYM_MES),
-        'thumbnail': rzv.file().optional().img(PLAYLIST_IMG_MES).max(PLAYLIST_MAS, PLAYLIST_MAS_MES).addUrl(),
+        'thumbnail': rzv.file().optional().img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
     }, {
         'title': playlist.title,
     })
@@ -83,3 +94,5 @@ export function getSettingsFormValidator(user: AppTypes.User) {
         "is_public_artists_listened": user.privacy.is_public_artists_listened.toString()
     });
 }
+
+
