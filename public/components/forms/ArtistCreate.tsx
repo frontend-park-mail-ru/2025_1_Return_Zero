@@ -36,17 +36,16 @@ export class ArtistCreate extends Component {
         }
 
         try {
-            const vr = ARTIST_CREATE_VALIDATOR.result
-            const artist = (await API.postArtist(
-                vr.title.value,
-                vr.thumbnail.value
-            )).body;
-            this.props.onCreate(artist);
-            Dispatcher.dispatch(new ACTIONS.CREATE_PLAYLIST(artist));
-            Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
-                type: 'success',
-                message: `Артист "${artist.title}" успешно создан`
-            }));
+            // const vr = ARTIST_CREATE_VALIDATOR.result
+            // const artist = (await API.postArtist(
+            //     vr.title.value,
+            //     vr.thumbnail.value
+            // )).body;
+            // this.props.onCreate(artist);
+            // Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+            //     type: 'success',
+            //     message: `Артист "${artist.title}" успешно создан`
+            // }));
         } catch (error) {
             console.error(error)
             this.setState({error: error.message})
