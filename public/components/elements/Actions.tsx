@@ -1,6 +1,9 @@
 import { Component } from "libs/rzf/Component";
 import { NearPopup } from "components/elements/NearPopup";
 
+import Dispatcher from "libs/flux/Dispatcher";
+import { ACTIONS } from "utils/flux/actions";
+
 import './Actions.scss'
 
 export class Actions extends Component {
@@ -32,6 +35,27 @@ export class Actions extends Component {
                     {this.props.children}
                 </NearPopup>}
             </div>
+        ]
+    }
+}
+
+export class ActionsCopyLink extends Component {
+    props: {
+        link: string,
+        [key: string]: any
+    }
+
+    copyLink = () => {
+        navigator.clipboard.writeText(this.props.link)
+        Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+            message: 'Ссылка скопирована',
+            type: 'success',
+        }))
+    }
+
+    render() {
+        return [
+            <span className="actions-item" onClick={this.copyLink}>Поделиться</span>
         ]
     }
 }

@@ -4,12 +4,13 @@ import { TrackLine } from "components/track/Track";
 import { AlbumCard } from "components/album/Album";
 import { Section } from "components/elements/Section";
 import { Button, ButtonDanger } from "components/elements/Button";
+import { ActionsArtist } from "components/elements/ActionsArtist";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
 
-import { one_alive_async } from "utils/funcs";
 import { API } from "utils/api";
+import { one_alive_async } from "utils/funcs";
 
 import './pages.scss';
 
@@ -72,10 +73,10 @@ export class ArtistPage extends Component {
                         <h2 className="page__info__title">{this.state.artist.title}</h2>
                         <span className="page__info__stats">{this.state.artist.listeners_count} слушателей за месяц</span>
                         <div className="page__info__actions">
-                            <img src="/static/img/play.svg" alt="play"/>
                             {!this.state.is_liked ? 
                                 <Button onClick={this.onLike}>Подписаться</Button> :
                                 <ButtonDanger onClick={this.onLike}>Отписаться</ButtonDanger>}
+                            <ActionsArtist artist={this.state.artist} />
                         </div>
                     </div>
                 </div>

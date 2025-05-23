@@ -1,7 +1,7 @@
 import { Component } from "libs/rzf/Component";
 import { Link } from "libs/rzf/Router";
 
-import { Actions } from "./Actions";
+import { Actions, ActionsCopyLink } from "./Actions";
 import { TrackToPlaylist } from "components/dialogs/TrackToPlaylist";
 
 import Dispatcher from "libs/flux/Dispatcher";
@@ -29,6 +29,7 @@ export class ActionsTrack extends Component {
                 {this.props.playlist && USER_STORAGE.getUser()?.username === this.props.playlist.username && 
                     <ActionsRemoveFromPlaylist track={track} playlist={playlist} onRemove={this.props.removeFromPlaylist} />}
                 <ActionsAddToQueue track={track} />
+                <ActionsCopyLink link={'Затычка'} />
                 <Link className="actions-item" to={this.props.track.album_page}>Перейти к альбому</Link>
                 <Link className="actions-item" to={this.props.track.artists[0].artist_page}>Перейти к исполнителю</Link>
             </Actions>
@@ -59,7 +60,7 @@ class ActionsAddToPlaylist extends Component {
     }
 }
 
-export class ActionsRemoveFromPlaylist extends Component {
+class ActionsRemoveFromPlaylist extends Component {
     props: {
         track: AppTypes.Track;
         playlist: AppTypes.Playlist;
@@ -85,7 +86,7 @@ export class ActionsRemoveFromPlaylist extends Component {
     }
 }
 
-export class ActionsAddToQueue extends Component {
+class ActionsAddToQueue extends Component {
     props: {
         track: AppTypes.Track;
         [key: string]: any;

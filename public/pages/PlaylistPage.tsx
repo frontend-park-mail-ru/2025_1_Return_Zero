@@ -7,6 +7,7 @@ import { PlaylistEdit } from "components/forms/PlaylistEdit";
 
 import { Button, ButtonDanger } from "components/elements/Button";
 import { Like } from "components/elements/Like";
+import { ActionsPlaylist } from "components/elements/ActionsPlaylist";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
@@ -92,8 +93,8 @@ export class PlaylistPage extends Component {
                             <Link key={playlist.username} to={playlist.user_page}>{playlist.username}</Link>
                         </div>
                         <div className="page__info__actions">
-                            <img src="/static/img/play.svg" alt="play"/>
                             {(!USER_STORAGE.getUser() || USER_STORAGE.getUser().username !== playlist.username) && <Like active={this.state.is_liked} onClick={this.onLike} />}
+                            <ActionsPlaylist playlist={playlist} />
                         </div>
                     </div>
                 </div>

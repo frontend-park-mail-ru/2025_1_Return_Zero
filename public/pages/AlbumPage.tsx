@@ -4,11 +4,12 @@ import { Link } from "libs/rzf/Router";
 import { TrackLine } from "components/track/Track";
 import { Section } from "components/elements/Section";
 import { Like } from "components/elements/Like";
+import { ActionsAlbum } from "components/elements/ActionsAlbum";
 
 import { API } from "utils/api";
+import { one_alive_async } from "utils/funcs";
 
 import './pages.scss';
-import { one_alive_async } from "utils/funcs";
 
 export class AlbumPage extends Component {
     state = {
@@ -63,8 +64,8 @@ export class AlbumPage extends Component {
                             ])}
                         </div>
                         <div className="page__info__actions">
-                            <img src="/static/img/play.svg" alt="play"/>
                             <Like className="page__info__like" active={this.state.is_liked} onClick={this.onLike}/>
+                            <ActionsAlbum album={album}/>
                         </div>
                     </div>
                 </div>
