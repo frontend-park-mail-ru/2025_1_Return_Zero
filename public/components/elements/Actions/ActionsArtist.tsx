@@ -22,7 +22,7 @@ export class ActionsArtist extends Component {
         return [
             <Actions>
                 <ActionsPlay artist={artist} />
-                <ActionsCopyLink link={'Затычка'} />
+                <ActionsCopyLink link={URL.parse(artist.artist_page, location.href).toString()} />
             </Actions>
         ]
     }

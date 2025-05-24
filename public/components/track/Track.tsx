@@ -8,7 +8,7 @@ import { TRACKS_STORAGE, USER_STORAGE, PLAYER_STORAGE } from "utils/flux/storage
 import { API } from "utils/api";
 
 import { Like } from "../elements/Like";
-import { ActionsTrack } from "../elements/ActionsTrack";
+import { ActionsTrack } from "../elements/Actions/ActionsTrack";
 
 import "./Track.scss";  
 

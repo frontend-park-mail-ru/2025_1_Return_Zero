@@ -4,6 +4,7 @@ import { Section } from "components/elements/Section";
 import { TrackLine } from "components/track/Track";
 import { ArtistCard } from "components/artist/Artist";
 import { PlaylistCard } from "components/playlist/PlaylistCard";
+import { ActionsProfile } from "components/elements/Actions/ActionsProfile";
 
 import { API } from "utils/api";
 
@@ -50,10 +51,7 @@ export class ProfilePage extends Component {
                     <div>
                         <div className="page--profile__info__header">
                             <h2 className="page--profile__info__username">{user.username}</h2>
-                            {/* <img src="/static/img/dots.svg" className="page--profile__info__action" alt="edit" onClick={() => this.setState({actions_opened: !this.state.actions_opened})} /> */}
-                            {/* {this.state.actions_opened && <div className="profile__info__action-items">
-                                <span className="item" onClick={() => navigator.clipboard.writeText(window.location.origin + '/profile/' + user.username)}>Скопировать ссылку</span>
-                            </div>} */}
+                            <ActionsProfile user={user}/>
                         </div>
                         <div className="page--profile__info__stats">
                             <span className="item">{user.statistics.minutes_listened === -1 ? '?' : user.statistics.minutes_listened} минут прослушано</span>

@@ -4,7 +4,7 @@ import { TrackLine } from "components/track/Track";
 import { AlbumCard } from "components/album/Album";
 import { Section } from "components/elements/Section";
 import { Button, ButtonDanger } from "components/elements/Button";
-import { ActionsArtist } from "components/elements/ActionsArtist";
+import { ActionsArtist } from "components/elements/Actions/ActionsArtist";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";

@@ -5,7 +5,7 @@ import DragProgressBar from "./DragHandlers/DragProgressBar";
 import "./PlayerSmall.scss";
 
 
-import { ActionsTrack } from "components/elements/ActionsTrack";
+import { ActionsTrack } from "components/elements/Actions/ActionsTrack";
 import { TRACKS_STORAGE } from "utils/flux/storages";
 import { PLAYER_STORAGE } from "utils/flux/storages";
 

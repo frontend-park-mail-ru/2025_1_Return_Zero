@@ -11,18 +11,18 @@ import { debounce } from "utils/funcs";
 import { API } from "utils/api";
 
 
-export class ActionsAlbum extends Component {
+export class ActionsPlaylist extends Component {
     props: {
-        album: AppTypes.Album;
+        playlist: AppTypes.Playlist;
         [key: string]: any;
     }
 
     render() {
-        const { album } = this.props;
+        const { playlist } = this.props;
         return [
             <Actions>
-                <ActionsPlay album={album} />
-                <ActionsCopyLink link={'Затычка'} />
+                <ActionsPlay playlist={playlist} />
+                <ActionsCopyLink link={URL.parse(playlist.playlist_page, location.href).toString()} />
             </Actions>
         ]
     }
@@ -30,7 +30,7 @@ export class ActionsAlbum extends Component {
 
 class ActionsPlay extends Component {
     props: {
-        album: AppTypes.Album;
+        playlist: AppTypes.Playlist;
         [key: string]: any;
     }
 

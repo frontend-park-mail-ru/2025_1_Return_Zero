@@ -3,7 +3,7 @@ import { convertDuration } from "utils/durationConverter";
 import DragProgressBar from "./DragHandlers/DragProgressBar";
 import "./PlayerFullscreen.scss";
 
-import { ActionsTrack } from "components/elements/ActionsTrack";
+import { ActionsTrack } from "components/elements/Actions/ActionsTrack";
 import { TRACKS_STORAGE } from "utils/flux/storages";
 import { PLAYER_STORAGE } from "utils/flux/storages";
 

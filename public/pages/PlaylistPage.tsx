@@ -7,7 +7,7 @@ import { PlaylistEdit } from "components/forms/PlaylistEdit";
 
 import { Button, ButtonDanger } from "components/elements/Button";
 import { Like } from "components/elements/Like";
-import { ActionsPlaylist } from "components/elements/ActionsPlaylist";
+import { ActionsPlaylist } from "components/elements/Actions/ActionsPlaylist";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
