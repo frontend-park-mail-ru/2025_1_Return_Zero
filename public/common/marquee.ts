@@ -1,3 +1,5 @@
+import { PLAYER_STORAGE } from "utils/flux/storages";
+
 export function updateMarquee() {
     document.querySelectorAll('.song-name, .artist-name').forEach(container => {
         const marquee = container.querySelector('.marquee');
@@ -10,5 +12,15 @@ export function updateMarquee() {
         } catch {}
     });
 }
+
+
+export function marqueeHandler() {
+    PLAYER_STORAGE.subscribe(
+        () => {
+            updateMarquee();
+        }
+    );
+}
+
 
 

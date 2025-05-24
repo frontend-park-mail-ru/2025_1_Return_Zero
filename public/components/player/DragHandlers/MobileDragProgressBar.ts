@@ -1,4 +1,9 @@
-import player from "common/player";
+import PLAYER_STORAGE from "utils/flux/PlayerStorage";
+
+import { ACTIONS } from "utils/flux/actions";
+import Dispatcher from "libs/flux/Dispatcher";
+import playerStorage from "utils/flux/PlayerStorage";
+
 
 type TouchEventLike = TouchEvent;
 
@@ -8,7 +13,6 @@ class MobileDragProgressBar {
     private circle: HTMLElement;
     private isDragging: boolean = false;
     private type: 'play' | 'volume';
-    private unsubscribe: () => void;
 
     constructor(
         fullProgress: HTMLElement,
@@ -23,18 +27,28 @@ class MobileDragProgressBar {
 
         switch (this.type) {
             case 'play':
-                this.setVisualPosition(player.audio.currentTime / player.audio.duration);
+                this.setVisualPosition(playerStorage.currentTime / playerStorage.duration);
                 break;
             case 'volume':
-                this.setVisualPosition(player.audio.volume);
+                this.setVisualPosition(playerStorage.audioLevel);
                 break;
         }
 
-        this.unsubscribe = player.subscribe(() => {
-            requestAnimationFrame(() => this.updateVisuals());
-        });
+        PLAYER_STORAGE.subscribe(this.onAction);
 
         this.initTouchEvents();
+    }
+
+    onAction = () => {
+        requestAnimationFrame(() => this.updateVisuals());
+    }
+
+    onSetVolume = (volume: number) => {
+        Dispatcher.dispatch(new ACTIONS.AUDIO_SET_VOLUME(volume));
+    }
+
+    onSetCurrentTime = (time: number) => {
+        Dispatcher.dispatch(new ACTIONS.AUDIO_SET_CURRENT_TIME(time));
     }
 
     private initTouchEvents() {
@@ -55,11 +69,11 @@ class MobileDragProgressBar {
 
         let position = 0;
         if (this.type === 'play') {
-            position = player.audio.duration > 0
-                ? player.audio.currentTime / player.audio.duration
+            position = playerStorage.duration > 0
+                ? playerStorage.currentTime / playerStorage.duration
                 : 0;
         } else {
-            position = player.audio.volume;
+            position = playerStorage.audioLevel;
         }
 
         this.setVisualPosition(position);
@@ -93,7 +107,7 @@ class MobileDragProgressBar {
         const pos = (clientX - rect.left) / rect.width;
 
         if (this.type === 'volume') {
-            player.setVolume(Math.max(0, Math.min(1, pos)));
+            this.onSetVolume(Math.max(0, Math.min(1, pos)));
         }
         this.setVisualPosition(pos);
     };
@@ -112,18 +126,16 @@ class MobileDragProgressBar {
         const safePos = Math.max(0, Math.min(1, pos));
 
         if (this.type === 'play') {
-            const newTime = Math.floor(safePos * player.audio.duration);
-            if (!isNaN(newTime) && player.playedOnce) {
-                player.setCurrentTime(newTime);
-                player.audio.currentTime = newTime;
+            const newTime = Math.floor(safePos * playerStorage.duration);
+            if (!isNaN(newTime) && playerStorage.playedOnce) {
+                this.onSetCurrentTime(newTime);
             }
         } else {
-            player.setVolume(safePos);
+            this.onSetVolume(safePos);
         }
     };
 
     destroy() {
-        this.unsubscribe();
         this.fullProgress.removeEventListener('touchstart', this.startDragging);
         document.removeEventListener('touchmove', this.handleDrag);
         document.removeEventListener('touchend', this.stopDragging);
@@ -131,3 +143,5 @@ class MobileDragProgressBar {
 }
 
 export default MobileDragProgressBar;
+
+

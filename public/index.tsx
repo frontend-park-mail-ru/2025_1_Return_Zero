@@ -9,7 +9,7 @@ import { API } from "utils/api";
 
 
 import "./index.scss";
-
+import "./sw.js";
 
 async function registerServiceWorker() {
     if ('serviceWorker' in navigator) {

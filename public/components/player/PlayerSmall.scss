@@ -65,6 +65,10 @@
                 text-decoration: underline;
             }
         }
+
+        .song-name, .artist-name {   
+            max-width: 10rem;   
+        }
     }
 
     &__container {

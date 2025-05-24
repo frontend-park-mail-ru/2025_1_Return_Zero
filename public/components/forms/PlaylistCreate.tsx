@@ -43,6 +43,10 @@ export class PlaylistCreate extends Component {
             )).body;
             this.props.onCreate(playlist);
             Dispatcher.dispatch(new ACTIONS.CREATE_PLAYLIST(playlist));
+            Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+                type: 'success',
+                message: `Плейлист "${playlist.title}" успешно создан`
+            }));
         } catch (error) {
             console.error(error)
             this.setState({error: 'У вас уже есть плейлист с таким названием'})

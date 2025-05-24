@@ -8,6 +8,7 @@ import { Logo } from "components/logo/Logo";
 import { BottomHeader } from "components/bottomHeader/BottomHeader";
 
 import { LoginForm, LogoutForm, SignupForm } from "components/forms/AuthForms";
+import { Notifications } from "components/notifications/Notifications";
 
 import { MainPage } from "pages/MainPage";
 import { TracksPage } from "pages/TracksPage";
@@ -16,12 +17,15 @@ import { ArtistsPage } from "pages/ArtistsPage";
 import { AlbumPage } from "pages/AlbumPage";
 import { ArtistPage } from "pages/ArtistPage";
 import { PlaylistPage } from "pages/PlaylistPage";
-import { SearchPage } from "pages/SearchPage";
 
 import { ProfilePage } from "pages/ProfilePage";
 import { SettingsPage } from "pages/SettingsPage";
 
+import { DisplayAllPage } from "pages/DisplayAllPage";
+import { SearchPage } from "pages/SearchPage";
+
 import "./layout.scss";
+import { LabelPage } from "pages/LabelPage";
 
 export default class MainLayout extends Component {
     render() {
@@ -45,11 +49,16 @@ export default class MainLayout extends Component {
                 <Route path="^/profile/:username/" exact component={ProfilePage} />
                 <Route path="^/settings/" exact component={SettingsPage} />
 
+                <Route path="^/all/" component={DisplayAllPage} />
                 <Route path="^/search/" component={SearchPage} />
+
+                <Route path="^/label/" component={LabelPage} />
 
                 <Route path="#login$" component={LoginForm} />
                 <Route path="#register$" component={SignupForm} />
                 <Route path="#logout$" component={LogoutForm} />
+                
+                <Notifications />
             
                 <div className="layout--main__bottom-panel"> 
                     <Route path=".*" component={Player} />

@@ -66,6 +66,21 @@
             gap: 1.125rem;
         }
     }
+
+    &__empty {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.27rem;
+    
+        padding-top: 2.5rem;
+    
+        > img {
+            width: 4.5rem;
+            height: 4.5rem;
+        }
+    }
 }
 
 .page.page--album {
@@ -414,3 +429,15 @@
         }
     }
 } 
+
+.page--label {
+    &__artist-create-btn {
+        width: 8.75rem;
+        height: 8.75rem;
+        border-radius: 50%;
+        @media (max-width: 600px) {
+            width: 7.7rem;
+            height: 7.7rem;
+        }
+    }
+}
