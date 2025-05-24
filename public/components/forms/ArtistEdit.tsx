@@ -2,7 +2,7 @@ import { Component } from "libs/rzf/Component";
 import { Button } from "../elements/Button";
 import { Dialog } from "../elements/Dialog";
 
-import { ARTIST_CREATE_VALIDATOR } from "utils/validators";
+import { getArtistEditValidator } from "utils/validators";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
@@ -13,10 +13,12 @@ import { one_alive_async } from "utils/funcs";
 import './ArtistCreate.scss';
 import './forms.scss'
 
-export class ArtistCreate extends Component {
+export class ArtistEdit extends Component {
+    validator = getArtistEditValidator(this.props.artist);
     props: {
+        artist: AppTypes.Artist,
         onClose: () => void,
-        onCreate: (artist: AppTypes.Artist) => void
+        onEdit: (artist: AppTypes.Artist) => void
     }
     state = {
         error: null as string | null
@@ -28,7 +30,7 @@ export class ArtistCreate extends Component {
     };
 
     _onSubmit = one_alive_async(async () => {
-        if (!ARTIST_CREATE_VALIDATOR.validateAll()) {
+        if (!this.validator.validateAll()) {
             this.setState({
                 error: 'Заполните все поля'
             })
@@ -36,17 +38,17 @@ export class ArtistCreate extends Component {
         }
 
         try {
-            const vr = ARTIST_CREATE_VALIDATOR.result
-            const artist = (await API.postLabelArtist(
+            const vr = this.validator.result
+            const artist = (await API.putLabelArtist(
+                this.props.artist.id,
                 vr.title.value,
                 vr.thumbnail.value
             )).body;
+            this.props.onEdit(artist);
             Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
                 type: 'success',
-                message: `Артист "${artist.title}" успешно создан`
+                message: `Артист "${artist.title}" успешно изменён`
             }));
-            ARTIST_CREATE_VALIDATOR.clear();
-            this.props.onCreate(artist);
         } catch (error) {
             console.error(error)
             this.setState({error: error.message})
@@ -55,7 +57,7 @@ export class ArtistCreate extends Component {
 
     onInput = (event: Event) => {
         const element = event.target as HTMLInputElement;
-        ARTIST_CREATE_VALIDATOR.validate(element.name, element.value);
+        this.validator.validate(element.name, element.value);
         this.setState({
             error: null
         });
@@ -63,20 +65,21 @@ export class ArtistCreate extends Component {
 
     onChangeImage = (event: Event) => {
         const file = (event.target as HTMLInputElement).files![0];
-        ARTIST_CREATE_VALIDATOR.validate((event.target as HTMLInputElement).name, file || null);
+        this.validator.validate((event.target as HTMLInputElement).name, file || null);
         this.setState({
             error: null
         });
     }
 
     render() {
-        const vr = ARTIST_CREATE_VALIDATOR.result;
+        const vr = this.validator.result;
+        const { artist } = this.props;
         return [
             <Dialog onClose={this.props.onClose}>
                 <form className="form form--artist-create" onSubmit={this.onSubmit}>
-                    <h2 className="form__title">Создание артиста</h2>
+                    <h2 className="form__title">Изменение артиста</h2>
                     <div className="form-input-container--image">
-                        <img className="form-input-container--image__image" src={vr.thumbnail.url} alt="200x200" />
+                        <img className="form-input-container--image__image" src={vr.thumbnail.url || artist.thumbnail_url} alt="error" />
                         <label className="form-input-container--image__button" for="thumbnail">
                             <img src="/static/img/pencil.svg" />
                         </label>
@@ -90,7 +93,7 @@ export class ArtistCreate extends Component {
                     </div>
                     <div className="form-input-container form-bottom-container">
                         {this.state.error && <p className="form-input-container__error">{this.state.error}</p>}
-                        <Button className="form__apply">Создать</Button>
+                        <Button className="form__apply">Изменить</Button>
                     </div>
                 </form>
             </Dialog>

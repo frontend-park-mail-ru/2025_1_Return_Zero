@@ -383,6 +383,40 @@ export class API {
         return await API.put(`/streams/${id}`, { duration });
     }
 
+
+    static async getLabelArtists(limit?: number, offset?: number): Promise<TemplateAPI.ArtistsResponse> {
+        const artists_resp = await API.get(API.addParams('/label/artists', {limit, offset}));
+        artists_resp.body = artists_resp.body.map((artist: AppTypes.Artist) =>
+            API.extendArtist(artist)
+        );
+        return artists_resp;
+    }
+
+    static async postLabelArtist(title: string, thumbnail: File): Promise<TemplateAPI.ArtistResponse> {
+        const data = new FormData();
+        data.append('title', title);
+        data.append('thumbnail', thumbnail);
+        const artist_resp = await API.postMultipart('/label/artist', data);
+        artist_resp.body = API.extendArtist(artist_resp.body);
+        return artist_resp;
+    }
+
+    static async putLabelArtist(id: number, title: string, thumbnail?: File): Promise<TemplateAPI.ArtistResponse> {
+        const data = new FormData();
+        data.append('title', title);
+        if (thumbnail) {
+            data.append('thumbnail', thumbnail);
+        }
+        const artist_resp = await API.putMultipart(`/label/artist/${id}`, data);
+        artist_resp.body = API.extendArtist(artist_resp.body);
+        return artist_resp;
+    }
+
+    static async deleteLabelArtist(id: number) {
+        return await API.delete(`/label/artist/${id}`, {});
+    }
+
+
     static extendTrack(track: any, retriever_func: Function, retriever_args: Record<string, any>): AppTypes.Track {
         return {
             ...track,

@@ -429,3 +429,15 @@
         }
     }
 } 
+
+.page--label {
+    &__artist-create-btn {
+        width: 8.75rem;
+        height: 8.75rem;
+        border-radius: 50%;
+        @media (max-width: 600px) {
+            width: 7.7rem;
+            height: 7.7rem;
+        }
+    }
+}

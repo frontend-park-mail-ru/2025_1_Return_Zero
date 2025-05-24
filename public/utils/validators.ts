@@ -48,17 +48,6 @@ export const PLAYLIST_CREATE_VALIDATOR = new rzv.Validator({
     'thumbnail': rzv.file().required(REQ_MES).img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
 })
 
-export const ARTIST_CREATE_VALIDATOR = new rzv.Validator({
-    'title': rzv.string().required(REQ_MES).max(20, 'Не более 20 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
-    'thumbnail': rzv.file().required(REQ_MES).img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
-})
-
-export const ALBUM_CREATE_VALIDATOR = new rzv.Validator({
-    'title': rzv.string().required(REQ_MES).max(20, 'Не более 20 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
-    'thumbnail': rzv.file().required(REQ_MES).img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
-    'description': rzv.string().required(REQ_MES).max(200, 'Не более 200 символов'),
-})
-
 export function getPlaylistEditValidator(playlist: AppTypes.Playlist) {
     return new rzv.Validator({
         'title': rzv.string().required(REQ_MES).min(PLAYLIST_MIL, PLAYLIST_MIL_MES).max(PLAYLIST_MAL, PLAYLIST_MAL_MES).consistOf(PLAYLIST_SYM, PLAYLIST_SYM_MES),
@@ -95,4 +84,22 @@ export function getSettingsFormValidator(user: AppTypes.User) {
     });
 }
 
+export const ARTIST_CREATE_VALIDATOR = new rzv.Validator({
+    'title': rzv.string().required(REQ_MES).max(20, 'Не более 20 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
+    'thumbnail': rzv.file().required(REQ_MES).img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
+})
 
+export const ALBUM_CREATE_VALIDATOR = new rzv.Validator({
+    'title': rzv.string().required(REQ_MES).max(20, 'Не более 20 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
+    'thumbnail': rzv.file().required(REQ_MES).img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
+    'description': rzv.string().required(REQ_MES).max(200, 'Не более 200 символов'),
+})
+
+export function getArtistEditValidator(artist: AppTypes.Artist) {
+    return new rzv.Validator({
+        'title': rzv.string().required(REQ_MES).max(20, 'Не более 20 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
+        'thumbnail': rzv.file().optional().img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
+    }, {
+        'title': artist.title,
+    })
+}

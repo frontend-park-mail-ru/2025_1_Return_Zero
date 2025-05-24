@@ -25,6 +25,7 @@ import { DisplayAllPage } from "pages/DisplayAllPage";
 import { SearchPage } from "pages/SearchPage";
 
 import "./layout.scss";
+import { LabelPage } from "pages/LabelPage";
 
 export default class MainLayout extends Component {
     render() {
@@ -49,8 +50,9 @@ export default class MainLayout extends Component {
                 <Route path="^/settings/" exact component={SettingsPage} />
 
                 <Route path="^/all/" component={DisplayAllPage} />
-
                 <Route path="^/search/" component={SearchPage} />
+
+                <Route path="^/label/" component={LabelPage} />
 
                 <Route path="#login$" component={LoginForm} />
                 <Route path="#register$" component={SignupForm} />
