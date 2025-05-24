@@ -2,7 +2,6 @@ import { VNodeType, VNode, ComponentVNode, cleanUp } from "./VDom";
 import * as VDomHelpers from './VDomHelpers'
 import { ComponentConstructor } from "./Component";
 import { render, destroy } from "./VDom";
-import { Like } from "components/elements/Like";
 
 export function hComponent(type: ComponentConstructor, key: string|null, props: Record<string, any>, ...children: VNode[]) {
     return {

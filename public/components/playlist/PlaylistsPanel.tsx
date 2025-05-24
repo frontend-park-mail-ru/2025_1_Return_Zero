@@ -2,7 +2,6 @@ import { Component } from "libs/rzf/Component";
 import router, { Link } from "libs/rzf/Router";
 
 import { Button } from "../elements/Button";
-import { NearPopup } from "../elements/NearPopup";
 import { PlaylistCreate } from "../forms/PlaylistCreate";
 
 import { ACTIONS } from "utils/flux/actions";
@@ -43,7 +42,7 @@ export class PlaylistsPanel extends Component {
                         <img src="/static/img/plus.svg" alt="error"/>
                     </Button>
                 }
-                {USER_STORAGE.getUser() && <Link to="/profile/tracks/favorite" className="playlists-panel__favorite">
+                {USER_STORAGE.getUser() && <Link to="/all/tracks/favorite" className="playlists-panel__favorite">
                     <img src="/static/img/like-active.svg" />
                 </Link>}
                 <section className="playlists-panel__playlists">

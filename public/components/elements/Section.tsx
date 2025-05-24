@@ -8,11 +8,8 @@ export class Section extends Component {
         title: string,
         horizontal?: boolean,
         wrap?: boolean,
+        all_link?: string,
         [key: string]: any
-    } = {
-        title: '',
-        horizontal: false,
-        wrap: false
     }
 
     render() {

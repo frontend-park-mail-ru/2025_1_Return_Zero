@@ -21,7 +21,7 @@ export abstract class Component {
     setState(state: Record<string, any>) {
         this.state = { ...this.state, ...state };
         const tempComponentVNode = {...this.vnode!};
-        setTimeout(update, 0, this.vnode!, tempComponentVNode);
+        update(this.vnode, tempComponentVNode);
     }
 
     abstract render(): VNode[];

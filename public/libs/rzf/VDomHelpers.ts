@@ -1,4 +1,3 @@
-import { Like } from 'components/elements/Like';
 import { VNode, VNodeType, TextVNode, TagVNode, ComponentVNode } from './VDom';
 import { render, destroy, update, putInDom } from './VDom';
 

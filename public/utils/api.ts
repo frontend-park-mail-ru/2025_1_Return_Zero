@@ -212,7 +212,7 @@ export class API {
     }
 
     static async getFavoriteAlbums(username: string, limit?: number, offset?: number): Promise<TemplateAPI.AlbumsResponse> {
-        const albums_resp = await API.get(API.addParams(`/user/${username}/albums`, {limit, offset}));
+        const albums_resp = await API.get(API.addParams(`/user/${'me'}/albums`, {limit, offset}));
         albums_resp.body = albums_resp.body.map((album: AppTypes.Album) =>
             API.extendAlbum(album)
         );
