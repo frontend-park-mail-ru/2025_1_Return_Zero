@@ -39,7 +39,8 @@ export class DisplayAllPage extends Component {
                     title="Любимые треки" retriever={() => API.getFavoriteTracks(USER_STORAGE.getUser()?.username, ALL_LIMIT).then(resp => resp.body)}
                     displayer={(track: AppTypes.Track) => <TrackLine track={track} />} />
                 <Route path="^/all/tracks/history/" exact component={AllPage<AppTypes.Track>}
-                    title="История прослушивания" retriever={() => API.getHistoryTracks(ALL_LIMIT).then(resp => resp.body)} />
+                    title="История прослушивания" retriever={() => API.getHistoryTracks(ALL_LIMIT).then(resp => resp.body)}
+                    displayer={(track: AppTypes.Track) => <TrackLine track={track} />} />
                 
                 <Route path="^/all/albums/favorite/" exact component={AllPage<AppTypes.Artist>}
                     title="Любимые альбомы" retriever={() => API.getFavoriteAlbums(USER_STORAGE.getUser()?.username, ALL_LIMIT).then(resp => resp.body)} 
