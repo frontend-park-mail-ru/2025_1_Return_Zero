@@ -1,4 +1,3 @@
-import { Like } from 'components/elements/Like';
 import { VNode, VNodeType, TextVNode, TagVNode, ComponentVNode } from './VDom';
 import { render, destroy, update, putInDom } from './VDom';
 
@@ -195,5 +194,4 @@ export function updateChildren(vnode: TagVNode | ComponentVNode, newVNode: TagVN
         destroy(vnode.children.at(-1)!);
     }
 }
-
 

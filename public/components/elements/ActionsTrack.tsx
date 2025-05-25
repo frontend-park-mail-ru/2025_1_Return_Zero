@@ -11,6 +11,7 @@ import { USER_STORAGE, PLAYER_STORAGE } from "utils/flux/storages";
 import { debounce } from "utils/funcs";
 import { API } from "utils/api";
 
+import Router from "libs/rzf/Router";
 
 export class ActionsTrack extends Component {
     props: {
@@ -30,6 +31,7 @@ export class ActionsTrack extends Component {
                     <ActionsRemoveFromPlaylist track={track} playlist={playlist} onRemove={this.props.removeFromPlaylist} />}
                 <ActionsAddToQueue track={track} />
                 <ActionsCopyLink link={'Затычка'} />
+                <ActionsStartJam track={track} />
                 <Link className="actions-item" to={this.props.track.album_page}>Перейти к альбому</Link>
                 <Link className="actions-item" to={this.props.track.artists[0].artist_page}>Перейти к исполнителю</Link>
             </Actions>
@@ -103,6 +105,28 @@ class ActionsAddToQueue extends Component {
     render() {
         return [
             <span className="actions-item" onClick={this.onAdd}>Добавить в очередь</span>
+        ].filter(Boolean)
+    }
+}
+
+class ActionsStartJam extends Component {
+    props: {
+        track: AppTypes.Track;
+        [key: string]: any;
+    }
+
+    onClick = debounce(async (e: Event) => {
+        const response = await API.createRoom(this.props.track.id.toString(), 0);
+        if (response.status === 200 || response.status === 201) {
+            Router.push(`/jam/${response.body.room_id}`, {});
+        } else {
+            console.error(response.body);
+        }
+    })
+
+    render() {
+        return [
+            <span className="actions-item" onClick={this.onClick}>Начать джем</span>
         ].filter(Boolean)
     }
 }

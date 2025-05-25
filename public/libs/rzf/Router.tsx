@@ -77,7 +77,7 @@ export class Route extends Component {
     
     processPath(){
         // process user path like /home/:id<int>/likes/:like_id to correct regex
-        this.path = this.props.path.replace(/:\w+<int>/g, '(\\d+)').replace(/:\w+/g, '(\\w+)');
+        this.path = this.props.path.replace(/:\w+<int>/g, '(\\d+)').replace(/:\w+/g, '((\\w|-)+)');
 
         this.names = [];
         this.types = [];

@@ -3,10 +3,10 @@ import { API } from "utils/api";
 
 import playerStorage from "utils/flux/PlayerStorage";
 import { ACTIONS } from "utils/flux/actions";
-import { TRACKS_STORAGE } from "utils/flux/storages";
+import { PLAYER_STORAGE, TRACKS_STORAGE } from "utils/flux/storages";
 import Dispatcher from "libs/flux/Dispatcher";
 import { Like } from "components/elements/Like";
-
+import Broadcast from "common/broadcast";
 
 export class LikeBtn extends Component {
     state: {
@@ -18,43 +18,33 @@ export class LikeBtn extends Component {
     componentDidMount() {
         // подписки
         TRACKS_STORAGE.subscribe(this.onAction);
+        PLAYER_STORAGE.subscribe(this.onAction);
+    }
+
+    componentWillUnmount() {
+        TRACKS_STORAGE.unsubscribe(this.onAction);
+        PLAYER_STORAGE.unsubscribe(this.onAction);
     }
 
     onAction = (action: any): void => {
-        switch (true) {
-            case action instanceof ACTIONS.TRACK_LIKE:
-                this.onLike(false);
-                break;
-        }
-
-        this.setState({ is_liked: this.props.track.is_liked });  
+        this.setState({is_liked: TRACKS_STORAGE.isLiked(playerStorage.currentTrack)});
     }
 
-    onLike = async (touchTrackLike: boolean) => {
+    onLike = () => {
         try {
-            if (touchTrackLike) {
-                const res = (await API.postTrackLike(this.props.track.id, !this.props.track.is_liked)).body;
-                Dispatcher.dispatch(new ACTIONS.TRACK_LIKE(this.props.track));
-            } else {
-                Dispatcher.dispatch(new ACTIONS.QUEUE_LIKE_CURRENT_TRACK(null));
-            }
+            Dispatcher.dispatch(new ACTIONS.TRACK_LIKE(this.props.track));
         } catch (e) {
             console.error(e);
             return;
         }
     }
-
-    componentWillUnmount() {
-        TRACKS_STORAGE.unsubscribe(this.onAction);
-    }
     
     render() {
-        console.log(this.props.track.is_liked)
         return [ 
             <Like 
                 className="icon" 
-                active={this.props.track.is_liked} 
-                onClick={() => this.onLike(true)} 
+                active={this.state.is_liked} 
+                onClick={this.onLike} 
             />
         ];
     }

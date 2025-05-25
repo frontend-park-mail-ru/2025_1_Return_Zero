@@ -2,7 +2,6 @@ import * as VDomHelpers from './VDomHelpers'
 import { Component, ComponentConstructor } from "./Component";
 import { destroyTag, cleanUpTag, hTag, renderTag, updateTag } from "./TagVNode";
 import { destroyComponent, cleanUpComponent, hComponent, renderComponent, updateComponent } from "./ComponentVNode";
-import { Like } from 'components/elements/Like';
 
 export enum VNodeType {
     TEXT,

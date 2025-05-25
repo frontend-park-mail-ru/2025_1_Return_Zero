@@ -21,6 +21,7 @@ import { SearchPage } from "pages/SearchPage";
 
 import { ProfilePage } from "pages/ProfilePage";
 import { SettingsPage } from "pages/SettingsPage";
+import { JamPage } from "pages/JamPage";
 
 import "./layout.scss";
 
@@ -47,6 +48,8 @@ export default class MainLayout extends Component {
                 <Route path="^/settings/" exact component={SettingsPage} />
 
                 <Route path="^/search/" component={SearchPage} />
+
+                <Route path="^/jam/:room_id/" exact component={JamPage} />
 
                 <Route path="#login$" component={LoginForm} />
                 <Route path="#register$" component={SignupForm} />
