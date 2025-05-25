@@ -4,7 +4,9 @@ import { TrackCard, TrackLine } from "components/track/Track";
 import { Special } from "components/special/Special";
 import { Section } from "components/elements/Section";
 
-import { USER_STORAGE, JAM_STORAGE } from "utils/flux/storages";
+import { USER_STORAGE, JAM_STORAGE, PLAYER_STORAGE } from "utils/flux/storages";
+
+
 import { ACTIONS } from "utils/flux/actions";
 import { API } from "utils/api";
 
@@ -25,7 +27,7 @@ export class JamPage extends Component {
     componentDidMount() {
         USER_STORAGE.subscribe(this.onAction);
         JAM_STORAGE.subscribe(this.onAction);
-
+        PLAYER_STORAGE.subscribe(this.onAction);
         this.fetchData();
     }
 
@@ -57,22 +59,26 @@ export class JamPage extends Component {
                     listeners: JAM_STORAGE.listeners,
                     now_playing: JAM_STORAGE.now_playing,
                 });
-                break;
-            case action instanceof ACTIONS.JAM_SET_TRACK:
-                this.setState({ ready: false });
+
+                for (const listener of JAM_STORAGE.listeners) {
+                    if (!listener.ready) {
+                        if (PLAYER_STORAGE.isPlaying) {
+                            Dispatcher.dispatch(new ACTIONS.JAM_PAUSE(null));
+                        }
+                    }
+                }
+
                 break;
             case action instanceof ACTIONS.JAM_OPEN:
-                this.setState({ ready: false });
                 break;
             case action instanceof ACTIONS.AUDIO_RETURN_METADATA:
-                this.setState({ ready: true });
+                Dispatcher.dispatch(new ACTIONS.JAM_HOST_LOAD(PLAYER_STORAGE.currentTrack?.id.toString() || ''));
+                Dispatcher.dispatch(new ACTIONS.JAM_READY(null));
                 break;
         }
     }
 
     render() {
-        console.warn(this.state.leader);
-
         return [
             <div className="page page--jam">
                 <Section title="Совместное прослушивание" horizontal>
@@ -100,8 +106,11 @@ export class JamPage extends Component {
                             <div className="page__listener" key={listener.id}>
                                 <img className="page__listener__img" src={listener.img_url} alt={listener.name} />
                                 <span className="page__listener__name">{listener.name}</span>
-                                {this.state.ready ? <Preloader width={1.5} height={1.5} /> 
-                                : <img className="page__listeners__status" src="/static/img/ready.svg" />}
+                                {
+                                    listener.ready ?
+                                        <img className="page__listeners__status" src="/static/img/ready.svg" /> 
+                                        : <Preloader width={1.5} height={1.5} />
+                                }
                             </div>
                         ))}
                     </div>

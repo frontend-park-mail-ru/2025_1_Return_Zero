@@ -306,9 +306,10 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
 
     loadTrack(src: string, play: boolean = true) {
         this.stor.audio.src = src;
+        this.stor.audio.load();
 
-        this.stor.audio.removeEventListener('canplaythrough', this.onMeta);
-        this.stor.audio.addEventListener('canplaythrough', this.onMeta, { once: true });
+        this.stor.audio.removeEventListener('canplay', this.onMeta);
+        this.stor.audio.addEventListener('canplay', this.onMeta, { once: true });
 
         this.callSubs(new ACTIONS.AUDIO_SET_TRACK(null));
         if (this.stor.currentTrack) {

@@ -17,6 +17,7 @@ export class TogglePlayBtn extends Component {
 
     onTogglePlayAction = () => {
         Dispatcher.dispatch(new ACTIONS.AUDIO_TOGGLE_PLAY(null));
+        Dispatcher.dispatch(new ACTIONS.JAM_PLAY(null));
     }
 
     componentWillUnmount() {

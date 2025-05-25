@@ -49,6 +49,7 @@ class MobileDragProgressBar {
 
     onSetCurrentTime = (time: number) => {
         Dispatcher.dispatch(new ACTIONS.AUDIO_SET_CURRENT_TIME(time));
+        Dispatcher.dispatch(new ACTIONS.JAM_SEEK(time));
     }
 
     private initTouchEvents() {

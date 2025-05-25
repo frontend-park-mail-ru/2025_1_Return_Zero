@@ -40,4 +40,10 @@ export namespace ACTIONS {
     export class JAM_CLOSE extends Action<null> {};
     export class JAM_UPDATE extends Action<null> {};
     export class JAM_SET_TRACK extends Action<AppTypes.Track> {};
+    export class JAM_PLAY extends Action<null> {};
+    export class JAM_SEEK extends Action<number> {};
+    export class JAM_PAUSE extends Action<null> {};
+    export class JAM_READY extends Action<null> {};
+    export class JAM_HOST_LOAD extends Action<string> {};
 }
+
