@@ -7,6 +7,8 @@ import { API } from "utils/api";
 import { Stream } from "common/stream";
 
 import PlayerSync from "common/playerSync";
+import Broadcast from "common/broadcast";
+import TracksStorage from "./TracksStorage";
 
 type PlayerStorageStor = {
     audio: HTMLAudioElement;
@@ -53,7 +55,6 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         if (event.key === 'player-action') {
             const action = JSON.parse(event.newValue);
             
-            console.log('action', action);
             switch (action.action) {
                 case 'previousTrack':
                     this.previousTrack();
@@ -94,13 +95,13 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
                 case 'addSection':
                     const msg = action.payload;
                     console.warn('addSection', action.payload);
-                    this.processNewTracks(msg.currentTrack as AppTypes.Track, msg.tracks as AppTypes.Track[]);
+                    this.processNewTracks(msg.currentTrack as AppTypes.Track, msg.tracks as AppTypes.Track[], true);
                     break;
                 case 'manualAddTrack':
                     this.manualAddTrack(action.payload);
                     break;
-                case 'likeCurrentTrack':
-                    this.likeCurrentTrack();
+                case 'processNewTracks':
+                    this.processNewTracks(action.payload.currentTrack, action.payload.tracks);
                     break;
             }
         }
@@ -114,6 +115,16 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
 
         this.init();
         this.stor.initialized = true;
+    }
+
+    clear() {
+        this.stor.audio = null;
+        this.stor.stream = null;
+        this.stor.audioLevel = 0.5;
+        this.stor.prevAudioLevel = 0.5;
+        this.stor.currentTime = 0;
+        this.stor.duration = 0;
+        this.stor.playedOnce = false;
     }
 
     init() {
@@ -223,8 +234,14 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
             case action instanceof ACTIONS.QUEUE_ADD_MANUAL:
                 this.doAction(action, 'manualAddTrack', () => this.manualAddTrack(action.payload), action.payload);
                 break;
-            case action instanceof ACTIONS.QUEUE_LIKE_CURRENT_TRACK:
-                this.doAction(action, 'likeCurrentTrack', () => this.likeCurrentTrack(), null);
+            case action instanceof ACTIONS.QUEUE_PROCESS_NEW_TRACKS:
+                this.doAction(action, 'processNewTracks', () => {
+                    this.processNewTracks(action.payload.currentTrack, action.payload.tracks);
+                }, action.payload);
+                break;
+            case action instanceof ACTIONS.AUDIO_RETURN_METADATA:
+                this.callSubs(action);
+                break;
         }
     }
 
@@ -304,8 +321,22 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         this.stor.audio.pause();
     }
 
+    private onMeta = () => {
+        Broadcast.send('loadedMetadata', { trackId: this.stor.currentTrack.id });
+        this.callSubs(new ACTIONS.AUDIO_RETURN_METADATA(null));
+    };
+
     loadTrack(src: string, play: boolean = true) {
         this.stor.audio.src = src;
+        
+        this.stor.audio.removeEventListener('canplay', this.onMeta);
+        this.stor.audio.addEventListener('canplay', this.onMeta, { once: true });
+
+        this.callSubs(new ACTIONS.AUDIO_SET_TRACK(null));
+        if (this.stor.currentTrack) {
+            Broadcast.send('trackLike', { trackId: this.stor.currentTrack.id, is_liked: this.stor.currentTrack.is_liked });
+            TracksStorage.addTrack(this.stor.currentTrack);
+        }
 
         if (this.stor.audio.paused && play) {
             this.togglePlay();
@@ -426,12 +457,16 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
             });
     }
 
-    private processNewTracks(currentTrack: AppTypes.Track, tracks: AppTypes.Track[]): void {
+    processNewTracks(currentTrack: AppTypes.Track, tracks: AppTypes.Track[], onPause: boolean = false): void {
         const tracksIds = tracks.map(t => t.id.toString());
         const trackIdx = tracks.findIndex(t => t.id === currentTrack.id);
 
         this.clearQueue();
         this.addTrack(tracksIds, trackIdx);
+
+        if (onPause) {
+            this.pause();
+        }
     }
 
     private saveQueue(): void {
@@ -541,10 +576,6 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         this.stor.shuffled = false;
     }
 
-    public setLiked(is_liked: boolean) {
-        this.stor.currentTrack.is_liked = is_liked;
-    }
-
     private async setTrack(play: boolean = true, isNext?: boolean): Promise<void> {
         let trackId: string | null = null;
         
@@ -573,13 +604,6 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
 
         await this.stor.stream.updateStream();
         await this.stor.stream.createStream();
-    }
-
-    likeCurrentTrack() {
-        console.warn('Before ', this.currentTrack.is_liked);
-        this.currentTrack.is_liked = !this.currentTrack.is_liked;
-        console.warn('Now ', this.currentTrack.is_liked);
-        this.saveCurrentTrack();
     }
 
     // GETTERS

@@ -20,6 +20,7 @@ import { PlaylistPage } from "pages/PlaylistPage";
 
 import { ProfilePage } from "pages/ProfilePage";
 import { SettingsPage } from "pages/SettingsPage";
+import { JamPage } from "pages/JamPage";
 
 import { DisplayAllPage } from "pages/DisplayAllPage";
 import { SearchPage } from "pages/SearchPage";
@@ -53,6 +54,7 @@ export default class MainLayout extends Component {
                 <Route path="^/search/" component={SearchPage} />
 
                 <Route path="^/label/" component={LabelPage} />
+                <Route path="^/jam/:room_id/" exact component={JamPage} />
 
                 <Route path="#login$" component={LoginForm} />
                 <Route path="#register$" component={SignupForm} />

@@ -6,9 +6,9 @@ export namespace ACTIONS {
     export class USER_CHANGE extends Action<AppTypes.User> {}
     export class USER_LOGOUT extends Action<null> {}
 
-    export class TRACK_PLAY extends Action<AppTypes.Track> {}  // Переключает играющий трек
-    export class TRACK_STATE_CHANGE extends Action<{playing: boolean}> {}  // Приостанавливает или воспроизводит играющий трек
-    export class TRACK_LIKE extends Action<AppTypes.Track> {} // Устанавливает лайк или убирает лайк у трека
+    export class TRACK_LIKE extends Action<AppTypes.Track> {}
+    export class TRACK_ADD extends Action<AppTypes.Track> {}
+    export class TRACK_LIKE_STATE extends Action<{ trackId: number, is_liked: boolean }> {}
 
     export class CONTENT_PLAYLISTS_CHANGED extends Action<null> {}
     export class LOAD_PLAYLISTS extends Action<null> {}
@@ -25,6 +25,7 @@ export namespace ACTIONS {
     export class AUDIO_SET_VOLUME extends Action<number> {};
     export class AUDIO_SET_CURRENT_TIME extends Action<number> {};
     export class AUDIO_TOGGLE_MUTE extends Action<null> {};
+    export class AUDIO_RETURN_METADATA extends Action<null> {};
     
     export class QUEUE_REPEAT extends Action<null> {};
     export class QUEUE_UNREPEAT extends Action<null> {};
@@ -35,5 +36,14 @@ export namespace ACTIONS {
     export class QUEUE_ADD_SECTION extends Action<AppTypes.Track> {};
     export class QUEUE_ADD_MANUAL extends Action<AppTypes.Track> {};
     export class QUEUE_LIKE_CURRENT_TRACK extends Action<null> {};
-}
+    export class QUEUE_PROCESS_NEW_TRACKS extends Action<{ currentTrack: AppTypes.Track, tracks: AppTypes.Track[] }> {};
 
+    export class JAM_OPEN extends Action<string> {};
+    export class JAM_CLOSE extends Action<null> {};
+    export class JAM_UPDATE extends Action<null> {};
+    export class JAM_SET_TRACK extends Action<AppTypes.Track> {};
+    export class JAM_SEEK extends Action<number> {};
+    export class JAM_READY extends Action<null> {};
+    export class JAM_HOST_LOAD extends Action<string> {};
+    export class JAM_LEAVE extends Action<null> {};
+}

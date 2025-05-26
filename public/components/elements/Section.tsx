@@ -27,3 +27,4 @@ export class Section extends Component {
         ]
     }
 }
+

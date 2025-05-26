@@ -105,7 +105,7 @@ export class PlayerMobileFullscreen extends Component {
 
                     <div class="fullscreen-mobile-player__container__widgets">
                         <LikeBtn track={playerStorage.currentTrack} />
-                        <div style={{ order: 2 }} className="song-text">
+                        <div className="song-text">
                             <SongName />
                             <SongArtist onResize={onResize} />
                         </div>

@@ -361,6 +361,10 @@ export class API {
         return await API.postMultipart(`/user/me/avatar`, data);
     }
 
+    static async createRoom(track_id: string, position: number) {
+        return await API.post('/jams', {track_id, position});
+    }
+
     static async putUser(
         data: ParamTypes.PutUser
     ): Promise<TemplateAPI.UserResponse> {

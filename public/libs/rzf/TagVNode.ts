@@ -171,3 +171,4 @@ export function updateTag(vnode: TagVNode, newVNode: TagVNode) {
 
     VDomHelpers.updateChildren(vnode, newVNode);
 }
+

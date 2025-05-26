@@ -12,6 +12,7 @@ import { ActionsTrack } from "../elements/Actions/ActionsTrack";
 
 import "./Track.scss";  
 
+
 function durationToString(duration: number): string {
     const minutes = Math.floor(duration / 60);
     const seconds = duration % 60;
@@ -19,6 +20,7 @@ function durationToString(duration: number): string {
 }
 
 import playerStorage from "utils/flux/PlayerStorage";
+import Broadcast from "common/broadcast";
 
 abstract class TrackBase extends Component {
     props: {
@@ -45,6 +47,7 @@ abstract class TrackBase extends Component {
         super(props);
 
         this.state.is_liked = props.track.is_liked;
+        Dispatcher.dispatch(new ACTIONS.TRACK_ADD(props.track));
         this.state.playing = this.checkPlaying();
     }
 
@@ -73,7 +76,10 @@ abstract class TrackBase extends Component {
     onAction = (action: any): void => {
         switch (true) {
             case action instanceof ACTIONS.TRACK_LIKE:
-                this.props.track.id === action.payload.id && this.setState({is_liked: action.payload.is_liked});
+                this.props.track.id === action.payload.id && this.setState({is_liked: TRACKS_STORAGE.isLiked(this.props.track)});
+                break;
+            case action instanceof ACTIONS.TRACK_LIKE_STATE:
+                this.props.track.id === action.payload.trackId && this.setState({is_liked: TRACKS_STORAGE.isLiked(this.props.track)});
                 break;
         }
     }
@@ -92,8 +98,7 @@ abstract class TrackBase extends Component {
 
     onLike = async () => {
         try {
-            const res = (await API.postTrackLike(this.props.track.id, !this.state.is_liked)).body;
-            Dispatcher.dispatch(new ACTIONS.TRACK_LIKE({...this.props.track, is_liked: !this.state.is_liked}));
+            Dispatcher.dispatch(new ACTIONS.TRACK_LIKE(this.props.track));
         } catch (e) {
             console.error(e);
             return;
