@@ -234,6 +234,12 @@ class JamStorage extends Storage<JamStorageStor> {
 
                 this.loadTrack(data.track_id);
                 break;
+
+            case 'jam:closed':
+                this.closeWebSocket();
+                this.callSubs(new ACTIONS.JAM_CLOSE(null));
+                Dispatcher.dispatch(new ACTIONS.AUDIO_PAUSE(null));
+                break;
         }
 
         this.callSubs(new ACTIONS.JAM_UPDATE(null));

@@ -31,6 +31,9 @@ export class ActionsTrack extends Component {
             case action instanceof ACTIONS.JAM_OPEN:
                 this.setState({ isJam: true });
                 break;
+            case action instanceof ACTIONS.JAM_UPDATE:
+                this.setState({ isJam: JAM_STORAGE.roomId ? true : false });
+                break;
         }
     }
 
@@ -57,11 +60,11 @@ export class ActionsTrack extends Component {
                     <ActionsRemoveFromPlaylist track={track} playlist={playlist} onRemove={this.props.removeFromPlaylist} />}
                 <ActionsAddToQueue track={track} />
                 <ActionsCopyLink link={URL.parse(track.album_page + `#track-${track.id}`, location.href).toString()} />
-                {this.state.isJam 
-                    ? <ActionsGoToJam room_id={JAM_STORAGE.roomId} />
-                    : <ActionsStartJam track={track} />
+                {!this.state.isJam && USER_STORAGE.getUser() &&
+                    <ActionsStartJam track={track} />
                 }
-                {this.state.isJam && <ActionsLeaveJam />}
+                {this.state.isJam && USER_STORAGE.getUser() && <ActionsLeaveJam />}
+                {this.state.isJam && USER_STORAGE.getUser() && <ActionsGoToJam room_id={JAM_STORAGE.roomId} />}
 
                 <ActionsGoToAlbum album_page={this.props.track.album_page} />
                 <ActionsGoToArtist artist_page={this.props.track.artists[0].artist_page} />

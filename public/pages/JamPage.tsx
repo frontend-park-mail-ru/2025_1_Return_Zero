@@ -79,6 +79,14 @@ export class JamPage extends Component {
     }
 
     render() {
+        if (!USER_STORAGE.getUser()) {
+            return [
+                <div className="page page--jam">
+                    <h1>Вы не авторизованы</h1>
+                </div>
+            ]
+        }
+
         return [
             <div className="page page--jam">
                 <Section title="Совместное прослушивание">
