@@ -100,6 +100,9 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
                 case 'manualAddTrack':
                     this.manualAddTrack(action.payload);
                     break;
+                case 'processNewTracks':
+                    this.processNewTracks(action.payload.currentTrack, action.payload.tracks);
+                    break;
             }
         }
 
@@ -112,6 +115,16 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
 
         this.init();
         this.stor.initialized = true;
+    }
+
+    clear() {
+        this.stor.audio = null;
+        this.stor.stream = null;
+        this.stor.audioLevel = 0.5;
+        this.stor.prevAudioLevel = 0.5;
+        this.stor.currentTime = 0;
+        this.stor.duration = 0;
+        this.stor.playedOnce = false;
     }
 
     init() {
@@ -221,6 +234,14 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
             case action instanceof ACTIONS.QUEUE_ADD_MANUAL:
                 this.doAction(action, 'manualAddTrack', () => this.manualAddTrack(action.payload), action.payload);
                 break;
+            case action instanceof ACTIONS.QUEUE_PROCESS_NEW_TRACKS:
+                this.doAction(action, 'processNewTracks', () => {
+                    this.processNewTracks(action.payload.currentTrack, action.payload.tracks);
+                }, action.payload);
+                break;
+            case action instanceof ACTIONS.AUDIO_RETURN_METADATA:
+                this.callSubs(action);
+                break;
         }
     }
 
@@ -301,13 +322,13 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
     }
 
     private onMeta = () => {
+        Broadcast.send('loadedMetadata', { trackId: this.stor.currentTrack.id });
         this.callSubs(new ACTIONS.AUDIO_RETURN_METADATA(null));
     };
 
     loadTrack(src: string, play: boolean = true) {
         this.stor.audio.src = src;
-        this.stor.audio.load();
-
+        
         this.stor.audio.removeEventListener('canplay', this.onMeta);
         this.stor.audio.addEventListener('canplay', this.onMeta, { once: true });
 

@@ -22,6 +22,9 @@ class Broadcast {
             case 'trackLike':
                 Dispatcher.dispatch(new ACTIONS.TRACK_LIKE_STATE(payload));
                 break;
+            case 'loadedMetadata':
+                Dispatcher.dispatch(new ACTIONS.AUDIO_RETURN_METADATA(null));
+                break;
         }
     }
 }

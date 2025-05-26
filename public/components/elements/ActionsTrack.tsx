@@ -6,20 +6,46 @@ import { TrackToPlaylist } from "components/dialogs/TrackToPlaylist";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
-import { USER_STORAGE, PLAYER_STORAGE } from "utils/flux/storages";
+import { USER_STORAGE, PLAYER_STORAGE, JAM_STORAGE } from "utils/flux/storages";
 
 import { debounce } from "utils/funcs";
 import { API } from "utils/api";
 
 import Router from "libs/rzf/Router";
+import { Action } from "libs/flux/Action";
 
 export class ActionsTrack extends Component {
+    componentDidMount() {
+        JAM_STORAGE.subscribe(this.onAction);
+    }
+
+    componentWillUnmount() {
+        JAM_STORAGE.unsubscribe(this.onAction);
+    }
+
+    onAction = (action: Action) => {
+        switch (true) {
+            case action instanceof ACTIONS.JAM_LEAVE:
+                this.setState({ isJam: false });
+                break;
+            case action instanceof ACTIONS.JAM_OPEN:
+                this.setState({ isJam: true });
+                break;
+        }
+    }
+
     props: {
         track: AppTypes.Track;
         playlist?: AppTypes.Playlist;
         removeFromPlaylist?: () => void;
         [key: string]: any;
     }
+
+    state = {
+        isJam: JAM_STORAGE.roomId ? true : false,
+    }
+
+
 
     render() {
         const { track, playlist } = this.props;
@@ -31,7 +57,13 @@ export class ActionsTrack extends Component {
                     <ActionsRemoveFromPlaylist track={track} playlist={playlist} onRemove={this.props.removeFromPlaylist} />}
                 <ActionsAddToQueue track={track} />
                 <ActionsCopyLink link={'Затычка'} />
-                <ActionsStartJam track={track} />
+                
+                {this.state.isJam 
+                    ? <ActionsGoToJam room_id={JAM_STORAGE.roomId} />
+                    : <ActionsStartJam track={track} />
+                }
+                {this.state.isJam && <ActionsLeaveJam />}
+
                 <Link className="actions-item" to={this.props.track.album_page}>Перейти к альбому</Link>
                 <Link className="actions-item" to={this.props.track.artists[0].artist_page}>Перейти к исполнителю</Link>
             </Actions>
@@ -130,3 +162,37 @@ class ActionsStartJam extends Component {
         ].filter(Boolean)
     }
 }
+
+class ActionsGoToJam extends Component {
+    props: {
+        [key: string]: any;
+    }
+
+    onClick = debounce(async (e: Event) => {
+        Router.push(`/jam/${this.props.room_id}`, {});
+    })
+
+    render() {
+        return [
+            <span className="actions-item" onClick={this.onClick}>Перейти в джем</span>
+        ].filter(Boolean)
+    }
+}
+
+
+class ActionsLeaveJam extends Component {
+    props: {
+        [key: string]: any;
+    }
+
+    onClick = debounce(async (e: Event) => {
+        Dispatcher.dispatch(new ACTIONS.JAM_LEAVE(null));
+    })
+
+    render() {
+        return [
+            <span className="actions-item" onClick={this.onClick}>Покинуть джем</span>
+        ].filter(Boolean)
+    }
+}
+

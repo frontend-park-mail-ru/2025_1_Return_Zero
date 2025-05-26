@@ -58,19 +58,6 @@ class JamStorage extends Storage<JamStorageStor> {
             case action instanceof ACTIONS.JAM_UPDATE:
                 this.callSubs(action);
                 break;
-            case action instanceof ACTIONS.JAM_PLAY:
-                if (this.stor.isLeader) {
-                    const type = playerStorage.isPlaying ? 'host:play' : 'host:pause';
-                    console.warn('Sending message:', type);
-                    this.stor.ws.send(JSON.stringify({ type: type }));
-                }
-                break;
-            case action instanceof ACTIONS.JAM_PAUSE:
-                if (this.stor.isLeader) {
-                    this.stor.ws.send(JSON.stringify({ type: 'host:pause' }));
-                }
-                playerStorage.pause();
-                break;
             case action instanceof ACTIONS.JAM_SEEK:
                 if (this.stor.isLeader) {
                     this.stor.ws.send(JSON.stringify({ type: 'host:seek', position: action.payload }));
@@ -82,6 +69,10 @@ class JamStorage extends Storage<JamStorageStor> {
                 break;
             case action instanceof ACTIONS.JAM_HOST_LOAD:
                 this.hostLoad(action.payload);
+                break;
+            case action instanceof ACTIONS.JAM_LEAVE:
+                this.closeWebSocket();
+                this.callSubs(action);
                 break;
         }
     }
@@ -98,14 +89,24 @@ class JamStorage extends Storage<JamStorageStor> {
         this.callSubs(new ACTIONS.JAM_UPDATE(null));
     }
 
+    private onPlayerAction(action: Action) {
+        if (action instanceof ACTIONS.AUDIO_TOGGLE_PLAY) {
+            if (this.stor.isLeader) {
+                const type = playerStorage.isPlaying ? 'host:play' : 'host:pause';
+                this.stor.ws.send(JSON.stringify({ type: type }));
+            }
+        }
+    }
+
     public openWebSocket(roomId: string) {
         if (this.stor.ws) {
             if (this.stor.roomId === roomId) {
                 return;
             }
-            this.stor.ws.close();
+            this.closeWebSocket();
         }
-
+        playerStorage.subscribe(this.onPlayerAction.bind(this));
+        
         this.stor.ws = new WebSocket(`${protocol}://${host}/api/v1/jams/${roomId}`);
         this.stor.roomId = roomId;
 
@@ -121,7 +122,6 @@ class JamStorage extends Storage<JamStorageStor> {
     }
 
     private onOpen() {
-        console.warn('WebSocket connection opened');
     }
 
     private async loadTrack(trackId: string) {
@@ -136,14 +136,11 @@ class JamStorage extends Storage<JamStorageStor> {
             }
         }
 
-        this.callSubs(new ACTIONS.JAM_UPDATE(null));
-
         console.log('Loadede track:', track);
-        playerStorage.processNewTracks(track, [track]);
+        Dispatcher.dispatch(new ACTIONS.QUEUE_PROCESS_NEW_TRACKS({ currentTrack: track, tracks: [track] }));
         this.callSubs(new ACTIONS.JAM_SET_TRACK(track));
 
         this.stor.now_playing = track;
-        this.callSubs(new ACTIONS.JAM_UPDATE(null));
     }
 
     private onMessage(event: MessageEvent) {
@@ -162,11 +159,15 @@ class JamStorage extends Storage<JamStorageStor> {
                 }
 
                 for (const [id, name] of Object.entries(data.user_names)) {
+                    if (id === host_id.toString()) {
+                        continue;
+                    }
+
                     this.stor.listeners.push({
                         id: id.toString(),
                         img_url: data.user_images[id.toString()],
                         name: name.toString(),
-                        ready: name === USER_STORAGE.getUser().username ? false : true,
+                        ready: data.loaded[id],
                     });
                 }
 
@@ -197,13 +198,15 @@ class JamStorage extends Storage<JamStorageStor> {
                     return;
                 }
 
-                playerStorage.pause();
+                Dispatcher.dispatch(new ACTIONS.AUDIO_TOGGLE_PLAY(null));
                 break;
 
             case 'play':
-                if (!playerStorage.isPlaying) {
-                    playerStorage.play();
+                if (this.stor.isLeader) {
+                    return;
                 }
+
+                Dispatcher.dispatch(new ACTIONS.AUDIO_TOGGLE_PLAY(null));
                 break;
 
             case 'seek':
@@ -211,20 +214,24 @@ class JamStorage extends Storage<JamStorageStor> {
                     return;
                 }
 
-                playerStorage.setCurrentTime(data.position);
+                Dispatcher.dispatch(new ACTIONS.AUDIO_SET_CURRENT_TIME(data.position));
                 break;
 
             case 'ready':
-                this.stor.listeners = this.stor.listeners.map(listener => {
-                    if (listener.id === data.user_id.toString()) {
-                        return { ...listener, ready: true };
+                for (const listener of this.stor.listeners) {
+                    if (data.loaded[listener.id]) {
+                        listener.ready = true;
                     }
-                    return listener;
-                });
+                }
+
+                this.callSubs(new ACTIONS.JAM_UPDATE(null));
                 break;
 
             case 'load':
                 if (this.stor.isLeader) {
+                    this.stor.now_playing = playerStorage.currentTrack;
+                    this.callSubs(new ACTIONS.JAM_SET_TRACK(playerStorage.currentTrack));
+                    this.callSubs(new ACTIONS.JAM_UPDATE(null));
                     return;
                 }
 
@@ -241,6 +248,11 @@ class JamStorage extends Storage<JamStorageStor> {
         }
 
         this.stor.ws.close();
+        this.stor.ws = null;
+        this.stor.roomId = null;
+        this.stor.leader = null;
+        this.stor.listeners = [];
+        this.stor.now_playing = null;
     }
 
     get leader() {
@@ -257,6 +269,10 @@ class JamStorage extends Storage<JamStorageStor> {
 
     get now_playing() {
         return this.stor.now_playing;
+    }
+
+    get roomId() {
+        return this.stor.roomId;
     }
 }
 

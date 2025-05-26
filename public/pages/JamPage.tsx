@@ -16,12 +16,13 @@ import './pages.scss';
 import Dispatcher from "libs/flux/Dispatcher";
 import { Preloader } from "components/preloader/Preloader";
 
+import playerStorage from "utils/flux/PlayerStorage";
+
 export class JamPage extends Component {
     state = {
-        leader: null as Leader | null,
-        listeners: null as Listener[] | null,
-        now_playing: null as AppTypes.Track | null,
-        ready: false as boolean,
+        leader: JAM_STORAGE.leader as Leader | null,
+        listeners: JAM_STORAGE.listeners as Listener[] | null,
+        now_playing: JAM_STORAGE.now_playing as AppTypes.Track | null,
     }
 
     componentDidMount() {
@@ -34,6 +35,7 @@ export class JamPage extends Component {
     componentWillUnmount(): void {
         USER_STORAGE.unsubscribe(this.onAction);
         JAM_STORAGE.unsubscribe(this.onAction);
+        PLAYER_STORAGE.unsubscribe(this.onAction);
     }
 
     fetchData() {
@@ -59,14 +61,6 @@ export class JamPage extends Component {
                     listeners: JAM_STORAGE.listeners,
                     now_playing: JAM_STORAGE.now_playing,
                 });
-
-                for (const listener of JAM_STORAGE.listeners) {
-                    if (!listener.ready) {
-                        if (PLAYER_STORAGE.isPlaying) {
-                            Dispatcher.dispatch(new ACTIONS.JAM_PAUSE(null));
-                        }
-                    }
-                }
 
                 break;
             case action instanceof ACTIONS.JAM_OPEN:
