@@ -43,8 +43,22 @@ class JamStorage extends Storage<JamStorageStor> {
         this.stor.roomId = null;
 
         Dispatcher.register(this.handleAction.bind(this));
+        playerStorage.subscribe(this.onPlayerAction.bind(this));
     }
 
+    private onPlayerAction(action: Action) {
+        if (action instanceof ACTIONS.AUDIO_SET_TRACK) {
+            if (this.stor.isLeader) {
+                this.stor.ws.send(JSON.stringify({ type: 'host:load', track_id: action.payload }));
+            }
+        }
+        if (action instanceof ACTIONS.AUDIO_TOGGLE_PLAY) {
+            if (this.stor.isLeader) {
+                const type = playerStorage.isPlaying ? 'host:play' : 'host:pause';
+                this.stor.ws.send(JSON.stringify({ type: type }));
+            }
+        }
+    }
     protected handleAction(action: Action) {
         switch (true) {
             case action instanceof ACTIONS.JAM_OPEN:
@@ -87,15 +101,6 @@ class JamStorage extends Storage<JamStorageStor> {
         }
 
         this.callSubs(new ACTIONS.JAM_UPDATE(null));
-    }
-
-    private onPlayerAction(action: Action) {
-        if (action instanceof ACTIONS.AUDIO_TOGGLE_PLAY) {
-            if (this.stor.isLeader) {
-                const type = playerStorage.isPlaying ? 'host:play' : 'host:pause';
-                this.stor.ws.send(JSON.stringify({ type: type }));
-            }
-        }
     }
 
     public openWebSocket(roomId: string) {
@@ -194,19 +199,11 @@ class JamStorage extends Storage<JamStorageStor> {
                 break;
 
             case 'pause': 
-                if (this.stor.isLeader) {
-                    return;
-                }
-
-                Dispatcher.dispatch(new ACTIONS.AUDIO_TOGGLE_PLAY(null));
+                Dispatcher.dispatch(new ACTIONS.AUDIO_PAUSE(null));
                 break;
 
             case 'play':
-                if (this.stor.isLeader) {
-                    return;
-                }
-
-                Dispatcher.dispatch(new ACTIONS.AUDIO_TOGGLE_PLAY(null));
+                Dispatcher.dispatch(new ACTIONS.AUDIO_PLAY(null));
                 break;
 
             case 'seek':

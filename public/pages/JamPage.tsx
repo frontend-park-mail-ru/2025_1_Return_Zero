@@ -72,11 +72,23 @@ export class JamPage extends Component {
         }
     }
 
+    onCopyLink() {
+        navigator.clipboard.writeText(window.location.href);
+        Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+            type: "success",
+            message: "Ссылка на комнату скопирована",
+        }))
+    }
+
     render() {
         return [
             <div className="page page--jam">
                 <Section title="Совместное прослушивание" horizontal>
-                    <div className="page__info">
+                    { this.state.leader == null && <div className="page__empty">
+                        <img src="/static/img/45-Smile.svg" alt="" />
+                        <h1>Прослушивание закрыто</h1>
+                    </div>}
+                    { this.state.leader != null && <div className="page__info">
                         <img className="page__info__img" src={this.state.leader?.img_url} alt={this.state.leader?.name} />
                         <div className="page__info__leader">
                             <span className="page__info__main">Лидер комнаты:</span>
@@ -84,18 +96,21 @@ export class JamPage extends Component {
 
                             <div className="page__info__link_container">
                                 <img src="/static/img/copy.svg" alt="copy" />
-                                <span className="page__info__link">Скопировать ссылку на комнату</span>
+                                <span className="page__info__link" onClick={() => this.onCopyLink()}>Скопировать ссылку на комнату</span>
                             </div>
                         </div>
-                    </div>
+                    </div>}
                 </Section>
+                { this.state.leader != null && 
+                    <Section title="Сейчас играет:" horizontal>
+                        {this.state.now_playing && <TrackLine track={this.state.now_playing} />}
+                    </Section>
+                }
 
-                <Section title="Сейчас играет:" horizontal>
-                    {this.state.now_playing && <TrackLine track={this.state.now_playing} />}
-                </Section>
-
-                <Section title="Слушатели:" horizontal>
-                    <div className="page__listeners">
+                { this.state.leader != null && 
+                    <Section title="Слушатели:" horizontal>
+                        <div className="page__listeners">
+                            {this.state.listeners?.length === 0 && <span className="page__listeners__empty">Сейчас никто не слушает</span>}
                         {this.state.listeners?.map(listener => (
                             <div className="page__listener" key={listener.id}>
                                 <img className="page__listener__img" src={listener.img_url} alt={listener.name} />
@@ -108,7 +123,8 @@ export class JamPage extends Component {
                             </div>
                         ))}
                     </div>
-                </Section>
+                    </Section>
+                }
             </div>
         ]
     }

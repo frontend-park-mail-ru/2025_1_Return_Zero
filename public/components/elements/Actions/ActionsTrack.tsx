@@ -183,7 +183,10 @@ class ActionsGoToJam extends Component {
 
     render() {
         return [
-            <span className="actions-item" onClick={this.onClick}>Перейти в джем</span>
+            <div className="actions-item" onClick={this.onClick}>
+                <img src="/static/img/headphones.svg" alt="play" />
+                <span>Перейти в джем</span>
+            </div>
         ].filter(Boolean)
     }
 }
@@ -200,7 +203,10 @@ class ActionsLeaveJam extends Component {
 
     render() {
         return [
-            <span className="actions-item" onClick={this.onClick}>Покинуть джем</span>
+            <div className="actions-item" onClick={this.onClick}>
+                <img src="/static/img/headphones.svg" alt="exit" />
+                <span>Покинуть джем</span>
+            </div>
         ].filter(Boolean)
     }
 }

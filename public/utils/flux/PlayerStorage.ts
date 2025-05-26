@@ -103,6 +103,14 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
                 case 'processNewTracks':
                     this.processNewTracks(action.payload.currentTrack, action.payload.tracks);
                     break;
+                case 'play':
+                    console.log('audio play');
+                    this.play();
+                    break;
+                case 'pause':
+                    console.log('audio pause');
+                    this.pause();
+                    break;
             }
         }
 
@@ -242,6 +250,14 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
             case action instanceof ACTIONS.AUDIO_RETURN_METADATA:
                 this.callSubs(action);
                 break;
+            case action instanceof ACTIONS.AUDIO_PLAY:
+                console.log('audio play');
+                this.doAction(action, 'play', () => this.play(), null);
+                break;
+            case action instanceof ACTIONS.AUDIO_PAUSE:
+                console.log('audio pause');
+                this.doAction(action, 'pause', () => this.pause(), null);
+                break;
         }
     }
 
@@ -291,13 +307,90 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
     }
 
     async play(): Promise<void> {
-        this.stor.playPromise = this.stor.audio.play();
-        return this.stor.playPromise
-            .then(() => {})
-            .catch((error) => {
-                throw error; // Rethrow the error
-            });
-    }
+        try {
+            await this.stor.audio.play();
+        } catch (error) {
+            const modal = document.createElement('div');
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100vw';
+            modal.style.height = '100vh';
+            modal.style.backgroundColor = 'rgba(12, 24, 33, 0.85)';
+            modal.style.display = 'flex';
+            modal.style.justifyContent = 'center';
+            modal.style.alignItems = 'center';
+            modal.style.zIndex = '9999';
+            modal.style.fontFamily = 'Arial, sans-serif';
+        
+            const dialog = document.createElement('div');
+            dialog.style.background = '#182633';
+            dialog.style.padding = '0.8rem 1.2rem';
+            dialog.style.borderRadius = '6px';
+            dialog.style.textAlign = 'center';
+            dialog.style.maxWidth = '260px';
+            dialog.style.boxShadow = '0 0 8px rgba(255, 122, 138, 0.6)';
+            dialog.style.position = 'relative';
+        
+            const message = document.createElement('p');
+            message.textContent = 'Воспроизведение заблокировано браузером. Нажмите кнопку, чтобы включить звук.';
+            message.style.color = '#f6f6f6';
+            message.style.fontSize = '0.7rem';
+            message.style.margin = '0 0 0.5rem 0';
+            message.style.lineHeight = '1.2';
+        
+            const playButton = document.createElement('button');
+            playButton.textContent = 'Воспроизвести звук';
+            playButton.style.backgroundColor = '#ff7a8a';
+            playButton.style.color = '#f6f6f6';
+            playButton.style.border = 'none';
+            playButton.style.padding = '0.25rem 0.8rem';
+            playButton.style.borderRadius = '4px';
+            playButton.style.fontSize = '0.75rem';
+            playButton.style.cursor = 'pointer';
+            playButton.style.transition = 'background-color 0.2s ease';
+            playButton.style.marginRight = '0.5rem';
+        
+            playButton.onmouseenter = () => {
+            playButton.style.backgroundColor = '#e76575';
+            };
+            playButton.onmouseleave = () => {
+            playButton.style.backgroundColor = '#ff7a8a';
+            };
+        
+            playButton.onclick = async () => {
+                try {
+                    await this.stor.audio.play();
+                    document.body.removeChild(modal);
+                } catch {
+                    alert('Ошибка при воспроизведении звука.');
+                }
+                };
+            
+                const closeButton = document.createElement('button');
+                closeButton.textContent = '×';
+                closeButton.style.position = 'absolute';
+                closeButton.style.top = '6px';
+                closeButton.style.right = '8px';
+                closeButton.style.background = 'transparent';
+                closeButton.style.border = 'none';
+                closeButton.style.color = '#ff7a8a';
+                closeButton.style.fontSize = '1.2rem';
+                closeButton.style.cursor = 'pointer';
+                closeButton.style.lineHeight = '1';
+                closeButton.style.padding = '0';
+            
+                closeButton.onclick = () => {
+                document.body.removeChild(modal);
+            };
+        
+            dialog.appendChild(closeButton);
+            dialog.appendChild(message);
+            dialog.appendChild(playButton);
+            modal.appendChild(dialog);
+            document.body.appendChild(modal);
+        }
+    }      
 
     toggleMute() {
         if (this.stor.audioLevel > 0.00001) {
@@ -323,6 +416,7 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
 
     private onMeta = () => {
         Broadcast.send('loadedMetadata', { trackId: this.stor.currentTrack.id });
+        this.callSubs(new ACTIONS.AUDIO_SET_TRACK(this.stor.currentTrack.id.toString()));
         this.callSubs(new ACTIONS.AUDIO_RETURN_METADATA(null));
     };
 
@@ -332,7 +426,6 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         this.stor.audio.removeEventListener('canplay', this.onMeta);
         this.stor.audio.addEventListener('canplay', this.onMeta, { once: true });
 
-        this.callSubs(new ACTIONS.AUDIO_SET_TRACK(null));
         if (this.stor.currentTrack) {
             Broadcast.send('trackLike', { trackId: this.stor.currentTrack.id, is_liked: this.stor.currentTrack.is_liked });
             TracksStorage.addTrack(this.stor.currentTrack);
@@ -341,8 +434,6 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         if (this.stor.audio.paused && play) {
             this.togglePlay();
         }
-
-        this.callSubs(new ACTIONS.AUDIO_SET_TRACK(null));
     }
 
     setVolume(volume: number) {

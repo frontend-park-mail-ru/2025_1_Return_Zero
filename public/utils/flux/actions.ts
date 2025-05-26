@@ -20,12 +20,14 @@ export namespace ACTIONS {
     export class REMOVE_NOTIFICATION extends Action<string> {}
 
     export class AUDIO_TOGGLE_PLAY extends Action<null> {};
-    export class AUDIO_SET_TRACK extends Action<null> {};
+    export class AUDIO_SET_TRACK extends Action<string | null> {};
     export class AUDIO_SET_DURATION extends Action<null> {};
     export class AUDIO_SET_VOLUME extends Action<number> {};
     export class AUDIO_SET_CURRENT_TIME extends Action<number> {};
     export class AUDIO_TOGGLE_MUTE extends Action<null> {};
     export class AUDIO_RETURN_METADATA extends Action<null> {};
+    export class AUDIO_PLAY extends Action<null> {};
+    export class AUDIO_PAUSE extends Action<null> {};
     
     export class QUEUE_REPEAT extends Action<null> {};
     export class QUEUE_UNREPEAT extends Action<null> {};
