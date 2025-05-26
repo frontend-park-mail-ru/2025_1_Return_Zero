@@ -69,16 +69,30 @@
 
     &__empty {
         width: 100%;
+        height: auto;
+        justify-content: center;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.27rem;
+        gap: 2rem;
     
         padding-top: 2.5rem;
     
         > img {
             width: 4.5rem;
             height: 4.5rem;
+
+            @media (max-width: 600px) {
+                width: 3.5rem;
+                height: 3.5rem;
+            }
+        }
+
+        > h1 {
+            text-align: center;
+            @media (max-width: 600px) {
+                font-size: v.$font-size-h3;
+            }
         }
     }
 }

@@ -21,27 +21,8 @@ export class ActionsAlbum extends Component {
         const { album } = this.props;
         return [
             <Actions>
-                <ActionsPlay album={album} />
                 <ActionsCopyLink link={URL.parse(album.album_page, location.href).toString()} />
             </Actions>
-        ]
-    }
-}
-
-class ActionsPlay extends Component {
-    props: {
-        album: AppTypes.Album;
-        [key: string]: any;
-    }
-
-    
-    play = () => {
-
-    }
-
-    render() {
-        return [
-            <span className="actions-item" onClick={this.play}>Слушать</span>
         ]
     }
 }

@@ -21,27 +21,10 @@ export class ActionsPlaylist extends Component {
         const { playlist } = this.props;
         return [
             <Actions>
-                <ActionsPlay playlist={playlist} />
                 <ActionsCopyLink link={URL.parse(playlist.playlist_page, location.href).toString()} />
             </Actions>
         ]
     }
 }
 
-class ActionsPlay extends Component {
-    props: {
-        playlist: AppTypes.Playlist;
-        [key: string]: any;
-    }
 
-    
-    play = () => {
-
-    }
-
-    render() {
-        return [
-            <span className="actions-item" onClick={this.play}>Слушать</span>
-        ]
-    }
-}

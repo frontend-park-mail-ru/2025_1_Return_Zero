@@ -51,12 +51,12 @@ export class ActionsTrack extends Component {
         const { track, playlist } = this.props;
         return [
             <Actions>
+                <ActionsCopyLink link={'Затычка'} />
                 {!this.props.inPlaylist && USER_STORAGE.getUser() && 
                     <ActionsAddToPlaylist track={track} />}
                 {this.props.playlist && USER_STORAGE.getUser()?.username === this.props.playlist.username && 
                     <ActionsRemoveFromPlaylist track={track} playlist={playlist} onRemove={this.props.removeFromPlaylist} />}
                 <ActionsAddToQueue track={track} />
-                <ActionsCopyLink link={'Затычка'} />
                 
                 {this.state.isJam 
                     ? <ActionsGoToJam room_id={JAM_STORAGE.roomId} />
@@ -64,8 +64,8 @@ export class ActionsTrack extends Component {
                 }
                 {this.state.isJam && <ActionsLeaveJam />}
 
-                <Link className="actions-item" to={this.props.track.album_page}>Перейти к альбому</Link>
-                <Link className="actions-item" to={this.props.track.artists[0].artist_page}>Перейти к исполнителю</Link>
+                <ActionsGoToAlbum album_page={this.props.track.album_page} />
+                <ActionsGoToArtist artist_page={this.props.track.artists[0].artist_page} />
             </Actions>
         ]
     }
@@ -88,7 +88,10 @@ class ActionsAddToPlaylist extends Component {
 
     render() {
         return [
-            <span className="actions-item" onClick={this.onClick}>Добавить в плейлист</span>,
+            <div className="actions-item" onClick={this.onClick}>
+                <img src="/static/img/cloud.svg" alt="cloud" />
+                <span>Добавить в плейлист</span>
+            </div>,
             this.state.opened && <TrackToPlaylist onClose={this.onClick} track={this.props.track}/>
         ]
     }
@@ -136,7 +139,10 @@ class ActionsAddToQueue extends Component {
 
     render() {
         return [
-            <span className="actions-item" onClick={this.onAdd}>Добавить в очередь</span>
+            <div className="actions-item" onClick={this.onAdd}>
+                <img src="/static/img/play-circle.svg" alt="queue" />
+                <span>Добавить в очередь</span>
+            </div>
         ].filter(Boolean)
     }
 }
@@ -158,7 +164,10 @@ class ActionsStartJam extends Component {
 
     render() {
         return [
-            <span className="actions-item" onClick={this.onClick}>Начать джем</span>
+            <div className="actions-item" onClick={this.onClick}>
+                <img src="/static/img/headphones.svg" alt="play" />
+                <span>Начать джем</span>
+            </div>
         ].filter(Boolean)
     }
 }
@@ -193,6 +202,44 @@ class ActionsLeaveJam extends Component {
         return [
             <span className="actions-item" onClick={this.onClick}>Покинуть джем</span>
         ].filter(Boolean)
+    }
+}
+
+class ActionsGoToAlbum extends Component {
+    props: {
+        [key: string]: any;
+    }
+    
+    onClick = debounce(async (e: Event) => {
+        Router.push(this.props.album_page, {});
+    })
+
+    render() {
+        return [
+            <div className="actions-item" onClick={this.onClick}>
+                <img src="/static/img/disc.svg" alt="album" />
+                <span>Перейти к альбому</span>
+            </div>
+        ].filter(Boolean)
+    }
+}
+
+class ActionsGoToArtist extends Component {
+    props: {        
+        [key: string]: any;
+    }
+
+    onClick = debounce(async (e: Event) => {
+        Router.push(this.props.artist_page, {});
+    })
+
+    render() {
+        return [
+            <div className="actions-item" onClick={this.onClick}>
+                <img src="/static/img/star.svg" alt="user" />
+                <span>Перейти к исполнителю</span>
+            </div>
+        ].filter(Boolean)   
     }
 }
 

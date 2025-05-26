@@ -55,7 +55,10 @@ export class ActionsCopyLink extends Component {
 
     render() {
         return [
-            <span className="actions-item" onClick={this.copyLink}>Поделиться</span>
+            <div className="actions-item" onClick={this.copyLink}>
+                <img src="/static/img/copy.svg" alt="copy" />
+                <span>Скопировать ссылку</span>
+            </div>
         ]
     }
 }

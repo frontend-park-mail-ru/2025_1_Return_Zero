@@ -35,7 +35,7 @@ export class Notification extends Component {
         return [
             <div className={className}>
                 <span className="notification__content">{this.props.message}</span>
-                <span className="notification__close" onClick={this.close}></span>
+                <img className="notification__close" onClick={this.close} src="/static/img/cross.svg" alt="close" />
             </div>
         ]
     }

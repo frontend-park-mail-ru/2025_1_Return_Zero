@@ -15,17 +15,22 @@
     &__popup {
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: 10px;
 
-        padding: 0.625rem;
+        padding: 0.8em;
 
         background-color: d.$color-elements;
         border: 1px solid d.$color-border;
         border-radius: 10px;
 
         .actions-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
             padding: 0 5px;
             background-color: transparent;
+            white-space: nowrap;
 
             cursor: pointer;
 

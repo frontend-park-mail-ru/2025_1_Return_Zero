@@ -21,27 +21,9 @@ export class ActionsArtist extends Component {
         const { artist } = this.props;
         return [
             <Actions>
-                <ActionsPlay artist={artist} />
                 <ActionsCopyLink link={URL.parse(artist.artist_page, location.href).toString()} />
             </Actions>
         ]
     }
 }
 
-class ActionsPlay extends Component {
-    props: {
-        artist: AppTypes.Artist;
-        [key: string]: any;
-    }
-
-    
-    play = () => {
-
-    }
-
-    render() {
-        return [
-            <span className="actions-item" onClick={this.play}>Слушать</span>
-        ]
-    }
-}

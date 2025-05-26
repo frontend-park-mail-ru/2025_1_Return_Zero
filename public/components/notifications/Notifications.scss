@@ -13,6 +13,13 @@
     border: 1px solid d.$color-border;
     border-radius: 15px;
 
+    &__content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.312rem 0;
+    }
+
     &--success {
         background-color: d.$color-success;
     }
@@ -23,9 +30,9 @@
 
     &__close {
         position: absolute;
-        top: 0.625rem;
-        bottom: 0.625rem;
-        right: 0.625rem;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
 
         cursor: pointer;
 
@@ -33,8 +40,8 @@
             scale: 1.05;
         }
 
-        width: 0.625rem;
-        background-color: red;
+        width: 1.1rem;
+        height: 1.1rem;
     }
 }
 
