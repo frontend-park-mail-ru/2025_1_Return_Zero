@@ -25,6 +25,15 @@ class Broadcast {
             case 'loadedMetadata':
                 Dispatcher.dispatch(new ACTIONS.AUDIO_RETURN_METADATA(null));
                 break;
+            case 'deletePlaylist':
+                Dispatcher.dispatch(new ACTIONS.DELETE_PLAYLIST(payload));
+                break;
+            case 'createPlaylist':
+                Dispatcher.dispatch(new ACTIONS.CREATE_PLAYLIST(payload));
+                break;
+            case 'editPlaylist':
+                Dispatcher.dispatch(new ACTIONS.EDIT_PLAYLIST(payload));
+                break;
         }
     }
 }

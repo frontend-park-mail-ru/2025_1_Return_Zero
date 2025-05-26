@@ -15,6 +15,7 @@ import { USER_STORAGE } from "utils/flux/storages";
 import { API } from "utils/api";
 
 import { one_alive_async } from "utils/funcs";
+import Broadcast from "common/broadcast";
 
 import './pages.scss';
 
@@ -57,7 +58,10 @@ export class PlaylistPage extends Component {
 
     onDelete = () => {
         API.deletePlaylist(this.state.playlist.id)
-            .then(() => { Dispatcher.dispatch(new ACTIONS.DELETE_PLAYLIST(this.state.playlist)); router.replace('/', {}) })
+            .then(() => { 
+                Dispatcher.dispatch(new ACTIONS.DELETE_PLAYLIST(this.state.playlist)); router.replace('/', {}); 
+                Broadcast.send('deletePlaylist', this.state.playlist);
+            })
             .catch(e => console.error(e.message));
     }
 
