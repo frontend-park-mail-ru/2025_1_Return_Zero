@@ -12,7 +12,7 @@ import { one_alive_async } from "utils/funcs";
 
 import './PlaylistCreate.scss';
 import './forms.scss'
-
+import Broadcast from "common/broadcast";
 export class PlaylistCreate extends Component {
     props: {
         onClose: () => void,
@@ -47,6 +47,7 @@ export class PlaylistCreate extends Component {
                 type: 'success',
                 message: `Плейлист "${playlist.title}" успешно создан`
             }));
+            Broadcast.send('createPlaylist', playlist);
         } catch (error) {
             console.error(error)
             this.setState({error: 'У вас уже есть плейлист с таким названием'})
