@@ -64,6 +64,15 @@
             display: flex;
             align-items: center;
             gap: 1.125rem;
+
+            .actions {
+                &__popup {
+                    left: 100%;
+                    top: 0;
+                    bottom: auto;
+                    right: auto;
+                }
+            }
         }
     }
 
@@ -121,13 +130,6 @@
         &__artists {
             a:first-child {
                 font-weight: v.$font-weight-bold;
-            }
-        }
-
-        &__actions {
-            * {
-                width: 2.375rem;
-                height: 2.375rem;
             }
         }
     }
@@ -258,17 +260,6 @@
         &__stats {
             font-size: v.$font-size-small;
         }
-    
-        &__actions {
-            img {
-                width: 2.375rem;
-                height: 2.375rem;
-                @media (max-width: 600px) {
-                    width: 2rem;
-                    height: 2rem;
-                }
-            }
-        }
     }
 }
 
@@ -282,13 +273,6 @@
         &__user {
             a {
                 font-weight: v.$font-weight-bold;
-            }
-        }
-
-        &__actions {
-            img {
-                width: 2.375rem;
-                height: 2.375rem;
             }
         }
 
