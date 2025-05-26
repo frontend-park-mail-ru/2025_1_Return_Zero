@@ -12,6 +12,7 @@ import { Notifications } from "components/notifications/Notifications";
 
 import { MainPage } from "pages/MainPage";
 import { TracksPage } from "pages/TracksPage";
+import { SelectionPage } from "pages/SelectionPage";
 import { AlbumsPage } from "pages/AlbumsPage";
 import { ArtistsPage } from "pages/ArtistsPage";
 import { AlbumPage } from "pages/AlbumPage";
@@ -25,8 +26,9 @@ import { JamPage } from "pages/JamPage";
 import { DisplayAllPage } from "pages/DisplayAllPage";
 import { SearchPage } from "pages/SearchPage";
 
-import "./layout.scss";
 import { LabelPage } from "pages/LabelPage";
+
+import "./layout.scss";
 
 export default class MainLayout extends Component {
     render() {
@@ -38,6 +40,7 @@ export default class MainLayout extends Component {
 
                 <Route path="^/" exact component={MainPage}></Route>
                 <Route path="^/tracks/" exact component={TracksPage} />
+                <Route path="^/selection/:selection/" exact component={SelectionPage} />
 
                 <Route path="^/albums/" exact component={AlbumsPage} />
                 <Route path="^/albums/:album_id<int>/" exact component={AlbumPage} />
