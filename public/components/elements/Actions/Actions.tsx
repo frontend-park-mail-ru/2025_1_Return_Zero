@@ -28,10 +28,6 @@ export class Actions extends Component {
     }
 
     onClick = (e: Event) => {
-        console.log((e.target as HTMLElement).classList)
-        if ((e.target as HTMLElement).classList.contains('actions-item')) {
-            this.close(e)
-        }
     }
 
     render() {

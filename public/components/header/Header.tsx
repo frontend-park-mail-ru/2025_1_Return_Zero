@@ -5,7 +5,6 @@ import { Button } from "components/elements/Button";
 import { HeaderLogo } from "components/logo/HeaderLogo";
 
 import { USER_STORAGE } from "utils/flux/storages";
-import { debounce } from "utils/funcs";
 
 import "./Header.scss";
 
@@ -14,7 +13,7 @@ export class Header extends Component {
         return [
             <header className="header">
                 <HeaderLogo />
-                <HeaderSearch />
+                <Route path="^.*" component={HeaderSearch} />
                 <nav className="header__nav">
                     <Route path="^/" exact component={NavItem} elseComponent={NavItem} link="/" icon="/static/img/icon-home.svg" text="Главная" />
                     <Route path="^/tracks/" exact component={NavItem} elseComponent={NavItem} link="/tracks" icon="/static/img/icon-tracks.svg" text="Треки" />
@@ -85,6 +84,9 @@ class HeaderSearch extends Component {
     }
 
     render() {
+        if (!location.pathname.startsWith('/search')) {
+            this.state.query = '';
+        };
         return [
             <form className="header__search" onSubmit={this.onSubmit}>
                 <img className="header__search__icon" src="/static/img/icon-search.svg" />
