@@ -2,7 +2,7 @@ import { Component } from "libs/rzf/Component";
 
 import playerStorage from "utils/flux/PlayerStorage";
 import { ACTIONS } from "utils/flux/actions";
-import { PLAYER_STORAGE } from "utils/flux/storages";
+import { JAM_STORAGE, PLAYER_STORAGE } from "utils/flux/storages";
 import Dispatcher from "libs/flux/Dispatcher";
 
 export class RepeatBtn extends Component {
@@ -16,10 +16,26 @@ export class RepeatBtn extends Component {
     }
 
     onRepeatAction = () => {
+        if (JAM_STORAGE.roomId) {
+            Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+                message: 'Сначала выйдите из режима Jam',
+                type: 'error'
+            }));
+            return;
+        }
+
         Dispatcher.dispatch(new ACTIONS.QUEUE_REPEAT(null));
     }
 
     onUnrepeatAction = () => {
+        if (JAM_STORAGE.roomId) {
+            Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+                message: 'Сначала выйдите из режима Jam',
+                type: 'error'
+            }));
+            return;
+        }
+
         Dispatcher.dispatch(new ACTIONS.QUEUE_UNREPEAT(null));
     }
 
