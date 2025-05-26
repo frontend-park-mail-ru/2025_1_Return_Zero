@@ -94,6 +94,15 @@ class AllPage<T> extends Component {
 
     componentDidMount(): void {
         this.refresh();
+        USER_STORAGE.subscribe(this.onAction)
+    }
+
+    componentWillUnmount(): void {
+        USER_STORAGE.unsubscribe(this.onAction)
+    }
+
+    onAction = (action: any) => {
+        this.refresh();
     }
 
     refresh() {
