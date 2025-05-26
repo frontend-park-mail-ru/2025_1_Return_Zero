@@ -27,7 +27,7 @@ export class Actions extends Component {
         this.setState({opened: !this.state.opened})
     }
 
-    onClick = (e: Event) => {
+    onClick = (e: MouseEvent) => {
     }
 
     render() {
