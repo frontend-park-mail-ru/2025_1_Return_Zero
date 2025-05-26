@@ -80,12 +80,12 @@ export class ArtistPage extends Component {
                         </div>
                     </div>
                 </div>
-                <Section title="Популярные альбомы" horizontal>
+                <Section title="Популярные альбомы" horizontal all_link={`/all/artists/${this.artist_id}/albums`}>
                     {this.state.albums.map((album, index) => (
                         <AlbumCard key={album.id} album={album}/>
                     ))}
                 </Section>
-                <Section title="Популярные треки">
+                <Section title="Популярные треки" all_link={`/all/artists/${this.artist_id}/tracks`}>
                     {this.state.tracks.map((track, index) => (
                         <TrackLine key={track.id} ind={index} track={track}/>
                     ))}

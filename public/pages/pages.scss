@@ -302,8 +302,13 @@
     justify-content: center;
     align-items: center;
 
-    font-size: v.$font-size-large;
-    font-weight: v.$font-size-large;
+    font-size: v.$font-size-big;
+    font-weight: v.$font-weight-bold;
+
+    span {
+        font-size: v.$font-size-small;
+        font-weight: v.$font-weight-light;
+    }
 }
 
 .page--profile__info {
