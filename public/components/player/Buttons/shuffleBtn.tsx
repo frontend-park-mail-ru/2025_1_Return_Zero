@@ -2,7 +2,7 @@ import { Component } from "libs/rzf/Component";
 
 import playerStorage from "utils/flux/PlayerStorage";
 import { ACTIONS } from "utils/flux/actions";
-import { PLAYER_STORAGE } from "utils/flux/storages";
+import { JAM_STORAGE, PLAYER_STORAGE } from "utils/flux/storages";
 import Dispatcher from "libs/flux/Dispatcher";
 
 export class ShuffleBtn extends Component {
@@ -16,10 +16,26 @@ export class ShuffleBtn extends Component {
     }
 
     onShuffleAction = () => {
+        if (JAM_STORAGE.roomId) {
+            Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+                message: 'Сначала выйдите из режима Jam',
+                type: 'error'
+            }));
+            return;
+        }
+
         Dispatcher.dispatch(new ACTIONS.QUEUE_SHUFFLE(null));
     }
 
     onUnshuffleAction = () => {
+        if (JAM_STORAGE.roomId) {
+            Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+                message: 'Сначала выйдите из режима Jam',
+                type: 'error'
+            }));
+            return;
+        }
+
         Dispatcher.dispatch(new ACTIONS.QUEUE_UNSHUFFLE(null));
     }
 
