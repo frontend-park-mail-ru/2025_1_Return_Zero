@@ -11,22 +11,27 @@ import { ACTIONS } from "utils/flux/actions";
 import { API } from "utils/api";
 
 import { Leader, Listener } from "utils/flux/JamStorage";
+import { JamForm } from "components/forms/JamForm";
 
 import './pages.scss';
 import Dispatcher from "libs/flux/Dispatcher";
 import { Preloader } from "components/preloader/Preloader";
+import { Route } from "libs/rzf/Router";
 
 export class JamPage extends Component {
     state = {
         leader: JAM_STORAGE.leader as Leader | null,
         listeners: JAM_STORAGE.listeners as Listener[] | null,
         now_playing: JAM_STORAGE.now_playing as AppTypes.Track | null,
+        entered: false,
+        authorized: false,
     }
 
     componentDidMount() {
         USER_STORAGE.subscribe(this.onAction);
         JAM_STORAGE.subscribe(this.onAction);
         PLAYER_STORAGE.subscribe(this.onAction);
+
         this.fetchData();
     }
 
@@ -38,11 +43,11 @@ export class JamPage extends Component {
 
     fetchData() {
         if (USER_STORAGE.getUser()) {
-            API.getFavoriteTracks(USER_STORAGE.getUser().username).then(res => {
-                this.setState({ });
-            }).catch(() => this.setState({}))
+            this.setState({ authorized: true });
         }
+    }
 
+    openSocket() {
         Dispatcher.dispatch(new ACTIONS.JAM_OPEN(this.props.room_id));
     }
 
@@ -62,6 +67,10 @@ export class JamPage extends Component {
 
                 break;
             case action instanceof ACTIONS.JAM_OPEN:
+                console.warn('jam open');
+                break;
+            case action instanceof ACTIONS.JAM_READY:
+                this.setState({ listeners: JAM_STORAGE.listeners });
                 break;
             case action instanceof ACTIONS.AUDIO_RETURN_METADATA:
                 Dispatcher.dispatch(new ACTIONS.JAM_HOST_LOAD(PLAYER_STORAGE.currentTrack?.id.toString() || ''));
@@ -79,10 +88,21 @@ export class JamPage extends Component {
     }
 
     render() {
-        if (!USER_STORAGE.getUser()) {
+        if (!this.state.authorized) {
             return [
                 <div className="page page--jam">
                     <h1>Вы не авторизованы</h1>
+                </div>
+            ]
+        }
+
+        if (!this.state.entered) {
+            return [
+                <div className="page page--jam">
+                     <JamForm onEnter={() => {
+                        this.setState({ entered: true });
+                        this.openSocket();
+                    }} />
                 </div>
             ]
         }

@@ -96,10 +96,6 @@ class JamStorage extends Storage<JamStorageStor> {
             this.stor.ws.send(JSON.stringify({ type: 'host:load', track_id: trackId }));
         }
 
-        for (const listener of this.stor.listeners) {
-            listener.ready = false;
-        }
-
         this.callSubs(new ACTIONS.JAM_UPDATE(null));
     }
 
@@ -192,6 +188,10 @@ class JamStorage extends Storage<JamStorageStor> {
                     ready: false,
                 });
 
+                if (this.stor.isLeader) {
+                    this.stor.ws.send(JSON.stringify({ type: 'seek', position: playerStorage.currentTime }));
+                }
+
                 break;
 
             case 'user:left':
@@ -216,7 +216,7 @@ class JamStorage extends Storage<JamStorageStor> {
 
             case 'ready':
                 for (const listener of this.stor.listeners) {
-                    if (data.loaded[listener.id]) {
+                    if (data.loaded[listener.id.toString()]) {
                         listener.ready = true;
                     }
                 }
