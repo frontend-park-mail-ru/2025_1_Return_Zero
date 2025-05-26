@@ -11,9 +11,11 @@
 }
 
 .artist-card {
-    // &:hover {
-    //     text-decoration: none;
-    // }
+    position: relative;
+
+    &:hover {
+        text-decoration: none;
+    }
     
     &__img {
         width: 8.75rem;
@@ -24,6 +26,28 @@
         }
 
         border-radius: 50%;
+    }
+
+    &__edit {
+        position: absolute;
+        left: calc(50% + 1.85rem);
+        top: 5.25rem;
+
+        width: 2.25rem;
+        height: 2.25rem;
+        padding: 0.625rem;
+
+        opacity: 0.65;
+        background-color: d.$color-elements;
+        border-radius: 50%;
+
+        cursor: pointer;
+        transition: all ease-in-out 0.3s;
+
+        &:hover {
+            opacity: 0.9;
+            scale: 1.05;
+        }
     }
 
     &__info {

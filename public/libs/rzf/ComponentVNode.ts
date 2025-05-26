@@ -20,7 +20,7 @@ export function renderComponent(vnode: ComponentVNode, dom: HTMLElement, before:
     vnode.instance = new vnode.component(vnode.props);
     vnode.instance.vnode = vnode;
 
-    vnode.children = vnode.instance.render();
+    vnode.children = vnode.instance.render().filter(Boolean);
     VDomHelpers.linkChildren(vnode);
 
     vnode.children.forEach(child => render(child, dom, before));
@@ -47,13 +47,13 @@ export function cleanUpComponent(vnode: ComponentVNode) {
 export function updateComponent(vnode: ComponentVNode, newVNode: ComponentVNode) {
     if (vnode.component !== newVNode.component) {
         VDomHelpers.insert(newVNode, destroy(vnode), vnode.parent);
-        render(newVNode, VDomHelpers.getParentTag(vnode)!.firstDom!, VDomHelpers.getNextDom(vnode));
+        render(newVNode, VDomHelpers.getParentTag(newVNode)!.firstDom!, VDomHelpers.getNextDom(newVNode));
         return;
     }
 
     if (vnode.instance!.componentShouldUpdate(newVNode.props, {})) {
         vnode.props = vnode.instance!.props = newVNode.props;
-        newVNode.children = vnode.instance!.render();
+        newVNode.children = vnode.instance!.render().filter(Boolean);
         VDomHelpers.updateChildren(vnode, newVNode);
     } else {
         vnode.props = vnode.instance!.props = newVNode.props;

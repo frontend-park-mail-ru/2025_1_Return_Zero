@@ -7,6 +7,7 @@ import { PlaylistEdit } from "components/forms/PlaylistEdit";
 
 import { Button, ButtonDanger } from "components/elements/Button";
 import { Like } from "components/elements/Like";
+import { ActionsPlaylist } from "components/elements/Actions/ActionsPlaylist";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
@@ -14,6 +15,7 @@ import { USER_STORAGE } from "utils/flux/storages";
 import { API } from "utils/api";
 
 import { one_alive_async } from "utils/funcs";
+import Broadcast from "common/broadcast";
 
 import './pages.scss';
 
@@ -56,7 +58,10 @@ export class PlaylistPage extends Component {
 
     onDelete = () => {
         API.deletePlaylist(this.state.playlist.id)
-            .then(() => { Dispatcher.dispatch(new ACTIONS.DELETE_PLAYLIST(this.state.playlist)); router.replace('/', {}) })
+            .then(() => { 
+                Dispatcher.dispatch(new ACTIONS.DELETE_PLAYLIST(this.state.playlist)); router.replace('/', {}); 
+                Broadcast.send('deletePlaylist', this.state.playlist);
+            })
             .catch(e => console.error(e.message));
     }
 
@@ -73,7 +78,12 @@ export class PlaylistPage extends Component {
         if (this.props.playlist_id !== this.playlist_id) this.fetchData();
         
         if (!this.state.playlist) {
-            return [<div className="page page--404">Плейлист не найден{'('}</div>]
+            return [
+                <div className="page page--404 page__empty">
+                    <img src="/static/img/icon-tracks.svg" alt="" />
+                    <h1>Плейлист не найден</h1>
+                </div>
+            ]
         }
         const playlist = this.state.playlist;
         return [
@@ -87,8 +97,8 @@ export class PlaylistPage extends Component {
                             <Link key={playlist.username} to={playlist.user_page}>{playlist.username}</Link>
                         </div>
                         <div className="page__info__actions">
-                            <img src="/static/img/play.svg" alt="play"/>
                             {(!USER_STORAGE.getUser() || USER_STORAGE.getUser().username !== playlist.username) && <Like active={this.state.is_liked} onClick={this.onLike} />}
+                            <ActionsPlaylist playlist={playlist} />
                         </div>
                     </div>
                 </div>

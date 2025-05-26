@@ -39,10 +39,11 @@ export class Validator {
     }
 
     clear(): void {
-        Object.keys(this.description).forEach(
-            key => this.result[key] = {
-                unprocessed: ''
-            }
-        )
+        Object.keys(this.description).forEach(key => {
+            this.description[key].clear(this.result[key])
+            this.result[key] = {
+                unprocessed: this.description[key].default,
+            };
+        });
     }
 }

@@ -30,6 +30,29 @@
             height: 2.25rem;
         }
     }
+
+    &__favorite {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: 4.625rem;
+        height: 4.625rem;
+
+        background-color: #262B3D;
+        border-radius: 15px;
+        
+        transition: scale 0.2s ease-in-out;
+
+        > img {
+            width: 2.25rem;
+            height: 2.25rem;
+        }
+
+        &:hover {
+            scale: 1.025;
+        }
+    }
     
     background-color: d.$color-background;
     border-radius: 0 1.25rem 1.25rem 0;

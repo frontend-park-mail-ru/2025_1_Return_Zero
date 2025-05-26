@@ -2,9 +2,9 @@ import { Component } from "libs/rzf/Component";
 
 import { ButtonDanger, ButtonSuccess } from "components/elements/Button";
 
+import Dispatcher from "libs/flux/Dispatcher";
 import { USER_STORAGE } from "utils/flux/storages";
 import { ACTIONS } from "utils/flux/actions";
-import Dispatcher from "libs/flux/Dispatcher";
 
 import { ParamTypes } from "utils/api_types";
 import { API } from "utils/api";
@@ -115,9 +115,9 @@ export class SettingsPage extends Component {
                 }));
             } catch (e) {
                 this.setState({
-                    error: e.message
+                    error: 'Не верный формат изображения'
                 })
-                console.error(e.message);
+                Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({ type: 'error', message: 'Не удалось сохранить изменения'}));
                 return ;
             } 
         }
@@ -142,8 +142,11 @@ export class SettingsPage extends Component {
             this.setState({
                 error: e.message
             })
-            console.error(e.message);
+            Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({ type: 'error', message: 'Не удалось сохранить изменения'}));
+            return;
         }
+
+        Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({ type: 'success', message: 'Новые настройки сохранены!'}));
     }
 
     onDelete = async (event: MouseEvent) => {

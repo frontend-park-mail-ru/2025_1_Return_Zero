@@ -1,4 +1,4 @@
-import { Actions } from "./Actions";
+import { Actions } from "./Actions/Actions";
 import { Button, ButtonDanger, ButtonSuccess } from "./Button";
 import { Dialog } from "./Dialog";
 import { Like } from "./Like";

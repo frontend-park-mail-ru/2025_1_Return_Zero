@@ -104,4 +104,6 @@ export class Describer<T = any> {
             result.check = 'or';
         }));
     }
+
+    clear(result: DescriberResult): void {}
 }

@@ -3,20 +3,21 @@ import { Link } from "libs/rzf/Router";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
-import { TRACKS_STORAGE, USER_STORAGE } from "utils/flux/storages";
-import { API } from "utils/api";
+
+import { TRACKS_STORAGE, PLAYER_STORAGE } from "utils/flux/storages";
 
 import { Like } from "../elements/Like";
-import { Actions } from "../elements/Actions";
-import { ActionsAddToPlaylist, ActionsAddToQueue, ActionsRemoveFromPlaylist, ActionsToAlbum, ActionsToArtist } from "../elements/ActionsTrack";
+import { ActionsTrack } from "../elements/Actions/ActionsTrack";
 
 import "./Track.scss";  
+
 
 function durationToString(duration: number): string {
     const minutes = Math.floor(duration / 60);
     const seconds = duration % 60;
     return `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
 }
+
 
 abstract class TrackBase extends Component {
     props: {
@@ -25,6 +26,8 @@ abstract class TrackBase extends Component {
 
         inPlaylist?: AppTypes.Playlist,
         removeFromPlaylist?: () => void,
+
+        ping?: boolean,
         [key: string]: any
     }
 
@@ -43,47 +46,58 @@ abstract class TrackBase extends Component {
         super(props);
 
         this.state.is_liked = props.track.is_liked;
+        Dispatcher.dispatch(new ACTIONS.TRACK_ADD(props.track));
+        this.state.playing = this.checkPlaying();
     }
+
+    checkPlaying() {
+        if (!PLAYER_STORAGE.currentTrack) return null;
+
+        if (PLAYER_STORAGE.currentTrack.id === this.props.track.id) {
+            if (PLAYER_STORAGE.isPlaying) {
+                return true;
+            }
+            return false;
+        }
+        return null;
+    } 
 
     componentDidMount(): void {
         TRACKS_STORAGE.subscribe(this.onAction);
-        if (TRACKS_STORAGE.getPlaying() && TRACKS_STORAGE.getPlaying().id === this.props.track.id) {
-            this.setState({
-                playing: TRACKS_STORAGE.getPlayingState()
-            });
-        }
+        PLAYER_STORAGE.subscribe(this.onPlayerAction);
     }
 
     componentWillUnmount(): void {
         TRACKS_STORAGE.unsubscribe(this.onAction);
+        PLAYER_STORAGE.unsubscribe(this.onPlayerAction);
     }
 
     onAction = (action: any): void => {
         switch (true) {
-            case action instanceof ACTIONS.TRACK_PLAY:
-                this.setState({playing: this.props.track.id === action.payload.id ? true : null});
-                break;
-            case action instanceof ACTIONS.TRACK_STATE_CHANGE:
-                this.setState({playing: this.props.track.id === TRACKS_STORAGE.getPlaying().id ? TRACKS_STORAGE.getPlayingState() : null});
-                break;
             case action instanceof ACTIONS.TRACK_LIKE:
-                this.props.track.id === action.payload.id && this.setState({is_liked: action.payload.is_liked});
+                this.props.track.id === action.payload.id && this.setState({is_liked: TRACKS_STORAGE.isLiked(this.props.track)});
+                break;
+            case action instanceof ACTIONS.TRACK_LIKE_STATE:
+                this.props.track.id === action.payload.trackId && this.setState({is_liked: TRACKS_STORAGE.isLiked(this.props.track)});
                 break;
         }
     }
 
+    onPlayerAction = (action: any): void => {
+        this.setState({playing: this.checkPlaying()});
+    }
+
     onPlay = (): void => {
-        if (typeof this.state.playing === 'boolean') {
-            Dispatcher.dispatch(new ACTIONS.TRACK_STATE_CHANGE({playing: !this.state.playing}));
+        if (this.checkPlaying() !== null) {
+            Dispatcher.dispatch(new ACTIONS.AUDIO_TOGGLE_PLAY(null));
             return;
-        } 
-        Dispatcher.dispatch(new ACTIONS.TRACK_PLAY(this.props.track));
+        }
+        Dispatcher.dispatch(new ACTIONS.QUEUE_ADD_SECTION(this.props.track));
     }
 
     onLike = async () => {
         try {
-            const res = (await API.postTrackLike(this.props.track.id, !this.state.is_liked)).body;
-            Dispatcher.dispatch(new ACTIONS.TRACK_LIKE({...this.props.track, is_liked: !this.state.is_liked}));
+            Dispatcher.dispatch(new ACTIONS.TRACK_LIKE(this.props.track));
         } catch (e) {
             console.error(e);
             return;
@@ -95,9 +109,10 @@ export class TrackLine extends TrackBase {
     render() {
         const ind: number = this.props.ind;
         const track: AppTypes.Track = this.props.track;
-
+        const className = "track-line" + (this.state.playing !== null || this.state.hover ? " active" : "")
+                                        + (this.props.ping ? " ping": "");
         return [
-            <div className={this.state.playing !== null || this.state.hover ? "track-line active" : "track-line"}>
+            <div className={className} dataTrack={track.id.toString()}>
                 <div className="track-line__info">
                     {ind !== undefined && <span className="track-line__info__index">{ind + 1}</span>}
                     <div className="track-line__info__img" onClick={this.onPlay} onMouseEnter={() => this.setState({hover: true})} onMouseLeave={() => this.setState({hover: false})}>
@@ -124,18 +139,12 @@ export class TrackLine extends TrackBase {
                     <Link to={track.album_page}>{track.album}</Link>
                 </div>
 
-                <div style={{ display: 'flex' }} className="track-line__controls">
-                    <div style={{ order: 1 }} className="track-line__controls__duration-container">
+                <div className="track-line__controls">
+                    <div className="track-line__controls__duration-container">
                         <span className="track-line__controls__duration">{durationToString(track.duration)}</span>
                     </div>
-                    <Like style={{ order: 2 }} active={this.state.is_liked} onClick={this.onLike}/>
-                    <Actions style={{ order: 3 }}>
-                        {!this.props.inPlaylist && <ActionsAddToPlaylist track={track} />}
-                        {this.props.inPlaylist && <ActionsRemoveFromPlaylist track={track} playlist={this.props.inPlaylist} onRemove={this.props.removeFromPlaylist} />}
-                        <ActionsAddToQueue track={track} />
-                        <ActionsToAlbum track={track} />
-                        <ActionsToArtist track={track} />
-                    </Actions>
+                    <Like active={this.state.is_liked} onClick={this.onLike}/>
+                    <ActionsTrack track={track} playlist={this.props.inPlaylist} removeFromPlaylist={this.props.removeFromPlaylist} />
                 </div>
             </div>
         ]
@@ -169,3 +178,4 @@ export class TrackCard extends TrackBase {
         ]
     }
 }
+

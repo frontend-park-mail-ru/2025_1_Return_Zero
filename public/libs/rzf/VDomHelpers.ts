@@ -195,4 +195,3 @@ export function updateChildren(vnode: TagVNode | ComponentVNode, newVNode: TagVN
     }
 }
 
-

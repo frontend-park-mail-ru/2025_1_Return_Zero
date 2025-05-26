@@ -8,18 +8,25 @@ import { Logo } from "components/logo/Logo";
 import { BottomHeader } from "components/bottomHeader/BottomHeader";
 
 import { LoginForm, LogoutForm, SignupForm } from "components/forms/AuthForms";
+import { Notifications } from "components/notifications/Notifications";
 
 import { MainPage } from "pages/MainPage";
 import { TracksPage } from "pages/TracksPage";
+import { SelectionPage } from "pages/SelectionPage";
 import { AlbumsPage } from "pages/AlbumsPage";
 import { ArtistsPage } from "pages/ArtistsPage";
 import { AlbumPage } from "pages/AlbumPage";
 import { ArtistPage } from "pages/ArtistPage";
 import { PlaylistPage } from "pages/PlaylistPage";
-import { SearchPage } from "pages/SearchPage";
 
 import { ProfilePage } from "pages/ProfilePage";
 import { SettingsPage } from "pages/SettingsPage";
+import { JamPage } from "pages/JamPage";
+
+import { DisplayAllPage } from "pages/DisplayAllPage";
+import { SearchPage } from "pages/SearchPage";
+
+import { LabelPage } from "pages/LabelPage";
 
 import "./layout.scss";
 
@@ -33,6 +40,7 @@ export default class MainLayout extends Component {
 
                 <Route path="^/" exact component={MainPage}></Route>
                 <Route path="^/tracks/" exact component={TracksPage} />
+                <Route path="^/selection/:selection/" exact component={SelectionPage} />
 
                 <Route path="^/albums/" exact component={AlbumsPage} />
                 <Route path="^/albums/:album_id<int>/" exact component={AlbumPage} />
@@ -45,11 +53,17 @@ export default class MainLayout extends Component {
                 <Route path="^/profile/:username/" exact component={ProfilePage} />
                 <Route path="^/settings/" exact component={SettingsPage} />
 
+                <Route path="^/all/" component={DisplayAllPage} />
                 <Route path="^/search/" component={SearchPage} />
+
+                <Route path="^/label/" component={LabelPage} />
+                <Route path="^/jam/:room_id/" exact component={JamPage} />
 
                 <Route path="#login$" component={LoginForm} />
                 <Route path="#register$" component={SignupForm} />
                 <Route path="#logout$" component={LogoutForm} />
+                
+                <Notifications />
             
                 <div className="layout--main__bottom-panel"> 
                     <Route path=".*" component={Player} />

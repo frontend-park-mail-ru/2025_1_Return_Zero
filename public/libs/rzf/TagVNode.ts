@@ -107,7 +107,7 @@ export function cleanUpTag(vnode: TagVNode) {
 export function updateTag(vnode: TagVNode, newVNode: TagVNode) {
     if (vnode.tag !== newVNode.tag) {
         VDomHelpers.insert(newVNode, destroy(vnode), vnode.parent);
-        render(newVNode, VDomHelpers.getParentTag(vnode)!.firstDom!, VDomHelpers.getNextDom(vnode));
+        render(newVNode, VDomHelpers.getParentTag(newVNode)!.firstDom!, VDomHelpers.getNextDom(newVNode));
         return;
     }
 
@@ -171,3 +171,4 @@ export function updateTag(vnode: TagVNode, newVNode: TagVNode) {
 
     VDomHelpers.updateChildren(vnode, newVNode);
 }
+

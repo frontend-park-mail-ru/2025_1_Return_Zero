@@ -4,9 +4,13 @@ import { TrackLine } from "components/track/Track";
 import { AlbumCard } from "components/album/Album";
 import { Section } from "components/elements/Section";
 import { Button, ButtonDanger } from "components/elements/Button";
+import { ActionsArtist } from "components/elements/Actions/ActionsArtist";
 
-import { one_alive_async } from "utils/funcs";
+import Dispatcher from "libs/flux/Dispatcher";
+import { ACTIONS } from "utils/flux/actions";
+
 import { API } from "utils/api";
+import { one_alive_async } from "utils/funcs";
 
 import './pages.scss';
 
@@ -39,9 +43,12 @@ export class ArtistPage extends Component {
     onLike = one_alive_async(async () => {
         try {
             const resp = await API.postArtistLike(this.props.artist_id, !this.state.is_liked);
+            Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+                type: "success",
+                message: !this.state.is_liked ? `Вы подписались на ${this.state.artist.title}` : `Вы отписались от ${this.state.artist.title}`,
+            }))
             this.setState({is_liked: !this.state.is_liked});
         } catch (e) {
-            console.error(e.message);
         }
     });
 
@@ -49,7 +56,12 @@ export class ArtistPage extends Component {
         if (this.artist_id !== this.props.artist_id) this.fetchData();
 
         if (!this.state.artist) {
-            return [<div className="page page--404">Артист не найден{'('}</div>]
+            return [
+                <div className="page page--404 page__empty">
+                    <img src="/static/img/icon-artists.svg" alt="" />
+                    <h1>Артист не найден</h1>
+                </div>
+            ]
         }
 
         return [
@@ -61,19 +73,19 @@ export class ArtistPage extends Component {
                         <h2 className="page__info__title">{this.state.artist.title}</h2>
                         <span className="page__info__stats">{this.state.artist.listeners_count} слушателей за месяц</span>
                         <div className="page__info__actions">
-                            <img src="/static/img/play.svg" alt="play"/>
                             {!this.state.is_liked ? 
                                 <Button onClick={this.onLike}>Подписаться</Button> :
                                 <ButtonDanger onClick={this.onLike}>Отписаться</ButtonDanger>}
+                            <ActionsArtist artist={this.state.artist} />
                         </div>
                     </div>
                 </div>
-                <Section title="Популярные альбомы" horizontal>
+                <Section title="Популярные альбомы" horizontal all_link={`/all/artists/${this.artist_id}/albums`}>
                     {this.state.albums.map((album, index) => (
                         <AlbumCard key={album.id} album={album}/>
                     ))}
                 </Section>
-                <Section title="Популярные треки">
+                <Section title="Популярные треки" all_link={`/all/artists/${this.artist_id}/tracks`}>
                     {this.state.tracks.map((track, index) => (
                         <TrackLine key={track.id} ind={index} track={track}/>
                     ))}

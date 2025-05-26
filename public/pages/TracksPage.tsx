@@ -58,13 +58,13 @@ export class TracksPage extends Component {
                 <Section title="Только для тебя" horizontal>
                     <Special />
                 </Section>
-                {this.state.playlists.length ? <Section title="Плейлисты" horizontal>
+                {!!this.state.playlists.length && <Section title="Плейлисты" horizontal all_link="/all/playlists">
                     {this.state.playlists.map((playlist, index) => <PlaylistCard key={playlist.id} playlist={playlist} />)}
-                </Section> : undefined}
-                {this.state.history.length ? <Section title="История прослушивания" horizontal>
+                </Section>}
+                {!!this.state.history.length && <Section title="История прослушивания" horizontal all_link="/all/tracks/history">
                     {this.state.history.map((track, index) => <TrackCard key={track.id} track={track} />)}
-                </Section> : undefined}
-                <Section title="Рекомендации">
+                </Section>}
+                <Section title="Рекомендации" all_link="/all/tracks/top">
                     {this.state.tracks.map((track, index) => (
                         <TrackLine key={track.id} ind={index} track={track}/>
                     ))}

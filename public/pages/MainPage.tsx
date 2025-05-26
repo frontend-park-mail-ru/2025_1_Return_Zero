@@ -52,15 +52,13 @@ export class MainPage extends Component {
                 <Section title="Только для тебя" horizontal>
                     <Special />
                 </Section>
-                {this.state.favorites.length ? <Section title="Любимые треки" horizontal>
+                {!!this.state.favorites.length && <Section title="Любимые треки" horizontal all_link="/all/tracks/favorite">
                     {this.state.favorites.map((track, index) => (
                         <TrackCard key={track.id} track={track}/>
                     ))}
-                </Section> : undefined}
-                <Section title="Рекомендации">
-                    {this.state.tracks.map((track, index) => (
-                        <TrackLine key={track.id} ind={index} track={track}/>
-                    ))}
+                </Section>}
+                <Section title="Рекомендации" all_link="/all/tracks/top">
+                    {this.state.tracks.map((track, index) => <TrackLine key={track.id} ind={index} track={track}/>)}
                 </Section>
             </div>
         ]

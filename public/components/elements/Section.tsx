@@ -4,8 +4,16 @@ import { Link } from "libs/rzf/Router";
 import './Section.scss'
 
 export class Section extends Component {
+    props: {
+        title: string,
+        horizontal?: boolean,
+        wrap?: boolean,
+        all_link?: string,
+        [key: string]: any
+    }
+
     render() {
-        const sectionClassName = this.props.horizontal ? "section section--horizontal" : "section";
+        const sectionClassName = "section" + (this.props.horizontal ? ' section--horizontal' : '') + (this.props.wrap ? ' section--wrap' : '');
         return [
             <section {...this.props} className={sectionClassName}>
                 <div className="section__top">
@@ -19,3 +27,4 @@ export class Section extends Component {
         ]
     }
 }
+

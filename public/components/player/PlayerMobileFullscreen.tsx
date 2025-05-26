@@ -1,42 +1,38 @@
 import { Component } from "libs/rzf/Component";
-import player from 'common/player';
 import { convertDuration } from "utils/durationConverter";
-import tracksQueue from "common/tracksQueue";
-import MobileDragProgressBar from "./MobileDragProgressBar";
+import MobileDragProgressBar from "./DragHandlers/MobileDragProgressBar";
 
 import Router from "libs/rzf/Router";
 
 import "./PlayerMobileFullscreen.scss";
 
-import { Like } from "components/elements/Like";
-import { Link } from "libs/rzf/Router";
-import { ACTIONS } from "utils/flux/actions";
-import { ActionsAddToPlaylist, ActionsAddToQueue, ActionsToAlbum, ActionsToArtist } from "components/elements/ActionsTrack";
-import { API } from "utils/api";
-import Dispatcher from "libs/flux/Dispatcher";
+
+import { ActionsTrack } from "components/elements/Actions/ActionsTrack";
 import { TRACKS_STORAGE } from "utils/flux/storages";
-import { updateMarquee } from "common/marquee";
-import { Actions } from "components/elements/Actions";
+import { PLAYER_STORAGE } from "utils/flux/storages";
+
+import { SongName } from "./SongTitle/SongName";
+import { SongArtist } from "./SongTitle/SongArtist";
+import { TogglePlayBtn } from "./Buttons/togglePlayBtn";
+import { PrevBtn } from "./Buttons/prevBtn";
+import { NextBtn } from "./Buttons/nextBtn";
+import { RepeatBtn } from "./Buttons/repeatBtn";
+import { ShuffleBtn } from "./Buttons/shuffleBtn";
+import { LikeBtn } from "./Buttons/likeBtn";
+import playerStorage from "utils/flux/PlayerStorage";
 
 export class PlayerMobileFullscreen extends Component {
-    private unsubscribe: () => void;
-    private storageUnsubscribe: any;
     private playDragging: MobileDragProgressBar;
 
     state = {
         actions_opened: false,
     }
-
+    
     componentDidMount() {
         // подписки
-        this.unsubscribe = player.subscribe(() => {
-            this.setState({});    
-        });
-        this.storageUnsubscribe = TRACKS_STORAGE.subscribe(this.onAction);
-
+        TRACKS_STORAGE.subscribe(this.onAction);
+        PLAYER_STORAGE.subscribe(this.onAction);
         this.configurePlayProgressBar();
-
-        queueMicrotask(() => updateMarquee());
     }
 
     onAction = () => {
@@ -44,10 +40,8 @@ export class PlayerMobileFullscreen extends Component {
     }
 
     componentWillUnmount() {
-        if (this.unsubscribe) {
-            this.unsubscribe();
-        }
         TRACKS_STORAGE.unsubscribe(this.onAction);
+        PLAYER_STORAGE.unsubscribe(this.onAction);
     }
 
     configurePlayProgressBar() {
@@ -84,26 +78,18 @@ export class PlayerMobileFullscreen extends Component {
         }
     };
 
-    onLike = async () => {
-        try {
-            const res = (await API.postTrackLike(tracksQueue.getCurrentTrack().id, !tracksQueue.getCurrentTrack().is_liked)).body;
-            Dispatcher.dispatch(new ACTIONS.TRACK_LIKE({...tracksQueue.getCurrentTrack(), is_liked: !tracksQueue.getCurrentTrack().is_liked}));
-            this.setState({});
-        } catch (e) {
-            console.error(e);
-            return;
-        }
-    }
-
     render() {
         const onResize = this.props.onResize;
-        console.warn(tracksQueue.getCurrentTrack());
 
         return [
             <div id="player" class="fullscreen-mobile-player" style={{ overscrollBehavior: 'contain' }}>
                 <div className="fullscreen-mobile-player__container">
                     <div class="fullscreen-mobile-player__container__top">
-                        <div onClick={() => Router.push(tracksQueue.getCurrentTrack().album_page, {})} class="album-href">Перейти к альбому</div>
+                        <div onClick={() => Router.push(playerStorage.currentTrack.album_page, {})}
+                            class="album-href"
+                            >
+                                Перейти к альбому
+                        </div>
                         <img onClick={this.props.onResize} class="cross" src="/static/img/cross.svg" />
                     </div>
 
@@ -111,30 +97,19 @@ export class PlayerMobileFullscreen extends Component {
                         id="song-img"
                         class="song-img" 
                         onTouchMove={this.handleTouchMove}
-                        src={tracksQueue.getCurrentTrackImage()}
+                        src={playerStorage.currentTrackImage}
                         draggable={false}
                         onTouchStart={this.handleTouchStart}
                         onTouchEnd={this.handleTouchEnd}
                     />
 
                     <div class="fullscreen-mobile-player__container__widgets">
-                        <Like className="icon" active={tracksQueue.getCurrentTrack().is_liked} onClick={this.onLike}/>
+                        <LikeBtn track={playerStorage.currentTrack} />
                         <div className="song-text">
-                            <div id="song-name" className="song-name">
-                                <span className="marquee">{tracksQueue.getCurrentTrackName()}</span>
-                            </div>
-                            <div id="artist-name" className="artist-name" 
-                                onClick={() => {Router.push(tracksQueue.getAristURL(), {}); onResize()}}
-                            >
-                                <span className="marquee">{tracksQueue.getCurrentTrackArtist()}</span>
-                            </div>
+                            <SongName />
+                            <SongArtist onResize={onResize} />
                         </div>
-                        <Actions className="icon">
-                            <ActionsAddToPlaylist track={tracksQueue.getCurrentTrack()} />
-                            <ActionsAddToQueue track={tracksQueue.getCurrentTrack()} />
-                            <ActionsToAlbum track={tracksQueue.getCurrentTrack()} />
-                            <ActionsToArtist track={tracksQueue.getCurrentTrack()} />
-                        </Actions>
+                        <ActionsTrack track={playerStorage.currentTrack} />
                     </div> 
 
                     <div className="fullscreen-mobile-player__container__line">
@@ -146,68 +121,17 @@ export class PlayerMobileFullscreen extends Component {
                         </div>
 
                         <div className="fullscreen-mobile-player__container__duration">
-                            <span id="current-span">{convertDuration(player.getCurrentTime())}</span>
-                            <span id='end-span'>{convertDuration(player.getDuration())}</span>
+                            <span id="current-span">{convertDuration(playerStorage.currentTime)}</span>
+                            <span id='end-span'>{convertDuration(playerStorage.duration)}</span>
                         </div>
                     </div>
 
                     <div className="fullscreen-mobile-player__container__controls">
-                        <img 
-                            src={tracksQueue.shuffled 
-                                ? "/static/img/player-shuffle-active.svg"
-                                : "/static/img/player-shuffle.svg"}
-                            className="icon" 
-                            id="shuffle" 
-                            alt="Shuffle"
-                            draggable={false}
-                            onClick={() => {
-                                tracksQueue.shuffled 
-                                    ? tracksQueue.unshuffle()
-                                    : tracksQueue.shuffle();
-                                this.setState({});
-                            }}
-                        />
-                        <img 
-                            src="/static/img/player-prev.svg" 
-                            className="icon" 
-                            id="prev" 
-                            alt="Prev"
-                            draggable={false}
-                            onClick={() => tracksQueue.previousTrack()}
-                        />
-                        <img 
-                            src={player.audio.paused 
-                                ? "/static/img/player-play.svg" 
-                                : "/static/img/player-pause.svg"} 
-                            className="icon" 
-                            id="play" 
-                            alt={player.audio.paused ? "Play" : "Pause"}
-                            draggable={false}
-                            onClick={() => player.togglePlay()}
-                        />
-                        <img 
-                            src="/static/img/player-next.svg" 
-                            className="icon" 
-                            id="next" 
-                            alt="Next"
-                            draggable={false}
-                            onClick={() => tracksQueue.nextTrack()}
-                        />
-                        <img 
-                            src={tracksQueue.repeated 
-                                ? "/static/img/player-repeat-active.svg"
-                                : "/static/img/player-repeat.svg"} 
-                            className="icon" 
-                            id="repeat" 
-                            alt="Repeat"
-                            draggable={false}
-                            onClick={() => {
-                                tracksQueue.repeated
-                                    ? tracksQueue.unrepeat()
-                                    : tracksQueue.repeat();
-                                this.setState({});
-                            }}
-                        />
+                        <ShuffleBtn />
+                        <PrevBtn />
+                        <TogglePlayBtn />
+                        <NextBtn />
+                        <RepeatBtn />
                     </div>
                 </div>
             </div>

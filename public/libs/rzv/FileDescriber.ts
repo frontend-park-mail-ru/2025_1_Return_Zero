@@ -59,6 +59,12 @@ export class FileDescriber extends Describer<File> {
             result.url = result.value && URL.createObjectURL(result.value);
         }));
     }
+
+    clear(result: DescriberResult): void {
+        if (result.url) {
+            URL.revokeObjectURL(result.url);
+        }
+    }
 }
 
 export function file(): FileDescriber {

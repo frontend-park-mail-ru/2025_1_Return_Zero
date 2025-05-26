@@ -12,6 +12,7 @@ import { one_alive_async } from "utils/funcs";
 
 import './PlaylistCreate.scss';
 import './forms.scss'
+import Broadcast from "common/broadcast";
 
 export class PlaylistEdit extends Component {
     validator = getPlaylistEditValidator(this.props.playlist);
@@ -47,8 +48,12 @@ export class PlaylistEdit extends Component {
             )).body;
             this.props.onSave(playlist);
             Dispatcher.dispatch(new ACTIONS.EDIT_PLAYLIST(playlist));
+            Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+                type: 'success',
+                message: `Плейлист успешно изменён`
+            }));
+            Broadcast.send('editPlaylist', playlist);
         } catch (error) {
-            console.error(error)
             this.setState({error: 'Что-то пошло не так'})
         }
     })
