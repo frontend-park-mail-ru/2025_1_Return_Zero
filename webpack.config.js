@@ -4,12 +4,15 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 const buildPath = path.resolve(__dirname, 'dist');
 const publicPath = path.resolve(__dirname, 'public');
 
 module.exports = {
-  mode: 'development', 
+  mode: 'production', 
   entry: path.join(publicPath, 'index.tsx'),
   output: {
     path: buildPath,
@@ -73,11 +76,23 @@ module.exports = {
       }
     ],
   },
+  optimization: {
+    minimizer: [
+      new TerserPlugin(),
+      new CssMinimizerPlugin(), 
+    ],
+  },
   plugins: [
     new CleanWebpackPlugin(),
     new ForkTsCheckerWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, './public/index.html'),
+      minify: { 
+        collapseWhitespace: true,
+        removeComments: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+      },
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',
@@ -85,24 +100,22 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         {
+          from: path.join(publicPath, 'sw.js'),
+          to: path.join(buildPath, 'sw.js'),
+        },
+        {
           from: path.join(publicPath, 'img'),
           to: path.join(buildPath, 'img'),
         },
-        {
-          from: path.join(publicPath, 'sw.js'),
-          to: path.join(buildPath, 'sw.js'),
-        }
       ],
     }),
+    new CompressionPlugin({
+      algorithm: 'gzip',
+      test: /\.(js|css|html|svg)$/,
+      threshold: 10240,
+      minRatio: 0.8,
+    }),
   ],
-  devServer: {
-    port: 8888,
-    historyApiFallback: true,
-    watchFiles: publicPath,
-    client: {
-      overlay: false,
-    },
-  },
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],
     alias: {
