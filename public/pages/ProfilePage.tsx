@@ -60,17 +60,17 @@ export class ProfilePage extends Component {
                         </div>
                     </div>
                 </div>
-                { playlists.length > 0 && <Section title="Плейлисты" horizontal>
+                { playlists.length > 0 && <Section title="Плейлисты" horizontal all_link={`/all/profile/${this.username}/playlists`}>
                     {playlists.map((playlist, index) => (
                         <PlaylistCard key={playlist.id} ind={index} playlist={playlist} />
                     ))}
                 </Section>}
-                { tracks.length > 0 && <Section title="Любимые треки">
+                { tracks.length > 0 && <Section title="Любимые треки" all_link={`/all/profile/${this.username}/tracks`}>
                     {tracks.map((track, index) => (
                         <TrackLine key={track.id} ind={index} track={track}/>
                     ))}
                 </Section>}
-                { artists.length > 0 && <Section title="Любимые исполнители" horizontal>
+                { artists.length > 0 && <Section title="Любимые исполнители" horizontal all_link={`/all/profile/${this.username}/artists`}>
                     {artists.map((artist, index) => (
                         <ArtistCard key={artist.id} artist={artist}/>
                     ))}

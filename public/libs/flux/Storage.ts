@@ -26,12 +26,7 @@ export class Storage<T extends StorageStor = StorageStor> {
     }
 
     unsubscribe(sub: ActionCallback): void {
-        const index = this.subs.indexOf(sub);
-        if (index !== -1) {
-            this.subs.splice(index, 1);
-        } else {
-            console.error('Subscription not found');
-        }
+        this.subs = this.subs.filter(item => item !== sub);
     }
 }
 

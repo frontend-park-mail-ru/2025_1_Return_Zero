@@ -1,6 +1,8 @@
 import { Component } from "libs/rzf/Component";
 import { Link } from "libs/rzf/Router";
 
+import { ActionsAlbum } from "components/elements/Actions/ActionsAlbum";
+
 import "./Album.scss";
 
 export class AlbumLine extends Component {
@@ -30,7 +32,7 @@ export class AlbumLine extends Component {
                     <span>{album.type}</span>
                 </div>
                 <div className="album-line__controls">
-                    <img src="/static/img/play.svg" alt="play"/>
+                    <ActionsAlbum album={album} />
                 </div>
             </div>
         ]
