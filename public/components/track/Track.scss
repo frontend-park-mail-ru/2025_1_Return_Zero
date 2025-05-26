@@ -42,8 +42,9 @@
         &__img {
             position: relative;
             cursor: pointer;
-
+            
             .content {
+                display: block;
                 width: 4.375rem;
                 height: 4.375rem;
                 border-radius: 15px;
@@ -105,6 +106,20 @@
         .track-line__info__img {
             @include trackImgPlaying();
         }
+    }
+
+    &.ping {
+        @keyframes pingTrack {
+            from {
+                background-color: transparent;
+            }
+
+            to {
+                background-color: d.$color-button-active;
+            }
+        }
+
+        animation: pingTrack 0.8s ease-in-out 0.3s 4 alternate;
     }
 
     &__album {
