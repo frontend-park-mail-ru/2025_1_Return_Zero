@@ -4,8 +4,7 @@ import { Link } from "libs/rzf/Router";
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
 
-import { TRACKS_STORAGE, USER_STORAGE, PLAYER_STORAGE } from "utils/flux/storages";
-import { API } from "utils/api";
+import { TRACKS_STORAGE, PLAYER_STORAGE } from "utils/flux/storages";
 
 import { Like } from "../elements/Like";
 import { ActionsTrack } from "../elements/Actions/ActionsTrack";
@@ -19,8 +18,6 @@ function durationToString(duration: number): string {
     return `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
 }
 
-import playerStorage from "utils/flux/PlayerStorage";
-import Broadcast from "common/broadcast";
 
 abstract class TrackBase extends Component {
     props: {
@@ -29,6 +26,8 @@ abstract class TrackBase extends Component {
 
         inPlaylist?: AppTypes.Playlist,
         removeFromPlaylist?: () => void,
+
+        ping?: boolean,
         [key: string]: any
     }
 
@@ -52,10 +51,10 @@ abstract class TrackBase extends Component {
     }
 
     checkPlaying() {
-        if (!playerStorage.currentTrack) return null;
+        if (!PLAYER_STORAGE.currentTrack) return null;
 
-        if (playerStorage.currentTrack.id === this.props.track.id) {
-            if (playerStorage.isPlaying) {
+        if (PLAYER_STORAGE.currentTrack.id === this.props.track.id) {
+            if (PLAYER_STORAGE.isPlaying) {
                 return true;
             }
             return false;
@@ -110,11 +109,10 @@ export class TrackLine extends TrackBase {
     render() {
         const ind: number = this.props.ind;
         const track: AppTypes.Track = this.props.track;
-
+        const className = "track-line" + (this.state.playing !== null || this.state.hover ? " active" : "")
+                                        + (this.props.ping ? " ping": "");
         return [
-            <div className={this.state.playing !== null || this.state.hover ? "track-line active" : "track-line"} 
-                id={this.props.setId ? 'track-' + track.id.toString() : undefined}
-                >
+            <div className={className} dataTrack={track.id.toString()}>
                 <div className="track-line__info">
                     {ind !== undefined && <span className="track-line__info__index">{ind + 1}</span>}
                     <div className="track-line__info__img" onClick={this.onPlay} onMouseEnter={() => this.setState({hover: true})} onMouseLeave={() => this.setState({hover: false})}>

@@ -40,6 +40,17 @@ export class AlbumPage extends Component {
         }
     });
 
+    scrollToTrack() {
+        const m = location.hash.match(/#track-(\d+)$/)
+        if (!m) return;
+        const id = parseInt(m[1]);
+
+        const page = (this.vnode.firstDom as HTMLElement)
+        const track = (page.querySelector(`.track-line[data-track="${id}"]`) as HTMLElement);
+        if (!track) return;
+        track.scrollIntoView({behavior: 'smooth'});
+    }
+
     render() {
         if (!this.state.album) {
             return [
@@ -49,6 +60,9 @@ export class AlbumPage extends Component {
                 </div>
             ]
         }
+        queueMicrotask(this.scrollToTrack.bind(this));
+
+        const m = location.hash.match(/#track-(\d+)$/)
         const album = this.state.album;
         return [
             <div className="page page--album">
@@ -71,7 +85,7 @@ export class AlbumPage extends Component {
                 </div>
                 <Section title="Треки в альбоме">
                     {this.state.tracks.map((track, index) => (
-                        <TrackLine key={track.id} ind={index} track={track} />
+                        <TrackLine key={track.id} ind={index} track={track} ping={m && track.id === parseInt(m[1])} />
                     ))}
                 </Section>
             </div>

@@ -27,9 +27,18 @@ export class Actions extends Component {
         this.setState({opened: !this.state.opened})
     }
 
+    onClick = (e: Event) => {
+        console.log((e.target as HTMLElement).classList)
+        if ((e.target as HTMLElement).classList.contains('actions-item')) {
+            this.close(e)
+        }
+    }
+
     render() {
         return [
-            <div {...this.props} className={this.props.className ? this.props.className + " actions" : "actions"} onClickOutside={this.close} >
+            <div {...this.props} className={this.props.className ? this.props.className + " actions" : "actions"}
+                onClick={this.onClick} onClickOutside={this.close}
+                >
                 <img onClick={this.switch} className="actions__img" src="/static/img/dots.svg"/>
                 {this.state.opened && <NearPopup className="actions__popup" >
                     {this.props.children}
@@ -57,7 +66,7 @@ export class ActionsCopyLink extends Component {
         return [
             <div className="actions-item" onClick={this.copyLink}>
                 <img src="/static/img/copy.svg" alt="copy" />
-                <span>Скопировать ссылку</span>
+                <span>Поделиться</span>
             </div>
         ]
     }

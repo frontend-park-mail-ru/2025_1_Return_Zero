@@ -51,7 +51,6 @@ export class ActionsTrack extends Component {
         const { track, playlist } = this.props;
         return [
             <Actions>
-                <ActionsCopyLink link={'Затычка'} />
                 {!this.props.inPlaylist && USER_STORAGE.getUser() && 
                     <ActionsAddToPlaylist track={track} />}
                 {this.props.playlist && USER_STORAGE.getUser()?.username === this.props.playlist.username && 
