@@ -16,8 +16,6 @@ import './pages.scss';
 import Dispatcher from "libs/flux/Dispatcher";
 import { Preloader } from "components/preloader/Preloader";
 
-import playerStorage from "utils/flux/PlayerStorage";
-
 export class JamPage extends Component {
     state = {
         leader: JAM_STORAGE.leader as Leader | null,
@@ -83,7 +81,7 @@ export class JamPage extends Component {
     render() {
         return [
             <div className="page page--jam">
-                <Section title="Совместное прослушивание" horizontal>
+                <Section title="Совместное прослушивание">
                     { this.state.leader == null && <div className="page__empty">
                         <img src="/static/img/45-Smile.svg" alt="" />
                         <h1>Прослушивание закрыто</h1>
@@ -102,7 +100,7 @@ export class JamPage extends Component {
                     </div>}
                 </Section>
                 { this.state.leader != null && 
-                    <Section title="Сейчас играет:" horizontal>
+                    <Section title="Сейчас играет:">
                         {this.state.now_playing && <TrackLine track={this.state.now_playing} />}
                     </Section>
                 }
