@@ -27,11 +27,7 @@ export class Actions extends Component {
         this.setState({opened: !this.state.opened})
     }
 
-    onClick = (e: Event) => {
-        console.log((e.target as HTMLElement).classList)
-        if ((e.target as HTMLElement).classList.contains('actions-item')) {
-            this.close(e)
-        }
+    onClick = (e: MouseEvent) => {
     }
 
     render() {

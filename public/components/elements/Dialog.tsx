@@ -9,7 +9,7 @@ export class Dialog extends Component {
     }
     
     onClose = (e: Event) => { this.props.onClose && this.props.onClose(e) }
-    onInner = (e: Event) => e.stopPropagation()
+    onInner = (e: Event) => { e.stopPropagation()}
 
     render() {
         const {className, children, onClose, ...props} = this.props

@@ -25,7 +25,6 @@ export class SearchPage extends Component {
 
     fetchData = debounce(() => {
         this.query = location.search;
-        console.log(this.query);
         const searchParams = Object.fromEntries(new URLSearchParams(location.search)) as {
             query: string
         };

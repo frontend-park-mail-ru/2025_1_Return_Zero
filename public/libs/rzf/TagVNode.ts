@@ -41,7 +41,7 @@ export function hTag(
 
 function getClickOutsideHandler(vnode: TagVNode, handler: EventListenerOrEventListenerObject) {
     const res_handler = (e: MouseEvent) => {
-        if (!vnode.firstDom!.contains(e.target as HTMLElement)) {
+        if (!vnode.firstDom!.contains(e.target as HTMLElement) && document.body.contains(e.target as HTMLElement)) {
             if (typeof handler === 'function') {
                 handler(e);
             } else {

@@ -48,8 +48,6 @@ export class ActionsTrack extends Component {
         isJam: JAM_STORAGE.roomId ? true : false,
     }
 
-
-
     render() {
         const { track, playlist } = this.props;
         return [
