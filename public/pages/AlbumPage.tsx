@@ -71,7 +71,7 @@ export class AlbumPage extends Component {
                 </div>
                 <Section title="Треки в альбоме">
                     {this.state.tracks.map((track, index) => (
-                        <TrackLine key={track.id} ind={index} track={track}/>
+                        <TrackLine key={track.id} ind={index} track={track} />
                     ))}
                 </Section>
             </div>

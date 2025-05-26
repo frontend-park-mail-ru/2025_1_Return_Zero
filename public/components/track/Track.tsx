@@ -112,7 +112,9 @@ export class TrackLine extends TrackBase {
         const track: AppTypes.Track = this.props.track;
 
         return [
-            <div className={this.state.playing !== null || this.state.hover ? "track-line active" : "track-line"}>
+            <div className={this.state.playing !== null || this.state.hover ? "track-line active" : "track-line"} 
+                id={this.props.setId ? 'track-' + track.id.toString() : undefined}
+                >
                 <div className="track-line__info">
                     {ind !== undefined && <span className="track-line__info__index">{ind + 1}</span>}
                     <div className="track-line__info__img" onClick={this.onPlay} onMouseEnter={() => this.setState({hover: true})} onMouseLeave={() => this.setState({hover: false})}>

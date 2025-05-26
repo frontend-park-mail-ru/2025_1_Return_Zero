@@ -57,6 +57,9 @@ export class ActionsTrack extends Component {
                 {this.props.playlist && USER_STORAGE.getUser()?.username === this.props.playlist.username && 
                     <ActionsRemoveFromPlaylist track={track} playlist={playlist} onRemove={this.props.removeFromPlaylist} />}
                 <ActionsAddToQueue track={track} />
+                <ActionsCopyLink link={URL.parse(track.album_page + `#track-${track.id}`, location.href).toString()} />
+                <Link className="actions-item" to={this.props.track.album_page}>Перейти к альбому</Link>
+                <Link className="actions-item" to={this.props.track.artists[0].artist_page}>Перейти к исполнителю</Link>
                 
                 {this.state.isJam 
                     ? <ActionsGoToJam room_id={JAM_STORAGE.roomId} />
