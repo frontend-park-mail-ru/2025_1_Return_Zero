@@ -3,7 +3,7 @@ import { Component } from "libs/rzf/Component";
 import { ACTIONS } from "utils/flux/actions";
 import { JAM_STORAGE, PLAYER_STORAGE } from "utils/flux/storages";
 import Dispatcher from "libs/flux/Dispatcher";
-
+import { JamToggleError } from "common/errors";
 export class NextBtn extends Component {
     componentDidMount() {
         // подписки
@@ -17,7 +17,7 @@ export class NextBtn extends Component {
     onNextAction = () => {
         if (JAM_STORAGE.roomId && !JAM_STORAGE.isLeader) {
             Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
-                message: 'Сначала выйдите из режима Jam',
+                message: JamToggleError,
                 type: 'error'
             }));
             return;

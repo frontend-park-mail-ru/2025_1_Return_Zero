@@ -66,7 +66,7 @@ export class JamPage extends Component {
 
                 break;
             case action instanceof ACTIONS.JAM_OPEN:
-                console.warn('jam open');
+                // console.warn('jam open');
                 break;
             case action instanceof ACTIONS.JAM_READY:
                 this.setState({ listeners: JAM_STORAGE.listeners });
@@ -141,8 +141,8 @@ export class JamPage extends Component {
                                 <img className="page__listener__img" src={listener.img_url} alt={listener.name} />
                                 <span className="page__listener__name">{listener.name}</span>
                                 {
-                                    listener.ready ?
-                                        <img className="page__listeners__status" src="/static/img/ready.svg" /> 
+                                    listener.ready 
+                                        ? <img className="page__listeners__status" src="/static/img/ready.svg" /> 
                                         : <Preloader width={1.5} height={1.5} />
                                 }
                             </div>

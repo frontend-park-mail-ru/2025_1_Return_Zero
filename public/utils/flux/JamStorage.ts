@@ -61,10 +61,6 @@ class JamStorage extends Storage<JamStorageStor> {
                     this.stor.ws.send(JSON.stringify({ type: type }));
                 }
                 break;
-            // case action instanceof ACTIONS.AUDIO_SET_CURRENT_TIME:
-            //     if (this.stor.isLeader) {
-            //         this.stor.ws.send(JSON.sting )
-            //     }
         }
     }
     protected handleAction(action: Action) {
@@ -134,6 +130,10 @@ class JamStorage extends Storage<JamStorageStor> {
             this.onMessage(event);
         };
 
+        this.stor.ws.onclose = () => {
+            this.onClose();
+        };
+
         this.stor.isLeader = false;
     }
 
@@ -186,6 +186,8 @@ class JamStorage extends Storage<JamStorageStor> {
 
         if (host_name === USER_STORAGE.getUser().username) {
             this.stor.isLeader = true;
+            this.stor.now_playing = playerStorage.currentTrack;
+            this.callSubs(new ACTIONS.JAM_UPDATE(null));
         }
 
         this.loadTrack(data.track_id);
@@ -230,7 +232,7 @@ class JamStorage extends Storage<JamStorageStor> {
         this.loadTrack(data.track_id);
     }
 
-    onClose(data: any) {
+    onClose() {
         this.closeWebSocket();
         this.callSubs(new ACTIONS.JAM_CLOSE(null));
         Dispatcher.dispatch(new ACTIONS.AUDIO_PAUSE(null));
@@ -274,7 +276,7 @@ class JamStorage extends Storage<JamStorageStor> {
                 break;
 
             case 'jam:closed':
-                this.onClose(data);
+                this.onClose();
                 break;
         }
 
@@ -283,6 +285,11 @@ class JamStorage extends Storage<JamStorageStor> {
 
     public closeWebSocket() {
         if (!this.stor.ws) {
+            this.stor.ws = null;
+            this.stor.roomId = null;
+            this.stor.leader = null;
+            this.stor.listeners = [];
+            this.stor.now_playing = null;
             return;
         }
 
