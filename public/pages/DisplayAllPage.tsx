@@ -118,10 +118,14 @@ class AllPage<T> extends Component {
             return [<Preloader />]
         }
         if (this.state.data.length === 0) {
+            const { retriever, displayer, ...other } = this.props;
             return [
-                <div className="page page--404 page__empty">
-                    <h2>Тут пока-что пусто</h2>
-                </div>
+                <Section {...other}>
+                    <div className="page page--404 page__empty">
+                        <img src="/static/img/45-Smile.svg" alt="empty" />
+                        <h2>Тут пока ничего нету</h2>
+                    </div>
+                </Section>
             ]
         }
     }

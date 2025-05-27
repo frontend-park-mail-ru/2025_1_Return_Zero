@@ -126,8 +126,6 @@ class JamStorage extends Storage<JamStorageStor> {
     }
 
     private async loadTrack(trackId: string) {
-        console.log('Loading track:', trackId);
-
         const response = await API.getTrack(Number(trackId));
         const track = response.body;
 
@@ -137,7 +135,6 @@ class JamStorage extends Storage<JamStorageStor> {
             }
         }
 
-        console.log('Loadede track:', track);
         Dispatcher.dispatch(new ACTIONS.QUEUE_PROCESS_NEW_TRACKS({ currentTrack: track, tracks: [track] }));
         this.callSubs(new ACTIONS.JAM_SET_TRACK(track));
 
@@ -146,7 +143,6 @@ class JamStorage extends Storage<JamStorageStor> {
 
     private onMessage(event: MessageEvent) {
         const data = JSON.parse(event.data);
-        console.warn('WebSocket message received:', data);
 
         switch (data.type) {
             case 'init':

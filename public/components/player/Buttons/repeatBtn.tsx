@@ -16,7 +16,7 @@ export class RepeatBtn extends Component {
     }
 
     onRepeatAction = () => {
-        if (JAM_STORAGE.roomId) {
+        if (JAM_STORAGE.roomId && !JAM_STORAGE.isLeader) {
             Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
                 message: 'Сначала выйдите из режима Jam',
                 type: 'error'
@@ -28,7 +28,7 @@ export class RepeatBtn extends Component {
     }
 
     onUnrepeatAction = () => {
-        if (JAM_STORAGE.roomId) {
+        if (JAM_STORAGE.roomId && !JAM_STORAGE.isLeader) {
             Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
                 message: 'Сначала выйдите из режима Jam',
                 type: 'error'
