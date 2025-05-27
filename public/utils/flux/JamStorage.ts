@@ -76,6 +76,7 @@ class JamStorage extends Storage<JamStorageStor> {
                 if (this.stor.isLeader) {
                     this.stor.ws.send(JSON.stringify({ type: 'host:seek', position: Math.floor(action.payload) }));
                 }
+                this.callSubs(action);
                 break;
             case action instanceof ACTIONS.JAM_READY:
                 this.stor.ws.send(JSON.stringify({ type: 'client:ready' }));
@@ -83,6 +84,7 @@ class JamStorage extends Storage<JamStorageStor> {
                 break;
             case action instanceof ACTIONS.JAM_HOST_LOAD:
                 this.hostLoad(action.payload);
+                this.callSubs(action);
                 break;
             case action instanceof ACTIONS.JAM_LEAVE:
                 this.closeWebSocket();
@@ -126,6 +128,10 @@ class JamStorage extends Storage<JamStorageStor> {
     }
 
     private async loadTrack(trackId: string) {
+        if (this.stor.isLeader) {
+            return;
+        }
+
         const response = await API.getTrack(Number(trackId));
         const track = response.body;
 
@@ -141,57 +147,95 @@ class JamStorage extends Storage<JamStorageStor> {
         this.stor.now_playing = track;
     }
 
+    onEnter(data: any) {
+        const host_id = data.host_id;
+        const host_name = data.user_names[host_id];    
+        
+        this.stor.leader = {
+            id: host_id.toString(),
+            img_url: data.user_images[host_id.toString()],
+            name: host_name.toString(),
+        }
+
+        for (const [id, name] of Object.entries(data.user_names)) {
+            if (id === host_id.toString()) {
+                continue;
+            }
+
+            this.stor.listeners.push({
+                id: id.toString(),
+                img_url: data.user_images[id.toString()],
+                name: name.toString(),
+                ready: data.loaded[id],
+            });
+        }
+
+        if (host_name === USER_STORAGE.getUser().username) {
+            this.stor.isLeader = true;
+        }
+
+        this.loadTrack(data.track_id);
+    }
+
+    onUserJoined(data: any) {
+        this.stor.listeners.push({
+            id: data.user_id.toString(),
+            img_url: data.user_images[data.user_id.toString()],
+            name: data.user_names[data.user_id.toString()].toString(),
+            ready: false,
+        });
+
+        if (this.stor.isLeader) {
+            this.stor.ws.send(JSON.stringify({ type: 'seek', position: Math.floor(playerStorage.currentTime) }));
+        }
+    }
+
+    onUserLeft(data: any) {
+        this.stor.listeners = this.stor.listeners.filter(listener => listener.id !== data.user_id.toString());
+    }
+
+    onSeek(data: any) {
+        if (this.stor.isLeader) {
+            return;
+        }
+
+        Dispatcher.dispatch(new ACTIONS.AUDIO_SET_CURRENT_TIME(data.position));
+    }
+
+    onReady(data: any) {
+        for (const listener of this.stor.listeners) {
+            if (data.loaded[listener.id]) {
+                listener.ready = true;
+            }
+        }
+    }
+
+    onLoad(data: any) {
+        this.callSubs(new ACTIONS.JAM_SET_TRACK(playerStorage.currentTrack));
+        this.stor.now_playing = playerStorage.currentTrack;
+        this.loadTrack(data.track_id);
+    }
+
+    onClose(data: any) {
+        this.closeWebSocket();
+        this.callSubs(new ACTIONS.JAM_CLOSE(null));
+        Dispatcher.dispatch(new ACTIONS.AUDIO_PAUSE(null));
+    }
+
     private onMessage(event: MessageEvent) {
         const data = JSON.parse(event.data);
 
         switch (data.type) {
             case 'init':
-                const host_id = data.host_id;
-                const host_name = data.user_names[host_id];    
-                
-                this.stor.leader = {
-                    id: host_id.toString(),
-                    img_url: data.user_images[host_id.toString()],
-                    name: host_name.toString(),
-                }
-
-                for (const [id, name] of Object.entries(data.user_names)) {
-                    if (id === host_id.toString()) {
-                        continue;
-                    }
-
-                    this.stor.listeners.push({
-                        id: id.toString(),
-                        img_url: data.user_images[id.toString()],
-                        name: name.toString(),
-                        ready: data.loaded[id],
-                    });
-                }
-
-                this.loadTrack(data.track_id);
-
-                if (host_name === USER_STORAGE.getUser().username) {
-                    this.stor.isLeader = true;
-                }
-
+                this.onEnter(data);
                 break;
 
             case 'user:joined':
-                this.stor.listeners.push({
-                    id: data.user_id.toString(),
-                    img_url: data.user_images[data.user_id.toString()],
-                    name: data.user_names[data.user_id.toString()].toString(),
-                    ready: false,
-                });
-
-                if (this.stor.isLeader) {
-                    this.stor.ws.send(JSON.stringify({ type: 'seek', position: Math.floor(playerStorage.currentTime) }));
-                }
-
+                this.onUserJoined(data);
                 break;
 
             case 'user:left':
-                this.stor.listeners = this.stor.listeners.filter(listener => listener.id !== data.user_id.toString());
+                this.onUserLeft(data);
                 break;
 
             case 'pause': 
@@ -203,38 +247,19 @@ class JamStorage extends Storage<JamStorageStor> {
                 break;
 
             case 'seek':
-                if (this.stor.isLeader) {
-                    return;
-                }
-
-                Dispatcher.dispatch(new ACTIONS.AUDIO_SET_CURRENT_TIME(data.position));
+                this.onSeek(data);
                 break;
 
             case 'ready':
-                for (const listener of this.stor.listeners) {
-                    if (data.loaded[listener.id]) {
-                        listener.ready = true;
-                    }
-                }
-
-                this.callSubs(new ACTIONS.JAM_UPDATE(null));
+                this.onReady(data);
                 break;
 
             case 'load':
-                if (this.stor.isLeader) {
-                    this.stor.now_playing = playerStorage.currentTrack;
-                    this.callSubs(new ACTIONS.JAM_SET_TRACK(playerStorage.currentTrack));
-                    this.callSubs(new ACTIONS.JAM_UPDATE(null));
-                    return;
-                }
-
-                this.loadTrack(data.track_id);
+                this.onLoad(data);
                 break;
 
             case 'jam:closed':
-                this.closeWebSocket();
-                this.callSubs(new ACTIONS.JAM_CLOSE(null));
-                Dispatcher.dispatch(new ACTIONS.AUDIO_PAUSE(null));
+                this.onClose(data);
                 break;
         }
 
