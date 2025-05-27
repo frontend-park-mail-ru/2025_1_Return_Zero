@@ -74,7 +74,7 @@ class JamStorage extends Storage<JamStorageStor> {
                 break;
             case action instanceof ACTIONS.JAM_SEEK:
                 if (this.stor.isLeader) {
-                    this.stor.ws.send(JSON.stringify({ type: 'host:seek', position: action.payload }));
+                    this.stor.ws.send(JSON.stringify({ type: 'host:seek', position: Math.floor(action.payload) }));
                 }
                 break;
             case action instanceof ACTIONS.JAM_READY:
@@ -189,7 +189,7 @@ class JamStorage extends Storage<JamStorageStor> {
                 });
 
                 if (this.stor.isLeader) {
-                    this.stor.ws.send(JSON.stringify({ type: 'seek', position: playerStorage.currentTime }));
+                    this.stor.ws.send(JSON.stringify({ type: 'seek', position: Math.floor(playerStorage.currentTime) }));
                 }
 
                 break;
@@ -216,7 +216,7 @@ class JamStorage extends Storage<JamStorageStor> {
 
             case 'ready':
                 for (const listener of this.stor.listeners) {
-                    if (data.loaded[listener.id.toString()]) {
+                    if (data.loaded[listener.id]) {
                         listener.ready = true;
                     }
                 }

@@ -1,7 +1,7 @@
 import { Component } from "libs/rzf/Component";
 
 import { ACTIONS } from "utils/flux/actions";
-import { PLAYER_STORAGE } from "utils/flux/storages";
+import { JAM_STORAGE, PLAYER_STORAGE } from "utils/flux/storages";
 import Dispatcher from "libs/flux/Dispatcher";
 
 export class NextBtn extends Component {
@@ -15,6 +15,13 @@ export class NextBtn extends Component {
     }
 
     onNextAction = () => {
+        if (JAM_STORAGE.roomId) {
+            Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+                message: 'Сначала выйдите из режима Jam',
+                type: 'error'
+            }));
+            return;
+        }
         Dispatcher.dispatch(new ACTIONS.QUEUE_NEXT(null));
     }
 

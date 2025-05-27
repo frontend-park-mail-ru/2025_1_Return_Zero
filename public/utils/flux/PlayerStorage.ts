@@ -198,7 +198,7 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         this.callSubs(action);
     }
 
-    protected handleAction(action: Action) {
+    protected handleAction(action: Action) {        
         switch (true) {
             case action instanceof ACTIONS.AUDIO_TOGGLE_PLAY:
                 this.doAction(action, 'togglePlay', () => this.togglePlay(), null);

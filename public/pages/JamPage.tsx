@@ -6,7 +6,6 @@ import { Section } from "components/elements/Section";
 
 import { USER_STORAGE, JAM_STORAGE, PLAYER_STORAGE } from "utils/flux/storages";
 
-
 import { ACTIONS } from "utils/flux/actions";
 import { API } from "utils/api";
 
@@ -23,7 +22,7 @@ export class JamPage extends Component {
         leader: JAM_STORAGE.leader as Leader | null,
         listeners: JAM_STORAGE.listeners as Listener[] | null,
         now_playing: JAM_STORAGE.now_playing as AppTypes.Track | null,
-        entered: false,
+        entered: JAM_STORAGE.roomId ? true : false,
         authorized: false,
     }
 
