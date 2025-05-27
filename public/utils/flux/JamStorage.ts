@@ -47,16 +47,24 @@ class JamStorage extends Storage<JamStorageStor> {
     }
 
     private onPlayerAction(action: Action) {
-        if (action instanceof ACTIONS.AUDIO_SET_TRACK) {
-            if (this.stor.isLeader) {
-                this.stor.ws.send(JSON.stringify({ type: 'host:load', track_id: action.payload }));
-            }
-        }
-        if (action instanceof ACTIONS.AUDIO_TOGGLE_PLAY) {
-            if (this.stor.isLeader) {
-                const type = playerStorage.isPlaying ? 'host:play' : 'host:pause';
-                this.stor.ws.send(JSON.stringify({ type: type }));
-            }
+        if (!this.stor.ws) return;
+
+        switch (true) {
+            case action instanceof ACTIONS.AUDIO_SET_TRACK:
+                if (this.stor.isLeader) {
+                    this.stor.ws.send(JSON.stringify({ type: 'host:load', track_id: action.payload }))
+                }
+                break;
+            case action instanceof ACTIONS.AUDIO_TOGGLE_PLAY:
+                if (this.stor.isLeader) {
+                    const type = playerStorage.isPlaying ? 'host:play' : 'host:pause';
+                    this.stor.ws.send(JSON.stringify({ type: type }));
+                }
+                break;
+            // case action instanceof ACTIONS.AUDIO_SET_CURRENT_TIME:
+            //     if (this.stor.isLeader) {
+            //         this.stor.ws.send(JSON.sting )
+            //     }
         }
     }
     protected handleAction(action: Action) {
@@ -69,9 +77,15 @@ class JamStorage extends Storage<JamStorageStor> {
                 this.closeWebSocket();
                 this.callSubs(action);
                 break;
-            case action instanceof ACTIONS.JAM_UPDATE:
+            case action instanceof ACTIONS.JAM_LEAVE:
+                this.closeWebSocket();
                 this.callSubs(action);
                 break;
+        }
+
+        if (!this.stor.ws) return;
+
+        switch (true) {
             case action instanceof ACTIONS.JAM_SEEK:
                 if (this.stor.isLeader) {
                     this.stor.ws.send(JSON.stringify({ type: 'host:seek', position: Math.floor(action.payload) }));
@@ -86,8 +100,7 @@ class JamStorage extends Storage<JamStorageStor> {
                 this.hostLoad(action.payload);
                 this.callSubs(action);
                 break;
-            case action instanceof ACTIONS.JAM_LEAVE:
-                this.closeWebSocket();
+            case action instanceof ACTIONS.JAM_UPDATE:
                 this.callSubs(action);
                 break;
         }
@@ -125,6 +138,7 @@ class JamStorage extends Storage<JamStorageStor> {
     }
 
     private onOpen() {
+        console.warn("onOpen");
     }
 
     private async loadTrack(trackId: string) {
@@ -225,6 +239,7 @@ class JamStorage extends Storage<JamStorageStor> {
     private onMessage(event: MessageEvent) {
         const data = JSON.parse(event.data);
 
+        console.warn("onMessage", data);
         switch (data.type) {
             case 'init':
                 this.onEnter(data);
