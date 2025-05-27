@@ -542,5 +542,11 @@
             width: 7.7rem;
             height: 7.7rem;
         }
+
+        &:hover {
+            img {
+                scale: 1.05;
+            }
+        }
     }
 }

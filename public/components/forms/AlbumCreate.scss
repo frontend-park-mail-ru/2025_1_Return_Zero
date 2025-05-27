@@ -1,0 +1,23 @@
+.form--album-create {
+    width: 100%;
+    align-items: center;
+    
+    > * {
+        align-items: center;
+        justify-content: center;
+
+        max-width: 100%;
+    };
+
+    .section {
+        width: auto;
+
+        &__top {
+            text-align: center;
+        }
+    }
+
+    .button--danger {
+        align-self: center;
+    }
+}

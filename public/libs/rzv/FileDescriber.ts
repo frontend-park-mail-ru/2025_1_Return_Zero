@@ -43,6 +43,10 @@ export class FileDescriber extends Describer<File> {
         return this.type('image/(jpeg|png|gif|svg|bmp)', message);
     }
 
+    mp3(message: string = 'Not mp3'): FileDescriber {
+        return this.type('audio/mpeg', message);
+    }
+
     type(type: string, message: string = `Not ${type}`): FileDescriber {
         const regex = new RegExp(`^${type}$`);
         return this.push(new FileDescriber((context: DescriberContext, result: DescriberResult) => {

@@ -8,7 +8,7 @@ export class Validator {
     protected description: Record<string, Describer>
     result: Record<string, ValidatorResult>
 
-    constructor(description: Record<string, Describer>, initialValue: Record<string, string> = {}) {
+    constructor(description: Record<string, Describer>, initialValue: Record<string, any> = {}) {
         this.result = {}
         this.description = description;
         for (const key in description) {

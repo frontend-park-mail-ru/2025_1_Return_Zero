@@ -18,7 +18,8 @@
         gap: 1.25rem;
     }
 
-    &--horizontal &__content {
+    &--horizontal>&__content,
+    &--horizontal>*>&__content {
         flex-direction: row;
         gap: 2rem;
 
@@ -27,7 +28,7 @@
         scrollbar-width: none;
     }
 
-    &--wrap &__content {
+    &--wrap>&__content {
         overflow: hidden;
         flex-wrap: wrap;
     }

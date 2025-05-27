@@ -8,16 +8,15 @@ import './pages.scss'
 import { Button } from "components/elements/Button";
 import { ArtistCreate } from "components/forms/ArtistCreate";
 import { API } from "utils/api";
-import { ArtistEdit } from "components/forms/ArtistEdit";
+import { Preloader } from "components/preloader/Preloader";
+import { AlbumCreate } from "components/forms/AlbumCreate";
 
 export class LabelPage extends Component {
-    state: {
-        artists: AppTypes.Artist[],
-        albums: AppTypes.Album[],
-        artistCreateOpen: boolean,
-    } = {
-        artists: [],
-        albums: [],
+    state = {
+        artists: [] as AppTypes.Artist[],
+        artists_loading: true,
+        albums: [] as AppTypes.Album[],
+        albums_loading: true,
         artistCreateOpen: false,
     }
 
@@ -26,7 +25,11 @@ export class LabelPage extends Component {
     }
 
     loadData() {
-        API.getLabelArtists().then(artists => this.setState({artists: artists.body})).catch(err => console.log(err));
+        this.setState({artists_loading: true, albums_loading: true})
+        API.getLabelArtists().then(artists => this.setState({artists: artists.body}))
+            .catch(err => console.log(err)).finally(() => this.setState({artists_loading: false}));
+        API.getLabelAlbums().then(albums => this.setState({albums: albums.body}))
+            .catch(err => console.log(err)).finally(() => this.setState({albums_loading: false}));
     }
 
     artistCreated = (artist: AppTypes.Artist) => {
@@ -47,10 +50,19 @@ export class LabelPage extends Component {
         return [
             <div className="page page--label">
                 <Section title="Мои артисты" horizontal wrap>
-                    <Button className="page--label__artist-create-btn" onClick={() => this.setState({artistCreateOpen: true})}><img src="/static/img/plus.svg" alt="error"/></Button>
-                    {artists.map(artist => 
-                        <ArtistCard artist={artist} onEdit={this.artistEdited} />
-                    )}
+                    {!this.state.artists_loading ? [
+                        <Button className="page--label__artist-create-btn" onClick={() => this.setState({artistCreateOpen: true})}>
+                            <img src="/static/img/plus.svg" alt="error"/>
+                        </Button>,
+                        ...artists.map(artist => <ArtistCard artist={artist} onEdit={this.artistEdited} />)
+                    ] : <Preloader />}
+                </Section>
+                <Section title="Мои альбомы" horizontal wrap>
+                    {!this.state.albums_loading ? 
+                        this.state.albums.map(album => <AlbumCard album={album} />) : <Preloader />}
+                </Section>
+                <Section title="Выложить альбом" horizontal wrap>
+                    <AlbumCreate onCreate={(album: AppTypes.Album) => this.setState({albums: [album, ...this.state.albums]})} />
                 </Section>
 
                 {this.state.artistCreateOpen && <ArtistCreate 

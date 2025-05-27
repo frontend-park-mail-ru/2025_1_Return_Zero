@@ -398,6 +398,34 @@ export class API {
     }
 
 
+    static async getLabelAlbums(limit=10, offset?: number): Promise<TemplateAPI.AlbumsResponse> {
+        const albums_resp = await API.get(API.addParams('/label/albums', {limit, offset}));
+        albums_resp.body = albums_resp.body.map((album: AppTypes.Album) =>
+            API.extendAlbum(album)
+        );
+        return albums_resp;
+    }
+
+    static async postLabelAlbum(title: string, type: string, thumbnail: File, artists: number[], tracks: {title:string, track: File}[]): Promise<TemplateAPI.AlbumResponse> {
+        const data = new FormData();
+        data.append('title', title);
+        data.append('type', type);
+        data.append('artists_ids', artists.map(String).join(','));
+        data.append('thumbnail', thumbnail);
+        tracks.forEach((track: {title:string, track: File}) => {
+            data.append('track_titles[]', track.title);
+            data.append('tracks[]', track.track);
+        });
+        const album_resp = await API.postMultipart('/label/album', data);
+        album_resp.body = API.extendAlbum(album_resp.body);
+        return album_resp;
+        
+        }
+
+    static async deleteLabelAlbum(id: number) {
+        return await API.delete(`/label/album/${id}`, {});
+    }
+
     static async getLabelArtists(limit=10, offset?: number): Promise<TemplateAPI.ArtistsResponse> {
         const artists_resp = await API.get(API.addParams('/label/artists', {limit, offset}));
         artists_resp.body = artists_resp.body.map((artist: AppTypes.Artist) =>
@@ -417,11 +445,12 @@ export class API {
 
     static async putLabelArtist(id: number, title: string, thumbnail?: File): Promise<TemplateAPI.ArtistResponse> {
         const data = new FormData();
+        data.append('artist_id', id.toString())
         data.append('title', title);
         if (thumbnail) {
             data.append('thumbnail', thumbnail);
         }
-        const artist_resp = await API.putMultipart(`/label/artist/${id}`, data);
+        const artist_resp = await API.putMultipart(`/label/artist`, data);
         artist_resp.body = API.extendArtist(artist_resp.body);
         return artist_resp;
     }

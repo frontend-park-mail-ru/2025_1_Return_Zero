@@ -85,21 +85,28 @@ export function getSettingsFormValidator(user: AppTypes.User) {
 }
 
 export const ARTIST_CREATE_VALIDATOR = new rzv.Validator({
-    'title': rzv.string().required(REQ_MES).max(20, 'Не более 20 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
+    'title': rzv.string().required(REQ_MES).max(40, 'Не более 40 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
     'thumbnail': rzv.file().required(REQ_MES).img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
-})
-
-export const ALBUM_CREATE_VALIDATOR = new rzv.Validator({
-    'title': rzv.string().required(REQ_MES).max(20, 'Не более 20 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
-    'thumbnail': rzv.file().required(REQ_MES).img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
-    'description': rzv.string().required(REQ_MES).max(200, 'Не более 200 символов'),
 })
 
 export function getArtistEditValidator(artist: AppTypes.Artist) {
     return new rzv.Validator({
-        'title': rzv.string().required(REQ_MES).max(20, 'Не более 20 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
+        'title': rzv.string().required(REQ_MES).max(40, 'Не более 40 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
         'thumbnail': rzv.file().optional().img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
     }, {
         'title': artist.title,
+    })
+}
+
+export const ALBUM_CREATE_VALIDATOR = new rzv.Validator({
+    'title': rzv.string().required(REQ_MES).max(40, 'Не более 40 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
+    'thumbnail': rzv.file().required(REQ_MES).img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
+    'type': rzv.string().required().oneof(['album', 'single', 'ep', 'compilation'])
+})
+
+export function getTrackCreateValidator() {
+    return new rzv.Validator({
+        'title': rzv.string().required(REQ_MES).max(40, 'Не более 40 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
+        'track': rzv.file().required().mp3().addUrl(),
     })
 }

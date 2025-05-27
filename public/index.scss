@@ -38,6 +38,10 @@ a {
     }
 }
 
+img {
+    object-fit: contain;
+}
+
 input {
     border: none;
     color: d.$color-text;

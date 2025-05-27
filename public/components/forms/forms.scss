@@ -210,3 +210,18 @@
     @include form-button;
     background-color: #c83126;
 }
+
+
+.selective {
+    * {
+        pointer-events: none;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &.active {
+        background-color: d.$color-button-active;
+    }
+}
