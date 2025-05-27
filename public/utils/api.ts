@@ -446,7 +446,7 @@ export class API {
     static async putLabelArtist(id: number, title: string, thumbnail?: File): Promise<TemplateAPI.ArtistResponse> {
         const data = new FormData();
         data.append('artist_id', id.toString())
-        data.append('title', title);
+        data.append('new_title', title);
         if (thumbnail) {
             data.append('thumbnail', thumbnail);
         }

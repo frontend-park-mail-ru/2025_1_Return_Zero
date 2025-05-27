@@ -107,7 +107,8 @@ export class AlbumCreate extends Component {
         this.setState({
             selected_artists: selected
                 ? [...this.state.selected_artists, artist]
-                : this.state.selected_artists.filter(({id}) => id !== artist.id)
+                : this.state.selected_artists.filter(({id}) => id !== artist.id),
+            error: null
         })
     }
 
@@ -123,28 +124,30 @@ export class AlbumCreate extends Component {
         const vr = ALBUM_CREATE_VALIDATOR.result;
         return [
             <form className="form form--album-create" onSubmit={this.onSubmit}>
-                <div className="form-input-container--image">
-                    <img className="form-input-container--image__image" src={vr.thumbnail.url} alt="200x200" />
-                    <label className="form-input-container--image__button" for="thumbnail1">
-                        <img src="/static/img/pencil.svg" />
-                    </label>
-                    <input className="form-input-container--image__input" type="file" id="thumbnail1" name="thumbnail" accept="image/*" onChange={this.onChangeImage} />
-                    {vr.thumbnail.error && <p className="form-input-container--image__error">{vr.thumbnail.error}</p>}
-                </div>
-                <div className="form-input-container">
-                    <label className="form-input-container__label" htmlFor="title1">Название альбома</label>
-                    <input className="form-input-container__input" type="text" id="title1" name="title" value={vr.title.unprocessed} onInput={this.onInput} />
-                    {vr.title.error && <p className="form-input-container__error">{vr.title.error}</p>}
-                </div>
-                <div className="form-input-container">
-                    <label className="form-input-container__label" htmlFor="type">Тип альбома</label>
-                    <select className="form-input-container__select" name="type" id="type" onChange={this.onInput}>
-                        <option>Выберете</option>
-                        <option value="album">Альбом</option>
-                        <option value="single">Сингл</option>
-                        <option value="ep">EP</option>
-                        <option value="compilation">Компилляция</option>
-                    </select>
+                <div className="form--album-create__info">
+                    <div className="form-input-container--image">
+                        <img className="form-input-container--image__image" src={vr.thumbnail.url} alt="200x200" />
+                        <label className="form-input-container--image__button" for="thumbnail1">
+                            <img src="/static/img/pencil.svg" />
+                        </label>
+                        <input className="form-input-container--image__input" type="file" id="thumbnail1" name="thumbnail" accept="image/*" onChange={this.onChangeImage} />
+                        {vr.thumbnail.error && <p className="form-input-container--image__error">{vr.thumbnail.error}</p>}
+                    </div>
+                    <div className="form-input-container">
+                        <label className="form-input-container__label" htmlFor="title1">Название альбома</label>
+                        <input className="form-input-container__input" type="text" id="title1" name="title" placeholder="название" value={vr.title.unprocessed} onInput={this.onInput} />
+                        {vr.title.error && <p className="form-input-container__error">{vr.title.error}</p>}
+                    </div>
+                    <div className="form-input-container">
+                        <label className="form-input-container__label" htmlFor="type">Тип альбома</label>
+                        <select className="form-input-container__select" name="type" id="type" onChange={this.onInput} required>
+                            <option disabled selected hidden>выберите</option>
+                            <option value="album">Альбом</option>
+                            <option value="single">Сингл</option>
+                            <option value="ep">EP</option>
+                            <option value="compilation">Компилляция</option>
+                        </select>
+                    </div>
                 </div>
                 <Section title="Главный артист">
                     {!!this.state.selected_artists.length && <ArtistCard artist={this.state.selected_artists[0]} />}
@@ -209,7 +212,7 @@ class TrackCreate extends Component {
             <Section title="" className="form--album-create__track" horizontal wrap>
                 <div className="form-input-container">
                     <label className="form-input-container__label" htmlFor="title">Название трека №{this.props.ind}</label>
-                    <input className="form-input-container__input" type="text" id="title" name="title" value={vr.title.unprocessed} onInput={this.onInput} />
+                    <input className="form-input-container__input" type="text" id="title" name="title" placeholder={`трек №${this.props.ind}`} value={vr.title.unprocessed} onInput={this.onInput} />
                     {vr.title.error && <p className="form-input-container__error">{vr.title.error}</p>}
                 </div>
                 <div className="form-input-container">
