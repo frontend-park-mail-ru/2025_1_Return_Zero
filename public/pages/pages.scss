@@ -224,8 +224,13 @@
             }
 
             &__name {
+                cursor: pointer;
                 font-size: v.$font-size-h3;
                 font-weight: v.$font-weight-bold;
+
+                &:hover {
+                    text-decoration: underline;
+                }
             }
         }   
 
