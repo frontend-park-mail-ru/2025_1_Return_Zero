@@ -13,7 +13,8 @@ export class Section extends Component {
     }
 
     render() {
-        const sectionClassName = "section" + (this.props.horizontal ? ' section--horizontal' : '') + (this.props.wrap ? ' section--wrap' : '');
+        const sectionClassName = "section" + (this.props.horizontal ? ' section--horizontal' : '') + (this.props.wrap ? ' section--wrap' : '')
+            + (this.props.className ? ' ' + this.props.className : '');
         return [
             <section {...this.props} className={sectionClassName}>
                 <div className="section__top">

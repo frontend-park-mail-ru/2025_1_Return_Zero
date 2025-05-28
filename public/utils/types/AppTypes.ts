@@ -69,6 +69,7 @@ declare global {
             username: string;
             email: string;
             avatar_url: string;
+            is_label: boolean;
             // not included in /auth/check
             privacy?: {
                 is_public_minutes_listened: boolean;

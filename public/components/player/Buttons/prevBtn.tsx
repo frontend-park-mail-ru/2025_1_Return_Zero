@@ -1,5 +1,6 @@
 import { Component } from "libs/rzf/Component";
 
+import { JamToggleError } from "common/errors";
 import { ACTIONS } from "utils/flux/actions";
 import { JAM_STORAGE, PLAYER_STORAGE } from "utils/flux/storages";
 import Dispatcher from "libs/flux/Dispatcher";

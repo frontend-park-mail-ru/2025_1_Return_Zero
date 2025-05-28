@@ -1,15 +1,17 @@
 import { Component } from "libs/rzf/Component";
 
+import { Button } from "components/elements/Button";
 import { Section } from "components/elements/Section";
 import { ArtistCard } from "components/artist/Artist";
 import { AlbumCard } from "components/album/Album";
+import { Preloader } from "components/preloader/Preloader";
+import { ArtistCreate } from "components/forms/ArtistCreate";
+import { AlbumCreate } from "components/forms/AlbumCreate";
+
+import { API } from "utils/api";
+import { USER_STORAGE } from "utils/flux/storages";
 
 import './pages.scss'
-import { Button } from "components/elements/Button";
-import { ArtistCreate } from "components/forms/ArtistCreate";
-import { API } from "utils/api";
-import { Preloader } from "components/preloader/Preloader";
-import { AlbumCreate } from "components/forms/AlbumCreate";
 
 export class LabelPage extends Component {
     state = {
@@ -22,14 +24,26 @@ export class LabelPage extends Component {
 
     componentDidMount(): void {
         this.loadData();
+        USER_STORAGE.subscribe(this.onAction)
     }
 
+    componentWillUnmount(): void {
+        USER_STORAGE.unsubscribe(this.onAction)
+    }
+
+    onAction = (action: any) => this.loadData();
+
+
     loadData() {
-        this.setState({artists_loading: true, albums_loading: true})
-        API.getLabelArtists().then(artists => this.setState({artists: artists.body}))
-            .catch(err => console.log(err)).finally(() => this.setState({artists_loading: false}));
-        API.getLabelAlbums().then(albums => this.setState({albums: albums.body}))
-            .catch(err => console.log(err)).finally(() => this.setState({albums_loading: false}));
+        if (USER_STORAGE.getUser()?.is_label) {
+            this.setState({artists_loading: true, albums_loading: true})
+            API.getLabelArtists().then(artists => this.setState({artists: artists.body}))
+                .catch(err => console.log(err)).finally(() => this.setState({artists_loading: false}));
+            API.getLabelAlbums().then(albums => this.setState({albums: albums.body}))
+                .catch(err => console.log(err)).finally(() => this.setState({albums_loading: false}));
+            return;
+        }
+        this.setState({artists: [], albums: [], artists_loading: false, albums_loading: false})
     }
 
     artistCreated = (artist: AppTypes.Artist) => {
@@ -46,6 +60,13 @@ export class LabelPage extends Component {
     }
 
     render() {
+        if (!USER_STORAGE.getUser()?.is_label) {
+            return [
+                <div className="page page--404 page__empty">
+                    <h1>У вас нет доступа</h1>
+                </div>
+            ];
+        }
         const { artists } = this.state;
         return [
             <div className="page page--label">

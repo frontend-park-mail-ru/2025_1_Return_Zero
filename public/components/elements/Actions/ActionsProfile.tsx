@@ -22,7 +22,7 @@ export class ActionsProfile extends Component {
         return [
             <Actions>
                 <ActionsCopyLink link={URL.parse(`/profile/${user.username}`, location.href).toString()} />
-                {/* <Link to="/label" className="actions-item">К лейблу</Link> */}
+                {USER_STORAGE.getUser()?.is_label && <Link to="/label" className="actions-item">К лейблу</Link>}
             </Actions>
         ]
     }
