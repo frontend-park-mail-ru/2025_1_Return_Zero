@@ -11,7 +11,7 @@
 
     padding: 1.875rem;
 
-    border-radius: 1.25rem 1.25rem 0 0;
+    border-radius: 1.25rem;
 
     background-color: d.$color-background;
 
@@ -250,10 +250,14 @@
         &__img {
             border-radius: 50%;
             width: 15rem;
-            height: auto;
+            height: 15rem;
             @media (max-width: 600px) {
                 width: 10rem;
+                height: 10rem;
             }
+
+            background-position: center;
+            background-size: cover;
         }
 
         &__title {
@@ -279,6 +283,7 @@
         &__user {
             a {
                 font-weight: v.$font-weight-bold;
+                word-break: break-word;
             }
         }
 
@@ -291,8 +296,13 @@
 
         &__title {
             @media (max-width: 600px) {
-                font-size: v.$font-size-h1;
+                font-size: v.$font-size-h3 !important;
             }
+            word-break: break-word;
+        }
+
+        div {
+            gap: 0.5rem;
         }
     }
 
@@ -300,6 +310,17 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+
+        @media (max-width: 600px) {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .button {
+            @media (max-width: 600px) {
+                width: 100%;
+            }
+        }
     }
 }
 
@@ -336,6 +357,9 @@
             height: 8rem;
         }
         border-radius: 50%;
+
+        background-size: cover;
+        background-position: center;
     }
 
     @media (max-width: 600px) {

@@ -1,3 +1,6 @@
+@use "root/variables.scss" as v;
+@use "root/dark.scss" as d;
+
 .section {
     position: relative;
     width: 100%;
@@ -10,6 +13,19 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+
+        &__title {
+            @media (max-width: 600px) {
+                font-size: v.$font-size-h3;
+            }
+        }
+
+        &__link {
+            @media (max-width: 600px) {
+                font-size: v.$font-size-small;
+            }
+            flex-shrink: 0;
+        }
     }
 
     &__content {

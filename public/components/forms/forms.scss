@@ -185,6 +185,9 @@
         text-align: center;
         line-height: 13.625rem;
 
+        background-size: cover;
+        background-position: center;
+
         width: 13.625rem;
         height: 13.625rem;
         @media (max-width: 600px) {
@@ -194,7 +197,6 @@
         border-radius: 50%;
 
         &::before {
-            content: '';
             position: absolute;
             display: block;
 

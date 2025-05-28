@@ -75,6 +75,7 @@
             &__title {
                 font-weight: v.$font-weight-bold;
                 font-size: v.$font-size-h4;
+                
                 display: -webkit-box;
                 -webkit-line-clamp: 2;
                 -webkit-box-orient: vertical;
@@ -98,6 +99,16 @@
                 &:first-child {
                     font-weight: v.$font-weight-regular;
                 }
+
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                line-height: 1.2;
+                max-height: calc(v.$font-size-h4 * 1.2 * 2);
+                word-break: break-word;
+                overflow-wrap: break-word;
             }
         }
     }
@@ -222,6 +233,16 @@
             text-align: center;
             font-size: v.$font-size-h4;
             font-weight: v.$font-weight-bold;
+
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2;
+            max-height: calc(v.$font-size-h4 * 1.2 * 2);
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
 
         &__artists {
@@ -235,6 +256,16 @@
             &:first-child {
                 font-weight: v.$font-weight-regular;
             }
+
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2;
+            max-height: calc(v.$font-size-h4 * 1.2 * 2);
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
     }
 }

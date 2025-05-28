@@ -151,7 +151,7 @@ class HeaderProfile extends Component {
     renderProfile(user: AppTypes.User) {
         return [
             <div className="header__profile" onClick={() => this.setState({ opened: !this.state.opened })} onClickOutside={() => this.setState({ opened: false })}>
-                <img src={user.avatar_url} className="header__profile__avatar" />
+                <div className="header__profile__avatar" style={{backgroundImage: `url(${user.avatar_url})`}} />
                 {this.state.opened && <div className="header__profile__menu">
                     <Link className="item" to={"/profile/" + user.username}>
                         <img src='/static/img/icon-profile.svg' />

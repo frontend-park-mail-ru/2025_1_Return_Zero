@@ -182,7 +182,7 @@ export class SettingsPage extends Component {
                 <div className="page--settings__info">
                     <div className="page--settings__info__avatar">
                         <div className="form-input-container--image">
-                            <img className="form-input-container--image__image" src={this.state.avatar_url} />
+                            <div className="form-input-container--image__image" style={{backgroundImage: `url(${this.state.avatar_url})`}} />
                             <label className="form-input-container--image__button" for="avatar">
                                 <img src="/static/img/pencil.svg" />
                             </label>
