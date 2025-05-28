@@ -142,18 +142,18 @@ class JamStorage extends Storage<JamStorageStor> {
     }
 
     private async loadTrack(trackId: string) {
+        for (const listener of this.stor.listeners) {
+            if (listener.id !== this.stor.leader.id) {
+                listener.ready = false;
+            }
+        }
+
         if (this.stor.isLeader) {
             return;
         }
 
         const response = await API.getTrack(Number(trackId));
         const track = response.body;
-
-        for (const listener of this.stor.listeners) {
-            if (listener.id !== this.stor.leader.id) {
-                listener.ready = false;
-            }
-        }
 
         Dispatcher.dispatch(new ACTIONS.QUEUE_PROCESS_NEW_TRACKS({ currentTrack: track, tracks: [track] }));
         this.callSubs(new ACTIONS.JAM_SET_TRACK(track));
@@ -202,7 +202,7 @@ class JamStorage extends Storage<JamStorageStor> {
         });
 
         if (this.stor.isLeader) {
-            this.stor.ws.send(JSON.stringify({ type: 'seek', position: Math.floor(playerStorage.currentTime) }));
+            this.stor.ws.send(JSON.stringify({ type: 'host:seek', position: Math.floor(playerStorage.currentTime) }));
         }
     }
 
@@ -224,6 +224,10 @@ class JamStorage extends Storage<JamStorageStor> {
                 listener.ready = true;
             }
         }
+
+        if (this.stor.isLeader) {
+            this.stor.ws.send(JSON.stringify({ type: 'host:seek', position: Math.floor(playerStorage.currentTime) }));
+        }
     }
 
     onLoad(data: any) {
@@ -236,6 +240,8 @@ class JamStorage extends Storage<JamStorageStor> {
         this.closeWebSocket();
         this.callSubs(new ACTIONS.JAM_CLOSE(null));
         Dispatcher.dispatch(new ACTIONS.AUDIO_PAUSE(null));
+
+        this.callSubs(new ACTIONS.JAM_UPDATE(null));
     }
 
     private onMessage(event: MessageEvent) {

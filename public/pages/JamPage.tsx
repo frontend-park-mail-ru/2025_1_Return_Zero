@@ -15,7 +15,8 @@ import { JamForm } from "components/forms/JamForm";
 import './pages.scss';
 import Dispatcher from "libs/flux/Dispatcher";
 import { Preloader } from "components/preloader/Preloader";
-import { Route } from "libs/rzf/Router";
+
+import Router from "libs/rzf/Router";
 
 export class JamPage extends Component {
     state = {
@@ -48,6 +49,10 @@ export class JamPage extends Component {
 
     openSocket() {
         Dispatcher.dispatch(new ACTIONS.JAM_OPEN(this.props.room_id));
+    }
+
+    onNameClick(name: string) {
+        Router.push(`/profile/${name}`, {});
     }
 
     onAction = (action: any) => {
@@ -139,7 +144,7 @@ export class JamPage extends Component {
                         {this.state.listeners?.map(listener => (
                             <div className="page__listener" key={listener.id}>
                                 <img className="page__listener__img" src={listener.img_url} alt={listener.name} />
-                                <span className="page__listener__name">{listener.name}</span>
+                                <span onClick={() => this.onNameClick(listener.name)} className="page__listener__name">{listener.name}</span>
                                 {
                                     listener.ready 
                                         ? <img className="page__listeners__status" src="/static/img/ready.svg" /> 

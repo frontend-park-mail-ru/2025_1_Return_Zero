@@ -4,12 +4,13 @@ import { Link } from "libs/rzf/Router";
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
 
-import { TRACKS_STORAGE, PLAYER_STORAGE } from "utils/flux/storages";
+import { TRACKS_STORAGE, PLAYER_STORAGE, JAM_STORAGE } from "utils/flux/storages";
 
 import { Like } from "../elements/Like";
 import { ActionsTrack } from "../elements/Actions/ActionsTrack";
 
 import "./Track.scss";  
+import { JamToggleError } from "common/errors";
 
 
 function durationToString(duration: number): string {
@@ -88,6 +89,14 @@ abstract class TrackBase extends Component {
     }
 
     onPlay = (): void => {
+        if (JAM_STORAGE.roomId && !JAM_STORAGE.isLeader) {
+            Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+                message: JamToggleError,
+                type: 'error'
+            }));
+            return;
+        }
+
         if (this.checkPlaying() !== null) {
             Dispatcher.dispatch(new ACTIONS.AUDIO_TOGGLE_PLAY(null));
             return;
