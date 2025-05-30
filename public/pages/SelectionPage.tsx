@@ -6,7 +6,8 @@ import { API, SELECTION_VARIANTS } from "utils/api";
 
 export class SelectionPage extends Component {
     state = {
-        tracks: [] as AppTypes.Track[]
+        tracks: [] as AppTypes.Track[],
+        tracks_loading: true
     }
 
     props: {
@@ -14,9 +15,11 @@ export class SelectionPage extends Component {
     }
 
     componentDidMount(): void {
+        this.setState({tracks_loading: true})
         API.getSelectionTracks(this.props.selection as SELECTION_VARIANTS)
             .then(tracks => this.setState({tracks: tracks.body}))
             .catch(console.error)
+            .finally(() => this.setState({tracks_loading: false}))
     }
 
     render() {
@@ -47,7 +50,7 @@ export class SelectionPage extends Component {
         }
         return [
             <div className="page page--selection">
-                <Section title={title}>
+                <Section title={title} is_loading={this.state.tracks_loading}>
                     {this.state.tracks.map((track, i) => {
                         return <TrackLine key={track.id} track={track} ind={i} />
                     })}

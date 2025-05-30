@@ -2,6 +2,7 @@ import { Component } from "libs/rzf/Component";
 
 import { ButtonDanger, ButtonSuccess } from "components/elements/Button";
 import { DialogConfirm } from "components/elements/Dialog";
+import { Preloader } from "components/preloader/Preloader";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { USER_STORAGE } from "utils/flux/storages";
@@ -19,6 +20,7 @@ import './pages.scss';
 export class SettingsPage extends Component {
     state: {
         user?: AppTypes.User,
+        user_loading: boolean,
         error?: string,
 
         avatar_url?: string,
@@ -29,6 +31,7 @@ export class SettingsPage extends Component {
         show_new_password: boolean,
         confirm_delete: boolean,
     } = {
+        user_loading: true,
         show_password: false,
         show_new_password: false,
         confirm_delete: false,
@@ -44,10 +47,12 @@ export class SettingsPage extends Component {
         USER_STORAGE.subscribe(this.onAction);
         
         if (USER_STORAGE.getUser()) {
+            this.setState({ user_loading: true });
             API.getUserSettings(USER_STORAGE.getUser().username).then((res) => {
                 this.validator = getSettingsFormValidator(res.body);
                 this.setState({ user: res.body, avatar_url: res.body.avatar_url })
-            }).catch((reason: Error) => console.error(reason.message));
+            }).catch((reason: Error) => console.error(reason.message))
+             .finally(() => this.setState({ user_loading: false }));
         }
     }
     
@@ -60,10 +65,11 @@ export class SettingsPage extends Component {
         URL.revokeObjectURL(this.state.avatar_url);
         switch (true) {
             case action instanceof ACTIONS.USER_LOGIN:
+                this.setState({ user_loading: true });
                 API.getUserSettings(USER_STORAGE.getUser().username).then((res) => {
                     this.validator = getSettingsFormValidator(res.body);
                     this.setState({ user: res.body, avatar_url: res.body.avatar_url })
-                }).catch((reason: Error) => console.error(reason.message));
+                }).catch((reason: Error) => console.error(reason.message)).finally(() => this.setState({ user_loading: false}));
                 break;
             case action instanceof ACTIONS.USER_CHANGE:
                 this.validator = getSettingsFormValidator(action.payload);
@@ -178,6 +184,11 @@ export class SettingsPage extends Component {
 
     render() {
         const user = this.state.user;
+        if (this.state.user_loading) {
+            return [<div className="page page--404">
+                <Preloader />
+            </div>];
+        }
         if (!user) return [<div className="page page--404">Вы не авторизованы</div>];
         const result = this.validator.result;
         return [

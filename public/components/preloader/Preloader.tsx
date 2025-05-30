@@ -13,7 +13,6 @@ export class Preloader extends Component {
     }
 
     render() {
-        console.log(this.props)
         return [
             <div  className="preloader-container">
                 <img style={{"width": `${this.props.width}rem`, "height": `${this.props.height}rem`}} className="preloader" src="/static/img/preloader.svg" alt="preloader" />

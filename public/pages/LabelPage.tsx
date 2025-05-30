@@ -4,7 +4,6 @@ import { Button } from "components/elements/Button";
 import { Section } from "components/elements/Section";
 import { ArtistCard } from "components/artist/Artist";
 import { AlbumCard } from "components/album/Album";
-import { Preloader } from "components/preloader/Preloader";
 import { ArtistCreate } from "components/forms/ArtistCreate";
 import { AlbumCreate } from "components/forms/AlbumCreate";
 
@@ -70,17 +69,14 @@ export class LabelPage extends Component {
         const { artists } = this.state;
         return [
             <div className="page page--label">
-                <Section title="Мои артисты" horizontal wrap>
-                    {!this.state.artists_loading ? [
-                        <Button className="page--label__artist-create-btn" onClick={() => this.setState({artistCreateOpen: true})}>
-                            <img src="/static/img/plus.svg" alt="error"/>
-                        </Button>,
-                        ...artists.map(artist => <ArtistCard artist={artist} onEdit={this.artistEdited} />)
-                    ] : <Preloader />}
+                <Section title="Мои артисты" horizontal wrap is_loading={this.state.artists_loading}>
+                    <Button className="page--label__artist-create-btn" onClick={() => this.setState({artistCreateOpen: true})}>
+                        <img src="/static/img/plus.svg" alt="error"/>
+                    </Button>
+                    {artists.map(artist => <ArtistCard artist={artist} onEdit={this.artistEdited} />)}
                 </Section>
-                <Section title="Мои альбомы" horizontal wrap>
-                    {!this.state.albums_loading ? 
-                        this.state.albums.map(album => <AlbumCard album={album} />) : <Preloader />}
+                <Section title="Мои альбомы" horizontal wrap is_loading={this.state.albums_loading}>
+                    { this.state.albums.map(album => <AlbumCard album={album} />) }
                 </Section>
                 <Section title="Выложить альбом" horizontal wrap>
                     <AlbumCreate onCreate={(album: AppTypes.Album) => this.setState({albums: [album, ...this.state.albums]})} />

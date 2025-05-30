@@ -163,10 +163,8 @@ export class AlbumCreate extends Component {
                 <Section title="Остальные артисты">
                     {this.state.selected_artists.length > 1 && this.state.selected_artists.slice(1).map(a => <Selective onSelect={this.onSelect} props={{artist: a}} component={ArtistCard} selected /> )}
                 </Section>
-                <Section title="Выберете артистов" horizontal wrap >
-                    {!this.state.artists_loading ? 
-                        this.state.artists.map(a => <Selective onSelect={this.onSelect} props={{artist: a}} component={ArtistCard} selected={this.state.selected_artists.includes(a)} />) :
-                        <Preloader />}
+                <Section title="Выберете артистов" horizontal wrap is_loading={this.state.artists_loading}>
+                    {this.state.artists.map(a => <Selective onSelect={this.onSelect} props={{artist: a}} component={ArtistCard} selected={this.state.selected_artists.includes(a)} />)}
                 </Section>
                 <Section title="Треки альбома">
                     {this.state.tracks_validators.map((vl, i) => 

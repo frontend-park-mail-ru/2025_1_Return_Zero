@@ -9,6 +9,7 @@ export class Section extends Component {
         horizontal?: boolean,
         wrap?: boolean,
         all_link?: string,
+        is_loading?: boolean,
         [key: string]: any
     }
 
@@ -22,7 +23,9 @@ export class Section extends Component {
                     {this.props.all_link && <Link className="section__top__link" to={this.props.all_link}>Показать все</Link>}
                 </div>
                 <div className="section__content">
-                    {this.props.children.length ? this.props.children : <span className="section__empty">Сдесь пока ничего нет</span>}
+                    {this.props.is_loading 
+                        ? <div className="section__skeleton"></div>
+                        : (this.props.children.length ? this.props.children : <span className="section__empty">Сдесь пока ничего нет</span>)}
                 </div>
             </section>
         ]

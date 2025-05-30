@@ -42,7 +42,7 @@ export class TracksPage extends Component {
                 .catch(() => this.setState({ playlists: [] }))
                 .finally(() => this.setState({ playlists_loading: false }));
         } else {
-            this.setState({ history_loading: false, playlists_loading: false });
+            this.setState({ history: [], history_loading: false, playlists: [], playlists_loading: false });
         }
         API.getTracks().then(res => this.setState({ tracks: res.body }))
             .catch(() => this.setState({ tracks: [] }))
@@ -65,16 +65,14 @@ export class TracksPage extends Component {
                 <Section title="Только для тебя" horizontal>
                     <Special />
                 </Section>
-                {(!!this.state.playlists.length || this.state.playlists_loading) && <Section title="Плейлисты" horizontal all_link="/all/playlists">
-                    {!this.state.playlists_loading ? this.state.playlists.map((playlist, index) => <PlaylistCard key={playlist.id} playlist={playlist} />) : <Preloader />}
+                {USER_STORAGE.getUser() && <Section title="Плейлисты" horizontal all_link="/all/playlists" is_loading={this.state.playlists_loading}>
+                    {this.state.playlists.map((playlist, index) => <PlaylistCard key={playlist.id} playlist={playlist} />)}
                 </Section>}
-                {(!!this.state.history.length || this.state.history_loading) && <Section title="История прослушивания" horizontal all_link="/all/tracks/history">
-                    {!this.state.history_loading ? this.state.history.map((track, index) => <TrackCard key={track.id} track={track} />) : <Preloader />}
+                {USER_STORAGE.getUser() && <Section title="История прослушивания" horizontal all_link="/all/tracks/history" is_loading={this.state.history_loading}>
+                    {this.state.history.map((track, index) => <TrackCard key={track.id} track={track} />)}
                 </Section>}
-                <Section title="Рекомендации" all_link="/all/tracks/top">
-                    {!this.state.tracks_loading ? this.state.tracks.map((track, index) => (
-                        <TrackLine key={track.id} ind={index} track={track}/>
-                    )) : <Preloader />}
+                <Section title="Рекомендации" all_link="/all/tracks/top" is_loading={this.state.tracks_loading}>
+                    {this.state.tracks.map((track, index) => <TrackLine key={track.id} ind={index} track={track}/>)}
                 </Section>
             </div>
         ]

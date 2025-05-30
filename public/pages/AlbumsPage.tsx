@@ -13,7 +13,9 @@ import './pages.scss';
 export class AlbumsPage extends Component {
     state = {
         albums: [] as AppTypes.Album[],
+        albums_loading: true,
         favorites: [] as AppTypes.Album[],
+        favorites_loading: true
     }
 
     componentDidMount() {
@@ -26,14 +28,20 @@ export class AlbumsPage extends Component {
     }
 
     fetchData() {
+        this.setState({ favorites_loading: true, albums_loading: true });
         if (USER_STORAGE.getUser()) {
-            API.getFavoriteAlbums('me').then(res => {
-                this.setState({ favorites: res.body });
-            }).catch(() => this.setState({ favorites: [] }))
+            API.getFavoriteAlbums('me').then(res => this.setState({ favorites: res.body }))
+                .catch(() => this.setState({ favorites: [] }))
+                .finally(() => this.setState({ favorites_loading: false }));
+        } else { 
+            this.setState({
+                favorites: [],
+                favorites_loading: false 
+            })
         }
-        API.getAlbums().then(res => {
-            this.setState({ albums: res.body });
-        }).catch(() => this.setState({ albums: [] }));
+        API.getAlbums().then(res => this.setState({ albums: res.body }))
+            .catch(() => this.setState({ albums: [] }))
+            .finally(() => this.setState({ albums_loading: false}));
     }
 
     onAction = (action: any) => {
@@ -52,12 +60,14 @@ export class AlbumsPage extends Component {
                 <Section title="Только для тебя" horizontal>
                     <Special />
                 </Section>
-                {!!this.state.favorites.length && <Section title="Любимые альбомы" horizontal all_link="/all/albums/favorite">
-                    {this.state.favorites.map((album, index) => (
-                        <AlbumCard key={album.id} album={album}/>
-                    ))}
-                </Section>}
-                <Section title="Рекомендации" all_link="/all/albums/top">
+                {USER_STORAGE.getUser() && 
+                    <Section title="Любимые альбомы" horizontal all_link="/all/albums/favorite" is_loading={this.state.favorites_loading}>
+                        {this.state.favorites.map((album, index) => (
+                            <AlbumCard key={album.id} album={album}/>
+                        ))}
+                    </Section>
+                }
+                <Section title="Рекомендации" all_link="/all/albums/top" is_loading={this.state.albums_loading}>
                     {this.state.albums.map((album, index) => (
                         <AlbumLine key={album.id} ind={index} album={album} />
                     ))}

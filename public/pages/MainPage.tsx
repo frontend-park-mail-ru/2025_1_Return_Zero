@@ -3,7 +3,6 @@ import { Component } from "libs/rzf/Component";
 import { TrackCard, TrackLine } from "components/track/Track";
 import { Special } from "components/special/Special";
 import { Section } from "components/elements/Section";
-import { Preloader } from "components/preloader/Preloader";
 
 import { USER_STORAGE } from "utils/flux/storages";
 import { ACTIONS } from "utils/flux/actions";
@@ -35,7 +34,7 @@ export class MainPage extends Component {
                 .then(res => this.setState({ favorites: res.body}))
                 .catch(() => this.setState({ favorites: [] }))
                 .finally(() => this.setState({ favorites_loading: false }));
-        } else { this.setState({ favorites_loading: false }) }
+        } else { this.setState({ favorites: [], favorites_loading: false }) }
         API.getTracks().then(res => this.setState({ tracks: res.body }))
             .catch(() => this.setState({ tracks: [] }))
             .finally(() => this.setState({ tracks_loading: false }));
@@ -57,11 +56,11 @@ export class MainPage extends Component {
                 <Section title="Только для тебя" horizontal>
                     <Special />
                 </Section>
-                {(!!this.state.favorites.length || this.state.favorites_loading) && <Section title="Любимые треки" horizontal all_link="/all/tracks/favorite">
-                    {!this.state.favorites_loading ? this.state.favorites.map((track, index) => <TrackCard key={track.id} track={track}/>) : <Preloader />}
+                {USER_STORAGE.getUser() && <Section title="Любимые треки" horizontal all_link="/all/tracks/favorite" is_loading={this.state.favorites_loading}>
+                    {this.state.favorites.map((track, index) => <TrackCard key={track.id} track={track}/>)}
                 </Section>}
-                <Section title="Рекомендации" all_link="/all/tracks/top">
-                    {!this.state.tracks_loading ? this.state.tracks.map((track, index) => <TrackLine key={track.id} ind={index} track={track}/>) : <Preloader />}
+                <Section title="Рекомендации" all_link="/all/tracks/top" is_loading={this.state.tracks_loading}>
+                    {this.state.tracks.map((track, index) => <TrackLine key={track.id} ind={index} track={track}/>)}
                 </Section>
             </div>
         ]
