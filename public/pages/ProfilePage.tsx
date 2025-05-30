@@ -18,7 +18,6 @@ export class ProfilePage extends Component {
         playlists: [] as AppTypes.Playlist[],
         tracks: [] as AppTypes.Track[],
         artists: [] as AppTypes.Artist[],
-        actions_opened: false
     }
 
     fetchData() {

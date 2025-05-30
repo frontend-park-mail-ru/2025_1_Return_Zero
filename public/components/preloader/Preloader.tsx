@@ -7,15 +7,16 @@ export class Preloader extends Component {
         width?: number,
         height?: number
     } = {
-        width: 15,
-        height: 15,
+        width: 10,
+        height: 10,
         ...this.props
     }
 
     render() {
+        console.log(this.props)
         return [
-            <div className="preloader-container">
-                <img width={this.props.width} height={this.props.height} className="preloader" src="/static/img/preloader.svg" alt="preloader" />
+            <div  className="preloader-container">
+                <img style={{"width": `${this.props.width}rem`, "height": `${this.props.height}rem`}} className="preloader" src="/static/img/preloader.svg" alt="preloader" />
             </div>
         ];
     }

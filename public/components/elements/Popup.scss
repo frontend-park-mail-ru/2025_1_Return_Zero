@@ -4,21 +4,17 @@
 }
 
 .popup--left {
-    top: 0;
-    right: 100%;
+    right: 0;
 }
 
 .popup--right {
-    top: 0;
-    left: 100%;
+    left: 0;
 }
 
 .popup--above {
     bottom: 100%;
-    right: 0;
 }
 
 .popup--under {
     top: 100%;
-    right: 0;
 }

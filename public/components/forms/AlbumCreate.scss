@@ -38,3 +38,9 @@
         border-radius: 15px;
     }
 }
+
+.dialog--loading {
+    > .dialog__container {
+        overflow: hidden;
+    }
+}

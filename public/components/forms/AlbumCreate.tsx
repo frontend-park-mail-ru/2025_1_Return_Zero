@@ -1,8 +1,10 @@
 import { Component } from "libs/rzf/Component";
 
 import { Section } from "components/elements/Section";
+import { Dialog } from "components/elements/Dialog";
+import { Button, ButtonAdd, ButtonDanger } from "components/elements/Button";
 import { ArtistCard } from "components/artist/Artist";
-import { Button, ButtonAdd, ButtonDanger } from "../elements/Button";
+import { Preloader } from "components/preloader/Preloader";
 
 import { Selective } from "./Selective";
 
@@ -17,7 +19,6 @@ import { one_alive_async } from "utils/funcs";
 
 import './forms.scss'
 import './AlbumCreate.scss';
-import { Preloader } from "components/preloader/Preloader";
 
 export class AlbumCreate extends Component {
     state = {
@@ -27,7 +28,9 @@ export class AlbumCreate extends Component {
         selected_artists: [] as AppTypes.Artist[],
         selected_artists_error: null as string | null,
         tracks_validators: [getTrackCreateValidator()],
-        error: null as string | null
+        error: null as string | null,
+
+        sending: false as boolean,
     }
 
     componentDidMount(): void { this.fetchData(); }
@@ -64,6 +67,7 @@ export class AlbumCreate extends Component {
         }
 
         try {
+            this.setState({sending: true})
             const vr = ALBUM_CREATE_VALIDATOR.result
             const album = (await API.postLabelAlbum(
                 vr.title.value,
@@ -92,6 +96,8 @@ export class AlbumCreate extends Component {
         } catch (error) {
             console.error(error)
             this.setState({error: error.message})
+        } finally {
+            this.setState({sending: false})
         }
     })
 
@@ -108,7 +114,8 @@ export class AlbumCreate extends Component {
             selected_artists: selected
                 ? [...this.state.selected_artists, artist]
                 : this.state.selected_artists.filter(({id}) => id !== artist.id),
-            error: null
+            error: null,
+            selected_artists_error: null,
         })
     }
 
@@ -150,11 +157,11 @@ export class AlbumCreate extends Component {
                     </div>
                 </div>
                 <Section title="Главный артист">
-                    {!!this.state.selected_artists.length && <ArtistCard artist={this.state.selected_artists[0]} />}
+                    {!!this.state.selected_artists.length && <Selective onSelect={this.onSelect} props={{artist: this.state.selected_artists[0]}} component={ArtistCard} selected /> }
                 </Section>
                 {this.state.selected_artists_error && <p className="form-input-container--image__error">Артист не выбран</p>}
                 <Section title="Остальные артисты">
-                    {this.state.selected_artists.length > 1 && this.state.artists.slice(1).map(a => <ArtistCard artist={a} />)}
+                    {this.state.selected_artists.length > 1 && this.state.selected_artists.slice(1).map(a => <Selective onSelect={this.onSelect} props={{artist: a}} component={ArtistCard} selected /> )}
                 </Section>
                 <Section title="Выберете артистов" horizontal wrap >
                     {!this.state.artists_loading ? 
@@ -172,6 +179,10 @@ export class AlbumCreate extends Component {
                     {this.state.error && <p className="form-input-container__error">{this.state.error}</p>}
                     <Button className="form__apply">Создать альбом</Button>
                 </div>
+                {this.state.sending && <Dialog className="dialog--loading">
+                    <h2>Альбом публикуется...</h2>
+                    <Preloader />
+                </Dialog>}
             </form>
         ]
     }

@@ -4,7 +4,6 @@ import "./Popup.scss";
 
 export class NearPopup extends Component {
     props: {
-        horizontal?: boolean,
         [key: string]: any
     }
 
@@ -12,16 +11,8 @@ export class NearPopup extends Component {
         const element = this.vnode.parent.firstDom as HTMLElement;
         const position = element.getBoundingClientRect();
 
-        if (this.props.horizontal) {
-            if ((position.left + position.right) / 2 > window.innerWidth / 2) {
-                return `popup--left`
-            }
-            return `popup--right`
-        }
-        if ((position.top + position.bottom) / 2 > window.innerHeight / 2) {
-            return `popup--above`
-        }
-        return `popup--under`
+        return ((position.top + position.bottom) > window.innerHeight ? 'popup--above' : 'popup--under') + ' ' +
+                ((position.left + position.right) > window.innerWidth ? 'popup--left': 'popup--right');
     }
 
     render() {

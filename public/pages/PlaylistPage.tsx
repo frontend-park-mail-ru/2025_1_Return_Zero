@@ -8,6 +8,7 @@ import { PlaylistEdit } from "components/forms/PlaylistEdit";
 import { Button, ButtonDanger } from "components/elements/Button";
 import { Like } from "components/elements/Like";
 import { ActionsPlaylist } from "components/elements/Actions/ActionsPlaylist";
+import { DialogConfirm } from "components/elements/Dialog";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
@@ -26,6 +27,7 @@ export class PlaylistPage extends Component {
         tracks: [] as AppTypes.Track[],
         is_liked: false,
         editing: false,
+        confirm_delete: false,
     }
 
     props: {
@@ -109,14 +111,15 @@ export class PlaylistPage extends Component {
                                 () => this.setState({ tracks: this.state.tracks.filter(t => t.id !== track.id)})}
                             />
                         )) :
-                        <span>В этом плейлисте пока-что пусто{'('}</span>
+                        <span>В этом плейлисте пока что пусто{'('}</span>
                     }
                 </Section>
-                {this.state.editing && <PlaylistEdit playlist={playlist} onClose={() => this.setState({editing: false})} onSave={this.onSave}/>}
                 <div className="page__buttons">
-                    {USER_STORAGE.getUser() && USER_STORAGE.getUser().username === playlist.username && <Button className="page--playlist__delete" onClick={() => this.setState({ editing: true })}>Изменить плейлист</Button>}
-                    {USER_STORAGE.getUser() && USER_STORAGE.getUser().username === playlist.username && <ButtonDanger className="page--playlist__delete" onClick={this.onDelete}>Удалить плейлист</ButtonDanger>}
+                    {USER_STORAGE.getUser() && USER_STORAGE.getUser().username === playlist.username && <Button className="page--playlist__edit" onClick={() => this.setState({ editing: true })}>Изменить плейлист</Button>}
+                    {USER_STORAGE.getUser() && USER_STORAGE.getUser().username === playlist.username && <ButtonDanger className="page--playlist__delete" onClick={() => this.setState({ confirm_delete: true })}>Удалить плейлист</ButtonDanger>}
                 </div>
+                {this.state.editing && <PlaylistEdit playlist={playlist} onClose={() => this.setState({editing: false})} onSave={this.onSave}/>}
+                {this.state.confirm_delete && <DialogConfirm onClose={() => this.setState({confirm_delete: false})} onConfirm={this.onDelete} message="Вы уверены что хотите удалить плейлист?" />}
             </div>
         ]
     }

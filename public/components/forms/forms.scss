@@ -261,5 +261,13 @@
 
     &.active {
         background-color: d.$color-button-active;
+
+        &:has(.artist-card) {
+            background-color: transparent;
+
+            .artist-card__info__title {
+                color: d.$color-button-active;
+            }
+        }
     }
 }

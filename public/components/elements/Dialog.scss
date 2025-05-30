@@ -1,3 +1,6 @@
+@use "root/variables.scss" as v;
+@use "root/dark.scss" as d;
+
 .dialog {
     z-index: 10;
     position: fixed;
@@ -16,5 +19,29 @@
     &__container {
         overflow-y: auto;
         overflow-x: hidden;
+    }
+}
+
+.dialog--confirm {
+    .dialog {
+        &__container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+
+            padding: 1rem;
+            min-width: 33%;
+            max-width: 80%;
+
+            background-color: d.$color-background;
+            border: 1px solid d.$color-border;
+            border-radius: 15px;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 4rem;
     }
 }

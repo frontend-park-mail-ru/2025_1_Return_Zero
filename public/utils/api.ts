@@ -5,8 +5,6 @@ import {
     AuthSendingData,
 } from './api_types.ts';
 
-import { routes } from './routes';
-
 
 let csrf: string = undefined;
 const CSRF_HEADER = 'X-Csrf-Token';
@@ -487,7 +485,7 @@ export class API {
     static extendArtist(artist: any): AppTypes.Artist {
         return {
             ...artist,
-            artist_page: routes.artistsRoute.build({ artist_id: artist.id }),
+            artist_page: '/artists/' + artist.id,
         };
     }
 

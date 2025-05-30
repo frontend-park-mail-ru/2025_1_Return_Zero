@@ -84,14 +84,17 @@ export function getSettingsFormValidator(user: AppTypes.User) {
     });
 }
 
+const LABEL_ALLOWED_CHARS = 'a-zA-Zа-яА-Я0-9 _\\-\\(\\)\\[\\]\\{\\}\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)\\_\\+\\=\\|\\?\\>\\<\\.\\,\\;\\:\\~\`\'';
+const LABEL_ALLOWD_MESAGE = 'Запрещённые символы в названии'
+
 export const ARTIST_CREATE_VALIDATOR = new rzv.Validator({
-    'title': rzv.string().required(REQ_MES).max(40, 'Не более 40 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
+    'title': rzv.string().required(REQ_MES).max(100, 'Не более 100 символов').consistOf(LABEL_ALLOWED_CHARS, LABEL_ALLOWD_MESAGE),
     'thumbnail': rzv.file().required(REQ_MES).img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
 })
 
 export function getArtistEditValidator(artist: AppTypes.Artist) {
     return new rzv.Validator({
-        'title': rzv.string().required(REQ_MES).max(40, 'Не более 40 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
+        'title': rzv.string().required(REQ_MES).max(100, 'Не более 100 символов').consistOf(LABEL_ALLOWED_CHARS, LABEL_ALLOWD_MESAGE),
         'thumbnail': rzv.file().optional().img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
     }, {
         'title': artist.title,
@@ -99,14 +102,14 @@ export function getArtistEditValidator(artist: AppTypes.Artist) {
 }
 
 export const ALBUM_CREATE_VALIDATOR = new rzv.Validator({
-    'title': rzv.string().required(REQ_MES).max(40, 'Не более 40 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
+    'title': rzv.string().required(REQ_MES).max(100, 'Не более 100 символов').consistOf(LABEL_ALLOWED_CHARS, LABEL_ALLOWD_MESAGE),
     'thumbnail': rzv.file().required(REQ_MES).img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
     'type': rzv.string().required().oneof(['album', 'single', 'ep', 'compilation'])
 })
 
 export function getTrackCreateValidator() {
     return new rzv.Validator({
-        'title': rzv.string().required(REQ_MES).max(40, 'Не более 40 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
+        'title': rzv.string().required(REQ_MES).max(100, 'Не более 100 символов').consistOf(LABEL_ALLOWED_CHARS, LABEL_ALLOWD_MESAGE),
         'track': rzv.file().required().mp3().addUrl(),
     })
 }

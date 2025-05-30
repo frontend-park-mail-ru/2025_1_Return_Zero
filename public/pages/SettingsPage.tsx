@@ -1,6 +1,7 @@
 import { Component } from "libs/rzf/Component";
 
 import { ButtonDanger, ButtonSuccess } from "components/elements/Button";
+import { DialogConfirm } from "components/elements/Dialog";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { USER_STORAGE } from "utils/flux/storages";
@@ -26,9 +27,11 @@ export class SettingsPage extends Component {
         
         show_password: boolean,
         show_new_password: boolean,
+        confirm_delete: boolean,
     } = {
         show_password: false,
-        show_new_password: false
+        show_new_password: false,
+        confirm_delete: false,
     }
 
     validator: Validator
@@ -263,10 +266,11 @@ export class SettingsPage extends Component {
                     </div>
                 </div>
                 <div className="page--settings__submit">
-                    <ButtonDanger onClick={this.onDelete}>Удалить аккаунт</ButtonDanger>
+                    <ButtonDanger onClick={() => this.setState({ confirm_delete: true })}>Удалить аккаунт</ButtonDanger>
                     <p className="page--settings__submit__error form-input-container__error">{this.state.error}</p>
                     <ButtonSuccess onClick={this.onSave}>Сохранить</ButtonSuccess>
                 </div>
+                {this.state.confirm_delete && <DialogConfirm message="Вы точно хотите удалить свой аккаунт?" onClose={() => this.setState({confirm_delete: false})} onConfirm={this.onDelete} />}
             </form>
         ]
     }
