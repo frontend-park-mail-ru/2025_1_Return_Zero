@@ -47,7 +47,7 @@ export class ProfilePage extends Component {
         return [
             <div className="page page--profile">
                 <div className="page--profile__info">
-                    <div className="page--profile__info__avatar" style={{backgroundImage: `url(${user.avatar_url})`}} alt="avatar" />
+                    <img className="page--profile__info__avatar" src={ user.avatar_url } alt="avatar" />
                     <div>
                         <div className="page--profile__info__header">
                             <h2 className="page--profile__info__username">{user.username}</h2>

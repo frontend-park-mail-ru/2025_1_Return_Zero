@@ -67,7 +67,7 @@ export class ArtistPage extends Component {
         return [
             <div className="page page--artist">
                 <div className="page__info">
-                    <div className="page__info__img" style={{backgroundImage: `url(${this.state.artist.thumbnail_url})`}} alt="error" />
+                    <img className="page__info__img" src={ this.state.artist.thumbnail_url } alt="error" />
                     <div>
                         <span className="page__info__type">Исполнитель</span>
                         <h2 className="page__info__title">{this.state.artist.title}</h2>

@@ -115,9 +115,10 @@
 
         &__img {
             width: 15rem;
-            height: auto;
+            height: 15rem;
             @media (max-width: 600px) {
                 width: 10rem;
+                height: 10rem;
             }
         }
 

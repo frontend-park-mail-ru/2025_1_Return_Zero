@@ -28,7 +28,7 @@ export class ArtistCard extends Component {
         return [
             <div className="artist-card">
                 <Link to={artist.artist_page}>
-                    <div className="artist-card__img" style={{backgroundImage: `url(${artist.thumbnail_url})`}} alt="error"/>
+                    <img className="artist-card__img" src={ artist.thumbnail_url } alt="error"/>
                     {this.props.onEdit && <img className="artist-card__edit" src="/static/img/pencil.svg" alt="ed" onClick={this.onEditClick} />}
                     <div className="artist-card__info">
                         <span className="artist-card__info__title">{artist.title}</span>
