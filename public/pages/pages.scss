@@ -64,15 +64,6 @@
             display: flex;
             align-items: center;
             gap: 1.125rem;
-
-            .actions {
-                &__popup {
-                    left: 100%;
-                    top: 0;
-                    bottom: auto;
-                    right: auto;
-                }
-            }
         }
     }
 
@@ -339,6 +330,174 @@
     }
 }
 
+/* костыль */
+// div:has(>.page--profile__info) {
+//     grid-area: page;
+//     position: relative;
+
+//     display: flex;
+//     flex-direction: column;
+//     gap: 2.5rem;
+
+//     padding: 1.875rem;
+
+//     border-radius: 1.25rem;
+
+//     background-color: d.$color-background;
+
+//     overflow-y: scroll;
+//     height: 100%;
+
+//     > * {
+//         flex-shrink: 0;
+//     }
+
+//     .page__info {
+//         align-self: flex-start;
+    
+//         display: flex;
+//         align-items: center;
+//         gap: 3.125rem;
+    
+//         &__img {
+//             width: 13.625rem;
+//             height: 13.625rem;
+//             border-radius: 15px;
+    
+//             box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.25);
+//         }
+    
+//         > div {
+//             display: flex;
+//             flex-direction: column;
+//             align-items: flex-start;
+//         }
+    
+//         &__type {
+//             font-size: v.$font-size-small;
+//             color: d.$color-text-transparent;
+    
+//             margin-bottom: -0.5rem;
+//         }
+    
+//         &__title {
+//             font-size: v.$font-size-large;
+//             @media (max-width: 1200px) {
+//                 font-size: v.$font-size-big;
+//             }
+//             font-family: v.$font-family-header;
+//         }
+    
+//         &__actions {
+//             margin-top: 1.75rem;
+    
+//             display: flex;
+//             align-items: center;
+//             gap: 1.125rem;
+//         }
+//     }
+
+//     .page__empty {
+//         width: 100%;
+//         height: auto;
+//         justify-content: center;
+//         display: flex;
+//         flex-direction: column;
+//         align-items: center;
+//         gap: 2rem;
+//         overflow: auto;
+    
+//         padding-top: 2.5rem;
+    
+//         > img {
+//             width: 4.5rem;
+//             height: 4.5rem;
+
+//             @media (max-width: 600px) {
+//                 width: 3.5rem;
+//                 height: 3.5rem;
+//             }
+//         }
+
+//         > h1 {
+//             text-align: center;
+//             @media (max-width: 600px) {
+//                 font-size: v.$font-size-h3;
+//             }
+//         }
+//     }
+
+//     .page--profile__info {
+//         justify-self: flex-start;
+//         display: flex;
+//         align-items: center;
+//         gap: 3.125rem;
+//         @media (max-width: 600px) {
+//             gap: 2rem;
+//             // &__action {
+//             //     width: 2.5rem;
+//             // }
+//         }
+    
+//         .page--profile__info__avatar {
+//             width: 13.625rem;
+//             height: 13.625rem;
+//             @media (max-width: 600px) {
+//                 width: 8rem;
+//                 height: 8rem;
+//             }
+//             border-radius: 50%;
+    
+//             background-size: cover;
+//             background-position: center;
+//         }
+    
+//         // @media (max-width: 600px) {
+//         //     .page--profile__info__username {
+//         //         font-size: v.$font-size-h4;
+//         //     }       
+//         // }
+        
+//         .page--profile__info > div {
+//             display: flex;
+//             flex-direction: column;
+//             gap: 1.719rem;
+//             @media (max-width: 600px) {
+//                 gap: 1rem;
+//             }
+//         }
+    
+//         .page--profile__info__header {
+//             display: flex;
+//             align-items: center;
+//             gap: 1.25rem;
+    
+//             &__action {
+//                 cursor: pointer;
+//                 width: 2.375rem;
+//             }
+//         }
+    
+//         .page--profile__info__username {
+//             font-family: v.$font-family-main;
+//         }
+    
+//         .page--profile__info__stats {
+//             font-size: v.$font-size-h4;
+//             gap: 1.25rem;
+//             @media (max-width: 600px) {
+//                 font-size: v.$font-size-small;
+//                 gap: 1rem;
+//             }
+    
+//             display: flex;
+//             flex-direction: column;
+//         }
+//     }
+// }
+
+/* костыль */
+
 .page--profile__info {
     display: flex;
     align-items: center;
@@ -368,7 +527,7 @@
             font-size: v.$font-size-h4;
         }       
     }
-    
+
     > div {
         display: flex;
         flex-direction: column;

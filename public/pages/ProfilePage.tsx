@@ -48,7 +48,7 @@ export class ProfilePage extends Component {
         const {user, playlists, tracks, artists} = this.state;
         if (this.state.user_loading) {
             return [
-                <div class="page page--404 page__empty">
+                <div className="page page--404 page__empty">
                     <Preloader />
                 </div>
             ]

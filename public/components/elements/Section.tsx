@@ -25,7 +25,7 @@ export class Section extends Component {
                 <div className="section__content">
                     {this.props.is_loading 
                         ? <div className="section__skeleton"></div>
-                        : (this.props.children.length ? this.props.children : <span className="section__empty">Сдесь пока ничего нет</span>)}
+                        : (this.props.children.length ? this.props.children : <span className="section__empty">Здесь пока ничего нет</span>)}
                 </div>
             </section>
         ]

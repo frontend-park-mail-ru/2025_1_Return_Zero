@@ -100,7 +100,7 @@ class NavItem extends Component {
     render() {
         return [
             <div className={"header__nav__item" + (location.pathname === this.props.link ? " active" : "")}>
-                <Link class="header__nav__item__link" to={this.props.link}>
+                <Link className="header__nav__item__link" to={this.props.link}>
                     <img src={this.props.icon} />
                     <span>{this.props.text}</span>
                 </Link>

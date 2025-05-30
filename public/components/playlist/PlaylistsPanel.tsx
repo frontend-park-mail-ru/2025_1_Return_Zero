@@ -42,9 +42,7 @@ export class PlaylistsPanel extends Component {
                         <img src="/static/img/plus.svg" alt="error"/>
                     </Button>
                 }
-                {USER_STORAGE.getUser() && <Link to="/all/tracks/favorite" className="playlists-panel__favorite">
-                    <img src="/static/img/liked.svg" />
-                </Link>}
+                {USER_STORAGE.getUser() && <Link to="/all/tracks/favorite" className="playlists-panel__favorite" />}
                 <section className="playlists-panel__playlists">
                     {this.state.playlists.map((playlist, index) => (
                         <PlaylistItem key={playlist.id} playlist={playlist}/>

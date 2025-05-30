@@ -18,11 +18,25 @@ export abstract class Component {
         return true;  // TO DO
     }
 
-    setState(state: Record<string, any>) {
+    setState = debounceSetState((state: Record<string, any>) => {
         this.state = { ...this.state, ...state };
         const tempComponentVNode = {...this.vnode!};
-        queueMicrotask(() => update(this.vnode!, tempComponentVNode));
-    }
+        update(this.vnode!, tempComponentVNode);
+    })
 
     abstract render(): VNode[];
 }
+
+function debounceSetState(setState: (state: Record<string, any>) => void) {
+    let timeout = 0;
+    let accum = {};
+
+    return (state: Record<string, any>) => {
+        accum = { ...accum, ...state };
+        clearTimeout(timeout);
+        timeout = window.setTimeout(() => {
+            setState(accum);
+            accum = {};
+        });
+    }
+};

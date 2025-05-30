@@ -13,6 +13,7 @@ import { API } from "utils/api";
 
 import { Validator } from "libs/rzv/Validator";
 import { getSettingsFormValidator } from "utils/validators"; 
+import { debounce, one_alive_async } from "utils/funcs";
 
 import 'components/forms/forms.scss';
 import './pages.scss';
@@ -111,7 +112,7 @@ export class SettingsPage extends Component {
 
     onSubmit = async (event: SubmitEvent) => {event.preventDefault();}
 
-    onSave = async (event: MouseEvent) => {
+    onSave = debounce(async (event: MouseEvent) => {
         const validator = this.validator;
         if (this.state.avatar_file) {
             try {
@@ -156,9 +157,9 @@ export class SettingsPage extends Component {
         }
 
         Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({ type: 'success', message: 'Новые настройки сохранены!'}));
-    }
+    })
 
-    onDelete = async (event: MouseEvent) => {
+    onDelete = debounce(async (event: MouseEvent) => {
         if (!this.validator.validateAll({'submit': 'delete'})) {
             this.setState({
                 error: 'Заполните все поля'
@@ -180,7 +181,7 @@ export class SettingsPage extends Component {
                 error: 'Что-то пошло не так'
             })
         }
-    }
+    })
 
     render() {
         const user = this.state.user;
@@ -229,27 +230,27 @@ export class SettingsPage extends Component {
                             <p className="form-input-container__error">{result["new_email"].error}</p>
                         </div>
                     </div>
-                    <div class="page--settings__main__security">
-                        <h1 class="page--settings__main__security__title">Безопасность</h1>
-                        <div class="form-input-container">
-                            <label class="form-input-container__label" for="password">Действующий пароль</label>
-                            <div class="form-input-container__password">
-                                <input class="form-input-container__input" name="password" value={result.password.unprocessed} onInput={this.onInput} type={!this.state.show_password ? "password" : "text"} id="password" placeholder="действующий пароль" />
+                    <div className="page--settings__main__security">
+                        <h1 className="page--settings__main__security__title">Безопасность</h1>
+                        <div className="form-input-container">
+                            <label className="form-input-container__label" for="password">Действующий пароль</label>
+                            <div className="form-input-container__password">
+                                <input className="form-input-container__input" name="password" value={result.password.unprocessed} onInput={this.onInput} type={!this.state.show_password ? "password" : "text"} id="password" placeholder="действующий пароль" />
                                 <img className="form-input-container__password__show" src={!this.state.show_password ? "/static/img/hidden.svg" : "/static/img/shown.svg"} alt={!this.state.show_password ? "+" : "-"} onClick={() => this.setState({ show_password: !this.state.show_password })} />
                             </div>
-                            <p class="form-input-container__error">{ result["password"].check === 'required' && result["password"].error}</p>
+                            <p className="form-input-container__error">{ result["password"].check === 'required' && result["password"].error}</p>
                         </div>
-                        <div class="form-input-container">
-                            <label class="form-input-container__label" for="new-password">Новый пароль</label>
-                            <div class="form-input-container__password">
-                                <input class="form-input-container__input" name="new_password" value={result.new_password.unprocessed} onInput={this.onInput} type={!this.state.show_new_password ? "password" : "text"} id="new-password" placeholder="новый пароль" />
+                        <div className="form-input-container">
+                            <label className="form-input-container__label" for="new-password">Новый пароль</label>
+                            <div className="form-input-container__password">
+                                <input className="form-input-container__input" name="new_password" value={result.new_password.unprocessed} onInput={this.onInput} type={!this.state.show_new_password ? "password" : "text"} id="new-password" placeholder="новый пароль" />
                                 <img className="form-input-container__password__show" src={!this.state.show_new_password ? "/static/img/hidden.svg" : "/static/img/shown.svg"} alt={!this.state.show_new_password ? "+" : "-"} onClick={() => this.setState({ show_new_password: !this.state.show_new_password })} />
                             </div>
-                            <p class="form-input-container__error">{result["new_password"].error}</p>
+                            <p className="form-input-container__error">{result["new_password"].error}</p>
                         </div>
                     </div>
                     <div className="form-input-container page--settings__main__privacy">
-                        <h1 class="page--settings__main__security__title">Приватность</h1>
+                        <h1 className="page--settings__main__security__title">Приватность</h1>
                         <div>
                             {[
                                 {label: 'Плейлисты', name: 'is_public_playlists'},
@@ -259,15 +260,15 @@ export class SettingsPage extends Component {
                                 {label: 'Любимые исполнители', name: 'is_public_favorite_artists'},
                                 {label: 'Артистов прослушано', name: 'is_public_artists_listened'},
                             ].map(({label, name}) => {
-                                return <div class="form-input-container page--settings__main__privacy__item">
-                                    <label class="form-input-container__label">{label}</label>
-                                    <div class="form-input-container__radio">
-                                        <label class="form-input-container__radio__label">
-                                            <input class="form-input-container__radio__input" type="radio" name={name} onInput={this.onInput} value="false" {...(result[name].unprocessed === 'false' ? { checked:true } : {})} />
+                                return <div className="form-input-container page--settings__main__privacy__item">
+                                    <label className="form-input-container__label">{label}</label>
+                                    <div className="form-input-container__radio">
+                                        <label className="form-input-container__radio__label">
+                                            <input className="form-input-container__radio__input" type="radio" name={name} onInput={this.onInput} value="false" {...(result[name].unprocessed === 'false' ? { checked:true } : {})} />
                                             Приватно
                                         </label>
-                                        <label class="form-input-container__radio__label">
-                                            <input class="form-input-container__radio__input" type="radio" name={name} onInput={this.onInput} value="true" {...(result[name].unprocessed === 'true' ? { checked:true } : {})} />
+                                        <label className="form-input-container__radio__label">
+                                            <input className="form-input-container__radio__input" type="radio" name={name} onInput={this.onInput} value="true" {...(result[name].unprocessed === 'true' ? { checked:true } : {})} />
                                             Публично
                                         </label>
                                     </div>
