@@ -80,9 +80,15 @@ export class API {
     }
 
     static async processResponse(resp: Response): Promise<ApiResponse<any>> {
-        if (!resp.ok) throw new Error(resp.statusText);
+        if (!resp.ok) throw {
+            status: resp.status,
+            error: resp.statusText,
+        }
         let data = await resp.json();
-        if (data.error) throw new Error(data.status + ': ' + data.error);
+        if (data.error) throw {
+            status: resp.status,
+            error: data.error,
+        }
         return data;
     }
 

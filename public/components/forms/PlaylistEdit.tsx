@@ -54,7 +54,13 @@ export class PlaylistEdit extends Component {
             }));
             Broadcast.send('editPlaylist', playlist);
         } catch (error) {
-            this.setState({error: 'Что-то пошло не так'})
+            switch (error.status) {
+                case 409:
+                    this.setState({error: 'У вас уже есть плейлист с таким названием'})
+                    break;
+                default:
+                    this.setState({error: 'Что то пошло не так'})
+            }
         }
     })
 

@@ -39,12 +39,8 @@ a {
 }
 
 img {
-    object-fit: cover;
-    object-position: center;
     display: block;
     flex-shrink: 0;
-    -webkit-user-drag: none; 
-    user-drag: none;   
 }
 
 input {

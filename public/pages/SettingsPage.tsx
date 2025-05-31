@@ -95,12 +95,6 @@ export class SettingsPage extends Component {
 
     onChangeAvatar = (event: Event) => {
         const file = (event.target as HTMLInputElement).files![0];
-        if (file.size > 5 * 1024 * 1024) {
-            this.setState({
-                error: 'Файл слишком большой'
-            })
-            return
-        }
         URL.revokeObjectURL(this.state.avatar_url);
         this.setState({
             avatar_url: URL.createObjectURL((event.target as HTMLInputElement).files![0]),
@@ -108,6 +102,21 @@ export class SettingsPage extends Component {
             avatar_error: undefined,
             error: undefined
         })
+        
+        if (file.size > 5 * 1024 * 1024) {
+            this.setState({
+                avatar_error: 'Файл слишком большой',
+                error: undefined
+            })
+            return
+        }
+        if (!['image/jpeg', 'image/png'].includes(file.type)) {
+            this.setState({
+                avatar_error: 'Не верный формат изображения',
+                error: undefined
+            })
+            return ;
+        }
     }
 
     onSubmit = async (event: SubmitEvent) => {event.preventDefault();}
@@ -115,6 +124,9 @@ export class SettingsPage extends Component {
     onSave = debounce(async (event: MouseEvent) => {
         const validator = this.validator;
         if (this.state.avatar_file) {
+            if (this.state.avatar_error)
+                return;
+
             try {
                 const formData = new FormData();
                 formData.append('avatar', this.state.avatar_file);
@@ -149,9 +161,13 @@ export class SettingsPage extends Component {
             const result = (await API.putUser(data)).body;
             Dispatcher.dispatch(new ACTIONS.USER_CHANGE(result));
         } catch (e) {
-            this.setState({
-                error: e.message
-            })
+            switch (e.status) {
+                case 401:
+                    this.setState({ error: 'Не правильный пароль' })
+                    break;
+                default:
+                    this.setState({ error: 'Что-то пошло не так' })
+            }
             Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({ type: 'error', message: 'Не удалось сохранить изменения'}));
             return;
         }
@@ -202,7 +218,7 @@ export class SettingsPage extends Component {
                                 <img src="/static/img/pencil.svg" />
                             </label>
                             <input className="form-input-container--image__input" type="file" id="avatar" accept="image/*" onChange={this.onChangeAvatar} />
-                            <p className="form-input-container--image__error"></p>
+                            <p className="form-input-container--image__error">{this.state.avatar_error}</p>
                         </div>
                     </div>
                     <div className="page--settings__info__data">

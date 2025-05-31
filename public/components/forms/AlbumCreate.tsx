@@ -133,7 +133,8 @@ export class AlbumCreate extends Component {
             <form className="form form--album-create" onSubmit={this.onSubmit}>
                 <div className="form--album-create__info">
                     <div className="form-input-container--image">
-                        <img className="form-input-container--image__image" src={vr.thumbnail.url} alt="200x200" />
+                        {vr.thumbnail.url ? <img className="form-input-container--image__image" src={vr.thumbnail.url} />
+                                          : <div className="form-input-container--image__placeholder">200x200</div>}
                         <label className="form-input-container--image__button" for="thumbnail1">
                             <img src="/static/img/pencil.svg" />
                         </label>

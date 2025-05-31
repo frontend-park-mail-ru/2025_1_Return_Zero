@@ -49,8 +49,13 @@ export class PlaylistCreate extends Component {
             }));
             Broadcast.send('createPlaylist', playlist);
         } catch (error) {
-            console.error(error)
-            this.setState({error: 'У вас уже есть плейлист с таким названием'})
+            switch (error.status) {
+                case 409:
+                    this.setState({error: 'У вас уже есть плейлист с таким названием'})
+                    break;
+                default:
+                    this.setState({error: 'Что то пошло не так'})
+            }
         }
     })
 
@@ -77,7 +82,8 @@ export class PlaylistCreate extends Component {
                 <form className="form form--playlist-create" onSubmit={this.onSubmit}>
                     <h2 className="form__title">Создание плейлиста</h2>
                     <div className="form-input-container--image">
-                        <img className="form-input-container--image__image" src={vr.thumbnail.url} alt="200x200" />
+                        {vr.thumbnail.url ? <img className="form-input-container--image__image" src={vr.thumbnail.url} />
+                                          : <div className="form-input-container--image__placeholder">200x200</div>}
                         <label className="form-input-container--image__button" for="thumbnail">
                             <img src="/static/img/pencil.svg" />
                         </label>

@@ -180,13 +180,23 @@
     }
 
     &__image {
-        position: relative;
-        display: block;
-        text-align: center;
-        line-height: 13.625rem;
-
-        background-size: cover;
+        width: 13.625rem;
+        height: 13.625rem;
+        border-radius: 50%;
+        
         background-position: center;
+        background-size: contain;
+
+        @media (max-width: 600px) {
+            width: 10rem;
+            height: 10rem;
+        }
+    }
+
+    &__placeholder {
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         width: 13.625rem;
         height: 13.625rem;
@@ -194,20 +204,11 @@
             width: 10rem;
             height: 10rem;
         }
+
         border-radius: 50%;
 
-        &::before {
-            position: absolute;
-            display: block;
-
-            inset: 0;
-            width: 100%;
-            height: 100%;
-
-            background-color: d.$color-elements;
-            border: 1px solid d.$color-border;
-            border-radius: inherit;
-        }
+        background-color: d.$color-elements;
+        border: 1px solid d.$color-border;
     }
 
     &__input {
