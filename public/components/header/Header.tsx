@@ -59,7 +59,6 @@ class HeaderSearch extends Component {
 
     onSubmit = (e: Event) => {
         e.preventDefault();
-        this._onSubmit();
     }
 
     onInput = (e: Event) => {
@@ -68,15 +67,15 @@ class HeaderSearch extends Component {
             router.push('/search/all', {});
         }
         this.setState({ query: target });
-        this._onSubmit();
+        this._onSubmit(target);
     }
 
-    _onSubmit = () => {
-        if (!this.state.query) { 
+    _onSubmit = (target: string) => {
+        if (this.state.query && !target) {
             router.push('/', {});
             return;
         }
-        router.replace(`?query=${this.state.query}`, {})
+        router.replace(`?query=${target}`, {})
     }
 
     onFocus = () => {
