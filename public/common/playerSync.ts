@@ -1,15 +1,16 @@
+// PlayerSync.ts
 class PlayerSync {
     private static readonly QUEUE_KEY = 'playerQueue';
     private static readonly HEARTBEAT_KEY = 'masterHeartbeat';
-    private static readonly HEARTBEAT_INTERVAL = 1000;
-    private static readonly HEARTBEAT_TIMEOUT = 1500;
+    private static readonly HEARTBEAT_INTERVAL = 500;   // миллисекунд
+    private static readonly HEARTBEAT_TIMEOUT = 800;    // миллисекунд
 
-    id: string;
-    isMaster: boolean;
-    callback: () => void;
+    public id: string;
+    public isMaster: boolean;
+    private callback: () => void;
 
-    private heartbeatTimer?: number;
-    private masterCheckTimer: number;
+    private heartbeatTimer: number | undefined;
+    private masterCheckTimer: number | undefined;
 
     constructor(callback: () => void) {
         this.id = crypto.randomUUID();
@@ -28,33 +29,52 @@ class PlayerSync {
         );
     }
 
+    public destroy() {
+        if (this.isMaster) {
+        this.stopHeartbeat();
+        try {
+            localStorage.removeItem(PlayerSync.HEARTBEAT_KEY);
+        } catch {
+            /* игнорируем */
+        }
+        }
+
+        this.leaveQueue();
+        this.cleanupAll();
+    }
+
+
     private getQueue(): string[] {
         const raw = localStorage.getItem(PlayerSync.QUEUE_KEY);
-      
         if (!raw) return [];
-      
         try {
-          const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed) && parsed.every(id => typeof id === 'string')) {
-            return parsed;
-          }
-          localStorage.removeItem(PlayerSync.QUEUE_KEY);
-          return [];
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed) && parsed.every(id => typeof id === 'string')) {
+                return parsed;
+            }
+
+            localStorage.removeItem(PlayerSync.QUEUE_KEY);
+            return [];
         } catch {
-          localStorage.removeItem(PlayerSync.QUEUE_KEY);
-          return [];
+            localStorage.removeItem(PlayerSync.QUEUE_KEY);
+            return [];
         }
-      }
+    }
+
 
     private setQueue(queue: string[]) {
-        localStorage.setItem(PlayerSync.QUEUE_KEY, JSON.stringify(queue));
+        try {
+            localStorage.setItem(PlayerSync.QUEUE_KEY, JSON.stringify(queue));
+        } catch {
+        // В редком случае quota exceeded или запрещён, но тихо игнорируем
+        }
     }
 
     private enterQueue() {
         const queue = this.getQueue();
         if (!queue.includes(this.id)) {
-            queue.push(this.id);
-            this.setQueue(queue);
+        queue.push(this.id);
+        this.setQueue(queue);
         }
     }
 
@@ -75,13 +95,26 @@ class PlayerSync {
         } else if (!this.isMaster && wasMaster) {
             console.log(`Player ${this.id} is now SLAVE`);
             this.stopHeartbeat();
+            try {
+                localStorage.removeItem(PlayerSync.HEARTBEAT_KEY);
+            } catch {
+                /* игнорируем */
+            }
         }
     }
 
     private startHeartbeat() {
-        localStorage.setItem(PlayerSync.HEARTBEAT_KEY, Date.now().toString());
+        try {
+            localStorage.setItem(PlayerSync.HEARTBEAT_KEY, Date.now().toString());
+        } catch {
+        /* игнорируем */
+        }
         this.heartbeatTimer = window.setInterval(() => {
-        localStorage.setItem(PlayerSync.HEARTBEAT_KEY, Date.now().toString());
+        try {
+            localStorage.setItem(PlayerSync.HEARTBEAT_KEY, Date.now().toString());
+        } catch {
+            /* игнорируем */
+        }
         }, PlayerSync.HEARTBEAT_INTERVAL);
     }
 
@@ -89,6 +122,13 @@ class PlayerSync {
         if (this.heartbeatTimer !== undefined) {
             clearInterval(this.heartbeatTimer);
             this.heartbeatTimer = undefined;
+        }
+    }
+
+    private stopMasterCheck() {
+        if (this.masterCheckTimer !== undefined) {
+            clearInterval(this.masterCheckTimer);
+            this.masterCheckTimer = undefined;
         }
     }
 
@@ -100,7 +140,7 @@ class PlayerSync {
         }
 
         const masterId = queue[0];
-        if (masterId === this.id) {
+            if (masterId === this.id) {
             return;
         }
 
@@ -113,28 +153,45 @@ class PlayerSync {
     }
 
     private insertSelfAsMaster() {
-        let queue = this.getQueue().filter(id => id !== this.id);
-        queue = queue.filter((_, idx) => idx !== 0);
+        let queue = this.getQueue();
+        queue = queue.filter(id => id !== this.id);
+        if (queue.length > 0) {
+            queue.shift();
+        }
+   
         queue.unshift(this.id);
+
         this.setQueue(queue);
         this.updateMasterFlag();
     }
 
     private onStorageEvent(e: StorageEvent) {
         if (e.key === PlayerSync.QUEUE_KEY) {
-        this.updateMasterFlag();
+            this.updateMasterFlag();
         }
     }
 
     private onPageHide() {
         if (this.isMaster) {
+        this.stopHeartbeat();
         try {
-            localStorage.setItem('is-playing', 'false');
-        } catch { /* ignore */ }
+            localStorage.removeItem(PlayerSync.HEARTBEAT_KEY);
+        } catch {
+            /* игнорируем */
+        }
         }
         this.leaveQueue();
+        this.cleanupAll();
+    }
+
+    private cleanupAll() {
+        this.stopHeartbeat();
+        this.stopMasterCheck();
+        window.removeEventListener('storage', this.onStorageEvent.bind(this));
+        window.removeEventListener('pagehide', this.onPageHide.bind(this));
     }
 }
 
 export default PlayerSync;
+
   

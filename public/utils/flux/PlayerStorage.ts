@@ -693,10 +693,10 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         return this.stor.currentTrack?.title || 'none';
     }
 
-    get currentTrackArtist() {
+    get currentTrackArtists() {
         try {
             if (!this.playerSync.isMaster) {
-                return JSON.parse(localStorage.getItem('current-track') || 'undefined')?.artists[0]?.title;
+                return JSON.parse(localStorage.getItem('current-track') || 'undefined');
             }
         } catch (error) {
             return 'none';
@@ -715,18 +715,6 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         }
 
         return this.stor.currentTrack?.thumbnail_url || 'none';
-    }
-
-    get currentTrackAristURL() {
-        try {
-            if (!this.playerSync.isMaster) {
-                return JSON.parse(localStorage.getItem('current-track') || 'undefined')?.artists[0]?.artist_page;
-            }
-        } catch (error) {
-            return 'none';
-        }
-
-        return this.stor.currentTrack?.artists[0]?.artist_page;
     }
 
     get shuffled() {
