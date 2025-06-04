@@ -57,6 +57,7 @@
                 font-weight: v.$font-weight-bold;
                 font-size: v.$font-size-h4;
                 display: -webkit-box;
+
                 -webkit-line-clamp: 2;
                 -webkit-box-orient: vertical;
                 overflow: hidden;
@@ -79,6 +80,16 @@
                 &:first-child {
                     font-weight: v.$font-weight-regular;
                 }
+
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                line-height: 1.2;
+                max-height: calc(v.$font-size-h4 * 1.2 * 2);
+                word-break: break-word;
+                overflow-wrap: break-word;
             }
         }
     }
@@ -109,6 +120,10 @@
 }
 
 .album-card {
+    span {
+        flex: 1 0 auto;
+    }
+
     display: flex;
     flex-direction: column;
     align-items: center;

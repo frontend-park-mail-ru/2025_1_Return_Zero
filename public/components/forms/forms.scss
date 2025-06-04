@@ -17,6 +17,7 @@
 .form-input-container {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 0.438rem;
 
     &__label {
@@ -53,11 +54,17 @@
 
         background-color: d.$color-form-element;
         border: 1px solid d.$color-border;
-        border-radius: 0.625rem;
+        border-radius: 10px;
 
         &::placeholder {
             text-align: center;
             color: d.$color-text-transparent;
+        }
+    }
+
+    &__input[type=file] {
+        &::file-selector-button {
+            display: none;
         }
     }
 
@@ -101,7 +108,31 @@
             border-radius: 5px;
 
             &:checked {
-                background-color: d.$color-highlight;
+                background-color: d.$color-button-active;
+            }
+        }
+    }
+
+    &__select {
+        padding: 0.6rem;
+        background-color: d.$color-form-element;
+
+        border: 1px solid d.$color-border;
+        border-radius: 10px;
+
+        color: d.$color-text;
+
+        transition: all 0.2s ease-in-out;
+
+        .placeholder {
+            color: d.$color-text-transparent;
+        }
+
+        &:open {
+            border-radius: 10px 10px 5px 5px;
+
+            &::picker-icon {
+                rotate: 180deg;
             }
         }
     }
@@ -114,6 +145,8 @@
     flex-direction: column;
     gap: 0.438rem;
 
+    width: min-content;
+
     &__button {
         position: absolute;
         cursor: pointer;
@@ -122,8 +155,12 @@
         align-items: center;
 
         padding: 0.625rem;
-        right: 15%;
-        bottom: 15%;
+        left: 10rem;
+        top: 10rem;
+        @media (max-width: 600px) {
+            left: 7rem;
+            top: 7rem;
+        }
 
         background-color: d.$color-elements;
         border: 1px solid d.$color-border;
@@ -143,10 +180,23 @@
     }
 
     &__image {
-        position: relative;
-        display: block;
-        text-align: center;
-        line-height: 13.625rem;
+        width: 13.625rem;
+        height: 13.625rem;
+        border-radius: 50%;
+        
+        background-position: center;
+        background-size: contain;
+
+        @media (max-width: 600px) {
+            width: 10rem;
+            height: 10rem;
+        }
+    }
+
+    &__placeholder {
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         width: 13.625rem;
         height: 13.625rem;
@@ -154,21 +204,11 @@
             width: 10rem;
             height: 10rem;
         }
+
         border-radius: 50%;
 
-        &::before {
-            content: '';
-            position: absolute;
-            display: block;
-
-            inset: 0;
-            width: 100%;
-            height: 100%;
-
-            background-color: d.$color-elements;
-            border: 1px solid d.$color-border;
-            border-radius: inherit;
-        }
+        background-color: d.$color-elements;
+        border: 1px solid d.$color-border;
     }
 
     &__input {
@@ -179,7 +219,6 @@
     }
 
     &__error {
-        width: 100%;
         min-height: calc(1em * v.$font-line-height);
         line-height: v.$font-line-height;
 
@@ -209,4 +248,27 @@
 .form-reject-button {
     @include form-button;
     background-color: #c83126;
+}
+
+
+.selective {
+    * {
+        pointer-events: none;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &.active {
+        background-color: d.$color-button-active;
+
+        &:has(.artist-card) {
+            background-color: transparent;
+
+            .artist-card__info__title {
+                color: d.$color-button-active;
+            }
+        }
+    }
 }

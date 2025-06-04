@@ -5,7 +5,6 @@ import { Button } from "components/elements/Button";
 import { HeaderLogo } from "components/logo/HeaderLogo";
 
 import { USER_STORAGE } from "utils/flux/storages";
-import { debounce } from "utils/funcs";
 
 import "./Header.scss";
 
@@ -14,7 +13,7 @@ export class Header extends Component {
         return [
             <header className="header">
                 <HeaderLogo />
-                <HeaderSearch />
+                <Route path="^.*" component={HeaderSearch} />
                 <nav className="header__nav">
                     <Route path="^/" exact component={NavItem} elseComponent={NavItem} link="/" icon="/static/img/icon-home.svg" text="Главная" />
                     <Route path="^/tracks/" exact component={NavItem} elseComponent={NavItem} link="/tracks" icon="/static/img/icon-tracks.svg" text="Треки" />
@@ -60,7 +59,6 @@ class HeaderSearch extends Component {
 
     onSubmit = (e: Event) => {
         e.preventDefault();
-        this._onSubmit();
     }
 
     onInput = (e: Event) => {
@@ -69,15 +67,15 @@ class HeaderSearch extends Component {
             router.push('/search/all', {});
         }
         this.setState({ query: target });
-        this._onSubmit();
+        this._onSubmit(target);
     }
 
-    _onSubmit = () => {
-        if (!this.state.query) { 
+    _onSubmit = (target: string) => {
+        if (this.state.query && !target) {
             router.push('/', {});
             return;
         }
-        router.replace(`?query=${this.state.query}`, {})
+        router.replace(`?query=${target}`, {})
     }
 
     onFocus = () => {
@@ -85,6 +83,9 @@ class HeaderSearch extends Component {
     }
 
     render() {
+        if (!location.pathname.startsWith('/search')) {
+            this.state.query = '';
+        };
         return [
             <form className="header__search" onSubmit={this.onSubmit}>
                 <img className="header__search__icon" src="/static/img/icon-search.svg" />
@@ -98,7 +99,7 @@ class NavItem extends Component {
     render() {
         return [
             <div className={"header__nav__item" + (location.pathname === this.props.link ? " active" : "")}>
-                <Link class="header__nav__item__link" to={this.props.link}>
+                <Link className="header__nav__item__link" to={this.props.link}>
                     <img src={this.props.icon} />
                     <span>{this.props.text}</span>
                 </Link>
@@ -149,7 +150,7 @@ class HeaderProfile extends Component {
     renderProfile(user: AppTypes.User) {
         return [
             <div className="header__profile" onClick={() => this.setState({ opened: !this.state.opened })} onClickOutside={() => this.setState({ opened: false })}>
-                <img src={user.avatar_url} className="header__profile__avatar" />
+                <img className="header__profile__avatar" src={ user.avatar_url } />
                 {this.state.opened && <div className="header__profile__menu">
                     <Link className="item" to={"/profile/" + user.username}>
                         <img src='/static/img/icon-profile.svg' />

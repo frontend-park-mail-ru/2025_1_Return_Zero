@@ -40,7 +40,11 @@ export class FileDescriber extends Describer<File> {
     }
 
     img(message: string = 'Not image'): FileDescriber {
-        return this.type('image/(jpeg|png|gif|svg|bmp)', message);
+        return this.type('image/(jpg|jpeg|png)', message);
+    }
+
+    mp3(message: string = 'Not mp3'): FileDescriber {
+        return this.type('audio/mpeg', message);
     }
 
     type(type: string, message: string = `Not ${type}`): FileDescriber {

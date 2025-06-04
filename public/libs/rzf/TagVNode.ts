@@ -41,7 +41,7 @@ export function hTag(
 
 function getClickOutsideHandler(vnode: TagVNode, handler: EventListenerOrEventListenerObject) {
     const res_handler = (e: MouseEvent) => {
-        if (!vnode.firstDom!.contains(e.target as HTMLElement)) {
+        if (!vnode.firstDom!.contains(e.target as HTMLElement) && document.body.contains(e.target as HTMLElement)) {
             if (typeof handler === 'function') {
                 handler(e);
             } else {
@@ -115,12 +115,10 @@ export function updateTag(vnode: TagVNode, newVNode: TagVNode) {
     const { classes: newClases, style: newStyle, on: newOn, data: newData, ...newAttrs } = newVNode.props;
     vnode.props = newVNode.props;
 
-    // remove classes that are not in new
-    classes.filter(className => !newClases.includes(className)).forEach(className => {
+    classes.forEach(className => {
         vnode.firstDom!.classList.remove(className);
     });
-    // add classes that are not in old
-    newClases.filter(className => !classes.includes(className)).forEach(className => {
+    newClases.forEach(className => {
         vnode.firstDom!.classList.add(className);
     })
 

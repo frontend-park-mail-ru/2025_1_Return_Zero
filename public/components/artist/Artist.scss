@@ -3,6 +3,7 @@
 
 .artist-card > a {
     width: 8.75rem;
+    gap: 1rem;
 
     display: flex;
     flex-direction: column;
@@ -13,7 +14,7 @@
 .artist-card {
     position: relative;
 
-    &:hover {
+    a:hover {
         text-decoration: none;
     }
     
@@ -24,6 +25,9 @@
             width: 7.7rem;
             height: 7.7rem;
         }
+
+        background-position: center;
+        background-size: cover;
 
         border-radius: 50%;
     }
@@ -61,6 +65,16 @@
             font-weight: v.$font-weight-bold;
 
             text-align: center;
+
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2;
+            max-height: calc(v.$font-size-h4 * 1.2 * 2);
+            word-break: break-word;
+            overflow-wrap: break-word;
         } 
     }
 }

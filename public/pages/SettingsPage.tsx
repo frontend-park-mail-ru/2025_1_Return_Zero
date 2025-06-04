@@ -1,6 +1,8 @@
 import { Component } from "libs/rzf/Component";
 
 import { ButtonDanger, ButtonSuccess } from "components/elements/Button";
+import { DialogConfirm } from "components/elements/Dialog";
+import { Preloader } from "components/preloader/Preloader";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { USER_STORAGE } from "utils/flux/storages";
@@ -11,6 +13,7 @@ import { API } from "utils/api";
 
 import { Validator } from "libs/rzv/Validator";
 import { getSettingsFormValidator } from "utils/validators"; 
+import { debounce, one_alive_async } from "utils/funcs";
 
 import 'components/forms/forms.scss';
 import './pages.scss';
@@ -18,6 +21,7 @@ import './pages.scss';
 export class SettingsPage extends Component {
     state: {
         user?: AppTypes.User,
+        user_loading: boolean,
         error?: string,
 
         avatar_url?: string,
@@ -26,9 +30,12 @@ export class SettingsPage extends Component {
         
         show_password: boolean,
         show_new_password: boolean,
+        confirm_delete: boolean,
     } = {
+        user_loading: true,
         show_password: false,
-        show_new_password: false
+        show_new_password: false,
+        confirm_delete: false,
     }
 
     validator: Validator
@@ -41,10 +48,12 @@ export class SettingsPage extends Component {
         USER_STORAGE.subscribe(this.onAction);
         
         if (USER_STORAGE.getUser()) {
+            this.setState({ user_loading: true });
             API.getUserSettings(USER_STORAGE.getUser().username).then((res) => {
                 this.validator = getSettingsFormValidator(res.body);
                 this.setState({ user: res.body, avatar_url: res.body.avatar_url })
-            }).catch((reason: Error) => console.error(reason.message));
+            }).catch((reason: Error) => console.error(reason.message))
+             .finally(() => this.setState({ user_loading: false }));
         }
     }
     
@@ -57,10 +66,11 @@ export class SettingsPage extends Component {
         URL.revokeObjectURL(this.state.avatar_url);
         switch (true) {
             case action instanceof ACTIONS.USER_LOGIN:
+                this.setState({ user_loading: true });
                 API.getUserSettings(USER_STORAGE.getUser().username).then((res) => {
                     this.validator = getSettingsFormValidator(res.body);
                     this.setState({ user: res.body, avatar_url: res.body.avatar_url })
-                }).catch((reason: Error) => console.error(reason.message));
+                }).catch((reason: Error) => console.error(reason.message)).finally(() => this.setState({ user_loading: false}));
                 break;
             case action instanceof ACTIONS.USER_CHANGE:
                 this.validator = getSettingsFormValidator(action.payload);
@@ -85,12 +95,6 @@ export class SettingsPage extends Component {
 
     onChangeAvatar = (event: Event) => {
         const file = (event.target as HTMLInputElement).files![0];
-        if (file.size > 5 * 1024 * 1024) {
-            this.setState({
-                error: 'Файл слишком большой'
-            })
-            return
-        }
         URL.revokeObjectURL(this.state.avatar_url);
         this.setState({
             avatar_url: URL.createObjectURL((event.target as HTMLInputElement).files![0]),
@@ -98,13 +102,31 @@ export class SettingsPage extends Component {
             avatar_error: undefined,
             error: undefined
         })
+        
+        if (file.size > 5 * 1024 * 1024) {
+            this.setState({
+                avatar_error: 'Файл слишком большой',
+                error: undefined
+            })
+            return
+        }
+        if (!['image/jpeg', 'image/png'].includes(file.type)) {
+            this.setState({
+                avatar_error: 'Не верный формат изображения',
+                error: undefined
+            })
+            return ;
+        }
     }
 
     onSubmit = async (event: SubmitEvent) => {event.preventDefault();}
 
-    onSave = async (event: MouseEvent) => {
+    onSave = debounce(async (event: MouseEvent) => {
         const validator = this.validator;
         if (this.state.avatar_file) {
+            if (this.state.avatar_error)
+                return;
+
             try {
                 const formData = new FormData();
                 formData.append('avatar', this.state.avatar_file);
@@ -139,17 +161,21 @@ export class SettingsPage extends Component {
             const result = (await API.putUser(data)).body;
             Dispatcher.dispatch(new ACTIONS.USER_CHANGE(result));
         } catch (e) {
-            this.setState({
-                error: e.message
-            })
+            switch (e.status) {
+                case 401:
+                    this.setState({ error: 'Не правильный пароль' })
+                    break;
+                default:
+                    this.setState({ error: 'Что-то пошло не так' })
+            }
             Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({ type: 'error', message: 'Не удалось сохранить изменения'}));
             return;
         }
 
         Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({ type: 'success', message: 'Новые настройки сохранены!'}));
-    }
+    })
 
-    onDelete = async (event: MouseEvent) => {
+    onDelete = debounce(async (event: MouseEvent) => {
         if (!this.validator.validateAll({'submit': 'delete'})) {
             this.setState({
                 error: 'Заполните все поля'
@@ -171,10 +197,15 @@ export class SettingsPage extends Component {
                 error: 'Что-то пошло не так'
             })
         }
-    }
+    })
 
     render() {
         const user = this.state.user;
+        if (this.state.user_loading) {
+            return [<div className="page page--404">
+                <Preloader />
+            </div>];
+        }
         if (!user) return [<div className="page page--404">Вы не авторизованы</div>];
         const result = this.validator.result;
         return [
@@ -182,12 +213,12 @@ export class SettingsPage extends Component {
                 <div className="page--settings__info">
                     <div className="page--settings__info__avatar">
                         <div className="form-input-container--image">
-                            <img className="form-input-container--image__image" src={this.state.avatar_url} />
+                            <div className="form-input-container--image__image" style={{backgroundImage: `url(${this.state.avatar_url})`}} />
                             <label className="form-input-container--image__button" for="avatar">
                                 <img src="/static/img/pencil.svg" />
                             </label>
                             <input className="form-input-container--image__input" type="file" id="avatar" accept="image/*" onChange={this.onChangeAvatar} />
-                            <p className="form-input-container--image__error"></p>
+                            <p className="form-input-container--image__error">{this.state.avatar_error}</p>
                         </div>
                     </div>
                     <div className="page--settings__info__data">
@@ -215,27 +246,27 @@ export class SettingsPage extends Component {
                             <p className="form-input-container__error">{result["new_email"].error}</p>
                         </div>
                     </div>
-                    <div class="page--settings__main__security">
-                        <h1 class="page--settings__main__security__title">Безопасность</h1>
-                        <div class="form-input-container">
-                            <label class="form-input-container__label" for="password">Действующий пароль</label>
-                            <div class="form-input-container__password">
-                                <input class="form-input-container__input" name="password" value={result.password.unprocessed} onInput={this.onInput} type={!this.state.show_password ? "password" : "text"} id="password" placeholder="действующий пароль" />
+                    <div className="page--settings__main__security">
+                        <h1 className="page--settings__main__security__title">Безопасность</h1>
+                        <div className="form-input-container">
+                            <label className="form-input-container__label" for="password">Действующий пароль</label>
+                            <div className="form-input-container__password">
+                                <input className="form-input-container__input" name="password" value={result.password.unprocessed} onInput={this.onInput} type={!this.state.show_password ? "password" : "text"} id="password" placeholder="действующий пароль" />
                                 <img className="form-input-container__password__show" src={!this.state.show_password ? "/static/img/hidden.svg" : "/static/img/shown.svg"} alt={!this.state.show_password ? "+" : "-"} onClick={() => this.setState({ show_password: !this.state.show_password })} />
                             </div>
-                            <p class="form-input-container__error">{ result["password"].check === 'required' && result["password"].error}</p>
+                            <p className="form-input-container__error">{ result["password"].check === 'required' && result["password"].error}</p>
                         </div>
-                        <div class="form-input-container">
-                            <label class="form-input-container__label" for="new-password">Новый пароль</label>
-                            <div class="form-input-container__password">
-                                <input class="form-input-container__input" name="new_password" value={result.new_password.unprocessed} onInput={this.onInput} type={!this.state.show_new_password ? "password" : "text"} id="new-password" placeholder="новый пароль" />
+                        <div className="form-input-container">
+                            <label className="form-input-container__label" for="new-password">Новый пароль</label>
+                            <div className="form-input-container__password">
+                                <input className="form-input-container__input" name="new_password" value={result.new_password.unprocessed} onInput={this.onInput} type={!this.state.show_new_password ? "password" : "text"} id="new-password" placeholder="новый пароль" />
                                 <img className="form-input-container__password__show" src={!this.state.show_new_password ? "/static/img/hidden.svg" : "/static/img/shown.svg"} alt={!this.state.show_new_password ? "+" : "-"} onClick={() => this.setState({ show_new_password: !this.state.show_new_password })} />
                             </div>
-                            <p class="form-input-container__error">{result["new_password"].error}</p>
+                            <p className="form-input-container__error">{result["new_password"].error}</p>
                         </div>
                     </div>
                     <div className="form-input-container page--settings__main__privacy">
-                        <h1 class="page--settings__main__security__title">Приватность</h1>
+                        <h1 className="page--settings__main__security__title">Приватность</h1>
                         <div>
                             {[
                                 {label: 'Плейлисты', name: 'is_public_playlists'},
@@ -245,15 +276,15 @@ export class SettingsPage extends Component {
                                 {label: 'Любимые исполнители', name: 'is_public_favorite_artists'},
                                 {label: 'Артистов прослушано', name: 'is_public_artists_listened'},
                             ].map(({label, name}) => {
-                                return <div class="form-input-container page--settings__main__privacy__item">
-                                    <label class="form-input-container__label">{label}</label>
-                                    <div class="form-input-container__radio">
-                                        <label class="form-input-container__radio__label">
-                                            <input class="form-input-container__radio__input" type="radio" name={name} onInput={this.onInput} value="false" {...(result[name].unprocessed === 'false' ? { checked:true } : {})} />
+                                return <div className="form-input-container page--settings__main__privacy__item">
+                                    <label className="form-input-container__label">{label}</label>
+                                    <div className="form-input-container__radio">
+                                        <label className="form-input-container__radio__label">
+                                            <input className="form-input-container__radio__input" type="radio" name={name} onInput={this.onInput} value="false" {...(result[name].unprocessed === 'false' ? { checked:true } : {})} />
                                             Приватно
                                         </label>
-                                        <label class="form-input-container__radio__label">
-                                            <input class="form-input-container__radio__input" type="radio" name={name} onInput={this.onInput} value="true" {...(result[name].unprocessed === 'true' ? { checked:true } : {})} />
+                                        <label className="form-input-container__radio__label">
+                                            <input className="form-input-container__radio__input" type="radio" name={name} onInput={this.onInput} value="true" {...(result[name].unprocessed === 'true' ? { checked:true } : {})} />
                                             Публично
                                         </label>
                                     </div>
@@ -263,10 +294,11 @@ export class SettingsPage extends Component {
                     </div>
                 </div>
                 <div className="page--settings__submit">
-                    <ButtonDanger onClick={this.onDelete}>Удалить аккаунт</ButtonDanger>
+                    <ButtonDanger onClick={() => this.setState({ confirm_delete: true })}>Удалить аккаунт</ButtonDanger>
                     <p className="page--settings__submit__error form-input-container__error">{this.state.error}</p>
                     <ButtonSuccess onClick={this.onSave}>Сохранить</ButtonSuccess>
                 </div>
+                {this.state.confirm_delete && <DialogConfirm message="Вы точно хотите удалить свой аккаунт?" onClose={() => this.setState({confirm_delete: false})} onConfirm={this.onDelete} />}
             </form>
         ]
     }

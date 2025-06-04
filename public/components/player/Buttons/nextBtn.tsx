@@ -1,9 +1,9 @@
 import { Component } from "libs/rzf/Component";
 
 import { ACTIONS } from "utils/flux/actions";
-import { PLAYER_STORAGE } from "utils/flux/storages";
+import { JAM_STORAGE, PLAYER_STORAGE } from "utils/flux/storages";
 import Dispatcher from "libs/flux/Dispatcher";
-
+import { JamToggleError } from "common/errors";
 export class NextBtn extends Component {
     componentDidMount() {
         // подписки
@@ -15,6 +15,13 @@ export class NextBtn extends Component {
     }
 
     onNextAction = () => {
+        if (JAM_STORAGE.roomId && !JAM_STORAGE.isLeader) {
+            Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+                message: JamToggleError,
+                type: 'error'
+            }));
+            return;
+        }
         Dispatcher.dispatch(new ACTIONS.QUEUE_NEXT(null));
     }
 

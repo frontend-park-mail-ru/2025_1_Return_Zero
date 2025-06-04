@@ -6,6 +6,7 @@ import { TrackCard, TrackLine } from "components/track/Track";
 import { AlbumLine } from "components/album/Album";
 import { ArtistCard } from "components/artist/Artist";
 import { PlaylistCard } from "components/playlist/PlaylistCard";
+import { Preloader } from "components/preloader/Preloader";
 
 import { USER_STORAGE } from "utils/flux/storages";
 import { API } from "utils/api";
@@ -86,10 +87,9 @@ class AllPage<T> extends Component {
         [key: string]: any
     }
 
-    state: {
-        data: T[]
-    } = {
-        data: []
+    state = {
+        data: [] as T[],
+        loading: true
     }
 
     componentDidMount(): void {
@@ -102,26 +102,21 @@ class AllPage<T> extends Component {
     }
 
     onAction = (action: any) => {
+        this.setState({ loading: true });
         this.refresh();
     }
 
     refresh() {
         const { retriever, displayer, ...other } = this.props;
-        this.props.retriever(other).then(data => this.setState({data})).catch(err => this.setState({data: []}));
+        this.props.retriever(other).then(data => this.setState({data}))
+            .catch(err => this.setState({data: []}))
+            .finally(() => this.setState({loading: false}));
     }
 
     render() {
         const { retriever, displayer, ...other } = this.props;
-        if (this.state.data.length === 0) {
-            return [
-                <div className="page page--404 page__empty">
-                    <h2>Ничего не найдено</h2>
-                    <span>Может ссылка указана не верно?</span>
-                </div>
-            ]
-        }
         return [
-            <Section {...other}>
+            <Section {...other} is_loading={this.state.loading}>
                 {this.state.data.map(this.props.displayer)}
             </Section>
         ]

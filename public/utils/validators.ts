@@ -23,7 +23,7 @@ const PLAYLIST_MAL_MES = 'Название плейлиста должно со�
 const PLAYLIST_SYM = 'a-zA-Zа-яА-Я0-9_ ';
 const PLAYLIST_SYM_MES = 'Запрещённые символы в названии'
 
-const IMG_MES = 'Разрешенные форматы изображений: jpg, jpeg, png, gif'
+const IMG_MES = 'Разрешенные форматы изображений: jpg, jpeg, png'
 const IMG_MAS = 5;
 const IMG_MAS_MES = 'Максимальный размер загружаемого файла не более 5 МБ'
 const REQ_MES = 'Обязательное поле';
@@ -84,22 +84,32 @@ export function getSettingsFormValidator(user: AppTypes.User) {
     });
 }
 
-export const ARTIST_CREATE_VALIDATOR = new rzv.Validator({
-    'title': rzv.string().required(REQ_MES).max(20, 'Не более 20 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
-    'thumbnail': rzv.file().required(REQ_MES).img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
-})
+const LABEL_ALLOWED_CHARS = 'a-zA-Zа-яА-Я0-9 _\\-\\(\\)\\[\\]\\{\\}\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)\\_\\+\\=\\|\\?\\>\\<\\.\\,\\;\\:\\~\`\'';
+const LABEL_ALLOWD_MESAGE = 'Запрещённые символы в названии'
 
-export const ALBUM_CREATE_VALIDATOR = new rzv.Validator({
-    'title': rzv.string().required(REQ_MES).max(20, 'Не более 20 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
+export const ARTIST_CREATE_VALIDATOR = new rzv.Validator({
+    'title': rzv.string().required(REQ_MES).max(100, 'Не более 100 символов').consistOf(LABEL_ALLOWED_CHARS, LABEL_ALLOWD_MESAGE),
     'thumbnail': rzv.file().required(REQ_MES).img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
-    'description': rzv.string().required(REQ_MES).max(200, 'Не более 200 символов'),
 })
 
 export function getArtistEditValidator(artist: AppTypes.Artist) {
     return new rzv.Validator({
-        'title': rzv.string().required(REQ_MES).max(20, 'Не более 20 символов').consistOf('a-zA-Zа-яА-Я0-9_ ', 'Разрешены только буквы, цифры и символы'),
+        'title': rzv.string().required(REQ_MES).max(100, 'Не более 100 символов').consistOf(LABEL_ALLOWED_CHARS, LABEL_ALLOWD_MESAGE),
         'thumbnail': rzv.file().optional().img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
     }, {
         'title': artist.title,
+    })
+}
+
+export const ALBUM_CREATE_VALIDATOR = new rzv.Validator({
+    'title': rzv.string().required(REQ_MES).max(100, 'Не более 100 символов').consistOf(LABEL_ALLOWED_CHARS, LABEL_ALLOWD_MESAGE),
+    'thumbnail': rzv.file().required(REQ_MES).img(IMG_MES).max(IMG_MAS, IMG_MAS_MES).addUrl(),
+    'type': rzv.string().required().oneof(['album', 'single', 'ep', 'compilation'])
+})
+
+export function getTrackCreateValidator() {
+    return new rzv.Validator({
+        'title': rzv.string().required(REQ_MES).max(100, 'Не более 100 символов').consistOf(LABEL_ALLOWED_CHARS, LABEL_ALLOWD_MESAGE),
+        'track': rzv.file().required().mp3().addUrl(),
     })
 }

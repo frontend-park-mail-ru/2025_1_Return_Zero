@@ -56,9 +56,8 @@ export class LoginForm extends Component {
             router.push(location.pathname, {});
         } catch (e) {
             this.setState({
-                'error': 'Перепроверьте данные'
+                'error': 'Перепроверьте введенные данные'
             })
-            console.error(e)
         }
     }
 
@@ -132,9 +131,19 @@ export class SignupForm extends Component {
             Dispatcher.dispatch(new ACTIONS.USER_LOGIN(reply));
             router.push(location.pathname, {});
         } catch (e) {
-            this.setState({
-                'error': 'Перепроверьте введенные данные'
-            })
+            switch (e.status) {
+                case 409: {
+                    this.setState({
+                        'error': 'Такой пользователь уже зарегистрирован'
+                    })
+                    break;
+                }
+                default: {
+                    this.setState({
+                        'error': 'Что то пошло не так'
+                    })
+                }
+            }
             console.error(e)
         }
     }

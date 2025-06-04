@@ -13,7 +13,9 @@ import './pages.scss';
 export class ArtistsPage extends Component {
     state = {
         artists: [] as AppTypes.Artist[],
+        artists_loading: false,
         favorites: [] as AppTypes.Artist[],
+        favorites_loading: false
     }
 
     componentDidMount() {
@@ -26,14 +28,17 @@ export class ArtistsPage extends Component {
     }
 
     fetchData() {
+        this.setState({ artists_loading: true, favorites_loading: true });
         if (USER_STORAGE.getUser()) {
-            API.getFavoriteArtists(USER_STORAGE.getUser().username).then(res => {
-                this.setState({ favorites: res.body });
-            }).catch(() => this.setState({ favorites: [] }))
+            API.getFavoriteArtists(USER_STORAGE.getUser().username).then(res => this.setState({ favorites: res.body }))
+                .catch(() => this.setState({ favorites: [] }))
+                .finally(() => this.setState({ favorites_loading: false }));
+        } else {
+            this.setState({ favorites: [], favorites_loading: false });
         }
-        API.getArtists(20).then(res => {
-            this.setState({ artists: res.body });
-        }).catch(() => this.setState({ artists: [] }));
+        API.getArtists(20).then(res => this.setState({ artists: res.body }))
+            .catch(() => this.setState({ artists: [] }))
+            .finally(() => this.setState({ artists_loading: false }));
     }
 
     onAction = (action: any) => {
@@ -52,12 +57,12 @@ export class ArtistsPage extends Component {
                 <Section title="Только для тебя" horizontal>
                     <Special />
                 </Section>
-                {!!this.state.favorites.length && <Section title="Любимые исполнители" horizontal all_link="/all/artists/favorite">
+                {USER_STORAGE.getUser() && <Section title="Любимые исполнители" horizontal all_link="/all/artists/favorite" is_loading={this.state.favorites_loading}>
                     {this.state.favorites.map((artist, index) => (
                         <ArtistCard key={artist.id} artist={artist}/>
                     ))}
                 </Section>}
-                <Section title="Рекомендации" horizontal wrap all_link="/all/artists/top">
+                <Section title="Рекомендации" horizontal wrap all_link="/all/artists/top" is_loading={this.state.artists_loading}>
                     {this.state.artists.map((artist, index) => (
                         <ArtistCard key={artist.id} artist={artist}/>
                     ))}

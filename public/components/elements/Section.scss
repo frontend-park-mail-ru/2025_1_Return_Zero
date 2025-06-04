@@ -1,3 +1,6 @@
+@use "root/variables.scss" as v;
+@use "root/dark.scss" as d;
+
 .section {
     position: relative;
     width: 100%;
@@ -10,6 +13,22 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+
+        gap: 1.5rem;
+
+        &__title {
+            @media (max-width: 600px) {
+                font-size: v.$font-size-h3;
+            }
+        }
+
+        &__link {
+            color: #b3b3b3;
+            @media (max-width: 600px) {
+                font-size: v.$font-size-small;
+            }
+            flex-shrink: 0;
+        }
     }
 
     &__content {
@@ -18,7 +37,42 @@
         gap: 1.25rem;
     }
 
-    &--horizontal &__content {
+    &__skeleton {
+        width: 100%;
+        height: 8.75rem;
+        background-color: #262B3D;
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+        
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -50%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.05) 70%,
+                transparent 100%
+            );
+            animation: shimmer 1.5s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-50%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+    }
+
+    &--horizontal>&__content,
+    &--horizontal>*>&__content {
         flex-direction: row;
         gap: 2rem;
 
@@ -27,7 +81,7 @@
         scrollbar-width: none;
     }
 
-    &--wrap &__content {
+    &--wrap>&__content {
         overflow: hidden;
         flex-wrap: wrap;
     }

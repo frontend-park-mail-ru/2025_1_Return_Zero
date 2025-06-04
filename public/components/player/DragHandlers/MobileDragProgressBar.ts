@@ -3,7 +3,8 @@ import PLAYER_STORAGE from "utils/flux/PlayerStorage";
 import { ACTIONS } from "utils/flux/actions";
 import Dispatcher from "libs/flux/Dispatcher";
 import playerStorage from "utils/flux/PlayerStorage";
-
+import { JAM_STORAGE } from "utils/flux/storages";
+import { JamToggleError } from "common/errors";
 
 type TouchEventLike = TouchEvent;
 
@@ -48,6 +49,14 @@ class MobileDragProgressBar {
     }
 
     onSetCurrentTime = (time: number) => {
+        if (JAM_STORAGE.roomId && !JAM_STORAGE.isLeader) {
+            Dispatcher.dispatch(new ACTIONS.CREATE_NOTIFICATION({
+                message: JamToggleError,
+                type: 'error'
+            }));
+            return;
+        }
+
         Dispatcher.dispatch(new ACTIONS.AUDIO_SET_CURRENT_TIME(time));
         Dispatcher.dispatch(new ACTIONS.JAM_SEEK(time));
     }

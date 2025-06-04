@@ -1,5 +1,5 @@
 import { Component } from "libs/rzf/Component";
-import Router from "libs/rzf/Router";
+import Router, { Link } from "libs/rzf/Router";
 
 import playerStorage from "utils/flux/PlayerStorage";
 
@@ -9,10 +9,12 @@ export class SongArtist extends Component {
 
         return [
             <div id="artist-name" className="artist-name" >
-                <span className="marquee"
-                    onClick={() => {Router.push(playerStorage.currentTrackAristURL, {}); onResize ? onResize() : null}}
-                 >
-                    {playerStorage.currentTrackArtist}</span>
+                    {playerStorage.currentTrack && playerStorage.currentTrack.artists.map((artist: any, index: any) => (
+                        <span className="marquee">
+                            <Link to={artist.artist_page}>{artist.title}</Link>
+                            {index < playerStorage.currentTrack.artists.length - 1 ? ', ' : ''}
+                        </span>
+                    ))}
             </div>
         ];
     }

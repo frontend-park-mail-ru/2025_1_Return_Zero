@@ -6,7 +6,6 @@ import { Section } from "components/elements/Section";
 
 import { USER_STORAGE, JAM_STORAGE, PLAYER_STORAGE } from "utils/flux/storages";
 
-
 import { ACTIONS } from "utils/flux/actions";
 import { API } from "utils/api";
 
@@ -16,14 +15,15 @@ import { JamForm } from "components/forms/JamForm";
 import './pages.scss';
 import Dispatcher from "libs/flux/Dispatcher";
 import { Preloader } from "components/preloader/Preloader";
-import { Route } from "libs/rzf/Router";
+
+import Router from "libs/rzf/Router";
 
 export class JamPage extends Component {
     state = {
         leader: JAM_STORAGE.leader as Leader | null,
         listeners: JAM_STORAGE.listeners as Listener[] | null,
         now_playing: JAM_STORAGE.now_playing as AppTypes.Track | null,
-        entered: false,
+        entered: JAM_STORAGE.roomId ? true : false,
         authorized: false,
     }
 
@@ -51,6 +51,10 @@ export class JamPage extends Component {
         Dispatcher.dispatch(new ACTIONS.JAM_OPEN(this.props.room_id));
     }
 
+    onNameClick(name: string) {
+        Router.push(`/profile/${name}`, {});
+    }
+
     onAction = (action: any) => {
         switch (true) {
             case action instanceof ACTIONS.USER_LOGIN:
@@ -67,7 +71,7 @@ export class JamPage extends Component {
 
                 break;
             case action instanceof ACTIONS.JAM_OPEN:
-                console.warn('jam open');
+                // console.warn('jam open');
                 break;
             case action instanceof ACTIONS.JAM_READY:
                 this.setState({ listeners: JAM_STORAGE.listeners });
@@ -140,10 +144,10 @@ export class JamPage extends Component {
                         {this.state.listeners?.map(listener => (
                             <div className="page__listener" key={listener.id}>
                                 <img className="page__listener__img" src={listener.img_url} alt={listener.name} />
-                                <span className="page__listener__name">{listener.name}</span>
+                                <span onClick={() => this.onNameClick(listener.name)} className="page__listener__name">{listener.name}</span>
                                 {
-                                    listener.ready ?
-                                        <img className="page__listeners__status" src="/static/img/ready.svg" /> 
+                                    listener.ready 
+                                        ? <img className="page__listeners__status" src="/static/img/ready.svg" /> 
                                         : <Preloader width={1.5} height={1.5} />
                                 }
                             </div>

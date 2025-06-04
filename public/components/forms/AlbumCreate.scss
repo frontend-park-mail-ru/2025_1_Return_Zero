@@ -1,0 +1,49 @@
+.form--album-create {
+    width: auto;
+    align-items: flex-start;
+
+    .section {
+        width: auto;
+    }
+
+    .button--danger {
+        align-self: flex-end;
+    }
+
+    &__info {
+        display: grid;
+        grid-template-areas: 
+            "img title"
+            "img type";
+        
+        column-gap: 1.25rem;
+        align-content: space-around;
+
+        >div:nth-child(1) {
+            grid-area: img;
+        }
+
+        >div:nth-child(2) {
+            grid-area: title;
+            justify-content: space-around;
+        }
+
+        >div:nth-child(3) {
+            grid-area: type;
+            justify-content: space-around;
+        }
+    }
+
+    .form-input-container--image__image {
+        border-radius: 15px;
+    }
+    .form-input-container--image__placeholder {
+        border-radius: 15px;
+    }
+}
+
+.dialog--loading {
+    > .dialog__container {
+        overflow: hidden;
+    }
+}
