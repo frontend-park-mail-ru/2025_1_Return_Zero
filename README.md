@@ -3,9 +3,9 @@
 
 <img width="100%" src="readme-img.jpg" alt="">
 
-[Фигма](https://www.figma.com/design/4QRRVHKU9udcBO1tGnRlev/Untitled?t=ACFjQLB0qHjMHRgv-0) - дизайн проекта
-[Сайт](http://returnzero.ru/) - сайт проекта
-[rzf](https://github.com/zeritonik/rzf) - отдельная репа для VDom
+<div><a src="https://www.figma.com/design/4QRRVHKU9udcBO1tGnRlev/Untitled?t=ACFjQLB0qHjMHRgv-0">Фигма проекта<a></div>
+<div><a src="https://returnzero.ru">Сайт проекта<a></div>
+<div><a src="https://github.com/zeritonik/rzf">Репа с описанием VDom<a></div>
 
 # Состав
 
