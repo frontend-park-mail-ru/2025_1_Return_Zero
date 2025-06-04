@@ -2,6 +2,7 @@
 Репозиторий команды Return Zero. Проект: Spotify
 
 <img width="100%" src="readme-img.jpg" alt="">
+
 [Фигма](https://www.figma.com/design/4QRRVHKU9udcBO1tGnRlev/Untitled?t=ACFjQLB0qHjMHRgv-0) - дизайн проекта
 [Сайт](http://returnzero.ru/) - сайт проекта
 [rzf](https://github.com/zeritonik/rzf) - отдельная репа для VDom
