@@ -1,5 +1,4 @@
 **/node_modules
-**/*.precompiled.js
 dist
 backend
 .vscode
