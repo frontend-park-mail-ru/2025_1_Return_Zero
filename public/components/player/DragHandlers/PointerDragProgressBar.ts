@@ -25,7 +25,6 @@ class PointerDragProgressBar {
         this.circle = circle;
         this.type = type;
 
-        // Устанавливаем начальную позицию визуально
         switch (this.type) {
             case 'play':
                 this.setVisualPosition(playerStorage.currentTime / playerStorage.duration);
@@ -35,10 +34,7 @@ class PointerDragProgressBar {
                 break;
         }
 
-        // Подписываемся на обновления storage
         PLAYER_STORAGE.subscribe(this.onAction);
-
-        // Вешаем Pointer Events
         this.initPointerEvents();
     }
 
@@ -63,27 +59,21 @@ class PointerDragProgressBar {
     }
 
     private initPointerEvents() {
-        // pointerdown на самом прогресс-баре
         this.fullProgress.addEventListener('pointerdown', this.handlePointerDown as EventListener);
-        // pointermove и pointerup (или pointercancel) вешаем на документ,
-        // чтобы отловить, даже если указатель вышел за пределы элемента
+
         document.addEventListener('pointermove', this.handlePointerMove as EventListener);
         document.addEventListener('pointerup', this.handlePointerUp as EventListener);
         document.addEventListener('pointercancel', this.handlePointerUp as EventListener);
         
-        // Для клика (без перетаскивания) тоже можем использовать pointerup,
-        // но чтобы отделить клик от drag, проверяем isDragging=false.
         this.fullProgress.addEventListener('click', this.handleClick as EventListener);
     }
 
     private updateVisuals() {
         if (this.isDragging) {
-            // Если мы тащим, чуть увеличиваем круг для фидбэка
             this.circle.style.transform = 'scale(1.25)';
             this.circle.style.transition = 'transform 0.3s ease';
             return;
         }
-        // Сбрасываем трансформацию после завершения drag
         this.circle.style.transform = '';
         this.circle.style.transition = '';
 
@@ -102,7 +92,6 @@ class PointerDragProgressBar {
         const safePos = Math.max(0, Math.min(1, pos));
         this.progress.style.width = `${safePos * 100}%`;
 
-        // Смещения для разных типов (чтобы круг центрировался правильно)
         const offset = this.type === 'play' ? -1 : -3;
         this.circle.style.left = `${safePos * 100 + offset}%`;
     }
@@ -113,7 +102,6 @@ class PointerDragProgressBar {
     }
 
     private handleClick = (e: MouseEvent) => {
-        // При перетаскивании клик игнорируем
         if (this.isDragging) return;
 
         const pos = this.getRelativePosition(e.clientX);
@@ -121,16 +109,13 @@ class PointerDragProgressBar {
     }
 
     private handlePointerDown = (e: PointerEvent) => {
-        // Чтобы не срабатывать и мышь, и тач, делаем preventDefault
         e.preventDefault();
 
         this.isDragging = true;
         this.fullProgress.classList.add('dragging');
 
-        // Обрабатываем «первый» кадр drag сразу
         const pos = this.getRelativePosition(e.clientX);
         if (this.type === 'volume') {
-            // Если это ползунок громкости, сразу меняем громкость
             this.onSetVolume(Math.max(0, Math.min(1, pos)));
         }
         this.setVisualPosition(pos);

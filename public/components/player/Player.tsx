@@ -9,14 +9,20 @@ import { PLAYER_STORAGE } from "utils/flux/storages";
 import { marqueeHandler } from "common/marquee";
 import './SongTitle/marquee.scss';
 
+import DragProgressBar from "./DragHandlers/DragProgressBar";
+import MobileDragProgressBar from "./DragHandlers/MobileDragProgressBar";
+import { isMobileDevice } from "utils/isMobileDevice";
+
 type DisplayType = 'small' | 'fullscreen' | 'none';
 type size = 'mobile' | 'desktop';
+type ProgressBarClass = typeof DragProgressBar | typeof MobileDragProgressBar;
 
 const mobileBreakpoint = 1100;
 
 export class Player extends Component {
     private unsubscribe: () => void;
     private url: string;
+    private mediaQuery: MediaQueryList;
 
     constructor(props: Record<string, any>) {
         super(props);
@@ -32,35 +38,53 @@ export class Player extends Component {
             return display;
         };
 
+        const isMobile = isMobileDevice();
+        this.mediaQuery = window.matchMedia(`(max-width: ${mobileBreakpoint}px)`);
+        const initialSize: size = this.mediaQuery.matches ? 'mobile' : 'desktop';
+        
         this.state = {
             displayedOption: getDisplayType(),
-            size: window.innerWidth <= mobileBreakpoint ? 'mobile' : 'desktop',
+            size: initialSize,
+            ProgressBarClass: isMobile ? MobileDragProgressBar : DragProgressBar,
         }
         
-        const mediaQuery = window.matchMedia(`(max-width: ${mobileBreakpoint}px)`);
-        mediaQuery.addEventListener('change', this.handleMediaChange.bind(this));
+        this.mediaQuery.addEventListener('change', this.handleMediaChange);
 
-        this.configureNoneDisplay();
+        PLAYER_STORAGE.subscribe(this.onPlayerUpdate);
         marqueeHandler();
     }
 
-    handleMediaChange(e: any) {
-        if (e.matches) {
-            this.setState({ size: 'mobile', displayedOption: this.state.displayedOption });
-        } else {
-            this.setState({ size: 'desktop', displayedOption: this.state.displayedOption });
+    handleMediaChange = (e: MediaQueryListEvent) => {
+        const newSize: size = e.matches ? 'mobile' : 'desktop';
+        this.setState({ 
+            ...this.state,
+            size: newSize
+        });
+    }
+
+    onPlayerUpdate = () => {
+        try {
+            const currentTrack = JSON.parse(localStorage.getItem('current-track') || 'undefined');
+            const shouldShow = !!currentTrack;
+            const currentlyShown = this.state.displayedOption !== 'none';
+            
+            if (shouldShow && !currentlyShown) {
+                this.setState({ ...this.state, displayedOption: 'small' });
+            } else if (!shouldShow && currentlyShown) {
+                this.setState({ ...this.state, displayedOption: 'none' });
+            } else {
+                this.setState({ ...this.state });
+            }
+        } catch (error) {
+            console.error('Error checking player state:', error);
         }
     }
 
-    configureNoneDisplay() {
-        if (this.state.displayedOption === 'none') {
-            PLAYER_STORAGE.subscribe(this.onAction);
+    componentWillUnmount() {
+        if (this.mediaQuery) {
+            this.mediaQuery.removeEventListener('change', this.handleMediaChange);
         }
-    }
-
-    onAction = () => {
-        this.toggleDisplayedOption();
-        PLAYER_STORAGE.unsubscribe(this.onAction);
+        PLAYER_STORAGE.unsubscribe(this.onPlayerUpdate);
     }
 
     render() {
@@ -77,21 +101,29 @@ export class Player extends Component {
                     return [
                         <PlayerMobile 
                             onResize={this.toggleDisplayedOption}
+                            ProgressBarClass={this.state.ProgressBarClass}
                         />
                     ];
                 return [
                     <PlayerSmall
-                        onResize={this.toggleDisplayedOption} 
+                        onResize={this.toggleDisplayedOption}
+                        ProgressBarClass={this.state.ProgressBarClass}
                     />
                 ];
                 
             case 'fullscreen':
                 if (this.state.size === 'mobile') 
                     return [
-                        <PlayerMobileFullscreen onResize={this.toggleDisplayedOption} />
+                        <PlayerMobileFullscreen 
+                            onResize={this.toggleDisplayedOption}
+                            ProgressBarClass={this.state.ProgressBarClass}
+                        />
                     ];
                 return [
-                    <PlayerFullscreen onResize={this.toggleDisplayedOption} />
+                    <PlayerFullscreen 
+                        onResize={this.toggleDisplayedOption}
+                        ProgressBarClass={this.state.ProgressBarClass}
+                    />
                 ];
                 
             case 'none':
@@ -105,7 +137,7 @@ export class Player extends Component {
             displayedOption: (this.state.displayedOption === 'fullscreen' || this.state.displayedOption === 'none') 
                 ? 'small' 
                 : 'fullscreen',
-            size: window.innerWidth <= mobileBreakpoint ? 'mobile' : 'desktop'
+            size: this.mediaQuery.matches ? 'mobile' : 'desktop'
         });
     };
 }

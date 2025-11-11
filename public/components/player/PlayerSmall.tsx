@@ -1,6 +1,7 @@
 import { Component } from "libs/rzf/Component";
 import { convertDuration } from "utils/durationConverter";
 import DragProgressBar from "./DragHandlers/DragProgressBar";
+import MobileDragProgressBar from "./DragHandlers/MobileDragProgressBar";
 
 import "./PlayerSmall.scss";
 
@@ -22,8 +23,8 @@ import { LikeBtn } from "./Buttons/likeBtn";
 import playerStorage from "utils/flux/PlayerStorage";
 
 export class PlayerSmall extends Component {
-    private playDragging: DragProgressBar;
-    private volumeDragging: DragProgressBar;
+    private playDragging: DragProgressBar | MobileDragProgressBar;
+    private volumeDragging: DragProgressBar | MobileDragProgressBar;
 
     state = {
         actions_opened: false,
@@ -51,7 +52,8 @@ export class PlayerSmall extends Component {
         const progress = document.getElementById("play-progress").querySelector(".rectangle-prev") as HTMLElement;
         const circle = document.getElementById("play-progress").querySelector(".circle") as HTMLElement;
 
-        this.playDragging = new DragProgressBar(
+        const ProgressBarClass = this.props.ProgressBarClass || DragProgressBar;
+        this.playDragging = new ProgressBarClass(
             fullProgress,
             progress,
             circle,
@@ -64,7 +66,8 @@ export class PlayerSmall extends Component {
         const progress = document.getElementById("volume-progress").querySelector(".rectangle-prev") as HTMLElement;
         const circle = document.getElementById("volume-progress").querySelector(".circle") as HTMLElement;
 
-        this.volumeDragging = new DragProgressBar(
+        const ProgressBarClass = this.props.ProgressBarClass || DragProgressBar;
+        this.volumeDragging = new ProgressBarClass(
             fullProgress,
             progress,
             circle, 

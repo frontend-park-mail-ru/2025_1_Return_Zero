@@ -10,13 +10,13 @@ declare global {
 
             album_id: number;
             album: string;
-            album_page: string; // extended
+            album_page: string; 
 
             artists: {
                 id: number;
                 title: string;
                 role: string;
-                artist_page: string; // extended
+                artist_page: string; 
             }[];
             
             retriever_func: Function;

@@ -1,5 +1,6 @@
 import { Component } from "libs/rzf/Component";
 import { convertDuration } from "utils/durationConverter";
+import DragProgressBar from "./DragHandlers/DragProgressBar";
 import MobileDragProgressBar from "./DragHandlers/MobileDragProgressBar";
 
 import Router from "libs/rzf/Router";
@@ -22,14 +23,14 @@ import { LikeBtn } from "./Buttons/likeBtn";
 import playerStorage from "utils/flux/PlayerStorage";
 
 export class PlayerMobileFullscreen extends Component {
-    private playDragging: MobileDragProgressBar;
+    private playDragging: DragProgressBar | MobileDragProgressBar;
 
     state = {
         actions_opened: false,
     }
     
     componentDidMount() {
-        // подписки
+
         TRACKS_STORAGE.subscribe(this.onAction);
         PLAYER_STORAGE.subscribe(this.onAction);
         this.configurePlayProgressBar();
@@ -49,7 +50,8 @@ export class PlayerMobileFullscreen extends Component {
         const progress = document.getElementById("play-progress").querySelector(".rectangle-prev") as HTMLElement;
         const circle = document.getElementById("play-progress").querySelector(".circle") as HTMLElement;
 
-        this.playDragging = new MobileDragProgressBar(
+        const ProgressBarClass = this.props.ProgressBarClass || MobileDragProgressBar;
+        this.playDragging = new ProgressBarClass(
             fullProgress,
             progress,
             circle,

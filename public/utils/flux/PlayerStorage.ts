@@ -52,8 +52,20 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
     }
 
     onStorageEvent(event: StorageEvent) {
+        if (!this.playerSync.isMaster) {
+            if (event.key === 'audio-current-time' || 
+                event.key === 'is-playing' || 
+                event.key === 'current-track' ||
+                event.key === 'audio-level') {
+       
+                this.callSubs(new ACTIONS.AUDIO_TOGGLE_PLAY(null));
+            }
+            return;
+        }
+
         if (event.key === 'player-action') {
             const action = JSON.parse(event.newValue);
+            console.log('Master executing action:', action.action);
             
             switch (action.action) {
                 case 'previousTrack':
@@ -112,15 +124,15 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
                     this.pause();
                     break;
             }
+            
+            this.callSubs(new ACTIONS.AUDIO_TOGGLE_PLAY(null));
         }
-
-        // затычка
-        this.callSubs(new ACTIONS.AUDIO_TOGGLE_PLAY(null));
     }
 
     onMasterChange() {
         if (this.stor.initialized) return;
 
+        console.log('Master initialized, loading player state...');
         this.init();
         this.stor.initialized = true;
     }
@@ -261,15 +273,10 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
         }
     }
 
-    // AUDIO
-
     async initAudioStates() {
         try {
             this.stor.audioLevel = Number(localStorage.getItem('audio-level'));
             this.stor.prevAudioLevel = this.stor.audioLevel;
-            this.stor.audio.currentTime = Number(
-                localStorage.getItem('audio-current-time')
-            );
 
             if (!('audio-level' in localStorage)) {
                 this.stor.audioLevel = 0.5;
@@ -337,12 +344,45 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
     }
 
     private onMeta = () => {
+        try {
+            const savedTrack = JSON.parse(localStorage.getItem('current-track') || 'null');
+            const isSameTrack = savedTrack && savedTrack.id === this.stor.currentTrack.id;
+            
+            if (isSameTrack) {
+                const savedTime = Number(localStorage.getItem('audio-current-time')) || 0;
+                if (!isNaN(savedTime) && savedTime >= 0 && savedTime <= this.stor.audio.duration) {
+                    this.stor.audio.currentTime = savedTime;
+                    this.stor.currentTime = savedTime;
+                } else {
+                    this.stor.audio.currentTime = 0;
+                    this.stor.currentTime = 0;
+                }
+            } else {
+                this.stor.audio.currentTime = 0;
+                this.stor.currentTime = 0;
+            }
+        } catch (error) {
+            console.error('Failed to restore track state:', error);
+            this.stor.audio.currentTime = 0;
+            this.stor.currentTime = 0;
+        }
+
         Broadcast.send('loadedMetadata', { trackId: this.stor.currentTrack.id });
         this.callSubs(new ACTIONS.AUDIO_SET_TRACK(this.stor.currentTrack.id.toString()));
         this.callSubs(new ACTIONS.AUDIO_RETURN_METADATA(null));
     };
 
-    loadTrack(src: string, play: boolean = true) {
+    loadTrack(src: string, play: boolean = true, trackId?: number) {
+        const isNewTrack = !trackId || !this.stor.currentTrack || trackId !== this.stor.currentTrack.id;
+        
+        if (isNewTrack) {
+            try {
+                localStorage.setItem('audio-current-time', '0');
+            } catch (error) {
+                console.error('Failed to clear current time:', error);
+            }
+        }
+
         this.stor.audio.src = src;
         
         this.stor.audio.removeEventListener('canplay', this.onMeta);
@@ -418,14 +458,39 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
             if (savedQueue) {
                 this.stor.queue = JSON.parse(savedQueue);
                 this.stor.savedQueue = JSON.parse(localStorage.getItem('saved-queue') || '[]');
-                this.stor.idx = Number(localStorage.getItem('queue-idx')) || -1;
+                this.stor.idx = Number(localStorage.getItem('queue-idx')) || 0;
                 this.stor.shuffled = JSON.parse(localStorage.getItem('queue-shuffled') || 'false');
                 this.stor.repeated = JSON.parse(localStorage.getItem('queue-repeated') || 'false');
+     
                 this.stor.currentTrack = JSON.parse(localStorage.getItem('current-track') || 'undefined');
                 this.stor.addedQueue = JSON.parse(localStorage.getItem('added-queue') || '[]');
 
-                if (this.stor.queue.length) {
-                    this.setTrack(false);
+                if (this.stor.queue.length > 0 && 
+                    this.stor.idx >= 0 && 
+                    this.stor.idx < this.stor.queue.length) {
+                    
+                    const trackIdInQueue = this.stor.queue[this.stor.idx];
+                    
+                    if (this.stor.currentTrack && String(this.stor.currentTrack.id) === String(trackIdInQueue)) {
+                        console.log('Track already loaded, skipping setTrack. TrackId:', trackIdInQueue);
+                    
+                        if (this.stor.currentTrack.file_url) {
+                            this.stor.audio.src = this.stor.currentTrack.file_url;
+                            this.setDuration(this.stor.currentTrack.duration);
+                  
+                            this.stor.audio.removeEventListener('canplay', this.onMeta);
+                            this.stor.audio.addEventListener('canplay', this.onMeta, { once: true });
+                        }
+                    } else {
+                        console.log('Loading initial track from queue, idx:', this.stor.idx, 'trackId:', trackIdInQueue);
+                        this.setTrack(false);
+                    }
+                } else {
+                    console.log('Skipping initial track load:', {
+                        queueLength: this.stor.queue.length,
+                        idx: this.stor.idx,
+                        hasCurrentTrack: !!this.stor.currentTrack
+                    });
                 }
             }
         } catch (error) {
@@ -603,12 +668,16 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
             trackId = this.stor.queue[this.stor.idx];
         }
 
-        if (!trackId) return;
+        if (!trackId) {
+            console.warn('setTrack called but no trackId found');
+            return;
+        }
 
+        console.log('Loading track:', trackId, 'play:', play);
         const response = await API.getTrack(Number(trackId));
         const track = response.body;
         
-        this.loadTrack(track.file_url, play);
+        this.loadTrack(track.file_url, play, track.id);
         this.setDuration(track.duration);
         this.stor.currentTrack = track;
         this.saveCurrentTrack();

@@ -1,4 +1,5 @@
 import { Component } from "libs/rzf/Component";
+import { Link } from "libs/rzf/Router";
 
 import { TrackLine } from "components/track/Track";
 import { AlbumCard } from "components/album/Album";
@@ -9,6 +10,7 @@ import { Preloader } from "components/preloader/Preloader";
 
 import Dispatcher from "libs/flux/Dispatcher";
 import { ACTIONS } from "utils/flux/actions";
+import { USER_STORAGE } from "utils/flux/storages";
 
 import { API } from "utils/api";
 import { one_alive_async } from "utils/funcs";
@@ -25,6 +27,19 @@ export class ArtistPage extends Component {
         albums: [] as AppTypes.Album[],
         albums_loading: true,
         is_liked: false,
+    }
+
+    componentDidMount(): void { USER_STORAGE.subscribe(this.onUserAction); }
+    componentWillUnmount(): void { USER_STORAGE.unsubscribe(this.onUserAction); }
+
+    onUserAction = (action: any) => {
+        switch (true) {
+            case action instanceof ACTIONS.USER_LOGIN:
+            case action instanceof ACTIONS.USER_LOGOUT:
+            case action instanceof ACTIONS.USER_CHANGE:
+                this.setState({});
+                break;
+        }
     }
 
     props: {
@@ -86,11 +101,16 @@ export class ArtistPage extends Component {
                     <div>
                         <span className="page__info__type">Исполнитель</span>
                         <h2 className="page__info__title">{this.state.artist.title}</h2>
-                        <span className="page__info__stats">{this.state.artist.listeners_count} слушателей за месяц</span>
+                        <span className="page__info__stats">{this.state.artist.listeners_count} слушателей за месяц</span>
                         <div className="page__info__actions">
-                            {!this.state.is_liked ? 
-                                <Button onClick={this.onLike}>Подписаться</Button> :
-                                <ButtonDanger onClick={this.onLike}>Отписаться</ButtonDanger>}
+                            {!USER_STORAGE.getUser() ? 
+                                <Link to="#login">
+                                    <Button>Подписаться</Button>
+                                </Link> :
+                                !this.state.is_liked ? 
+                                    <Button onClick={this.onLike}>Подписаться</Button> :
+                                    <ButtonDanger onClick={this.onLike}>Отписаться</ButtonDanger>
+                            }
                             <ActionsArtist artist={this.state.artist} />
                         </div>
                     </div>
