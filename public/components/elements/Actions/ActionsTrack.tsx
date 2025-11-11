@@ -118,7 +118,10 @@ class ActionsRemoveFromPlaylist extends Component {
 
     render() {
         return [
-            <span className="actions-item" onClick={this.onClick}>Удалить из плейлиста</span>
+            <div className="actions-item" onClick={this.onClick}>
+                <img src="/static/img/delete-circle.svg" alt="delete" />
+                <span>Удалить из плейлиста</span>
+            </div>
         ]
     }
 }

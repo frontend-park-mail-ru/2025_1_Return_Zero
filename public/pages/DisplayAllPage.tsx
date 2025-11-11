@@ -48,13 +48,13 @@ export class DisplayAllPage extends Component {
                     title="Топ альбомы" retriever={() => API.getAlbums(ALL_LIMIT).then(resp => resp.body)}
                     displayer={(album: AppTypes.Album) => <AlbumLine album={album} />} />
 
-                <Route path="^/all/artists/favorite/" exact component={AllPage<AppTypes.Artist>} horizontal wrap
+                <Route path="^/all/artists/favorite/" exact component={AllPage<AppTypes.Artist>} wrap
                     title="Любимые артисты" retriever={() => API.getFavoriteArtists(USER_STORAGE.getUser()?.username, ALL_LIMIT).then(resp => resp.body)}
                     displayer={(artist: AppTypes.Artist) => <ArtistCard artist={artist} />} />
-                <Route path="^/all/artists/top/" exact component={AllPage<AppTypes.Artist>} horizontal wrap
+                <Route path="^/all/artists/top/" exact component={AllPage<AppTypes.Artist>} wrap
                     title="Топ артисты" retriever={() => API.getArtists(ALL_LIMIT).then(resp => resp.body)}
                     displayer={(artist: AppTypes.Artist) => <ArtistCard artist={artist} />} />
-                <Route path="^/all/playlists/" exact component={AllPage<AppTypes.Playlist>} horizontal wrap
+                <Route path="^/all/playlists/" exact component={AllPage<AppTypes.Playlist>} wrap
                     title="Мои плейлисты" retriever={() => API.getUserPlaylists(USER_STORAGE.getUser()?.username, ALL_LIMIT).then(resp => resp.body)}
                     displayer={(playlist: AppTypes.Playlist) => <PlaylistCard playlist={playlist} />} />
 
@@ -68,10 +68,10 @@ export class DisplayAllPage extends Component {
                 <Route path="^/all/profile/:username/tracks/" component={AllPage}
                     title="Любимые треки пользователя" retriever={(args: any) => API.getFavoriteTracks(args.username, ALL_LIMIT).then(resp => resp.body)}
                     displayer={(track: AppTypes.Track) => <TrackLine track={track} />} />
-                <Route path="^/all/profile/:username/artists/" component={AllPage} horizontal wrap
+                <Route path="^/all/profile/:username/artists/" component={AllPage} wrap
                     title="Любимые артисты пользователя" retriever={(args: any) => API.getFavoriteArtists(args.username, ALL_LIMIT).then(resp => resp.body)}
                     displayer={(artist: AppTypes.Artist) => <ArtistCard artist={artist} />} />
-                <Route path="^/all/profile/:username/playlists/" component={AllPage} horizontal wrap
+                <Route path="^/all/profile/:username/playlists/" component={AllPage} wrap
                     title="Плейлисты пользователя" retriever={(args: any) => API.getUserPlaylists(args.username, ALL_LIMIT).then(resp => resp.body)}
                     displayer={(playlist: AppTypes.Playlist) => <PlaylistCard playlist={playlist} />} />
             </div>

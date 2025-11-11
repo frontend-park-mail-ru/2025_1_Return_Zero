@@ -156,7 +156,7 @@ class SearchArtists extends Component {
 
     render() {
         return [
-            this.props.artists.length > 0 ? <Section title='Артисты' horizontal wrap>
+            this.props.artists.length > 0 ? <Section title='Артисты' wrap>
                 {this.props.artists.map(artist => <ArtistCard key={artist.id} artist={artist} />)}
             </Section> : 
                 <div className="page__empty">
@@ -194,7 +194,7 @@ class SearchPlaylists extends Component {
 
     render() {
         return [
-            this.props.playlists.length > 0 ? <Section title='Плейлисты' horizontal style={{ flexWrap: 'wrap' }}>
+            this.props.playlists.length > 0 ? <Section title='Плейлисты' wrap>
                 {this.props.playlists.map(playlist => <PlaylistCard key={playlist.id} playlist={playlist} />)}
             </Section> : 
                 <div className="page__empty">

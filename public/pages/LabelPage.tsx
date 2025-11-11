@@ -69,16 +69,16 @@ export class LabelPage extends Component {
         const { artists } = this.state;
         return [
             <div className="page page--label">
-                <Section title="Мои артисты" horizontal wrap is_loading={this.state.artists_loading}>
+                <Section title="Мои артисты" wrap is_loading={this.state.artists_loading}>
                     <Button className="page--label__artist-create-btn" onClick={() => this.setState({artistCreateOpen: true})}>
                         <img src="/static/img/plus.svg" alt="error"/>
                     </Button>
                     {artists.map(artist => <ArtistCard artist={artist} onEdit={this.artistEdited} />)}
                 </Section>
-                <Section title="Мои альбомы" horizontal wrap is_loading={this.state.albums_loading}>
+                <Section title="Мои альбомы" wrap is_loading={this.state.albums_loading}>
                     { this.state.albums.map(album => <AlbumCard album={album} />) }
                 </Section>
-                <Section title="Выложить альбом" horizontal wrap>
+                <Section title="Выложить альбом">
                     <AlbumCreate onCreate={(album: AppTypes.Album) => this.setState({albums: [album, ...this.state.albums]})} />
                 </Section>
 

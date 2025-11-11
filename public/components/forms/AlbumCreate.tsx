@@ -157,17 +157,17 @@ export class AlbumCreate extends Component {
                         </select>
                     </div>
                 </div>
-                <Section title="Главный артист">
+                <Section title="Главный артист" wrap>
                     {!!this.state.selected_artists.length && <Selective onSelect={this.onSelect} props={{artist: this.state.selected_artists[0]}} component={ArtistCard} selected /> }
                 </Section>
                 {this.state.selected_artists_error && <p className="form-input-container--image__error">Артист не выбран</p>}
-                <Section title="Остальные артисты">
+                <Section title="Остальные артисты" wrap>
                     {this.state.selected_artists.length > 1 && this.state.selected_artists.slice(1).map(a => <Selective onSelect={this.onSelect} props={{artist: a}} component={ArtistCard} selected /> )}
                 </Section>
-                <Section title="Выберете артистов" horizontal wrap is_loading={this.state.artists_loading}>
+                <Section title="Выберете артистов" wrap is_loading={this.state.artists_loading}>
                     {this.state.artists.map(a => <Selective onSelect={this.onSelect} props={{artist: a}} component={ArtistCard} selected={this.state.selected_artists.includes(a)} />)}
                 </Section>
-                <Section title="Треки альбома">
+                <Section title="Треки альбома" className="form--album-create__tracks-section">
                     {this.state.tracks_validators.map((vl, i) => 
                         <TrackCreate ind={i + 1} validator={vl} onRemove={(v: Validator) => 
                             this.setState({ tracks_validators: this.state.tracks_validators.filter(vl => vl != v)})} 
@@ -219,7 +219,7 @@ class TrackCreate extends Component {
     render() {
         const vr = this.props.validator.result;
         return [
-            <Section title="" className="form--album-create__track" horizontal wrap>
+            <Section title="" className="form--album-create__track">
                 <div className="form-input-container">
                     <label className="form-input-container__label" htmlFor="title">Название трека №{this.props.ind}</label>
                     <input className="form-input-container__input" type="text" id="title" name="title" placeholder={`трек №${this.props.ind}`} value={vr.title.unprocessed} onInput={this.onInput} />

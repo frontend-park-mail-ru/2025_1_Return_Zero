@@ -57,12 +57,12 @@ export class ArtistsPage extends Component {
                 <Section title="Только для тебя" horizontal>
                     <Special />
                 </Section>
-                {USER_STORAGE.getUser() && <Section title="Любимые исполнители" horizontal all_link="/all/artists/favorite" is_loading={this.state.favorites_loading}>
+                {USER_STORAGE.getUser() && <Section title="Любимые исполнители" wrap all_link="/all/artists/favorite" is_loading={this.state.favorites_loading}>
                     {this.state.favorites.map((artist, index) => (
                         <ArtistCard key={artist.id} artist={artist}/>
                     ))}
                 </Section>}
-                <Section title="Рекомендации" horizontal wrap all_link="/all/artists/top" is_loading={this.state.artists_loading}>
+                <Section title="Рекомендации" wrap all_link="/all/artists/top" is_loading={this.state.artists_loading}>
                     {this.state.artists.map((artist, index) => (
                         <ArtistCard key={artist.id} artist={artist}/>
                     ))}

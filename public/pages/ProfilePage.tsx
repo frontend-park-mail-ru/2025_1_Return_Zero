@@ -90,7 +90,7 @@ export class ProfilePage extends Component {
                         <TrackLine key={track.id} ind={index} track={track}/>
                     ))}
                 </Section>}
-                {<Section title="Любимые исполнители" horizontal all_link={`/all/profile/${this.username}/artists`} is_loading={this.state.artists_loading}>
+                {<Section title="Любимые исполнители" wrap all_link={`/all/profile/${this.username}/artists`} is_loading={this.state.artists_loading}>
                     {artists.map((artist, index) => (
                         <ArtistCard key={artist.id} artist={artist}/>
                     ))}
