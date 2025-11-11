@@ -21,6 +21,7 @@ import { RepeatBtn } from "./Buttons/repeatBtn";
 import { ShuffleBtn } from "./Buttons/shuffleBtn";
 import { LikeBtn } from "./Buttons/likeBtn";
 import playerStorage from "utils/flux/PlayerStorage";
+import { updateMarquee } from "common/marquee";
 
 export class PlayerMobileFullscreen extends Component {
     private playDragging: DragProgressBar | MobileDragProgressBar;
@@ -30,14 +31,18 @@ export class PlayerMobileFullscreen extends Component {
     }
     
     componentDidMount() {
-
         TRACKS_STORAGE.subscribe(this.onAction);
         PLAYER_STORAGE.subscribe(this.onAction);
-        this.configurePlayProgressBar();
+        
+        setTimeout(() => {
+            this.configurePlayProgressBar();
+            updateMarquee();
+        }, 0);
     }
 
     onAction = () => {
         this.setState({});
+        setTimeout(() => updateMarquee(), 0);
     }
 
     componentWillUnmount() {
@@ -109,7 +114,7 @@ export class PlayerMobileFullscreen extends Component {
                         <LikeBtn track={playerStorage.currentTrack} />
                         <div className="song-text">
                             <SongName />
-                            <SongArtist onResize={onResize} />
+                            <SongArtist />
                         </div>
                         <ActionsTrack track={playerStorage.currentTrack} />
                     </div> 

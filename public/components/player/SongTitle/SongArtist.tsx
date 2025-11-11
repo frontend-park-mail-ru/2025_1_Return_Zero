@@ -8,13 +8,13 @@ export class SongArtist extends Component {
         const onResize = this.props.onResize;
 
         return [
-            <div id="artist-name" className="artist-name" >
-                    {playerStorage.currentTrack && playerStorage.currentTrack.artists.map((artist: any, index: any) => (
-                        <span className="marquee">
-                            <Link to={artist.artist_page}>{artist.title}</Link>
-                            {index < playerStorage.currentTrack.artists.length - 1 ? ', ' : ''}
-                        </span>
-                    ))}
+            <div id="artist-name" className="artist-name">
+                <span className="marquee">
+                    {playerStorage.currentTrack && playerStorage.currentTrack.artists.map((artist: any, index: any) => [
+                        <Link to={artist.artist_page}>{artist.title}</Link>,
+                        index < playerStorage.currentTrack.artists.length - 1 ? ', ' : ''
+                    ])}
+                </span>
             </div>
         ];
     }

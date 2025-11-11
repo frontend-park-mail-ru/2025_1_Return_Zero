@@ -607,8 +607,12 @@ class PlayerStorage extends Storage<PlayerStorageStor> {
     }
 
     public previousTrack(): void {
-        this.stor.idx = Math.max(this.stor.idx - 1, 0);
-        this.setTrack();
+        if (this.stor.currentTime < 5) {
+            this.stor.idx = Math.max(this.stor.idx - 1, 0);
+            this.setTrack();
+        } else {
+            this.setCurrentTime(0);
+        }
     }
 
     public repeat(): void {

@@ -34,8 +34,11 @@ export class PlayerSmall extends Component {
         // подписки
         TRACKS_STORAGE.subscribe(this.onAction);
         PLAYER_STORAGE.subscribe(this.onAction);
-        this.configurePlayProgressBar();
-        this.configureVolumeProgressBar();
+        
+        setTimeout(() => {
+            this.configurePlayProgressBar();
+            this.configureVolumeProgressBar();
+        }, 0);
     }
 
     onAction = () => {

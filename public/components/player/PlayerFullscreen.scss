@@ -71,7 +71,17 @@
         }
 
         .song-name, .artist-name {   
-            max-width: 30vw;   
+            max-width: 30vw;
+            
+            // Отключаем marquee на desktop fullscreen - используем ellipsis
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            
+            // Отключаем анимацию marquee
+            &.is-overflowing .marquee {
+                animation: none !important;
+            }
         }
     }
 

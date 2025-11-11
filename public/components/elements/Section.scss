@@ -83,6 +83,13 @@
 
     &--wrap>&__content {
         overflow: hidden;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(8.75rem, 1fr));
+        gap: 2rem;
+        
+        @media (max-width: 600px) {
+            grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+            gap: 1.5rem;
+        }
     }
 }

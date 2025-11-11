@@ -2,7 +2,7 @@
 @use "root/dark.scss" as d;
 
 .artist-card > a {
-    width: 8.75rem;
+    width: 100%;
     gap: 1rem;
 
     display: flex;
@@ -13,17 +13,21 @@
 
 .artist-card {
     position: relative;
+    width: 100%;
 
     a:hover {
         text-decoration: none;
     }
     
     &__img {
-        width: 8.75rem;
-        height: 8.75rem;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        max-width: 8.75rem;
+        max-height: 8.75rem;
+        
         @media (max-width: 600px) {
-            width: 7.7rem;
-            height: 7.7rem;
+            max-width: 7.7rem;
+            max-height: 7.7rem;
         }
 
         background-position: center;
@@ -68,6 +72,7 @@
 
             display: -webkit-box;
             -webkit-line-clamp: 2;
+            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;

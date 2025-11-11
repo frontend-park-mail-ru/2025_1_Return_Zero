@@ -30,14 +30,21 @@ export class PlayerMobile extends Component {
     }
 
     clickHandler = (onResize: () => void) => (e: MouseEvent) => {
-        e.preventDefault();
-    
-        const notAllowedClick = ['play', 'next', 'prev', 'song-img'];
         if (e.target instanceof HTMLElement) {
-            if (notAllowedClick.includes(e.target.id)) {
+            if (e.target.closest('.mobile-player__controls')) {
+                return;
+            }
+            
+            const target = e.target as HTMLElement;
+            if (target.id === 'play-progress' || 
+                target.closest('#play-progress') || 
+                target.classList.contains('rectangle') ||
+                target.classList.contains('rectangle-prev') ||
+                target.classList.contains('circle')) {
                 return;
             }
     
+            e.preventDefault();
             onResize();
         }
     }

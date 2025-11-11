@@ -31,8 +31,11 @@ export class PlayerFullscreen extends Component {
     componentDidMount() {
         TRACKS_STORAGE.subscribe(this.onAction);
         PLAYER_STORAGE.subscribe(this.onAction);
-        this.configurePlayProgressBar();
-        this.configureVolumeProgressBar();
+        
+        setTimeout(() => {
+            this.configurePlayProgressBar();
+            this.configureVolumeProgressBar();
+        }, 0);
     }
 
     onAction = () => {
@@ -86,7 +89,7 @@ export class PlayerFullscreen extends Component {
                         />
                         <div className="fullscreen-player__song-text">
                             <SongName />
-                            <SongArtist onResize={onResize}/>
+                            <SongArtist />
                         </div>
                         <div className="fullscreen-player__controls">
                             <ShuffleBtn />
