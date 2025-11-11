@@ -4,7 +4,7 @@
 <img width="100%" src="readme-img.jpg" alt="">
 
 - [Фигма проекта](https://www.figma.com/design/4QRRVHKU9udcBO1tGnRlev/Untitled?t=ACFjQLB0qHjMHRgv-0)  
-- [Сайт проекта](https://returnzero.ru)  
+- [Сайт проекта](https://returnzero.live/)  
 - [Репа с описанием VDom](https://github.com/zeritonik/rzf)
 
 # Состав
